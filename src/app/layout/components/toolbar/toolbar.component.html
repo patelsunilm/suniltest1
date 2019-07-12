@@ -26,6 +26,11 @@
                     <span>My Profile</span>
                 </button>
 
+                <button mat-menu-item [routerLink]="['/password']">
+                    <mat-icon>vpn_key</mat-icon>
+                    <span>Change Password</span>
+                </button>
+
                 <button mat-menu-item (click)="logout()">
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Logout</span>

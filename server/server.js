@@ -98,7 +98,9 @@ app.use(expressJwt({
     return null;
   }
 }).unless({
-  path: ['/users/authenticate']
+  path: ['/users/authenticate',
+    '/forgot-password-2/sendlink',
+    '/forgot-password-2/resetpassword']
 }));
 
 
@@ -106,7 +108,7 @@ app.use(expressJwt({
 // routes
 app.use(routes);
 app.use('/users', require('./controllers/Users/users.controller'));
-
+app.use('/forgot-password-2', require('./controllers/forgot-password-2/forgot-password-2.controller'));
 
 app.use(function (err, req, res, next) {
   console.log(err);
