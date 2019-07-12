@@ -1,0 +1,10 @@
+{
+    "DB_HOST": "localhost",
+    "DB_User": "smafuser",
+    "DB_Pass": "Smaf123!@#",
+    "DB_PORT": "27017",
+    "DB_NAME": "smaf",
+    "secret": "vishfini"
+  }
+  
+  

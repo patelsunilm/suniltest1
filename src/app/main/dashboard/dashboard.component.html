@@ -1,0 +1,36 @@
+<div id="dashboard-project" class="page-layout simple right-sidebar" fxLayout="row">
+
+    <!-- CENTER -->
+    <div class="center" fusePerfectScrollbar>
+        <!-- HEADER -->
+        <!-- <div class="header-top accent p-24 h-60" fxLayout="row" fxLayoutAlign="space-between center" fxLayout.xs="column">
+
+            <div class="logo mb-16 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    dashboard
+                </mat-icon>
+                <span class="logo-text" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Dashboard
+                </span>
+            </div>
+        </div> -->
+        <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    dashboard
+                </mat-icon>
+                <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Dashboard
+                </span>
+            </div>
+        </div>
+        <div class="content">
+            <div class="widget-group p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom>
+
+                <div class="content p-24">
+
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,81 @@
+.fuse-card.one{ background: #039be5 !important;}
+.fuse-card.two{ background: #81c868 !important;}
+.fuse-card.three{ background: #f05050 !important;}
+.fuse-card.four{ background: #ffbe4a !important;}
+.fuse-card.five{ background: #94dedd !important;}
+.fuse-card.six{ background: #852c9a !important;}
+.fuse-card.seven{ background: #555555 !important;}
+.fuse-card.eight{ background: #c2db39 !important;}
+.fuse-card.nine{ background: #da39bb !important;}
+.fuse-card.ten{ background: #da9838 !important;}
+.fuse-card.eleven{ background: #d9db38 !important;}
+.fuse-card.tweal{ background: #dc653b !important;}
+.fuse-card.thrteen{ background: #279b00 !important;}
+
+
+
+.csttext{ color: white !important; text-align: center; font-weight: bold;}
+.cstnum{  color: white !important; text-align: center;}
+#dashboard-project {
+
+    > .sidebar {
+        width: 280px;
+        min-width: 280px;
+        max-width: 280px;
+    }
+
+    > .center {
+
+        > .header {
+            height: 160px;
+            min-height: 160px;
+            max-height: 160px;
+
+            .selected-project {
+                background: rgba(0, 0, 0, 0.12);
+                color: #FFFFFF;
+                padding: 8px 16px;
+                height: 40px;
+                line-height: 24px;
+                font-size: 16px;
+                border-radius: 8px 0 0 0;
+            }
+
+            .project-selector {
+                margin-left: 1px;
+                background: rgba(0, 0, 0, 0.12);
+                border-radius: 0 8px 0 0;
+
+                mat-icon {
+                    color: #FFFFFF;
+                }
+            }
+        }
+
+        > .content {
+            flex: 1;
+
+            mat-tab-group {
+                height: 100%;
+
+                .mat-tab-body-wrapper {
+                    flex-grow: 1;
+                }
+            }
+
+            .mat-tab-label-container {
+                padding: 0 24px;
+            }
+        }
+    }
+
+    .widget {
+
+        &.widget5 {
+
+            .gridline-path.gridline-path-horizontal {
+                display: none;
+            }
+        }
+    }
+}
