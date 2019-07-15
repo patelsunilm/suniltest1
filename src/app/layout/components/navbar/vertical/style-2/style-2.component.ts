@@ -18,6 +18,7 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
+    layout;
 
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
@@ -38,8 +39,12 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
         private _router: Router
     )
     {
+
+     
+
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -99,45 +104,20 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this._router.events
-            .pipe(
-                filter((event) => event instanceof NavigationEnd),
-                takeUntil(this._unsubscribeAll)
-            )
-            .subscribe(() => {
-                    if ( this._fuseSidebarService.getSidebar('navbar') )
-                    {
-                        this._fuseSidebarService.getSidebar('navbar').close();
-                    }
-                }
-            );
+       
 
-        // Get current navigation
-        this._fuseNavigationService.onNavigationChanged
-            .pipe(
-                filter(value => value !== null),
-                takeUntil(this._unsubscribeAll)
-            )
-            .subscribe(() => {
-                this.navigation = this._fuseNavigationService.getCurrentNavigation();
-            });
-
-        // Subscribe to the config changes
-        this._fuseConfigService.config
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((config) => {
-                this.fuseConfig = config;
-            });
+        this.toggleSidebarOpened('navbar');
+       
     }
 
     /**
      * On destroy
      */
-    ngOnDestroy(): void
+    ngOnDestroy()
     {
         // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
+        // this._unsubscribeAll.next();
+        // this._unsubscribeAll.complete();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -147,16 +127,11 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
     /**
      * Toggle sidebar opened status
      */
-    toggleSidebarOpened(): void
-    {
-        this._fuseSidebarService.getSidebar('navbar').toggleOpen();
+    toggleSidebarOpened(key) {
+        this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
 
-    /**
-     * Toggle sidebar folded status
-     */
-    toggleSidebarFolded(): void
-    {
-        this._fuseSidebarService.getSidebar('navbar').toggleFold();
+    toggleSidebarFolded(key) {
+        this._fuseSidebarService.getSidebar(key).toggleFold();
     }
 }

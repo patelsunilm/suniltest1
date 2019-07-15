@@ -19,7 +19,7 @@ import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseProgressBarModule, FuseSidebarModule } from '@fuse/components';
+import { FuseProgressBarModule, FuseSidebarModule ,FuseThemeOptionsModule} from '@fuse/components';
 
 import { fuseConfig } from 'app/fuse-config';
 
@@ -34,8 +34,12 @@ import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/ind
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
-import {  SignupModule } from './main/signup/signup.module';
 import { ChangePasswordService } from './_services/index';
+
+
+//all module
+import {  SignupModule } from './main/signup/signup.module';
+import { ProductsModule } from './main/products/products.module';
 
 const appRoutes: Routes = [
     {
@@ -63,6 +67,7 @@ const appRoutes: Routes = [
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
+        FuseThemeOptionsModule,
         // App modules
         LayoutModule,
 
@@ -72,7 +77,8 @@ const appRoutes: Routes = [
         SignupModule,
         ForgotPassword2Module,
         PasswordModule,
-        ResetPasswordModule
+        ResetPasswordModule,
+        ProductsModule
 
     ], providers: [
        

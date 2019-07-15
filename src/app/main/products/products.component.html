@@ -1,0 +1,126 @@
+<div class="page-layout simple fullwidth angular-material-elements">
+
+    <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+  
+      <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          image
+        </mat-icon>
+        <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          Product 
+        </span>
+      </div>
+      <button mat-raised-button matTooltip="Add New Product" [routerLink]="['/catalogue/addproduct']">
+        <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add</mat-icon>Add Product
+       
+      </button>
+    </div>
+  
+    <div class="content p-24">
+      <div class="customhalf">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+      </div>
+      <div class="customhalf1">
+        <form class="" fxLayout="" fxLayoutAlign="" name="form" [formGroup]="form">
+          <!-- <mat-form-field appearance="" fxFlex="" class="pl-4">
+            <mat-select placeholder="Select Category" formControlName="catName">
+              <mat-option value="SelectCategory" >Select Category</mat-option>
+
+            </mat-select>
+  
+          </mat-form-field> -->
+        </form>
+      </div>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+  
+  
+  
+          <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef> Image </th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="element.mainimage">
+               
+                <img class="imgcustom" src=""  alt="" style="height:100px">
+              </div>
+              <div *ngIf="element.mainyoutubevideo">
+                  <img src="assets/images/Logo-youtube.jpg" style="height:100px">
+  
+              <!-- <div [innerHtml]="element.mainyoutubevideo" ></div> -->
+            </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="proName">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element">  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="catName">
+            <th mat-header-cell *matHeaderCellDef> Product Category </th>
+            <td mat-cell *matCellDef="let element">  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef> Priority </th>
+            <td mat-cell *matCellDef="let element">  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="netamount">
+            <th mat-header-cell *matHeaderCellDef> Net Amount </th>
+            <td mat-cell *matCellDef="let element">  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="views">
+            <th mat-header-cell *matHeaderCellDef> Views </th>
+            <td mat-cell *matCellDef="let element">  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-slide-toggle checked="true" 
+               ></mat-slide-toggle>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="onweb">
+            <th mat-header-cell *matHeaderCellDef> Show on Web </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-slide-toggle checked="true" 
+                ></mat-slide-toggle>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="onapp">
+            <th mat-header-cell *matHeaderCellDef> Show on App </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-slide-toggle checked="true" 
+               ></mat-slide-toggle>
+            </td>
+          </ng-container>
+  
+  
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+              <a [routerLink]="['/catalogue/updateproduct/',element._id]">
+                <mat-icon _ngcontent-c64="" class="secondary-text s-24 mat-icon material-icons" role="img"
+                  aria-hidden="true">edit</mat-icon>
+              </a>
+              <mat-icon _ngcontent-c64="" class="secondary-text s-24 mat-icon material-icons" role="img"
+                aria-hidden="true" (click)="deleteproductgallery(element._id,element.proName)">delete_outline</mat-icon>
+            </td>
+  
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
+  </div>
