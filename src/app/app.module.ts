@@ -19,7 +19,7 @@ import { MerchantModule } from 'app/main/merchant/merchant.module';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseProgressBarModule, FuseSidebarModule } from '@fuse/components';
+import { FuseProgressBarModule, FuseSidebarModule ,FuseThemeOptionsModule} from '@fuse/components';
 
 import { fuseConfig } from 'app/fuse-config';
 
@@ -35,9 +35,13 @@ import { DashbordService } from './_services/index';
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
-import {  SignupModule } from './main/signup/signup.module';
 import { ChangePasswordService } from './_services/index';
 import { MerchantService } from './_services/index';
+
+
+//all module
+import {  SignupModule } from './main/signup/signup.module';
+import { ProductsModule } from './main/products/products.module';
 
 const appRoutes: Routes = [
     {
@@ -65,6 +69,7 @@ const appRoutes: Routes = [
         FuseProgressBarModule,
         FuseSharedModule,
         FuseSidebarModule,
+        FuseThemeOptionsModule,
         // App modules
         LayoutModule,
 
@@ -75,7 +80,8 @@ const appRoutes: Routes = [
         ForgotPassword2Module,
         PasswordModule,
         ResetPasswordModule,
-        MerchantModule
+        MerchantModule,
+        ProductsModule
 
     ], providers: [
        

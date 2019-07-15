@@ -45,31 +45,33 @@ export class FuseNavigationComponent implements OnInit
      */
     ngOnInit(): void
     {
-        // Load the navigation either from the input or from the service
-        this.navigation = this.navigation || this._fuseNavigationService.getCurrentNavigation();
 
-        // Subscribe to the current navigation changes
-        this._fuseNavigationService.onNavigationChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(() => {
+      
+        // // Load the navigation either from the input or from the service
+        // this.navigation = this.navigation || this._fuseNavigationService.getCurrentNavigation();
 
-                // Load the navigation
-                this.navigation = this._fuseNavigationService.getCurrentNavigation();
+        // // Subscribe to the current navigation changes
+        // this._fuseNavigationService.onNavigationChanged
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe(() => {
 
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+        //         // Load the navigation
+        //         this.navigation = this._fuseNavigationService.getCurrentNavigation();
 
-        // Subscribe to navigation item
-        merge(
-            this._fuseNavigationService.onNavigationItemAdded,
-            this._fuseNavigationService.onNavigationItemUpdated,
-            this._fuseNavigationService.onNavigationItemRemoved
-        ).pipe(takeUntil(this._unsubscribeAll))
-         .subscribe(() => {
+        //         // Mark for check
+        //         this._changeDetectorRef.markForCheck();
+        //     });
 
-             // Mark for check
-             this._changeDetectorRef.markForCheck();
-         });
+        // // Subscribe to navigation item
+        // merge(
+        //     this._fuseNavigationService.onNavigationItemAdded,
+        //     this._fuseNavigationService.onNavigationItemUpdated,
+        //     this._fuseNavigationService.onNavigationItemRemoved
+        // ).pipe(takeUntil(this._unsubscribeAll))
+        //  .subscribe(() => {
+
+        //      // Mark for check
+        //      this._changeDetectorRef.markForCheck();
+        //  });
     }
 }

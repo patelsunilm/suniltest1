@@ -90,10 +90,10 @@ this.http.get<{ip:string}>('https://jsonip.com')
 
   addsignupuser() {
     
-     this.registerForm.value.ipAddress = this.ipAddress;
-     this.registerForm.value.status = false;
-     this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
-     this.registerForm.value.usertype = "Merchant";
+ this.registerForm.value.ipAddress = this.ipAddress;
+ this.registerForm.value.status = false;
+ this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
+ this.registerForm.value.usertype = "Merchant";
 
 this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
   data => {

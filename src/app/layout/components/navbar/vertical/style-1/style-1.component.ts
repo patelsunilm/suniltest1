@@ -18,7 +18,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
-
+    layout;
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
@@ -40,6 +40,89 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        var custom = [
+            {
+                id: 'dashboard',
+                title: 'Dashboards',
+                url: '/dashboard',
+                type: 'item',
+                icon: 'dashboard'
+            },
+            {
+                id: 'merchant',
+                title: 'Merchant',
+                url: '/merchant',
+                type: 'item',
+                icon: 'merchant'
+            },
+        ]
+
+        var custom2 = [
+            {
+                id: 'dashboard',
+                title: 'Dashboards',
+                url: '/dashboard',
+                type: 'item',
+                icon: 'dashboard'
+            },
+            {
+                id: 'products',
+                title: 'Products',
+                url: '/products',
+                type: 'item',
+                icon: 'dashboard'
+            },
+
+        ]
+
+        _router.events.subscribe(
+            (event) => {
+             
+                if (event instanceof NavigationEnd) {
+                    var custom = [
+                        {
+                            id: 'dashboard',
+                            title: 'Dashboards',
+                            url: '/dashboard',
+                            type: 'item',
+                            icon: 'dashboard'
+                        },
+                        {
+                            id: 'merchant',
+                            title: 'Merchant',
+                            url: '/merchant',
+                            type: 'item',
+                            icon: 'merchant'
+                        },
+                    ]
+            
+                    var custom2 = [
+                        {
+                            id: 'dashboard',
+                            title: 'Dashboards',
+                            url: '/dashboard',
+                            type: 'item',
+                            icon: 'dashboard'
+                        },
+                        {
+                            id: 'products',
+                            title: 'Products',
+                            url: '/products',
+                            type: 'item',
+                            icon: 'dashboard'
+                        },
+            
+                    ];
+                  
+                }
+            })
+            
+
+            
+            this.navigation = custom;
+             this.navigation = custom2;
+           
+            this.layout = 'vertical';
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -99,35 +182,41 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this._router.events
-            .pipe(
-                filter((event) => event instanceof NavigationEnd),
-                takeUntil(this._unsubscribeAll)
-            )
-            .subscribe(() => {
-                    if ( this._fuseSidebarService.getSidebar('navbar') )
-                    {
-                        this._fuseSidebarService.getSidebar('navbar').close();
-                    }
-                }
-            );
 
-        // Subscribe to the config changes
+        
+         this.toggleSidebarOpened('navbar');
+
+        // this._router.events
+        //     .pipe(
+        //         filter((event) => event instanceof NavigationEnd),
+        //         takeUntil(this._unsubscribeAll)
+        //     )
+        //     .subscribe(() => {
+        //             if ( this._fuseSidebarService.getSidebar('navbar') )
+        //             {
+        //                 this._fuseSidebarService.getSidebar('navbar').close();
+        //             }
+        //         }
+        //     );
+
+     //   Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((config) => {
                 this.fuseConfig = config;
             });
 
-        // Get current navigation
-        this._fuseNavigationService.onNavigationChanged
-            .pipe(
-                filter(value => value !== null),
-                takeUntil(this._unsubscribeAll)
-            )
-            .subscribe(() => {
-                this.navigation = this._fuseNavigationService.getCurrentNavigation();
-            });
+      //  Get current navigation
+        // this._fuseNavigationService.onNavigationChanged
+        //     .pipe(
+        //         filter(value => value !== null),
+        //         takeUntil(this._unsubscribeAll)
+        //     )
+        //     .subscribe(() => {
+        //         this.navigation = this._fuseNavigationService.getCurrentNavigation();
+ 
+        //         console.log(this.navigation)
+        //     });
     }
 
     /**
@@ -147,7 +236,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy
     /**
      * Toggle sidebar opened status
      */
-    toggleSidebarOpened(): void
+    toggleSidebarOpened(key): void
     {
         this._fuseSidebarService.getSidebar('navbar').toggleOpen();
     }

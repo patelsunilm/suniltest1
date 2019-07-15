@@ -1,4 +1,4 @@
-<div class="navbar-header" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
+<div class="navbar-header fuse-navy-900" >
 
     <div class="logo">
         <img class="logo-icon" src="assets/images/logos/smaflogo.jpg">
@@ -6,18 +6,18 @@
     </div>
 
     <button mat-icon-button class="toggle-sidebar-folded"
-            (click)="toggleSidebarFolded()" fxHide.lt-lg>
+            (click)="toggleSidebarFolded('navbar')" fxHide.lt-lg>
         <mat-icon>menu</mat-icon>
     </button>
 
     <button mat-icon-button class="toggle-sidebar-opened"
-            (click)="toggleSidebarOpened()" fxHide.gt-md>
+            (click)="toggleSidebarOpened('navbar')" fxHide.gt-md>
         <mat-icon>arrow_back</mat-icon>
     </button>
 
 </div>
 
-<div class="navbar-content" fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}"
-     [ngClass]="fuseConfig.layout.navbar.primaryBackground">
-    <fuse-navigation layout="vertical"></fuse-navigation>
+
+<div class="navbar-content fuse-navy-700 " fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}" >
+     <fuse-navigation [navigation]="navigation" ></fuse-navigation>
 </div>

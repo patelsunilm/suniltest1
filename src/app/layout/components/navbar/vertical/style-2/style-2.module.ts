@@ -3,6 +3,7 @@ import { MatButtonModule, MatIconModule } from '@angular/material';
 
 import { FuseNavigationModule } from '@fuse/components';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { RouterModule, Routes } from '@angular/router';
 
 import { NavbarVerticalStyle2Component } from 'app/layout/components/navbar/vertical/style-2/style-2.component';
 
@@ -15,7 +16,9 @@ import { NavbarVerticalStyle2Component } from 'app/layout/components/navbar/vert
         MatIconModule,
 
         FuseSharedModule,
-        FuseNavigationModule
+        FuseNavigationModule,
+        RouterModule
+
     ],
     exports     : [
         NavbarVerticalStyle2Component
