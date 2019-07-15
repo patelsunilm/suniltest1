@@ -35,6 +35,7 @@ import { DashbordService } from './_services/index';
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
+import {  SignupModule } from './main/signup/signup.module';
 import { ChangePasswordService } from './_services/index';
 
 const appRoutes: Routes = [
@@ -46,7 +47,8 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        
     ],
     imports: [
         BrowserModule,
@@ -68,6 +70,7 @@ const appRoutes: Routes = [
         Login2Module,
         DashboardModule,
         ProfileModule,
+        SignupModule,
         ForgotPassword2Module,
         PasswordModule,
         ResetPasswordModule

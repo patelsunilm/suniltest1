@@ -21,7 +21,6 @@ export class AuthenticationService {
                 localStorage.setItem('email', user.email);
                 localStorage.setItem('userType', user.userType);
                 localStorage.setItem('name', user.name);
-                //localStorage.setItem('username', user.username);
                 localStorage.setItem('token', user.token);
 
                 return user;
@@ -37,5 +36,12 @@ export class AuthenticationService {
         //  localStorage.removeItem('username');
     }
 
+
+
+    addsignupuser(userdata) {
+
+        return this.http.post<any>(appConfig.apiUrl + '/users/addsignupuser', userdata)
+  
+    }
 
 }

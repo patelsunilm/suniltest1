@@ -4,11 +4,11 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var Users = require('../controllers/Users/users.model');// get our mongoose model
-
+var signup = require('../controllers/Users/signup.model');
 
 var service = {};
 service.authenticate = authenticate;
-
+service.addsignupuser = addsignupuser
 
 function authenticate(email, password) {
 
@@ -39,5 +39,35 @@ function authenticate(email, password) {
 }
 
 
+function addsignupuser(signupdata) {
+
+var deferred = Q.defer();
+var saveallsignup = new signup({
+   
+    name : signupdata.name,
+    email : signupdata.email,
+    password : signupdata.password,
+    address: signupdata.address,
+    businessname : signupdata.BusinessName,
+    secretquestion : signupdata.Secretquestion,
+    secretanswer : signupdata.Secretanswer,
+    ipaddress : signupdata.ipAddress,
+    status : signupdata.status,
+    uniqueid: signupdata.uniqueid,
+    usertype : signupdata.usertype
+});
+
+saveallsignup.save(function (err, saveallsignup) {
+    if (!err) {
+
+       
+        deferred.resolve(saveallsignup);
+    } else {
+        deferred.reject(err.name + ': ' + err.message);
+    }
+})
+return deferred.promise;
+
+}
 
 module.exports = service;
