@@ -15,7 +15,7 @@ import { ProfileModule } from 'app/main/profile/profile.module';
 import { ForgotPassword2Module } from 'app/main/forgotpassword/forgot-password-2.module';
 import { PasswordModule } from 'app/main/password/password.module';
 import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module';
-
+import { MerchantModule } from 'app/main/merchant/merchant.module';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -37,6 +37,7 @@ import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
 import {  SignupModule } from './main/signup/signup.module';
 import { ChangePasswordService } from './_services/index';
+import { MerchantService } from './_services/index';
 
 const appRoutes: Routes = [
     {
@@ -73,7 +74,8 @@ const appRoutes: Routes = [
         SignupModule,
         ForgotPassword2Module,
         PasswordModule,
-        ResetPasswordModule
+        ResetPasswordModule,
+        MerchantModule
 
     ], providers: [
        
@@ -85,6 +87,7 @@ const appRoutes: Routes = [
         ProfileService,
         ChangePasswordService,
         ForgotPasswordService,
+        MerchantService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
 

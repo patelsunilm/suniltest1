@@ -98,8 +98,8 @@ app.use(expressJwt({
     return null;
   }
 }).unless({
-  path: ['/users/authenticate' ,'/users/addsignupuser',
- 
+  path: ['/users/authenticate', '/users/addsignupuser',
+
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword']
 }));

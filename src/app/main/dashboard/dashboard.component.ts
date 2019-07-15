@@ -17,7 +17,7 @@ import { DashbordService } from '../../_services/index';
     animations: fuseAnimations
 })
 export class DashboardComponent implements OnInit {
-    allresellers: any;
+  
     countPackages: any;
     countDomains: any;
     countCompanies: any;
@@ -163,24 +163,7 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
 
-        this.DashbordService.getallMerchentsData()
-            .subscribe(
-                data => {
-                    this.allresellers = data;
-                    const resellers = data;
-                    const allresellers = [];
-                    resellers.forEach(element => {
-                        console.log(element)
-
-                        allresellers.push(element);
-
-                    });
-                    // this.dataSource = new MatTableDataSource(allresellers);
-                    // this.dataSource.paginator = this.paginator;
-                },
-                error => {
-                    console.log(error);
-                });
+      
     }
 
     // -----------------------------------------------------------------------------------------------------

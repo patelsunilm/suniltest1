@@ -10,9 +10,6 @@ export class DashbordService {
 
   constructor(private http: HttpClient) { }
   
-  
-  getallMerchentsData() {
-    return this.http.get<any>(appConfig.apiUrl + '/dashbord/getallMerchentsData')
-  }
+
 
 }

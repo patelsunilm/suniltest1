@@ -1,0 +1,82 @@
+<div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
+
+    <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+        fxLayoutAlign.gt-xs="space-between center">
+
+        <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                people
+            </mat-icon>
+            <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                Merchants
+            </span>
+        </div>
+        <!-- <button mat-raised-button matTooltip="Add resellers" [routerLink]="['/resellers/addreseller']">
+        <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add</mat-icon>Add Reseller
+      </button> -->
+    </div>
+    <div class="content p-24">
+
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" class="cstm-resellers-table">
+
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Name </th>
+                    <td mat-cell *matCellDef="let element">{{element.name}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Address </th>
+                    <td mat-cell *matCellDef="let element">{{element.address}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Email </th>
+                    <td mat-cell *matCellDef="let element">{{element.email}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="businessname">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Businessname </th>
+                    <td mat-cell *matCellDef="let element">{{element.businessname}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Status </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-slide-toggle (change)="merchantStatusToggle($event,element._id)"
+                            checked="{{element.status}}">
+                        </mat-slide-toggle>
+                    </td>
+
+                </ng-container>
+
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="cstm-th"> Action </th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <a [routerLink]="['/merchant/updatemerchant/',element._id]">
+                            <mat-icon _ngcontent-c64="" class="secondary-text s-24 mat-icon material-icons" role="img"
+                                aria-hidden="true">edit</mat-icon>
+                        </a>
+                        <mat-icon _ngcontent-c64="" class="secondary-text s-24 mat-icon material-icons" role="img"
+                            aria-hidden="true" (click)="deletemerchant(element._id,element.name)">delete_outline
+                        </mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+    </div>
+</div>

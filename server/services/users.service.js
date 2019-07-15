@@ -53,7 +53,7 @@ var saveallsignup = new Users({
     ipaddress : signupdata.ipAddress,
     status : signupdata.status,
     uniqueid: signupdata.uniqueid,
-    usertype : signupdata.usertype
+    userType : signupdata.usertype
 });
 
 saveallsignup.save(function (err, saveallsignup) {
