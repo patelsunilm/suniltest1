@@ -5,6 +5,7 @@ import * as shape from 'd3-shape';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { DashbordService } from '../../_services/index';
 
 
 
@@ -16,7 +17,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
     animations: fuseAnimations
 })
 export class DashboardComponent implements OnInit {
-
+    allresellers: any;
     countPackages: any;
     countDomains: any;
     countCompanies: any;
@@ -45,7 +46,7 @@ export class DashboardComponent implements OnInit {
      */
     constructor(
         private _fuseSidebarService: FuseSidebarService,
-     //   private DashbordService: DashbordService,
+        private DashbordService: DashbordService,
         private router: Router,
         private route: ActivatedRoute,
     ) {
@@ -162,6 +163,24 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
 
+        this.DashbordService.getallMerchentsData()
+            .subscribe(
+                data => {
+                    this.allresellers = data;
+                    const resellers = data;
+                    const allresellers = [];
+                    resellers.forEach(element => {
+                        console.log(element)
+
+                        allresellers.push(element);
+
+                    });
+                    // this.dataSource = new MatTableDataSource(allresellers);
+                    // this.dataSource.paginator = this.paginator;
+                },
+                error => {
+                    console.log(error);
+                });
     }
 
     // -----------------------------------------------------------------------------------------------------

@@ -31,6 +31,7 @@ import { AuthGuardCommon } from './_guards/index';
 import { AuthGuardCo } from './_guards/index';
 import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/index';
 
+import { DashbordService } from './_services/index';
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
@@ -76,6 +77,7 @@ const appRoutes: Routes = [
         AuthGuard,
         AuthGuardCo,
         AuthGuardCommon,
+        DashbordService,
         AuthenticationService,
         ProfileService,
         ChangePasswordService,

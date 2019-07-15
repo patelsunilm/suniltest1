@@ -11,4 +11,7 @@ router.post('/profile/updateprofile', profiledata.updateprofile);
 var passworddata = require('./controllers/password/password.controller');
 router.post('/password/passwordmatch', passworddata.passwordmatch);
 
+
+var merchentdata = require('./controllers/dashboards/dashboard.controller');
+router.get('/dashbord/getallMerchentsData', merchentdata.getallMerchentsData);
 module.exports = router;
