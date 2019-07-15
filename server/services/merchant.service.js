@@ -53,31 +53,42 @@ function updatemerchantData(merchantdata) {
             data.string = 'Email is already exist.';
             deferred.resolve(data);
 
-        } else {
-            users.findById(merchantdata._id, function (err, getdata) {
-                if (!err) {
-
-                    getdata.name = merchantdata.name;
-                    getdata.address = merchantdata.address;
-                    getdata.email = merchantdata.email;
-                    getdata.businessname = merchantdata.businessname;
-                    getdata.status = merchantdata.status;
-                    getdata.datemodified = Date.now();
-
-                    getdata.save(function (err) {
+        } else if (merchantdata.businessname) {
+            var businessname = new RegExp("^" + merchantdata.businessname + "$", "i")
+            users.find({ $and: [{ businessname: businessname }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
+                if (datalength.length > 0) {
+                    var data = {};
+                    data.string = 'Business Name is already exist.';
+                    deferred.resolve(data);
+                } else {
+                    users.findById(merchantdata._id, function (err, getdata) {
                         if (!err) {
-                            deferred.resolve(getdata);
+
+                            getdata.name = merchantdata.name;
+                            getdata.address = merchantdata.address;
+                            getdata.email = merchantdata.email;
+                            getdata.businessname = merchantdata.businessname;
+                            getdata.status = merchantdata.status;
+                            getdata.datemodified = Date.now();
+
+                            getdata.save(function (err) {
+                                if (!err) {
+                                    deferred.resolve(getdata);
+                                } else {
+                                    deferred.reject(err.name + ': ' + err.message);
+                                }
+                            });
+
                         } else {
                             deferred.reject(err.name + ': ' + err.message);
                         }
-                    });
 
-                } else {
-                    deferred.reject(err.name + ': ' + err.message);
+                    })
                 }
-
             })
         }
+
+
 
     })
 

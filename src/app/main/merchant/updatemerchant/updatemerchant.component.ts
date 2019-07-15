@@ -98,6 +98,12 @@ export class UpdateMerchantComponent implements OnInit, OnDestroy {
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
+                        } else if (data.string == 'Business Name is already exist.') {
+                            this.snackBar.open('Business Name is already exist.', '', {
+                                duration: 3000,
+                                horizontalPosition: this.horizontalPosition,
+                                verticalPosition: this.verticalPosition,
+                            });
                         } else {
                             this.snackBar.open('Merchant updated successfully.', '', {
                                 duration: 3000,

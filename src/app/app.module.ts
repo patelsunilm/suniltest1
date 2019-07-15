@@ -19,7 +19,7 @@ import { MerchantModule } from 'app/main/merchant/merchant.module';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseProgressBarModule, FuseSidebarModule ,FuseThemeOptionsModule} from '@fuse/components';
+import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
 
 import { fuseConfig } from 'app/fuse-config';
 
@@ -40,7 +40,7 @@ import { MerchantService } from './_services/index';
 
 
 //all module
-import {  SignupModule } from './main/signup/signup.module';
+import { SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
 
 const appRoutes: Routes = [
@@ -53,7 +53,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        
+
     ],
     imports: [
         BrowserModule,
@@ -84,7 +84,7 @@ const appRoutes: Routes = [
         ProductsModule
 
     ], providers: [
-       
+
         AuthGuard,
         AuthGuardCo,
         AuthGuardCommon,
