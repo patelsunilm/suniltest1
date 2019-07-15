@@ -4,7 +4,6 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var Users = require('../controllers/Users/users.model');// get our mongoose model
-var signup = require('../controllers/Users/signup.model');
 
 var service = {};
 service.authenticate = authenticate;
@@ -42,7 +41,7 @@ function authenticate(email, password) {
 function addsignupuser(signupdata) {
 
 var deferred = Q.defer();
-var saveallsignup = new signup({
+var saveallsignup = new Users({
    
     name : signupdata.name,
     email : signupdata.email,
