@@ -27,6 +27,7 @@ import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/ind
 
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
+import {  SignupModule } from './main/signup/signup.module';
 
 const appRoutes: Routes = [
     {
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        
     ],
     imports: [
         BrowserModule,
@@ -58,7 +60,8 @@ const appRoutes: Routes = [
 
         Login2Module,
         DashboardModule,
-        ProfileModule
+        ProfileModule,
+        SignupModule
 
     ], providers: [
         //  AuthGuard,
