@@ -8,9 +8,15 @@ import { MatButtonModule, MatIconModule } from '@angular/material';
 
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
+
 import { Login2Module } from 'app/main/login/login.module';
 import { DashboardModule } from 'app/main/dashboard/dashboard.module';
 import { ProfileModule } from 'app/main/profile/profile.module';
+import { ForgotPassword2Module } from 'app/main/forgotpassword/forgot-password-2.module';
+import { PasswordModule } from 'app/main/password/password.module';
+import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module';
+
+
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule } from '@fuse/components';
@@ -25,9 +31,11 @@ import { AuthGuardCommon } from './_guards/index';
 import { AuthGuardCo } from './_guards/index';
 import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/index';
 
+import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
 import {  SignupModule } from './main/signup/signup.module';
+import { ChangePasswordService } from './_services/index';
 
 const appRoutes: Routes = [
     {
@@ -61,15 +69,20 @@ const appRoutes: Routes = [
         Login2Module,
         DashboardModule,
         ProfileModule,
-        SignupModule
+        SignupModule,
+        ForgotPassword2Module,
+        PasswordModule,
+        ResetPasswordModule
 
     ], providers: [
-        //  AuthGuard,
+       
         AuthGuard,
         AuthGuardCo,
         AuthGuardCommon,
         AuthenticationService,
         ProfileService,
+        ChangePasswordService,
+        ForgotPasswordService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
 
