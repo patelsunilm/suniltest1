@@ -3,7 +3,9 @@ var router = express.Router();
 var userService = require('../../services/users.service');
 
 router.post('/authenticate', authenticate);
-router.post('/addsignupuser' , addsignupuser)
+router.post('/addsignupuser', addsignupuser);
+router.post('/addsecretValuedata', addsecretValuedata)
+
 
 module.exports = router;
 
@@ -44,4 +46,19 @@ function addsignupuser(req, res) {
         });
 }
 
+function addsecretValuedata(req, res) {
 
+    userService.addsecretValuedata(req.body)
+        .then(function (data) {
+         
+            if (data) {
+                res.send(data);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+
+}

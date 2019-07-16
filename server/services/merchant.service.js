@@ -15,7 +15,7 @@ service.deletemerchantData = deletemerchantData;
 function getallMerchentsData() {
     var deferred = Q.defer();
 
-    users.find({ userType: 'Merchant' }, function (err, getData) {
+    users.find({ userType: 'Merchant'}, function (err, getData) {
         if (!err) {
             deferred.resolve(getData);
         } else {

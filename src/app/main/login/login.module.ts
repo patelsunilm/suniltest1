@@ -5,17 +5,23 @@ import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, 
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { Login2Component } from 'app/main/login/login.component';
+import { secretvaluepopupComponent } from './login.component';
 
 const routes = [
     {
         path: 'login',
         component: Login2Component
+    },
+    {
+        path: 'login',
+        component: secretvaluepopupComponent,
     }
 ];
 
 @NgModule({
     declarations: [
-        Login2Component
+        Login2Component,
+        secretvaluepopupComponent
     ],
     imports: [
         RouterModule.forChild(routes),

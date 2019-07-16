@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild,OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, ViewChild, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from '../../_services/index';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBarVerticalPosition, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 
@@ -17,11 +17,11 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBa
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  animations   : fuseAnimations
+  animations: fuseAnimations
 })
 export class SignupComponent implements OnInit {
 
-  ipAddress:any;
+  ipAddress: any;
   registerForm: FormGroup;
   private _unsubscribeAll: Subject<any>;
 
@@ -29,95 +29,90 @@ export class SignupComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
 
-  constructor( private _fuseConfigService: FuseConfigService,private http: HttpClient,public snackBar: MatSnackBar,
-    private _formBuilder: FormBuilder  , private AuthenticationService : AuthenticationService,private route: ActivatedRoute,
-    private router: Router,) {
+  constructor(private _fuseConfigService: FuseConfigService, private http: HttpClient, public snackBar: MatSnackBar,
+    private _formBuilder: FormBuilder, private AuthenticationService: AuthenticationService, private route: ActivatedRoute,
+    private router: Router, ) {
 
-     
 
-// Configure the layout
-this._fuseConfigService.config = {
-  layout: {
-      navbar   : {
+
+    // Configure the layout
+    this._fuseConfigService.config = {
+      layout: {
+        navbar: {
           hidden: true
-      },
-      toolbar  : {
+        },
+        toolbar: {
           hidden: true
-      },
-      footer   : {
+        },
+        footer: {
           hidden: true
-      },
-      sidepanel: {
+        },
+        sidepanel: {
           hidden: true
+        }
       }
+    };
+
+    // Set the private defaults
+    this._unsubscribeAll = new Subject();
+
+
+    this.http.get<{ ip: string }>('https://jsonip.com')
+      .subscribe(data => {
+        this.ipAddress = data.ip
+
+
+      })
+
+
   }
-};
 
-// Set the private defaults
-this._unsubscribeAll = new Subject();
-
-
-this.http.get<{ip:string}>('https://jsonip.com')
-.subscribe( data => {
-  this.ipAddress = data.ip
-
-
-})
-
-
-     }
-
-  ngOnInit() : void {
+  ngOnInit(): void {
 
     this.registerForm = this._formBuilder.group({
-      name           : ['', Validators.required],
-      email          : ['', [Validators.required, Validators.email]],
-      password       : ['', Validators.required],
-      address        : ['' ,Validators.required],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      address: ['', Validators.required],
+      BusinessName: ['', Validators.required],
+      Secretquestion: ['', Validators.required],
+      Secretanswer: ['', Validators.required],
 
-      BusinessName        : ['' ,Validators.required],
-      Secretquestion        : ['' ,Validators.required],
-      Secretanswer        : ['' ,Validators.required],
+    });
 
 
-      
-      
-  });
-
-  
 
   }
 
   addsignupuser() {
-    
- this.registerForm.value.ipAddress = this.ipAddress;
- this.registerForm.value.status = false;
- this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
- this.registerForm.value.usertype = "Merchant";
 
-this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
-  data => {
+    this.registerForm.value.ipAddress = this.ipAddress;
+    this.registerForm.value.status = false;
+    this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
+    this.registerForm.value.usertype = "Merchant";
 
- this.snackBar.open('sign up successfully.', '', {
-  duration: 5000,
-  horizontalPosition: this.horizontalPosition,
-  verticalPosition: this.verticalPosition,
-});
-this.router.navigate(['login']);
+    this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
+      data => {
 
-
-},
-error => {
-  console.log(error);
-});
-}
+        this.snackBar.open('sign up successfully.', '', {
+          duration: 5000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+        this.router.navigate(['login']);
 
 
-  ngOnDestroy(): void
-  {
-      // Unsubscribe from all subscriptions
-      this._unsubscribeAll.next();
-      this._unsubscribeAll.complete();
+      },
+      error => {
+        console.log(error);
+      });
+  }
+
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
 

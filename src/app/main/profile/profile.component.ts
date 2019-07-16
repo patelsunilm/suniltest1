@@ -16,7 +16,6 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 export class ProfileComponent implements OnInit, OnDestroy {
 
     form: FormGroup;
-    // businessCategory: number;
     lat: number;
     lng: number;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -62,6 +61,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
             name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             address: ['', Validators.required],
+            businessname: ['', Validators.required],
+            Secretquestion: ['', Validators.required],
+            Secretanswer: ['', Validators.required],
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -71,11 +73,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
                     data => {
+
                         this.form = this._formBuilder.group({
 
                             name: [data.name],
                             email: [data.email],
                             address: [data.address],
+                            businessname: [data.businessname],
+                            Secretquestion: [data.secretquestion],
+                            Secretanswer: [data.secretanswer],
                         });
                     },
                     error => {
@@ -87,18 +93,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     }
 
+    readLocalStorageValue(key) {
+        return localStorage.getItem(key);
+    }
+
     updatemyprofile() {
 
         var user = JSON.parse(localStorage.getItem('currentUser'));
+        console.log(user)
         this.route.params.subscribe(params => {
             this.form.value._id = user._id;
-            this.form.value.user = user.userType;
+            this.form.value.userType = user.userType;
             this.ProfileService.updateprofile(this.form.value)
                 .subscribe(
                     data => {
 
                         if (data.string == 'Email is already exist.') {
                             this.snackBar.open('Email is already exist.', '', {
+                                duration: 3000,
+                                horizontalPosition: this.horizontalPosition,
+                                verticalPosition: this.verticalPosition,
+                            });
+                        } if (data.string == 'BusinessName is already exist.') {
+                            this.snackBar.open('BusinessName is already exist.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,

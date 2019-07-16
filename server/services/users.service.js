@@ -7,7 +7,9 @@ var Users = require('../controllers/Users/users.model');// get our mongoose mode
 
 var service = {};
 service.authenticate = authenticate;
-service.addsignupuser = addsignupuser
+service.addsignupuser = addsignupuser;
+service.addsecretValuedata = addsecretValuedata;
+
 
 function authenticate(email, password) {
 
@@ -24,6 +26,8 @@ function authenticate(email, password) {
                 email: user.email,
                 userType: user.userType,
                 name: user.name,
+                secretquestion: user.secretquestion,
+                secretanswer: user.secretanswer,
                 token: jwt.sign({ sub: user._id }, config.secret)
             });
 
@@ -40,33 +44,58 @@ function authenticate(email, password) {
 
 function addsignupuser(signupdata) {
 
-var deferred = Q.defer();
-var saveallsignup = new Users({
+    var deferred = Q.defer();
+    var saveallsignup = new Users({
+
+        name: signupdata.name,
+        email: signupdata.email,
+        password: signupdata.password,
+        address: signupdata.address,
+        businessname: signupdata.BusinessName,
+        secretquestion: signupdata.Secretquestion,
+        secretanswer: signupdata.Secretanswer,
+        ipaddress: signupdata.ipAddress,
+        status: signupdata.status,
+        uniqueid: signupdata.uniqueid,
+        userType: signupdata.usertype
+    });
+
+    saveallsignup.save(function (err, saveallsignup) {
+        if (!err) {
+
+
+            deferred.resolve(saveallsignup);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+
+}
+
+function addsecretValuedata(data) {
+    var deferred = Q.defer();
    
-    name : signupdata.name,
-    email : signupdata.email,
-    password : signupdata.password,
-    address: signupdata.address,
-    businessname : signupdata.BusinessName,
-    secretquestion : signupdata.Secretquestion,
-    secretanswer : signupdata.Secretanswer,
-    ipaddress : signupdata.ipAddress,
-    status : signupdata.status,
-    uniqueid: signupdata.uniqueid,
-    userType : signupdata.usertype
-});
-
-saveallsignup.save(function (err, saveallsignup) {
-    if (!err) {
-
+    Users.findOne({ $and: [{ _id: data._id }, { secretanswer: data.secretanswer.secretanswer }] }, function (err, getvalue) {
        
-        deferred.resolve(saveallsignup);
-    } else {
-        deferred.reject(err.name + ': ' + err.message);
-    }
-})
-return deferred.promise;
 
+        if (!err) {
+           if(getvalue){
+            var data = {};
+            data.string = 'Login successfully.';
+            deferred.resolve(data);
+           
+           }else{
+            var data = {};
+            data.string = 'Invalid credentials.';
+            deferred.resolve(data);
+           }
+
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
 }
 
 module.exports = service;

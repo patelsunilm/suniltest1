@@ -158,7 +158,6 @@ export class deletemerchantpopupComponent {
                 error => {
                     console.log(error);
                 });
-
     }
 
 }
