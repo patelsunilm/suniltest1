@@ -55,9 +55,11 @@ export class ProductsComponent implements OnInit {
     this.ProductService.getAllproducts()
       .subscribe(
         data => {
+
           this.dataSource = new MatTableDataSource(data);
           this.dataSource.paginator = this.paginator;
-          });
+        
+        });
   }
 
 
@@ -71,6 +73,7 @@ export class ProductsComponent implements OnInit {
       },
       width: '450px'
     });
+   
     dialogRef.afterClosed().subscribe(result => {
   
   

@@ -5,6 +5,7 @@ import * as shape from 'd3-shape';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { DashbordService } from '../../_services/index';
 
 
 
@@ -16,7 +17,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
     animations: fuseAnimations
 })
 export class DashboardComponent implements OnInit {
-
+  
     countPackages: any;
     countDomains: any;
     countCompanies: any;
@@ -45,7 +46,7 @@ export class DashboardComponent implements OnInit {
      */
     constructor(
         private _fuseSidebarService: FuseSidebarService,
-     //   private DashbordService: DashbordService,
+        private DashbordService: DashbordService,
         private router: Router,
         private route: ActivatedRoute,
     ) {
@@ -161,7 +162,7 @@ export class DashboardComponent implements OnInit {
      */
 
     ngOnInit() {
-
+     
     }
 
     // -----------------------------------------------------------------------------------------------------

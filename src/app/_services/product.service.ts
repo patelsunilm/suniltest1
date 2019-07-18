@@ -34,6 +34,7 @@ export class ProductService {
         const formData: any = new FormData();
         const files: Array<File> = Files;
         formData.append("uploads", files);
+    
         
         return this.http.post<any>(appConfig.apiUrl + '/addcsvfile' ,formData)
  

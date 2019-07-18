@@ -1,29 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
-import { ProfileService } from '../../_services/index';
-import { Router, ActivatedRoute } from '@angular/router';
+import { MerchantService } from '../../../_services/index';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 
-
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss'],
+    selector: 'app-updatemerchant',
+    templateUrl: '../updatemerchant/updatemerchant.component.html',
+    styleUrls: ['../updatemerchant/updatemerchant.component.scss'],
     animations: fuseAnimations
 })
-export class ProfileComponent implements OnInit, OnDestroy {
-
+export class UpdateMerchantComponent implements OnInit, OnDestroy {
     form: FormGroup;
-    lat: number;
-    lng: number;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     returnUrl: string;
-    packagename: any[];
-    latnew: any;
-    longnew: any;
+    hide = true;
+
+
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -36,13 +32,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         private _formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private ProfileService: ProfileService,
+        private MerchantService: MerchantService,
         public snackBar: MatSnackBar,
+
     ) {
         // Set the private defaults
-        this.lat = -34.397;
-        this.lng = 150.644;
-
         this._unsubscribeAll = new Subject();
     }
 
@@ -55,33 +49,27 @@ export class ProfileComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
-        var user = JSON.parse(localStorage.getItem('currentUser'));
+        // Reactive Form
         this.form = this._formBuilder.group({
             name: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
             address: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
             businessname: ['', Validators.required],
-            Secretquestion: ['', Validators.required],
-            Secretanswer: ['', Validators.required],
+            status: false,
         });
-
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
-
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/merchant';
 
         this.route.params.subscribe(params => {
-            this.ProfileService.getprofileInfo(user._id)
+            this.MerchantService.getmerchantDatabyId(params.id)
                 .subscribe(
                     data => {
 
                         this.form = this._formBuilder.group({
-
-                            name: [data.name],
-                            email: [data.email],
-                            address: [data.address],
-                            businessname: [data.businessname],
-                            Secretquestion: [data.secretquestion],
-                            Secretanswer: [data.secretanswer],
+                            name: [data.name, Validators.required],
+                            address: [data.address, Validators.required],
+                            email: [data.email, [Validators.required, Validators.email]],
+                            businessname: [data.businessname, Validators.required],
+                            status: [data.status, Validators.required]
                         });
                     },
                     error => {
@@ -93,18 +81,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     }
 
-    readLocalStorageValue(key) {
-        return localStorage.getItem(key);
-    }
 
-    updatemyprofile() {
+    updatemerchantData() {
 
-        var user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log(user)
         this.route.params.subscribe(params => {
-            this.form.value._id = user._id;
-            this.form.value.userType = user.userType;
-            this.ProfileService.updateprofile(this.form.value)
+            this.form.value._id = params.id;
+
+
+            this.MerchantService.updatemerchantData(this.form.value)
                 .subscribe(
                     data => {
 
@@ -114,14 +98,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
-                        } if (data.string == 'BusinessName is already exist.') {
-                            this.snackBar.open('BusinessName is already exist.', '', {
+                        } else if (data.string == 'Business Name is already exist.') {
+                            this.snackBar.open('Business Name is already exist.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
                         } else {
-                            this.snackBar.open('Profile updated successfully.', '', {
+                            this.snackBar.open('Merchant updated successfully.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
@@ -129,21 +113,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             this.router.navigate([this.returnUrl]);
                         }
 
-
                     },
                     error => {
 
                         console.log(error);
-                        this.snackBar.open('Please try again!', '', {
-                            duration: 3000,
-                            horizontalPosition: this.horizontalPosition,
-                            verticalPosition: this.verticalPosition,
-                        });
-                        this.router.navigate([this.returnUrl]);
-
                     });
         });
     }
+
 
     /**
      * On destroy

@@ -6,5 +6,4 @@ var Q = require('q');
 
 var service = {};
 
-
 module.exports = service;

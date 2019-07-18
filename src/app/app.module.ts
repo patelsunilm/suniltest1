@@ -15,11 +15,12 @@ import { ProfileModule } from 'app/main/profile/profile.module';
 import { ForgotPassword2Module } from 'app/main/forgotpassword/forgot-password-2.module';
 import { PasswordModule } from 'app/main/password/password.module';
 import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module';
-
+import { MerchantModule } from 'app/main/merchant/merchant.module';
+import { FaqModule } from 'app/main/faq/faq.module';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseProgressBarModule, FuseSidebarModule ,FuseThemeOptionsModule} from '@fuse/components';
+import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
 
 import { fuseConfig } from 'app/fuse-config';
 
@@ -31,15 +32,17 @@ import { AuthGuardCommon } from './_guards/index';
 import { AuthGuardCo } from './_guards/index';
 import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/index';
 
-//all services
+import { DashbordService } from './_services/index';
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
 import { ChangePasswordService } from './_services/index';
 import { ProductService } from './_services/index'
+import { MerchantService } from './_services/index';
+
 
 //all module
-import {  SignupModule } from './main/signup/signup.module';
+import { SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
 
@@ -53,7 +56,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        
+
     ],
     imports: [
         BrowserModule,
@@ -80,17 +83,21 @@ const appRoutes: Routes = [
         ForgotPassword2Module,
         PasswordModule,
         ResetPasswordModule,
-        ProductsModule
+        MerchantModule,
+        ProductsModule,
+        FaqModule
 
     ], providers: [
-       
+
         AuthGuard,
         AuthGuardCo,
         AuthGuardCommon,
+        DashbordService,
         AuthenticationService,
         ProfileService,
         ChangePasswordService,
         ForgotPasswordService,
+        MerchantService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
         ProductService

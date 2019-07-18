@@ -14,7 +14,7 @@ export class AuthenticationService {
 
         return this.http.post<any>(appConfig.apiUrl + '/users/authenticate', { email: email.toLowerCase(), password: password })
             .map(user => {
-
+                console.log(user)
 
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 localStorage.setItem('userId', user._id);
@@ -37,11 +37,14 @@ export class AuthenticationService {
     }
 
 
-
     addsignupuser(userdata) {
-
         return this.http.post<any>(appConfig.apiUrl + '/users/addsignupuser', userdata)
-  
+    }
+
+
+    addsecretValuedata(_id, secretanswer) {
+        return this.http.post<any>(appConfig.apiUrl + '/users/addsecretValuedata', { '_id': _id, 'secretanswer': secretanswer })
+
     }
 
 }

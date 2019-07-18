@@ -21,4 +21,12 @@ router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
 router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
 
 
+var merchentdata = require('./controllers/merchant/merchant.controller');
+router.get('/merchant/getallMerchentsData', merchentdata.getallMerchentsData);
+router.get('/merchant/getmerchantDatabyId/:merchantDataId', merchentdata.getmerchantDatabyId);
+router.post('/merchant/updatemerchantData', merchentdata.updatemerchantData);
+router.post('/merchant/merchantStatusToggle', merchentdata.merchantStatusToggle);
+router.delete('/merchant/deletemerchantData/:merchantDataId/:userId/:name', merchentdata.deletemerchantData);
+
+
 module.exports = router;

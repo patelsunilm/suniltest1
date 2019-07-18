@@ -104,8 +104,9 @@ app.use(expressJwt({
     return null;
   }
 }).unless({
-  path: ['/users/authenticate' ,'/users/addsignupuser',
- 
+  path: ['/users/authenticate',
+    '/users/addsecretValuedata',
+    '/users/addsignupuser',
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword' ,'/products/addcsvfile']
 }));
@@ -129,14 +130,14 @@ app.use(function (err, req, res, next) {
 });
 
 var storage = multer.diskStorage({
-  // destination
-  // destination: function (req, file, cb) {
-  //   console.log(DIR);
-  //   cb(null, DIR);
-  // },
-  // filename: function (req, file, cb) {
-  //   cb(null, file.originalname);
-  // }
+ // destination
+  destination: function (req, file, cb) {
+   
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
 
 });
 
@@ -144,52 +145,28 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
- console.log('reqaaa');
-console.log(req.files[0].originalname);
+var file = req.files[0];
+console.log(file);
+var originalFileName = file.originalname
+ var deferred = Q.defer();
 
- //var data = fs.writeFileSync('./uploads/req.files[0].originalname' , req.files[0], 'utf8' )
-
-
-// return false
-var storage = multer.diskStorage({
-    
-   destination: function(req, file, cb) {
-        cb(null, './uploads')
-    },
-    
-    filename: function(req, file, cb) {
-        cb(null, req.files[0].originalname + '-' + Date.now() )
-       }
-
-
- });
-
-
-//  let upload = multer({storage: storage});
-
-// var file = req.files[0].originalname
-//     filename  = req.files[0].originalname;
-//    file.mv("./uploads/" + filename, function(err){
-//      if(err) {
-//        console.log('err');
-//        console.log(err);
-//      }
-//    })
-return false
-
-
-var deferred = Q.defer();
-
-const results = [];
-fs.createReadStream(req.body.uploads)
+ const results = [];
+fs.createReadStream('uploads/' + originalFileName)
   .pipe(csv())
   .on('data', (data) => results.push(data))
   .on('end', () => {
-    // console.log(results);
-    
+  
     products.insertMany(results,function (err, product) {
       if (!err) {
-
+          
+          console.log('test');
+          fs.unlink( 'uploads',function(err, responce) {
+             if(err) {
+            console.log('err');
+             } else {
+            console.log('sucess');
+             }
+          })
           deferred.resolve(product);
       } else {
 

@@ -11,13 +11,13 @@ service.getprofileInfo = getprofileInfo;
 service.updateprofile = updateprofile;
 
 
-function getprofileInfo(resellersId) {
+function getprofileInfo(userId) {
     var deferred = Q.defer();
-    var resellersId = new mongoose.Types.ObjectId(resellersId);
+    var userId = new mongoose.Types.ObjectId(userId);
 
-    Users.findOne(resellersId, function (err, resellers) {
+    Users.findOne(userId, function (err, data) {
         if (!err) {
-            deferred.resolve(resellers);
+            deferred.resolve(data);
         } else {
             deferred.reject(err.name + ': ' + err.message);
         }
@@ -29,41 +29,97 @@ function getprofileInfo(resellersId) {
 
 function updateprofile(getprofiledata) {
 
-
     var deferred = Q.defer();
-    var email = new RegExp("^" + getprofiledata.email + "$", "i")
-    Users.find({ $and: [{ email: email }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
-       
-        if (duplicateData.length > 0) {
-            var data = {};
-            data.string = 'Email is already exist.';
-            deferred.resolve(data);
 
-        } else {
-            Users.findById(getprofiledata._id, function (err, getdata) {
+    if (getprofiledata.userType == 'admin') {
 
-                if (!err) {
-                    getdata.name = getprofiledata.name;
-                    getdata.email = getprofiledata.email;
-                    getdata.address = getprofiledata.address;
-                    getdata.datemodified = Date.now();
+        var email = new RegExp("^" + getprofiledata.email + "$", "i")
+        Users.find({ $and: [{ email: email }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
 
-                    getdata.save(function (err) {
-                        if (!err) {
-                            deferred.resolve(getdata);
-                        } else {
-                            deferred.reject(err.name + ': ' + err.message);
-                        }
-                    });
+            if (duplicateData.length > 0) {
+                var data = {};
+                data.string = 'Email is already exist.';
+                deferred.resolve(data);
 
-                } else {
-                    deferred.reject(err.name + ': ' + err.message);
-                }
+            } else {
+                Users.findById(getprofiledata._id, function (err, getdata) {
 
-            });
+                    if (!err) {
+                        getdata.name = getprofiledata.name;
+                        getdata.email = getprofiledata.email;
+                        getdata.address = getprofiledata.address;
+                        getdata.datemodified = Date.now();
 
-        }
-    })
+                        getdata.save(function (err) {
+                            if (!err) {
+                                deferred.resolve(getdata);
+                            } else {
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+                        });
+
+                    } else {
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+
+                });
+
+            }
+        })
+
+    } else {
+
+        var email = new RegExp("^" + getprofiledata.email + "$", "i")
+        Users.find({ $and: [{ email: email }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
+
+            if (duplicateData.length > 0) {
+                var data = {};
+                data.string = 'Email is already exist.';
+                deferred.resolve(data);
+
+            } else if (getprofiledata.businessname) {
+                var businessname = new RegExp("^" + getprofiledata.businessname + "$", "i")
+                Users.find({ $and: [{ businessname: businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
+                    if (duplicateData.length > 0) {
+                        var data = {};
+                        data.string = 'BusinessName is already exist.';
+                        deferred.resolve(data);
+
+                    } else {
+                        Users.findById(getprofiledata._id, function (err, getdata) {
+
+                            if (!err) {
+                                getdata.name = getprofiledata.name;
+                                getdata.email = getprofiledata.email;
+                                getdata.address = getprofiledata.address;
+                                getdata.businessname = getprofiledata.businessname;
+                                getdata.secretquestion = getprofiledata.Secretquestion;
+                                getdata.secretanswer = getprofiledata.Secretanswer;
+                                getdata.datemodified = Date.now();
+
+                                getdata.save(function (err) {
+                                    if (!err) {
+                                        deferred.resolve(getdata);
+                                    } else {
+                                        deferred.reject(err.name + ': ' + err.message);
+                                    }
+                                });
+
+                            } else {
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+
+                        });
+
+                    }
+                })
+
+            }
+        })
+
+    }
+
+
 
     return deferred.promise;
 }
