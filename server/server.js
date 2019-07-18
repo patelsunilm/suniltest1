@@ -8,7 +8,13 @@ var config = require('./config.json');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var fs = require('fs');
-
+const multer = require('multer');
+var Q = require('q');
+uploads = require("express-fileupload")
+// var csv = require('fast-csv');
+var path = require('path');
+const csv  = require('csv-parser')
+var products = require('../server/controllers/products/products.model');// get our mongoose model
 
 gm = require('gm');
 
@@ -102,7 +108,7 @@ app.use(expressJwt({
     '/users/addsecretValuedata',
     '/users/addsignupuser',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword']
+    '/forgot-password-2/resetpassword' ,'/products/addcsvfile']
 }));
 
 
@@ -110,6 +116,7 @@ app.use(expressJwt({
 // routes
 app.use(routes);
 app.use('/users', require('./controllers/Users/users.controller'));
+
 app.use('/forgot-password-2', require('./controllers/forgot-password-2/forgot-password-2.controller'));
 
 app.use(function (err, req, res, next) {
@@ -121,6 +128,58 @@ app.use(function (err, req, res, next) {
   }
 
 });
+
+var storage = multer.diskStorage({
+ // destination
+  destination: function (req, file, cb) {
+   
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+
+});
+
+var upload = multer({ storage: storage });
+
+app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
+
+var file = req.files[0];
+console.log(file);
+var originalFileName = file.originalname
+ var deferred = Q.defer();
+
+ const results = [];
+fs.createReadStream('uploads/' + originalFileName)
+  .pipe(csv())
+  .on('data', (data) => results.push(data))
+  .on('end', () => {
+  
+    products.insertMany(results,function (err, product) {
+      if (!err) {
+          
+          console.log('test');
+          fs.unlink( 'uploads',function(err, responce) {
+             if(err) {
+            console.log('err');
+             } else {
+            console.log('sucess');
+             }
+          })
+          deferred.resolve(product);
+      } else {
+
+          console.log(err);
+          deferred.reject(err.name + ': ' + err.message);
+      }
+  });
+
+  return deferred.promise;
+  });
+})
+
+
 
 
 // start server

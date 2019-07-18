@@ -1,0 +1,131 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+
+  <!-- HEADER -->
+  <!-- <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="start center">
+          <div class="h1 mt-16">Add Package</div>
+  </div> -->
+
+  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+
+      <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+          <!-- <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+              image
+          </mat-icon> -->
+          <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+              Add Product 
+          </span>
+      </div>
+      <button mat-raised-button="" color="" style="margin-top: 10px;" matTooltip="Back"
+          [routerLink]="['/products']">Back</button>
+  </div>
+  <!-- / HEADER -->
+
+  <!-- CONTENT -->
+  <div class="content p-24">
+
+      <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+
+        <form [formGroup]="productForm" (ngSubmit)="addproduct()">
+          <div formArrayName="itemRows">
+          
+            <table class="table table-responsive table-striped cstm-table-store">
+              <tr>
+                <th>image</th>
+                <th>Products Name</th>
+                <th>Cost Price</th>
+                <th>Markup</th>
+                <th>Selling Price</th>
+                <th>Date</th>
+                <th>Till type</th>
+                <th>Stock Level</th>
+                
+              </tr>
+              <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
+                <td>
+                  <a mat-button color="warn" class="add-file-button" (click)="fileInput1.click()"
+                  aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+                  Add Image
+              </a>
+              <input id="cin" hidden name="cin" #fileInput1 type="file"  accept=".jpg,.jpeg,.png,.raw,.tiff"
+                  (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
+              <div  class="remember-me" class="img-wrap">
+                {{urls}}
+                  <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
+                  <img *ngIf="urls[i]" [src]="urls[i]" style="width: 100px;height: 100px;padding: 5px;">
+                  <!-- <div> <input type="checkbox" class="image-list" (click)="checkboxclick($event,i)" /> </div> -->
+              </div>
+                </td> 
+                <td>
+                  <input matInput  formControlName="productname" required>
+                  <!-- <mat-error *ngIf="productForm.get('productname').hasError('required')">
+                    Please enter business name!
+                </mat-error>
+                <mat-error *ngIf="productForm.get('productname').hasError('pattern')">
+                    Please enter valid business name!
+                </mat-error> -->
+                </td>
+                <td>
+                  <input matInput  formControlName="costprice" required>
+                </td>
+                <td>
+                  <input matInput  formControlName="Markup" required>
+                </td>
+                <td>
+                  <input matInput  formControlName="sellingprice" required>
+                </td>
+                <td>
+                  
+                  <mat-form-field>
+                    <input required matInput  formControlName="date" [matDatepicker]="picker" placeholder="Choose a date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <input matInput  formControlName="tilltype" required>
+                </td>
+                <td>
+                  <input matInput  formControlName="stocklevel" required>
+                </td>
+                
+              </tr>
+  
+            </table>
+            <!-- <tr>
+              <th>Name</th>
+              <th>School</th>
+      
+            </tr>
+            <tr *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
+              <td>
+                <div class="col-sm-6">
+                  <input class="form-control" type="text"  formControlName="name"/>
+                </div>
+              </td>
+              <td>
+                <div class="col-sm-6">
+                  <input class="form-control" type="text"  formControlName="school"/>
+                </div>
+              </td>
+            </tr>
+            <div *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
+           
+             
+              <button *ngIf="invoiceForm.controls.itemRows.controls.length > 1" (click)="deleteRow(i)" class="btn btn-danger">Delete Button</button>
+            </div> -->
+          </div>
+          <div class="button-row" style="text-align: center;">
+            <button mat-raised-button="" color="" style="margin-top: 10px;"
+                >Submit</button>
+
+        </div>
+        </form>
+
+      </div>
+      <button type="button" (click)="addNewRow()" class="btn btn-primary" >Add new Row</button><br>
+
+  </div>
+  <!-- / CONTENT -->
+
+</div>

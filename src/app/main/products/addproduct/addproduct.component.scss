@@ -1,0 +1,247 @@
+p {
+    font-family: Lato;
+  }
+
+  /* Structure */
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .p-24 {
+      flex: 1 1 auto;
+      min-width: 0;
+  }
+  .custompadding
+  {
+    padding: 2%;
+  }
+  
+  mat-form-field.mat-form-field {
+    font-size: 12px;
+    width: 260px;
+  }
+  
+  .control_wrapper {
+    display: block;
+    margin: 0 auto;
+    max-width: 300px;
+    padding: 5% 0;
+  }
+  
+  .tabs-wrap {
+    padding: 0 0px 10px;
+  }
+  
+  .e-bigger .control-section {
+    margin-top: 60px;
+  }
+  
+  #container {
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  .e-input-group .e-input-group-icon,
+  .e-input-group.e-control-wrapper .e-input-group-icon,
+  .e-input-group.e-control-wrapper:not(.e-disabled) .e-input-group-icon:hover {
+    background: none;
+  }
+  
+  .e-input-group:not(.e-disabled) .e-input-group-icon:active,
+  .e-input-group.e-control-wrapper:not(.e-disabled) .e-input-group-icon:active {
+    background: rgb(0, 120, 214);
+  }
+  
+  .example-container {
+    padding: 1rem;
+  }
+  
+  .example-wrapper {
+    margin-bottom: 3rem;
+  }
+  
+  .example-input-wrapper {
+    display: block;
+    width: 200px;
+    margin-bottom: 1.5rem;
+  }
+  
+  
+  .up {
+    margin-left: 343px;
+    margin-top: 30px;
+  }
+  .cstm-table-store tbody tr td{text-align: center;border:1px solid #ccc;}
+  .cstm-table-store{border-collapse: collapse;}
+  .custompadding.up{margin-left: 0px;text-align: center;}
+  .custompadding.cstm-btn-table{text-align: center;width:100%;}
+  
+
+  
+.mat-option.mat-active {
+  /* background: rgba(0,0,0,.04); */
+  color: rgba(0,0,0,.87);
+  background-color:  #a8aac088 !important;
+}
+
+:host {
+  .hidefield
+  {
+    display:none !important;
+   
+  }
+  .showfield
+  {
+    display: block !important;
+  //  width: 600px;
+  }
+
+  #header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  h1 {
+    margin-top: 0;
+  }
+
+  
+
+  
+  .loading-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .loading {
+    height: 189px;
+    width: 189px;
+    position: relative;
+    margin: 0 15px 15px 0;
+    padding: 15px;
+    border: 1px #ccc solid;
+    border-radius: 4px;
+  }
+  
+  .loading p {
+    margin: 0 0 10px 0;
+  }
+  
+  
+  
+  
+  
+  button#toggle-loading-button {
+    background-color: #dd0031;
+  }
+  
+  
+  
+  button#toggle-colours-button {
+    background-color: #006ddd;
+  }
+  
+ 
+  button#toggle-template-button {
+    background-color: black;
+  }
+  
+ 
+  
+  .custom-class {
+    top: 0;
+    z-index: 2002;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000ba;
+    border-radius: 3px;
+  }
+  
+  .custom-class h3 {
+    color: white;
+  }
+
+  
+    .img-wrap {
+        position: relative;
+        display: inline-block;
+        border: 1px  #039be5 solid;
+        font-size: 0;
+      }
+      .img-wrap .close {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        z-index: 100;
+        background-color: #FFF;
+        padding: 5px 2px 2px;
+        color: #000;
+        font-weight: bold;
+        cursor: pointer;
+        opacity: .2;
+        text-align: center;
+        font-size: 22px;
+        line-height: 10px;
+        border-radius: 50%;
+      }
+      .img-wrap:hover .close {
+        opacity: 1;
+      }
+
+
+    .animate-show-hide.ng-hide {
+        opacity: 0;
+      }
+      
+      .animate-show-hide.ng-hide-add,
+      .animate-show-hide.ng-hide-remove {
+        transition: all linear 0.5s;
+      }
+      
+      .check-element {
+        border: 1px solid black;
+        opacity: 1;
+        padding: 10px;
+      }
+
+    .content {
+
+        form {
+            width: 100%;
+            
+        }
+
+        .form-errors-model {
+            flex: 1;
+
+            code {
+                background: none !important;
+            }
+        }
+
+        .horizontal-stepper-wrapper,
+        .vertical-stepper-wrapper {
+            max-width: 800px;
+        }
+        .customslide
+        {
+            width:25%;
+            float:left;
+        }
+        .customslidediv
+        {
+            padding: 0 0 3% 0;
+        }
+    }
+}

@@ -12,6 +12,15 @@ var passworddata = require('./controllers/password/password.controller');
 router.post('/password/passwordmatch', passworddata.passwordmatch);
 
 
+var productsdata = require('./controllers/products/products.controller');
+
+router.post('/products/addproduct', productsdata.addproduct);
+router.get('/products/getAllproducts', productsdata.getAllproducts);
+
+router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
+router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
+
+
 var merchentdata = require('./controllers/merchant/merchant.controller');
 router.get('/merchant/getallMerchentsData', merchentdata.getallMerchentsData);
 router.get('/merchant/getmerchantDatabyId/:merchantDataId', merchentdata.getmerchantDatabyId);
