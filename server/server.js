@@ -99,7 +99,7 @@ app.use(expressJwt({
   }
 }).unless({
   path: ['/users/authenticate',
-  '/users/addsecretValuedata',
+    '/users/addsecretValuedata',
     '/users/addsignupuser',
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword']

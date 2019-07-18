@@ -53,6 +53,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'people'
             },
+            {
+                id: 'faq',
+                title: 'Faq',
+                url: '/faq',
+                type: 'item',
+                icon: 'help'
+            },
         ]
 
         var custom2 = [
@@ -77,6 +84,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'people'
             },
+            {
+                id: 'faq',
+                title: 'Faq',
+                url: '/faq',
+                type: 'item',
+                icon: 'help'
+            },
 
         ]
 
@@ -99,6 +113,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'merchant'
                         },
+                        {
+                            id: 'faq',
+                            title: 'Faq',
+                            url: '/faq',
+                            type: 'item',
+                            icon: 'help'
+                        },
                     ]
 
                     var custom2 = [
@@ -115,14 +136,22 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             url: '/products',
                             type: 'item',
                             icon: 'shopping_cart'
-                        },            {
+                        },
+                        {
                             id: 'merchant',
                             title: 'Merchants',
                             url: '/merchant',
                             type: 'item',
                             icon: 'people'
                         },
-            
+                        {
+                            id: 'faq',
+                            title: 'Faq',
+                            url: '/faq',
+                            type: 'item',
+                            icon: 'help'
+                        },
+
 
                     ];
 
