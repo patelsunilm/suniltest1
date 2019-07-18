@@ -100,7 +100,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     updatemyprofile() {
 
         var user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log(user)
         this.route.params.subscribe(params => {
             this.form.value._id = user._id;
             this.form.value.userType = user.userType;

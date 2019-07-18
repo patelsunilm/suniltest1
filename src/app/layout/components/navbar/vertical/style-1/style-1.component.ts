@@ -252,7 +252,6 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
         //     .subscribe(() => {
         //         this.navigation = this._fuseNavigationService.getCurrentNavigation();
 
-        //         console.log(this.navigation)
         //     });
     }
 

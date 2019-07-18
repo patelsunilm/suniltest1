@@ -1,24 +1,29 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, OnDestroy, ɵConsole } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-
 import { FuseUtils } from '@fuse/utils';
+import { MatPaginator, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FuseConfigService } from '@fuse/services/config.service';
+import { fuseAnimations } from '@fuse/animations';
+import { FAQService } from '../../_services/index';
 
-import { FaqService } from 'app/main/faq/faq.service';
 
 @Component({
     selector: 'faq',
     templateUrl: './faq.component.html',
     styleUrls: ['./faq.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    animations: fuseAnimations
 })
 export class FaqComponent implements OnInit, OnDestroy {
-    faqs: any;
-    faqsFiltered: any;
-    step: number;
-    searchInput: any;
-
+    faqsvalue: any;
+    merchantname: any;
+    Form: FormGroup;
+    horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -28,14 +33,21 @@ export class FaqComponent implements OnInit, OnDestroy {
      * @param {FaqService} _faqService
      */
     constructor(
-        private _faqService: FaqService
+        private FAQService: FAQService,
+        public dialog: MatDialog,
     ) {
-        // Set the defaults
-        this.searchInput = new FormControl('');
-        this.step = 0;
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+    }
+
+
+    openDialog() {
+        const dialogRef = this.dialog.open(DialogContentExampleDialog);
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -46,57 +58,143 @@ export class FaqComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-        this._faqService.onFaqsChanged
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(response => {
-                this.faqs = response;
-                this.faqsFiltered = response;
-            });
+        this.FAQService.getAllfaqs()
+            .subscribe(
+                data => {
 
-        this.searchInput.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                distinctUntilChanged()
-            )
-            .subscribe(searchText => {
-                this.faqsFiltered = FuseUtils.filterArrayByString(this.faqs, searchText);
-            });
+                    this.faqsvalue = data
+                    this.merchantname = data
+                },
+                error => {
+
+                    console.log(error);
+                });
     }
+
+    readLocalStorageValue(key) {
+        return localStorage.getItem(key);
+    }
+
+    addFaq(id) {
+
+
+        let dialogRef = this.dialog.open(FaqPopupComponent, {
+            data: {
+                _id: id
+            },
+            width: '450px'
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            this.FAQService.getAllfaqs()
+                .subscribe(
+                    data => {
+                        this.faqsvalue = data
+                        this.merchantname = data
+                    },
+                    error => {
+
+                        console.log(error);
+                    });
+
+        });
+    }
+
 
     /**
      * On destroy
      */
     ngOnDestroy(): void {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Set step
-     *
-     * @param {number} index
-     */
-    setStep(index: number): void {
-        this.step = index;
-    }
-
-    /**
-     * Next step
-     */
-    nextStep(): void {
-        this.step++;
-    }
-
-    // /**
-    //  * Previous step
-    //  */
-    prevStep(): void {
-        this.step--;
-    }
 }
+
+
+@Component({
+    selector: 'faq-popup',
+    templateUrl: './faqpopup.html'
+})
+export class FaqPopupComponent {
+    Form: FormGroup;
+    returnUrl: string;
+    horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
+    faqsvalue: any;
+    merchantname: any;
+    /**
+     * Constructor
+     *
+     * @param {FuseConfigService} _fuseConfigService
+     * @param {FormBuilder} _formBuilder
+     */
+    constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+        private FAQService: FAQService,
+        private route: ActivatedRoute,
+        private router: Router,
+        public snackBar: MatSnackBar,
+        private _fuseConfigService: FuseConfigService,
+        private _formBuilder: FormBuilder,
+
+    ) {
+
+
+    }
+    ngOnInit() {
+        var userId = localStorage.getItem('userId');
+        this.Form = this._formBuilder.group({
+            userId: userId,
+            faqquestion: [''],
+            faqanswer: [''],
+            status: false
+        });
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/faq';
+    }
+
+    readLocalStorageValue(key) {
+        return localStorage.getItem(key);
+    }
+
+
+    submitFaq() {
+        this.FAQService.addfaqData(this.Form.value)
+
+            .subscribe(
+                data => {
+                    this.snackBar.open('Faq question added successfully.', '', {
+                        duration: 3000,
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                    });
+
+                    this.router.navigate([this.returnUrl]);
+
+                },
+                error => {
+
+                    console.log(error);
+                });
+    }
+
+    submitAnswerFaq(id) {
+        this.Form.value.faqId = id;
+        this.FAQService.addFaqAnswerByAdmin(this.Form.value)
+            .subscribe(
+                data => {
+                    this.snackBar.open('Faq answer added successfully.', '', {
+                        duration: 3000,
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                    });
+                    this.router.navigate([this.returnUrl]);
+                },
+                error => {
+
+                    console.log(error);
+                });
+
+
+    }
+
+}
+export class DialogContentExampleDialog { }

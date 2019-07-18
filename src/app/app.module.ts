@@ -38,6 +38,7 @@ import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
 import { ChangePasswordService } from './_services/index';
 import { MerchantService } from './_services/index';
+import { FAQService } from './_services/index';
 
 
 //all module
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
         ChangePasswordService,
         ForgotPasswordService,
         MerchantService,
+        FAQService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
 

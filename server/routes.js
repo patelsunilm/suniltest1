@@ -19,5 +19,9 @@ router.post('/merchant/updatemerchantData', merchentdata.updatemerchantData);
 router.post('/merchant/merchantStatusToggle', merchentdata.merchantStatusToggle);
 router.delete('/merchant/deletemerchantData/:merchantDataId/:userId/:name', merchentdata.deletemerchantData);
 
+var faqdata = require('./controllers/faq/faq.controller');
+router.post('/faq/addfaqData', faqdata.addfaqData);
+router.get('/faq/getAllfaqs', faqdata.getAllfaqs);
+router.post('/faq/addFaqAnswerByAdmin', faqdata.addFaqAnswerByAdmin);
 
 module.exports = router;
