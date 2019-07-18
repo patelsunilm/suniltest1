@@ -31,15 +31,17 @@ import { AuthGuardCommon } from './_guards/index';
 import { AuthGuardCo } from './_guards/index';
 import { JwtInterceptorProvider, ErrorInterceptorProvider } from './_helpers/index';
 
+//all services
 import { ForgotPasswordService } from './_services/index';
 import { AuthenticationService } from './_services/index';
 import { ProfileService } from './_services/index';
 import { ChangePasswordService } from './_services/index';
-
+import { ProductService } from './_services/index'
 
 //all module
 import {  SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
+import { from } from 'rxjs';
 
 const appRoutes: Routes = [
     {
@@ -91,7 +93,7 @@ const appRoutes: Routes = [
         ForgotPasswordService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
-
+        ProductService
     ],
     bootstrap: [
         AppComponent

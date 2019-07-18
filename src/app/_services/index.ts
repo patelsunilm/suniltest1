@@ -2,3 +2,4 @@ export * from './authentication.service';
 export * from './profile.service';
 export * from './forgot-password-2.service';
 export * from './password.service';
+export * from './product.service';
