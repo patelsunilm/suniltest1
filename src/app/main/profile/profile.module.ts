@@ -9,7 +9,7 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { FuseHighlightModule } from '@fuse/components/index';
 import { AgmCoreModule } from '@agm/core';
-
+import { ColorPickerModule } from 'ngx-color-picker';
 import { ProfileComponent } from './profile.component';
 import { AuthGuardCommon } from './../../_guards/index';
 
@@ -43,6 +43,7 @@ const routes = [
         FuseHighlightModule,
         FuseSidebarModule,
         FuseWidgetModule,
+        ColorPickerModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         })

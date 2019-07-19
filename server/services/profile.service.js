@@ -95,6 +95,8 @@ function updateprofile(getprofiledata) {
                                 getdata.businessname = getprofiledata.businessname;
                                 getdata.secretquestion = getprofiledata.Secretquestion;
                                 getdata.secretanswer = getprofiledata.Secretanswer;
+                                getdata.backgroundtheme = getprofiledata.backgroundtheme;
+                                getdata.fontcolor = getprofiledata.fontcolor;
                                 getdata.datemodified = Date.now();
 
                                 getdata.save(function (err) {

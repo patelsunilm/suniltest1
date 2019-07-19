@@ -13,7 +13,7 @@ var Q = require('q');
 uploads = require("express-fileupload")
 // var csv = require('fast-csv');
 var path = require('path');
-const csv  = require('csv-parser')
+const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
 
 gm = require('gm');
@@ -106,9 +106,10 @@ app.use(expressJwt({
 }).unless({
   path: ['/users/authenticate',
     '/users/addsecretValuedata',
+    '/users/updateipaddress',
     '/users/addsignupuser',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword' ,'/products/addcsvfile']
+    '/forgot-password-2/resetpassword', '/products/addcsvfile']
 }));
 
 
@@ -130,9 +131,9 @@ app.use(function (err, req, res, next) {
 });
 
 var storage = multer.diskStorage({
- // destination
+  // destination
   destination: function (req, file, cb) {
-   
+
     cb(null, './uploads');
   },
   filename: function (req, file, cb) {
@@ -145,38 +146,38 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
-var file = req.files[0];
-console.log(file);
-var originalFileName = file.originalname
- var deferred = Q.defer();
+  var file = req.files[0];
 
- const results = [];
-fs.createReadStream('uploads/' + originalFileName)
-  .pipe(csv())
-  .on('data', (data) => results.push(data))
-  .on('end', () => {
-  
-    products.insertMany(results,function (err, product) {
-      if (!err) {
-          
-          console.log('test');
-          fs.unlink( 'uploads',function(err, responce) {
-             if(err) {
-            console.log('err');
-             } else {
-            console.log('sucess');
-             }
+  var originalFileName = file.originalname
+  var deferred = Q.defer();
+
+  const results = [];
+  fs.createReadStream('uploads/' + originalFileName)
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+
+      products.insertMany(results, function (err, product) {
+        if (!err) {
+
+
+          fs.unlink('uploads', function (err, responce) {
+            if (err) {
+
+            } else {
+
+            }
           })
           deferred.resolve(product);
-      } else {
+        } else {
 
           console.log(err);
           deferred.reject(err.name + ': ' + err.message);
-      }
-  });
+        }
+      });
 
-  return deferred.promise;
-  });
+      return deferred.promise;
+    });
 })
 
 

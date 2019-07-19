@@ -20,7 +20,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBa
   animations: fuseAnimations
 })
 export class SignupComponent implements OnInit {
-
+  hide = true;
   ipAddress: any;
   registerForm: FormGroup;
   private _unsubscribeAll: Subject<any>;
@@ -60,8 +60,6 @@ export class SignupComponent implements OnInit {
     this.http.get<{ ip: string }>('https://jsonip.com')
       .subscribe(data => {
         this.ipAddress = data.ip
-
-
       })
 
 
@@ -72,7 +70,7 @@ export class SignupComponent implements OnInit {
     this.registerForm = this._formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       address: ['', Validators.required],
       BusinessName: ['', Validators.required],
       Secretquestion: ['', Validators.required],
@@ -94,7 +92,7 @@ export class SignupComponent implements OnInit {
     this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
       data => {
 
-        this.snackBar.open('sign up successfully.', '', {
+        this.snackBar.open('SignUp successful.', '', {
           duration: 5000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

@@ -5,6 +5,7 @@ var userService = require('../../services/users.service');
 router.post('/authenticate', authenticate);
 router.post('/addsignupuser', addsignupuser);
 router.post('/addsecretValuedata', addsecretValuedata)
+router.post('/updateipaddress', updateipaddress)
 
 
 module.exports = router;
@@ -50,7 +51,7 @@ function addsecretValuedata(req, res) {
 
     userService.addsecretValuedata(req.body)
         .then(function (data) {
-         
+
             if (data) {
                 res.send(data);
             } else {
@@ -61,4 +62,19 @@ function addsecretValuedata(req, res) {
             res.status(400).send(err);
         });
 
+}
+
+function updateipaddress(req, res) {
+
+    userService.updateipaddress(req.body)
+        .then(function (data) {
+            if (data) {
+                res.send(data);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }

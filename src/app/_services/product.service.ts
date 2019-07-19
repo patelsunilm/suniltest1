@@ -49,8 +49,7 @@ export class ProductService {
           formData.append("uploads[]", files[i], files[i]['name']);
         
         }
-        console.log('from data');
-        console.log(formData);
+        
         return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
 
       }

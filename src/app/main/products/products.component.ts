@@ -86,7 +86,7 @@ fileEvent($event) {
 
 
 this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
-  console.log('data');
+ 
 })
 
 

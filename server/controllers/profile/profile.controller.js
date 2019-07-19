@@ -18,7 +18,7 @@ exports.getprofileInfo = function (req, res) {
 }
 
 exports.updateprofile = function (req, res) {
-  
+
     profileService.updateprofile(req.body)
         .then(function (updatedata) {
             if (updatedata) {

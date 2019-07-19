@@ -6,6 +6,8 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { Login2Component } from 'app/main/login/login.component';
 import { secretvaluepopupComponent } from './login.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 const routes = [
     {
@@ -33,7 +35,7 @@ const routes = [
         MatInputModule,
         MatSnackBarModule,
         FuseSharedModule,
-        MatDialogModule
+        MatDialogModule, HttpClientModule, BrowserModule
     ]
 })
 export class Login2Module {
