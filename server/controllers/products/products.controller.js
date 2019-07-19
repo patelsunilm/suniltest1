@@ -72,3 +72,20 @@ exports.getallproductbyId = function(req, res) {
         res.status(400).send(err);
     });
 }
+
+exports.updateprodcutdetail = function(req, res) {
+ 
+    console.log('req.body');
+    console.log(req.body)
+    productservice.getallproductbyId(req.body)
+    .then(function (getproduct) {
+        if (getproduct) {
+            res.send(getproduct);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+}

@@ -9,6 +9,7 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 import {FormControl, FormArray} from '@angular/forms';
 
 import {ProductService} from '../../../_services/index';
+import { element } from '@angular/core/src/render3';
 
 
 @Component({
@@ -17,7 +18,9 @@ import {ProductService} from '../../../_services/index';
   styleUrls: ['./addproduct.component.scss'],
   animations: fuseAnimations
 })
+
 export class AddproductComponent implements OnInit {
+ 
   productForm: FormGroup;
   itemrow :any;
   checkboxdata = new Array();
@@ -25,8 +28,7 @@ export class AddproductComponent implements OnInit {
 
    urls: Array<File> =[];
   filesToUpload: Array<File> = [];
-
-
+ 
   constructor(private _fb: FormBuilder ,private ProductService : ProductService) {
 
      
@@ -58,8 +60,8 @@ export class AddproductComponent implements OnInit {
   }
 
   addNewRow() {
-    console.log('testing');
-    console.log(this.initItemRows())
+    // console.log('testing');
+    // console.log(this.initItemRows())
     this.formArr.push(this.initItemRows());
   }
 
@@ -77,7 +79,7 @@ export class AddproductComponent implements OnInit {
      
             var testreader = new FileReader();
             testreader.onload = (fileInput: any) => {
-
+              
 
               this.urls[index]=fileInput.target.result;
                 this.filesToUpload.push(imagefiles[0]);
@@ -106,19 +108,22 @@ addproduct() {
   console.log('test products');
   console.log(this.productForm.value.itemRows);
 
-console.log('this file upload');
-console.log(this.filesToUpload);
+// console.log('this file upload');
+// console.log(this.filesToUpload);
 
 this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
-})
+for (let index = 0; index < this.productForm.value.itemRows.length; index++) {
+    
+  data.forEach(element => {
+    this.productForm.value.itemRows[index].image = element ;
+  });
 
-return false;
+}
 this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
 
 })
-
-
+})
 }
 }

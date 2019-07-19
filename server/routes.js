@@ -19,6 +19,7 @@ router.get('/products/getAllproducts', productsdata.getAllproducts);
 
 router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
 router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
+router.post('/products/updateprodcutdetail', productsdata.updateprodcutdetail);
 
 
 var merchentdata = require('./controllers/merchant/merchant.controller');

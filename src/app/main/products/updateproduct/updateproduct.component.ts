@@ -27,7 +27,7 @@ export class UpdateproductComponent implements OnInit {
 
   urls: Array<File> =[];
   filesToUpload: Array<File> = [];
-
+  image : any;
   
   constructor(private ProductService : ProductService,  private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -49,12 +49,14 @@ export class UpdateproductComponent implements OnInit {
   });
  
   this.route.params.subscribe(params => { 
-    console.log(params.id);
+
 
     this.ProductService.getallproductbyId(params.id).subscribe(data => {
    
+
+      this.image = data.image
       this.form = this._formBuilder.group({
-        image: [''],
+        image: [ this.image],
         productname : [data.productname],
         costprice: [data.costprice],
         markup : [data.markup],
@@ -70,6 +72,7 @@ export class UpdateproductComponent implements OnInit {
 
 
   }
+  
   fileChangeEvent(fileInput: any,index) {
 
     var imagefiles = fileInput.target.files;
@@ -99,5 +102,29 @@ close(urls, event, index, i) {
   }
   this.filesToUpload = temp;
 
+}
+
+
+updateproduct() {
+
+
+  this.ProductService.updateproductgallery(this.filesToUpload).subscribe(data => {
+
+
+    for (let index = 0; index < this.form.value.length; index++) {
+    
+      data.forEach(element => {
+        this.form.value[index].image = element ;
+      });
+    
+    }
+
+console.log(this.form.value);
+this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
+
+
+  
+})
+  })
 }
 }
