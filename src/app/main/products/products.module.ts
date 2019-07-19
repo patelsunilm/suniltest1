@@ -22,6 +22,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { deleteproductPopupComponent } from './products.component';
 import { UpdateproductComponent } from './updateproduct/updateproduct.component';
 
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 
 const routes = [
@@ -76,7 +77,7 @@ const routes = [
         BrowserAnimationsModule,
         MatTableModule,
         MatDialogModule,
-        MatPaginatorModule,MatDatepickerModule
+        MatPaginatorModule,MatDatepickerModule,NgxBarcodeModule
     ]
 })
 export class ProductsModule {

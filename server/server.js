@@ -9,9 +9,12 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var fs = require('fs');
 const multer = require('multer');
+
+var AWS = require('aws-sdk');
+var sharp = require('sharp');
+
 var Q = require('q');
 uploads = require("express-fileupload")
-// var csv = require('fast-csv');
 var path = require('path');
 const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
@@ -130,6 +133,19 @@ app.use(function (err, req, res, next) {
 
 });
 
+//aws credentials
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = "AKIAJRCOCZM7YVPHCJRA";
+AWS.config.secretAccessKey = "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";
+AWS.config.region = "us-east-1";
+AWS.config.apiVersions = {
+  "s3": "2012-10-17"
+}
+
+
+
+
+
 var storage = multer.diskStorage({
   // destination
   destination: function (req, file, cb) {
@@ -146,41 +162,92 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
-  var file = req.files[0];
+var file = req.files[0];
+var originalFileName = file.originalname
 
-  var originalFileName = file.originalname
-  var deferred = Q.defer();
-
-  const results = [];
-  fs.createReadStream('uploads/' + originalFileName)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
-
-      products.insertMany(results, function (err, product) {
-        if (!err) {
-
-
-          fs.unlink('uploads', function (err, responce) {
-            if (err) {
-
-            } else {
-
+ const results = [];
+fs.createReadStream('uploads/' + originalFileName)
+  .pipe(csv())
+  .on('data', (data) => results.push(data))
+  .on('end', () => {
+  
+    products.insertMany(results,function (err, product) {
+      if (!err) {
+        
+          fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
+             if(err) {
+           
+             
+             } else {
+               var string = {}
+               string = 'sucesss'
+              res.send(string);    
             }
           })
-          deferred.resolve(product);
-        } else {
+      } else {
+         
+      }
+  });
 
-          console.log(err);
-          deferred.reject(err.name + ': ' + err.message);
-        }
-      });
 
-      return deferred.promise;
-    });
+  });
 })
 
 
+
+app.post('/uploadproductfiles' , upload.any('uploads[]'), function(req , res) { 
+
+  var s3data = [];
+
+  var uploadedfiles = req.files;
+  var datetime = new Date(new Date).valueOf();
+  var randomnumber = Math.floor((Math.random() * 100) + 1);
+
+  for (let i = 0; i < uploadedfiles.length; i++)  {
+    var s3 = new AWS.S3();
+  
+    var sizeOf = require('image-size');
+    var dimensions = sizeOf(uploadedfiles[i].path);
+
+    var logowidth = 100;
+    var logoheight = 100;
+    sharp(uploadedfiles[i].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+      // .flatten(true)
+      // .background('#F6F8FA')
+      // .embed()
+      .resize(logowidth, logoheight).toBuffer(function (err, data) {
+        var datetime = new Date(new Date).valueOf();
+        var randomnumber = Math.floor((Math.random() * 100) + 1);
+        var seperate = uploadedfiles[i].originalname;
+        var sep = seperate.split(".");
+
+        var params = {
+          'Bucket': 'smaf',
+          'Key': 'smaf/uploads/' + datetime + randomnumber + '.' + sep[1],
+          'Body': data,
+          'ContentEncoding': 'base64',
+          ACL: 'public-read',
+          Metadata: {
+            'Content-Type': 'image/' + sep[1]
+          }
+        };
+
+        s3.upload(params, function (err, resultdata) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+
+            s3data.push(resultdata.Location)
+
+            if (s3data.length == uploadedfiles.length) {
+              res.send(s3data);
+            }
+          }
+        })
+      })
+  }
+})
 
 
 // start server

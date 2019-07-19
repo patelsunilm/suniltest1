@@ -39,6 +39,7 @@
                 <th>Date</th>
                 <th>Till type</th>
                 <th>Stock Level</th>
+                <!-- <th>barcode</th> -->
                 
               </tr>
               <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
@@ -50,7 +51,6 @@
               <input id="cin" hidden name="cin" #fileInput1 type="file"  accept=".jpg,.jpeg,.png,.raw,.tiff"
                   (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
               <div  class="remember-me" class="img-wrap">
-                {{urls}}
                   <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
                   <img *ngIf="urls[i]" [src]="urls[i]" style="width: 100px;height: 100px;padding: 5px;">
                   <!-- <div> <input type="checkbox" class="image-list" (click)="checkboxclick($event,i)" /> </div> -->
@@ -88,7 +88,12 @@
                 <td>
                   <input matInput  formControlName="stocklevel" required>
                 </td>
-                
+<!--                
+                <td>
+                  <ngx-barcode format="CODE128" [bc-value]="'123'"  [bc-display-value]="true"></ngx-barcode>
+
+                </td> -->
+
               </tr>
   
             </table>

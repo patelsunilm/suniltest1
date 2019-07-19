@@ -19,7 +19,7 @@ function addproduct(addproducts) {
 
 var ProductsData = [];
 for (let i = 0; i < addproducts.length; i++) {
-    ProductsData.push({ productname: addproducts[i].productname,'costprice': addproducts[i].costprice,'markup': addproducts[i].Markup,'sellingprice': addproducts[i].sellingprice,'tilltype': addproducts[i].tilltype,'stocklevel': addproducts[i].stocklevel,'date': addproducts[i].date })
+    ProductsData.push({ image:addproducts[i].image,productname: addproducts[i].productname,'costprice': addproducts[i].costprice,'markup': addproducts[i].Markup,'sellingprice': addproducts[i].sellingprice,'tilltype': addproducts[i].tilltype,'stocklevel': addproducts[i].stocklevel,'date': addproducts[i].date })
 }
 
 products.insertMany(ProductsData,function (err, product) {

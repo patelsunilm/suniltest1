@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var ProductsSchema = new Schema({
- 
+  
+  image:String,
   productname: String,
   costprice: String,
   markup: Number,
