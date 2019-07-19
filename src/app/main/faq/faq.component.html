@@ -1,36 +1,88 @@
-<div id="faq" class="page-layout simple full-width">
+<div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
 
-    <!-- HEADER -->
-    <div class="header accent p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+    <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+        fxLayoutAlign.gt-xs="space-between center">
 
-        <div class="hero-text mb-16">
-            <h2>Frequently Asked Questions</h2>
+        <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                help
+            </mat-icon>
+            <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                Faq
+            </span>
         </div>
-
-        <!-- <div class="search mat-elevation-z7" fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon>search</mat-icon>
-            <input [formControl]="searchInput" placeholder="Search in FAQs..." fxFlex>
-        </div> -->
-
+        <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
+            <span style="padding-right: 10px">
+                <button mat-raised-button matTooltip="Add faq" (click)="addFaq()">
+                    <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add
+                    </mat-icon>Add
+                    Question
+                </button>
+            </span>
+        </div>
     </div>
-    <!-- / HEADER -->
+    <div class="content p-24">
 
-    <!-- CONTENT -->
-    <div class="content px-16 py-24 px-sm-24 py-sm-32">
+        <div class="mat-elevation-z8">
 
-        <mat-accordion class="faqs-accordion">
+            <div *ngIf="readLocalStorageValue('userType') == 'admin'">
 
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
-                        <mat-icon class="mr-12 s-20 secondary-text">help_outline</mat-icon>
-                       <input matInput type="text">
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-              
-            </mat-expansion-panel>
-        </mat-accordion>
+                <div class="content px-16 py-24 px-sm-24 py-sm-32">
+
+                    <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">
+
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+
+                                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+
+                                    <mat-icon class="mr-12 s-20 secondary-text">help_outline</mat-icon>
+                                    {{faq.faqquestion}}
+
+                                </mat-panel-title>
+                                <button mat-raised-button matTooltip="Add faq" (click)="addFaq(faq._id)"
+                                    *ngIf="!faq.faqanswer">
+                                    <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img"
+                                        aria-hidden="true">add</mat-icon>Give Answer
+                                </button>
+                                <span style="padding-right: 6px">{{value.userdata[0].name}}</span>
+                            </mat-expansion-panel-header>
+                            {{faq.faqanswer}}
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+            </div>
+
+
+
+
+
+            <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
+
+                <div class="content px-16 py-24 px-sm-24 py-sm-32">
+
+                    <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">
+
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+
+                                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+
+                                    <mat-icon class="mr-12 s-20 secondary-text">help_outline</mat-icon>
+                                    {{faq.faqquestion}}
+                                </mat-panel-title>
+                                <span style="padding-right: 6px">{{value.userdata[0].name}}</span>
+                            </mat-expansion-panel-header>
+                            {{faq.faqanswer}}
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+            </div>
+
+
+
+        </div>
     </div>
-    <!-- / CONTENT -->
-
 </div>

@@ -1,0 +1,48 @@
+<div class="dialog-content-wrapper">
+
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
+
+            <form name="Form" [formGroup]="Form">
+
+                <div fxLayout="row" fxLayoutAlign="start start">
+                    <mat-form-field class="example-full-width">
+                        <textarea matInput placeholder="Enter Question" formControlName="faqquestion"></textarea>
+                    </mat-form-field>
+                </div>
+                <button mat-button mat-dialog-close (click)="submitFaq()">
+                    Submit
+                </button>
+                <button mat-button mat-dialog-close>
+                    <mat-icon>close</mat-icon>Close
+                </button>
+            </form>
+
+
+        </div>
+
+
+        <div *ngIf="readLocalStorageValue('userType') == 'admin'">
+
+            <form name="Form" [formGroup]="Form">
+
+                <div fxLayout="row" fxLayoutAlign="start start">
+                    <mat-form-field class="example-full-width">
+                        <textarea matInput placeholder="Give Answer" formControlName="faqanswer"></textarea>
+                    </mat-form-field>
+                </div>
+                <button mat-button mat-dialog-close (click)="submitAnswerFaq(data._id)">
+                    Submit
+                </button>
+                <button mat-button mat-dialog-close>
+                    <mat-icon>close</mat-icon>Close
+                </button>
+            </form>
+
+        </div>
+
+
+    </div>
+</div>

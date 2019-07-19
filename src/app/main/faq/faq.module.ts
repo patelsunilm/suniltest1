@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MatExpansionModule,MatButtonModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatSelectModule, MatTableModule, MatTabsModule, MatPaginatorModule, MatDialogModule } from '@angular/material';
+import { MatExpansionModule, MatButtonModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatMenuModule, MatSelectModule, MatTableModule, MatTabsModule, MatPaginatorModule, MatDialogModule } from '@angular/material';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -9,10 +9,12 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { FaqService } from 'app/main/faq/faq.service';
+
 import { AuthGuardCommon } from './../../_guards/index';
 
 import { FaqComponent } from './faq.component';
+import { FaqPopupComponent } from './faq.component';
+
 
 const routes = [
     {
@@ -20,13 +22,18 @@ const routes = [
         component: FaqComponent,
         canActivate: [AuthGuardCommon]
     },
-   
+    {
+        path: 'faq',
+        component: FaqPopupComponent,
+        canActivate: [AuthGuardCommon]
+    }
+
 ];
 
 @NgModule({
     declarations: [
         FaqComponent,
-        
+        FaqPopupComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -51,10 +58,10 @@ const routes = [
     ],
     exports: [
         FaqComponent,
-        
+
     ],
-    providers   : [
-        FaqService
+    providers: [
+
     ]
 })
 
