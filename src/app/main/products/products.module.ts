@@ -9,15 +9,15 @@ import { FuseSidebarModule } from '@fuse/components';
 import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FuseHighlightModule } from '@fuse/components/index';
-import { AuthGuardCo } from '../../_guards/index';
-import { AuthGuard } from './../../_guards/index';
+
 import { MatTableModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material';
 import{AddproductComponent} from '../products/addproduct/addproduct.component' 
 import {MatDatepickerModule} from '@angular/material/datepicker';
-// import { } from '../products/' 
+
+import { AuthGuardCo } from './../../_guards/index';
 
 import { deleteproductPopupComponent } from './products.component';
 import { UpdateproductComponent } from './updateproduct/updateproduct.component';
@@ -28,20 +28,24 @@ import { NgxBarcodeModule } from 'ngx-barcode';
 const routes = [
     {
         path: 'products',
-        component: ProductsComponent
+        component: ProductsComponent,
+        canActivate: [AuthGuardCo]
     },
     {
         path: 'addproduct',
-        component: AddproductComponent
+        component: AddproductComponent,
+        canActivate: [AuthGuardCo]
     },
     {
         path: 'products',
-        component: deleteproductPopupComponent
+        component: deleteproductPopupComponent,
+        canActivate: [AuthGuardCo]
     },
 
     {
         path: 'updateproduct/:id',
-        component: UpdateproductComponent
+        component: UpdateproductComponent,
+        canActivate: [AuthGuardCo]
     }
 ];
 

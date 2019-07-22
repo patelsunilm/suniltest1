@@ -162,40 +162,40 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
-var file = req.files[0];
-var originalFileName = file.originalname
+  var file = req.files[0];
+  var originalFileName = file.originalname
 
- const results = [];
-fs.createReadStream('uploads/' + originalFileName)
-  .pipe(csv())
-  .on('data', (data) => results.push(data))
-  .on('end', () => {
-  
-    products.insertMany(results,function (err, product) {
-      if (!err) {
-        
-          fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
-             if(err) {
-           
-             
-             } else {
-               var string = {}
-               string = 'sucesss'
-              res.send(string);    
+  const results = [];
+  fs.createReadStream('uploads/' + originalFileName)
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+
+      products.insertMany(results, function (err, product) {
+        if (!err) {
+
+          fs.unlink('uploads/' + originalFileName, function (err, responce) {
+            if (err) {
+
+
+            } else {
+              var string = {}
+              string = 'sucesss'
+              res.send(string);
             }
           })
-      } else {
-         
-      }
-  });
+        } else {
+
+        }
+      });
 
 
-  });
+    });
 })
 
 
 
-app.post('/uploadproductfiles' , upload.any('uploads[]'), function(req , res) { 
+app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
   var s3data = [];
 
@@ -203,9 +203,9 @@ app.post('/uploadproductfiles' , upload.any('uploads[]'), function(req , res) {
   var datetime = new Date(new Date).valueOf();
   var randomnumber = Math.floor((Math.random() * 100) + 1);
 
-  for (let i = 0; i < uploadedfiles.length; i++)  {
+  for (let i = 0; i < uploadedfiles.length; i++) {
     var s3 = new AWS.S3();
-  
+
     var sizeOf = require('image-size');
     var dimensions = sizeOf(uploadedfiles[i].path);
 

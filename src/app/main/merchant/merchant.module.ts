@@ -13,24 +13,24 @@ import { MerchantComponent } from './merchant.component';
 import { UpdateMerchantComponent } from './updatemerchant/updatemerchant.component';
 import { deletemerchantpopupComponent } from './merchant.component';
 
-import { AuthGuardCommon } from './../../_guards/index';
+import { AuthGuard } from './../../_guards/index';
 
 
 const routes = [
     {
         path: 'merchant',
         component: MerchantComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuard]
     },
     {
         path: 'merchant/updatemerchant/:id',
         component: UpdateMerchantComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuard]
     },
     {
         path: 'merchant',
         component: deletemerchantpopupComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuard]
     }
 
 ];

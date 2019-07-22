@@ -68,11 +68,13 @@ function authenticate(email, password) {
 function addsignupuser(signupdata) {
 
     var deferred = Q.defer();
+    var hashUserPassword = bcrypt.hashSync(signupdata.password, 10);
+
     var saveallsignup = new Users({
 
         name: signupdata.name,
         email: signupdata.email,
-        password: signupdata.password,
+        password: hashUserPassword,
         address: signupdata.address,
         businessname: signupdata.BusinessName,
         secretquestion: signupdata.Secretquestion,

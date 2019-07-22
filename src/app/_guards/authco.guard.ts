@@ -17,7 +17,7 @@ export class AuthGuardCo implements CanActivate {
         if (localStorage.getItem('currentUser')) {
 
             
-            if(localStorage.getItem('userType')=='Company')
+            if(localStorage.getItem('userType')=='Merchant')
             {
                 setTimeout(function(){
                     localStorage.removeItem("currentUser");

@@ -31,7 +31,7 @@ router.delete('/merchant/deletemerchantData/:merchantDataId/:userId/:name', merc
 
 var faqdata = require('./controllers/faq/faq.controller');
 router.post('/faq/addfaqData', faqdata.addfaqData);
-router.get('/faq/getAllfaqs', faqdata.getAllfaqs);
+router.get('/faq/getAllfaqs/:userId/:userType', faqdata.getAllfaqs);
 router.post('/faq/addFaqAnswerByAdmin', faqdata.addFaqAnswerByAdmin);
 
 module.exports = router;

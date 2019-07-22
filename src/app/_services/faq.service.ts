@@ -19,7 +19,9 @@ export class FAQService {
 
 
     getAllfaqs() {
-        return this.http.get<any>(appConfig.apiUrl + '/faq/getAllfaqs')
+        var userId = localStorage.getItem('userId');
+        var userType = localStorage.getItem('userType');
+        return this.http.get<any>(appConfig.apiUrl + '/faq/getAllfaqs/' + userId + '/' + userType)
     }
 
 

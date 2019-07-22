@@ -41,7 +41,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
         var custom = [
             {
                 id: 'dashboard',
-                title: 'Dashboards',
+                title: 'Dashboard',
                 url: '/dashboard',
                 type: 'item',
                 icon: 'dashboard'
@@ -53,6 +53,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'people'
             },
+
             {
                 id: 'faq',
                 title: 'Faq',
@@ -61,11 +62,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 icon: 'help'
             },
         ]
-
         var custom2 = [
             {
                 id: 'dashboard',
-                title: 'Dashboards',
+                title: 'Dashboard',
                 url: '/dashboard',
                 type: 'item',
                 icon: 'dashboard'
@@ -78,22 +78,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 icon: 'shopping_cart'
             },
             {
-                id: 'merchant',
-                title: 'Merchants',
-                url: '/merchant',
-                type: 'item',
-                icon: 'people'
-            },
-            {
                 id: 'faq',
                 title: 'Faq',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
             },
-
         ]
-
         _router.events.subscribe(
             (event) => {
 
@@ -101,41 +92,10 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                     var custom = [
                         {
                             id: 'dashboard',
-                            title: 'Dashboards',
+                            title: 'Dashboard',
                             url: '/dashboard',
                             type: 'item',
                             icon: 'dashboard'
-                        },
-                        {
-                            id: 'merchant',
-                            title: 'Merchants',
-                            url: '/merchant',
-                            type: 'item',
-                            icon: 'merchant'
-                        },
-                        {
-                            id: 'faq',
-                            title: 'Faq',
-                            url: '/faq',
-                            type: 'item',
-                            icon: 'help'
-                        },
-                    ]
-
-                    var custom2 = [
-                        {
-                            id: 'dashboard',
-                            title: 'Dashboards',
-                            url: '/dashboard',
-                            type: 'item',
-                            icon: 'dashboard'
-                        },
-                        {
-                            id: 'products',
-                            title: 'Products',
-                            url: '/products',
-                            type: 'item',
-                            icon: 'shopping_cart'
                         },
                         {
                             id: 'merchant',
@@ -144,6 +104,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'people'
                         },
+
                         {
                             id: 'faq',
                             title: 'Faq',
@@ -151,17 +112,50 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'help'
                         },
+                    ]
+                    var custom2 = [
+                        {
+                            id: 'dashboard',
+                            title: 'Dashboard',
+                            url: '/dashboard',
+                            type: 'item',
+                            icon: 'dashboard'
+                        },
 
+                        {
+                            id: 'products',
+                            title: 'Products',
+                            url: '/products',
+                            type: 'item',
+                            icon: 'shopping_cart'
+                        },
 
+                        {
+                            id: 'faq',
+                            title: 'Faq',
+                            url: '/faq',
+                            type: 'item',
+                            icon: 'help'
+                        },
                     ];
 
+                    if (localStorage.getItem('userType') == 'admin') {
+                        this.navigation = custom;
+                    } else if (localStorage.getItem('userType') == 'Merchant') {
+                        this.navigation = custom2;
+                    }
                 }
             })
 
 
+        if (localStorage.getItem('userType') == 'admin') {
+            this.navigation = custom;
+        } else if (localStorage.getItem('userType') == 'Merchant') {
+            this.navigation = custom2;
+        }
 
-        this.navigation = custom;
-        this.navigation = custom2;
+        // this.navigation = custom;
+        // this.navigation = custom2;
 
         this.layout = 'vertical';
     }
@@ -219,7 +213,6 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
 
         this.toggleSidebarOpened('navbar');
 

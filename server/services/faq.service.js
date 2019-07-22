@@ -34,28 +34,60 @@ function addfaqData(faqData) {
     return deferred.promise;
 }
 
-function getAllfaqs() {
+function getAllfaqs(userId, userType) {
     var deferred = Q.defer();
+    var userId = new mongoose.Types.ObjectId(userId);
+    if (userType == 'admin') {
 
-    faq.aggregate([
-        {
-            $match: { $and: [{ "status": true }] }
-        },
-        {
-            $lookup: {
-                from: "users",
-                localField: "userId",
-                foreignField: "_id",
-                as: "userdata"
-            }
-        }]).exec(function (err, getdata) {
+        faq.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userdata"
+                }
+            }]).exec(function (err, getdata) {
 
-            if (!err) {
-                deferred.resolve(getdata);
-            } else {
-                deferred.reject(err.name + ': ' + err.message);
-            }
-        });
+                if (!err) {
+                    deferred.resolve(getdata);
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+
+    } else {
+
+        faq.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { "status": true },
+                        { "userId": userId }
+                    ]
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userdata"
+                }
+            }]).exec(function (err, getdata) {
+
+                if (!err) {
+                    deferred.resolve(getdata);
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+
+
+    }
+
+
+
     return deferred.promise;
 }
 
