@@ -50,7 +50,6 @@ export class UpdateproductComponent implements OnInit {
  
   this.route.params.subscribe(params => { 
 
-
     this.ProductService.getallproductbyId(params.id).subscribe(data => {
 
 console.log('datas');

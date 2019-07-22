@@ -108,7 +108,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Businessname </mat-label>
+                            <mat-label>Business name </mat-label>
                             <input matInput formControlName="businessname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
                                 required>
                             <mat-error *ngIf="form.get('businessname').hasError('required')">
@@ -155,7 +155,25 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Secret Question</mat-label>
+                            <mat-label>Select background Color</mat-label>
+                            <input matInput id="backgroundthemecolor" formControlName="backgroundtheme"
+                                [(colorPicker)]="color2" [value]="color2" readonly="true">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                            <mat-label>Select font Color</mat-label>
+                            <input matInput id="fontcolor" formControlName="fontcolor" readonly="true" [value]="color1"
+                                [(colorPicker)]="color1">
+
+                        </mat-form-field>
+                    </div>
+
+
+
+                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                            <mat-label>Secret question</mat-label>
                             <input matInput formControlName="Secretquestion" required>
                             <mat-error>
                                 Please enter valid secret question!
@@ -163,7 +181,7 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Secret Answer</mat-label>
+                            <mat-label>Secret answer</mat-label>
                             <input matInput formControlName="Secretanswer" required>
                             <mat-error>
                                 Please enter valid secret answer!
@@ -172,20 +190,22 @@
 
                     </div>
 
-
+                    <!-- 
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Category List</mat-label>
                             <input matInput>
-                            <!-- <mat-error *ngIf="form.get('email').hasError('required')">
+                            <mat-error *ngIf="form.get('email').hasError('required')">
                                 Please enter email!
                             </mat-error>
                             <mat-error *ngIf="form.get('email').hasError('email')">
                                 Please enter valid email!
-                            </mat-error> -->
+                            </mat-error>
                         </mat-form-field>
-                    </div>
+                    </div> -->
+
+
 
                     <div class="button-row" style="text-align: center;">
                         <button mat-raised-button="" color="" style="margin-top: 10px;"

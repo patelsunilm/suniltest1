@@ -14,6 +14,8 @@ var UserSchema = new Schema({
   ipaddress: String,
   status: Boolean,
   uniqueid: Number,
+  backgroundtheme: String,
+  fontcolor: String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

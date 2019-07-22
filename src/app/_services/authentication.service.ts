@@ -14,15 +14,18 @@ export class AuthenticationService {
 
         return this.http.post<any>(appConfig.apiUrl + '/users/authenticate', { email: email.toLowerCase(), password: password })
             .map(user => {
-                console.log(user)
 
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                localStorage.setItem('userId', user._id);
-                localStorage.setItem('email', user.email);
-                localStorage.setItem('userType', user.userType);
-                localStorage.setItem('name', user.name);
-                localStorage.setItem('token', user.token);
+                if (user.string == 'You cannot logged in as your Status is off.') {
 
+                }
+                else {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('userId', user._id);
+                    localStorage.setItem('email', user.email);
+                    localStorage.setItem('userType', user.userType);
+                    localStorage.setItem('name', user.name);
+                    localStorage.setItem('token', user.token);
+                }
                 return user;
             });
     }
@@ -46,5 +49,11 @@ export class AuthenticationService {
         return this.http.post<any>(appConfig.apiUrl + '/users/addsecretValuedata', { '_id': _id, 'secretanswer': secretanswer })
 
     }
+
+
+    updateipaddress(data) {
+        return this.http.post<any>(appConfig.apiUrl + '/users/updateipaddress', data)
+    }
+
 
 }

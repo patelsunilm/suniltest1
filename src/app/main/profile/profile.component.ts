@@ -5,7 +5,8 @@ import { fuseAnimations } from '@fuse/animations';
 import { ProfileService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
-
+import { ColorPickerService, Cmyk } from 'ngx-color-picker';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-profile',
@@ -26,6 +27,43 @@ export class ProfileComponent implements OnInit, OnDestroy {
     longnew: any;
     // Private
     private _unsubscribeAll: Subject<any>;
+
+
+    public rgbaText: string = 'rgba(165, 26, 214, 0.2)';
+
+    public arrayColors: any = {
+        color1: '#2883e9',
+        color2: '#e920e9',
+        color3: 'rgb(255,245,0)',
+        color4: 'rgb(236,64,64)',
+        color5: 'rgba(45,208,45,1)'
+    };
+
+    public selectedColor: string = 'color1';
+
+    public color1: string = '#2889e9';
+    public color2: string = '#e920e9';
+    public color3: string = '#fff500';
+    public color4: string = 'rgb(236,64,64)';
+    public color5: string = 'rgba(45,208,45,1)';
+    public color6: string = '#1973c0';
+    public color7: string = '#f200bd';
+    public color8: string = '#a8ff00';
+    public color9: string = '#278ce2';
+    public color10: string = '#0a6211';
+    public color11: string = '#f2ff00';
+    public color12: string = '#f200bd';
+    public color13: string = 'rgba(0,255,0,0.5)';
+    public color14: string = 'rgb(0,255,255)';
+    public color15: string = 'rgb(255,0,0)';
+    public color16: string = '#a51ad633';
+    public color17: string = '#666666';
+    public color18: string = '#ff0000';
+
+    public cmykValue: string = '';
+
+    public cmykColor: Cmyk = new Cmyk(0, 0, 0, 0);
+
 
     /**
      * Constructor
@@ -64,6 +102,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             businessname: ['', Validators.required],
             Secretquestion: ['', Validators.required],
             Secretanswer: ['', Validators.required],
+            backgroundtheme: [''],
+            fontcolor: [''],
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -82,6 +122,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             businessname: [data.businessname],
                             Secretquestion: [data.secretquestion],
                             Secretanswer: [data.secretanswer],
+                            backgroundtheme: [data.backgroundtheme],
+                            fontcolor: [data.fontcolor],
+
                         });
                     },
                     error => {
@@ -99,10 +142,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     updatemyprofile() {
 
+
+
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
             this.form.value._id = user._id;
             this.form.value.userType = user.userType;
+            this.form.value.fontcolor = $("#fontcolor").val()
+            this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+
             this.ProfileService.updateprofile(this.form.value)
                 .subscribe(
                     data => {
@@ -152,6 +200,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
-
 
 }

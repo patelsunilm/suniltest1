@@ -16,7 +16,7 @@ var sharp = require('sharp');
 var Q = require('q');
 uploads = require("express-fileupload")
 var path = require('path');
-const csv  = require('csv-parser')
+const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
 
 gm = require('gm');
@@ -109,9 +109,10 @@ app.use(expressJwt({
 }).unless({
   path: ['/users/authenticate',
     '/users/addsecretValuedata',
+    '/users/updateipaddress',
     '/users/addsignupuser',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword' ,'/products/addcsvfile']
+    '/forgot-password-2/resetpassword', '/products/addcsvfile']
 }));
 
 
@@ -146,9 +147,9 @@ AWS.config.apiVersions = {
 
 
 var storage = multer.diskStorage({
- // destination
+  // destination
   destination: function (req, file, cb) {
-   
+
     cb(null, './uploads');
   },
   filename: function (req, file, cb) {
