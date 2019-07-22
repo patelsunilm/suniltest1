@@ -51,10 +51,13 @@ export class UpdateproductComponent implements OnInit {
   this.route.params.subscribe(params => { 
 
     this.ProductService.getallproductbyId(params.id).subscribe(data => {
-   
+
+console.log('datas');
+console.log(data);
 
       this.image = data.image
       this.form = this._formBuilder.group({
+        id:[data._id],
         image: [ this.image],
         productname : [data.productname],
         costprice: [data.costprice],
@@ -110,20 +113,21 @@ updateproduct() {
   this.ProductService.updateproductgallery(this.filesToUpload).subscribe(data => {
 
 
-    for (let index = 0; index < this.form.value.length; index++) {
+    for (let i = 0; i < this.form.value.length; i++) {
     
       data.forEach(element => {
-        this.form.value[index].image = element ;
+        this.form.value[i].image = element ;
       });
     
     }
-
+console.log('dadasdasd')
 console.log(this.form.value);
 this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
+console.log('data');
+console.log(data);
 
-
-  
 })
+
   })
 }
 }

@@ -11,8 +11,8 @@ var service = {};
 service.addproduct = addproduct;
 service.getAllproducts = getAllproducts;
 service.deleteproduct = deleteproduct;
-service.getallproductbyId  = getallproductbyId
-
+service.getallproductbyId  = getallproductbyId;
+service.updateprodcutdetail = updateprodcutdetail;
 
 function addproduct(addproducts) {
     var deferred = Q.defer();
@@ -89,6 +89,33 @@ function getallproductbyId(productid) {
         }
     }).sort({ dateadded: -1 });
     return deferred.promise;
+}
+
+
+
+function updateprodcutdetail(data) {
+    var deferred = Q.defer();
+
+var id = new mongoose.Types.ObjectId(data.id);
+products.findOneAndUpdate({ _id:id} , {
+        image : data.image,
+        productname :data.productname,
+        costprice :data.costprice,
+        sellingprice : data.sellingprice,
+        date : data.date,
+        tilltype : data.tilltype,
+        stocklevel : data.stocklevel,
+        markup:data.markup
+           
+},function (err, updateproducts) {
+
+    if (!err) {
+        deferred.resolve(updateproducts);
+    } else {
+        deferred.reject(err.name + ': ' + err.message);
+    }
+})
+return deferred.promise;
 }
 module.exports = service;
 
