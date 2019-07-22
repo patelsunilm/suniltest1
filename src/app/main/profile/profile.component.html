@@ -43,7 +43,6 @@
                             </mat-error>
                         </mat-form-field>
 
-
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Email</mat-label>
                             <input matInput formControlName="email" required>
@@ -54,7 +53,6 @@
                                 Please enter valid email!
                             </mat-error>
                         </mat-form-field>
-
                     </div>
 
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
@@ -70,6 +68,21 @@
                             </mat-error>
                         </mat-form-field>
 
+                        <!-- <div>
+                            <a mat-button color="warn" class="add-file-button" (click)="fileInput1.click()"
+                                aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+                                Upload logo
+                            </a>
+                            <input id="cin" hidden name="cin" #fileInput1 type="file"
+                                accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent($event)" />
+
+                            <div *ngFor='let image of images' class="remember-me" class="img-wrap">
+                                <img    [src]="image.url" style="width: 100px;height: 100px;padding: 5px;">
+                            </div>
+                            <div *ngFor='let url of urls' class="remember-me" class="img-wrap">
+                                <img  *ngIf="url"  [src]="url" style="width: 100px;height: 100px;padding: 5px;">
+                            </div>
+                        </div> -->
                     </div>
 
                     <div class="button-row" style="text-align: center;">

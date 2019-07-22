@@ -29,6 +29,7 @@ function getprofileInfo(userId) {
 
 function updateprofile(getprofiledata) {
 
+
     var deferred = Q.defer();
 
     if (getprofiledata.userType == 'admin') {
@@ -42,9 +43,15 @@ function updateprofile(getprofiledata) {
                 deferred.resolve(data);
 
             } else {
+                // var imageData = [];
+                // for (let i = 0; i < getprofiledata.image.length; i++) {
+
+                //     imageData.push({ 'url': getprofiledata.image[i] })
+                // }
                 Users.findById(getprofiledata._id, function (err, getdata) {
 
                     if (!err) {
+                        //  getdata.image = imageData
                         getdata.name = getprofiledata.name;
                         getdata.email = getprofiledata.email;
                         getdata.address = getprofiledata.address;

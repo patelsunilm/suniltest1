@@ -104,13 +104,8 @@ close(urls, event, index, i) {
 
 addproduct() {
 
-  console.log('test products');
-  console.log(this.productForm.value.itemRows);
-
-console.log('this file upload');
-console.log(this.filesToUpload);
 if(this.filesToUpload) {
-console.log('test');
+
 } else {
 
 }

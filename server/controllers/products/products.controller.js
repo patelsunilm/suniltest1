@@ -75,8 +75,6 @@ exports.getallproductbyId = function(req, res) {
 
 exports.updateprodcutdetail = function(req, res) {
  
-    console.log('req.body');
-    console.log(req.body)
     productservice.updateprodcutdetail(req.body)
     .then(function (getproduct) {
         if (getproduct) {

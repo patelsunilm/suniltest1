@@ -58,8 +58,6 @@ export class Login2Component implements OnInit {
         //     .subscribe(data => {
 
         //         this.ipAddress = data.ip
-        //         console.log('new')
-        //         console.log(this.ipAddress);
         //     })
     }
 
@@ -143,7 +141,6 @@ export class Login2Component implements OnInit {
                 });
 
     }
-
 
 }
 

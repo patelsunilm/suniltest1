@@ -85,8 +85,7 @@ export class ProductsComponent implements OnInit {
 fileEvent($event) {
 
 this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
-  console.log('data');
-  console.log(data)
+ 
 }, error => {
   console.log(error);
 })

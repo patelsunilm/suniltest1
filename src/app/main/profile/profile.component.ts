@@ -17,14 +17,12 @@ import * as $ from 'jquery';
 export class ProfileComponent implements OnInit, OnDestroy {
 
     form: FormGroup;
-    lat: number;
-    lng: number;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     returnUrl: string;
-    packagename: any[];
-    latnew: any;
-    longnew: any;
+    urls = new Array<string>();
+    filesToUpload: Array<File> = [];
+    images: any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -78,8 +76,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         public snackBar: MatSnackBar,
     ) {
         // Set the private defaults
-        this.lat = -34.397;
-        this.lng = 150.644;
 
         this._unsubscribeAll = new Subject();
     }
@@ -104,6 +100,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             Secretanswer: ['', Validators.required],
             backgroundtheme: [''],
             fontcolor: [''],
+            //  image: [''],
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -113,7 +110,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
                     data => {
-
+                        this.images = data.image
                         this.form = this._formBuilder.group({
 
                             name: [data.name],
@@ -124,6 +121,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             Secretanswer: [data.secretanswer],
                             backgroundtheme: [data.backgroundtheme],
                             fontcolor: [data.fontcolor],
+                            //   image: [this.images],
 
                         });
                     },
@@ -136,16 +134,95 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     }
 
+    // fileChangeEvent(fileInput: any) {
+
+    //     if (fileInput.target.files && fileInput.target.files[0]) {
+    //         var filesAmount = fileInput.target.files.length;
+
+    //         for (let i = 0; i < filesAmount; i++) {
+    //             var reader = new FileReader();
+    //             reader.onload = (fileInput: any) => {
+
+    //                 this.urls.push(fileInput.target.result);
+
+    //             }
+    //             reader.readAsDataURL(fileInput.target.files[i]);
+    //             this.filesToUpload.push(fileInput.target.files[i]);
+
+    //         }
+
+    //     }
+    // }
+
+
     readLocalStorageValue(key) {
         return localStorage.getItem(key);
     }
 
     updatemyprofile() {
 
-
-
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
+
+            // if (this.filesToUpload.length > 0) {
+
+
+            //     this.ProfileService.uploadLogoImage(this.filesToUpload)
+            //         .subscribe(
+            //             data => {
+
+            //                 this.form.value.image = data[0];
+            //                 this.form.value._id = user._id;
+            //                 this.form.value.userType = user.userType;
+            //                 this.form.value.fontcolor = $("#fontcolor").val()
+            //                 this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+
+
+            //                 this.ProfileService.updateprofile(this.form.value)
+            //                     .subscribe(
+            //                         data => {
+
+            //                             if (data.string == 'Email is already exist.') {
+            //                                 this.snackBar.open('Email is already exist.', '', {
+            //                                     duration: 3000,
+            //                                     horizontalPosition: this.horizontalPosition,
+            //                                     verticalPosition: this.verticalPosition,
+            //                                 });
+            //                             } if (data.string == 'BusinessName is already exist.') {
+            //                                 this.snackBar.open('BusinessName is already exist.', '', {
+            //                                     duration: 3000,
+            //                                     horizontalPosition: this.horizontalPosition,
+            //                                     verticalPosition: this.verticalPosition,
+            //                                 });
+            //                             } else {
+            //                                 this.snackBar.open('Profile updated successfully.', '', {
+            //                                     duration: 3000,
+            //                                     horizontalPosition: this.horizontalPosition,
+            //                                     verticalPosition: this.verticalPosition,
+            //                                 });
+            //                                 this.router.navigate([this.returnUrl]);
+            //                             }
+
+
+            //                         },
+            //                         error => {
+
+            //                             console.log(error);
+            //                             this.snackBar.open('Please try again!', '', {
+            //                                 duration: 3000,
+            //                                 horizontalPosition: this.horizontalPosition,
+            //                                 verticalPosition: this.verticalPosition,
+            //                             });
+            //                             this.router.navigate([this.returnUrl]);
+
+            //                         });
+            //             });
+
+
+            // } 
+            // else {
+
+
             this.form.value._id = user._id;
             this.form.value.userType = user.userType;
             this.form.value.fontcolor = $("#fontcolor").val()
@@ -189,6 +266,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.router.navigate([this.returnUrl]);
 
                     });
+            // }
+
         });
     }
 

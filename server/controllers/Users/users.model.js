@@ -3,6 +3,11 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var UserSchema = new Schema({
+  // image: [{
+  //   url: { type: String },
+  //   dateadded: { type: Date, default: Date.now },
+  // }],
+
   name: String,
   address: String,
   userType: String,
