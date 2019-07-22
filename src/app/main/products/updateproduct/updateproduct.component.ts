@@ -28,7 +28,8 @@ export class UpdateproductComponent implements OnInit {
   urls: Array<File> =[];
   filesToUpload: Array<File> = [];
   image : any;
-  
+  returnUrl: string;
+
   constructor(private ProductService : ProductService,  private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -39,22 +40,18 @@ export class UpdateproductComponent implements OnInit {
  
     this.form = this._formBuilder.group({
       image: [''],
-      productname : [''],
-      costprice: [''],
-      markup : [''],
-      sellingprice : [''],
-      date : [''],
-      tilltype : [''],
-      stocklevel: ['']
+      productname: ['', Validators.required],
+      costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      markup: ['', Validators.required],
+      sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      date: ['', Validators.required],
+      tilltype: ['', Validators.required],
+      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
   });
  
   this.route.params.subscribe(params => { 
 
     this.ProductService.getallproductbyId(params.id).subscribe(data => {
-
-console.log('datas');
-console.log(data);
-
       this.image = data.image
       this.form = this._formBuilder.group({
         id:[data._id],
@@ -72,35 +69,39 @@ console.log(data);
   })
 
 
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
   }
   
-  fileChangeEvent(fileInput: any,index) {
+  fileChangeEvent(fileInput: any, index) {
 
     var imagefiles = fileInput.target.files;
     if (fileInput.target.files && fileInput.target.files[0]) {
-        var filesAmount = fileInput.target.files.length;
-     
-            var testreader = new FileReader();
-            testreader.onload = (fileInput: any) => {
+      var filesAmount = fileInput.target.files.length;
+
+      var testreader = new FileReader();
+      testreader.onload = (fileInput: any) => {
 
 
-              this.urls[index]=fileInput.target.result;
-                this.filesToUpload.push(imagefiles[0]);
-            }
-      
-            testreader.readAsDataURL(fileInput.target.files[0]);
+        this.urls[index] = fileInput.target.result;
+        this.filesToUpload.push(imagefiles[0]);
+      }
+
+      testreader.readAsDataURL(fileInput.target.files[0]);
     }
-}
+  }
+
 
 close(urls, event, index, i) {
+
+  console.log('test123');
 
   urls.splice(i, 1);
   var temp = new Array<File>();
   for (var j = 0; j < this.filesToUpload.length; j++) {
-      if (j != i) {
-          temp.push(this.filesToUpload[j]);
-      }
+    if (j != i) {
+      temp.push(this.filesToUpload[j]);
+    }
   }
   this.filesToUpload = temp;
 
@@ -110,24 +111,49 @@ close(urls, event, index, i) {
 updateproduct() {
 
 
-  this.ProductService.updateproductgallery(this.filesToUpload).subscribe(data => {
+if(this.filesToUpload.length > 0) {
+  
+  
+  var data = this.filesToUpload.slice(-1);
+  this.ProductService.updateproductgallery(data).subscribe(data => {
 
 
-    for (let i = 0; i < this.form.value.length; i++) {
-    
-      data.forEach(element => {
-        this.form.value[i].image = element ;
-      });
-    
-    }
-console.log('dadasdasd')
-console.log(this.form.value);
+ this.form.value.image = data.toString()
+
 this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
-console.log('data');
-console.log(data);
+ 
+  this.snackBar.open('Product update success fully', '', {
+    duration: 3000,
+    horizontalPosition: this.horizontalPosition,
+    verticalPosition: this.verticalPosition,
+  });
+  this.router.navigate([this.returnUrl]);
+
+}, error => {
+  console.log(error);
 
 })
 
   })
+} else {
+
+
+  this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
+ 
+    this.snackBar.open('Product update success fully', '', {
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  
+    this.router.navigate([this.returnUrl]);
+  }, error => {
+    console.log(error);
+  
+  })
+}
+
+return false
+
 }
 }

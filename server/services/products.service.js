@@ -95,7 +95,7 @@ function getallproductbyId(productid) {
 
 function updateprodcutdetail(data) {
     var deferred = Q.defer();
-
+    
 var id = new mongoose.Types.ObjectId(data.id);
 products.findOneAndUpdate({ _id:id} , {
         image : data.image,

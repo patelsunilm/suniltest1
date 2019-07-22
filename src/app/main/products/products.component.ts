@@ -31,6 +31,9 @@ export class ProductsComponent implements OnInit {
   displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype', 'stocklevel','action'];
   dataSource;
   form: FormGroup;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   applyFilter(filterValue: string) {
@@ -42,7 +45,7 @@ export class ProductsComponent implements OnInit {
 
 
   }
-  constructor(public dialog: MatDialog , private ProductService : ProductService) { }
+  constructor(public dialog: MatDialog , private ProductService : ProductService,public snackBar: MatSnackBar) { }
   openDialog() {
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
@@ -77,16 +80,43 @@ export class ProductsComponent implements OnInit {
     });
    
     dialogRef.afterClosed().subscribe(result => {
-  
+      this.ProductService.getAllproducts()
+      .subscribe(
+        data => {
+
+          this.dataSource = new MatTableDataSource(data);
+          this.dataSource.paginator = this.paginator;
+        
+        }, error => {
+          console.log(error);
+        });
   
     })
   }
 
 fileEvent($event) {
 
+
 this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
-  console.log('data');
-  console.log(data)
+ 
+  this.snackBar.open('Csv import success fully', '', {
+    duration: 3000,
+    horizontalPosition: this.horizontalPosition,
+    verticalPosition: this.verticalPosition,
+  });
+  this.ProductService.getAllproducts()
+  .subscribe(
+    data => {
+
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
+    
+    }, error => {
+      console.log(error);
+    });
+
+
+
 }, error => {
   console.log(error);
 })
@@ -126,11 +156,12 @@ export class deleteproductPopupComponent {
       .subscribe(
         data => {
  
-  this.snackBar.open(data.string, '', {
-  duration: 3000,
-  horizontalPosition: this.horizontalPosition,
-  verticalPosition: this.verticalPosition,
-});
+          this.snackBar.open('Product deleted successfully', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+
   })
 
   }
