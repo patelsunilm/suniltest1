@@ -10,7 +10,7 @@ import {FormControl, FormArray} from '@angular/forms';
 
 import {ProductService} from '../../../_services/index';
 import { element } from '@angular/core/src/render3';
-
+import { Observable }    from 'rxjs/Observable';
 
 @Component({
   selector: 'app-addproduct',
@@ -48,14 +48,14 @@ export class AddproductComponent implements OnInit {
 
 
     return this._fb.group({
-      image: ['',],
+      image: [''],
       productname : ['',Validators.required],
-      costprice : ['',Validators.required],
-      Markup : [''],
-      sellingprice : [''],
-      date : [''],
-      tilltype : [''],
-      stocklevel : ['']
+      costprice : ['',Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      Markup : ['',Validators.required],
+      sellingprice : ['',Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      date : ['',Validators.required],
+      tilltype : ['',Validators.required],
+      stocklevel : ['',Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
     });
   }
 
@@ -108,9 +108,16 @@ addproduct() {
   console.log('test products');
   console.log(this.productForm.value.itemRows);
 
-// console.log('this file upload');
-// console.log(this.filesToUpload);
+console.log('this file upload');
+console.log(this.filesToUpload);
+if(this.filesToUpload) {
+console.log('test');
+} else {
 
+}
+
+
+return false
 this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
 for (let index = 0; index < this.productForm.value.itemRows.length; index++) {
