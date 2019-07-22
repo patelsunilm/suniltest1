@@ -9,17 +9,17 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FuseHighlightModule } from '@fuse/components/index';
-//import { AuthGuardCommon } from './../../_guards/index';
-
 
 import { PasswordComponent } from './password.component';
+
+import { AuthGuardCommon } from './../../_guards/index';
+
 
 const routes = [
     {
         path: 'password',
         component: PasswordComponent,
-       // canActivate: [AuthGuardCommon]
-
+        canActivate: [AuthGuardCommon]
     }
 ];
 

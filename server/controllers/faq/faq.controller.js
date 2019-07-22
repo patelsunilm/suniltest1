@@ -20,7 +20,7 @@ exports.addfaqData = function (req, res) {
 
 exports.getAllfaqs = function (req, res) {
 
-    faqService.getAllfaqs()
+    faqService.getAllfaqs(req.params.userId, req.params.userType)
         .then(function (getdata) {
             if (getdata) {
                 res.send(getdata);
