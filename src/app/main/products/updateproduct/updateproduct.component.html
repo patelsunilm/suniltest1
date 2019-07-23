@@ -41,58 +41,57 @@
                   (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
                   <div *ngIf="!urls[i]" class="remember-me" class="img-wrap">
 
-                    <span class="close" >&times;</span>
                     <img [src]="image" style="width: 100px;height: 100px;padding: 5px;">
 
                 </div>
                 <div  class="remember-me" class="img-wrap">
               
-                  <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
+                  <!-- <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span> -->
                   <img *ngIf="urls[i]" [src]="urls[i]" style="width: 100px;height: 100px;padding: 5px;">
               </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Products Name</mat-label>
-            <input matInput formControlName="productname" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                      Please enter name!
+            <input matInput formControlName="productname"  pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true"  required>
+            <mat-error *ngIf="form.get('productname').hasError('required')">
+                      Please enter product name!
                   </mat-error>
-                  <mat-error *ngIf="form.get('proName').hasError('pattern')">
+                  <mat-error *ngIf="form.get('productname').hasError('pattern')">
                       Please enter valid name!
-                  </mat-error> -->
+                  </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Cost Price</mat-label>
             <input matInput formControlName="costprice" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                    Please enter name!
+            <mat-error *ngIf="form.get('costprice').hasError('required')">
+                    Please enter costprice!
                 </mat-error>
-                <mat-error *ngIf="form.get('proName').hasError('pattern')">
-                    Please enter valid name!
-                </mat-error> -->
+                <mat-error *ngIf="form.get('costprice').hasError('pattern')">
+                    Please enter valid costprice!
+                </mat-error>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Markup</mat-label>
             <input matInput formControlName="markup" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                      Please enter name!
+            <mat-error *ngIf="form.get('markup').hasError('required')">
+                      Please enter markup!
                   </mat-error>
-                  <mat-error *ngIf="form.get('proName').hasError('pattern')">
-                      Please enter valid name!
-                  </mat-error> -->
+                  <mat-error *ngIf="form.get('markup').hasError('pattern')">
+                      Please enter valid markup!
+                  </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Selling Price</mat-label>
             <input matInput formControlName="sellingprice" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                    Please enter name!
+            <mat-error *ngIf="form.get('sellingprice').hasError('required')">
+                    Please enter sellingprice!
                 </mat-error>
-                <mat-error *ngIf="form.get('proName').hasError('pattern')">
-                    Please enter valid name!
-                </mat-error> -->
+                <mat-error *ngIf="form.get('sellingprice').hasError('pattern')">
+                    Please enter valid sellingprice!
+                </mat-error>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
@@ -100,35 +99,39 @@
             <mat-label>Date</mat-label>
          
               <input required matInput  formControlName="date" [matDatepicker]="picker" placeholder="Choose a date">
+           
+           
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
-            
+              <mat-error *ngIf="form.get('date').hasError('required')">
+                  Please enter date!
+              </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Till type</mat-label>
             <input matInput formControlName="tilltype" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                    Please enter name!
+            <mat-error *ngIf="form.get('tilltype').hasError('required')">
+                    Please enter tilltype!
                 </mat-error>
-                <mat-error *ngIf="form.get('proName').hasError('pattern')">
-                    Please enter valid name!
-                </mat-error> -->
+                <mat-error *ngIf="form.get('tilltype').hasError('pattern')">
+                    Please enter valid tilltype!
+                </mat-error>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Stock Level</mat-label>
             <input matInput formControlName="stocklevel" required>
-            <!-- <mat-error *ngIf="form.get('proName').hasError('required')">
-                    Please enter name!
+            <mat-error *ngIf="form.get('stocklevel').hasError('required')">
+                    Please enter stocklevel!
                 </mat-error>
-                <mat-error *ngIf="form.get('proName').hasError('pattern')">
-                    Please enter valid name!
-                </mat-error> -->
+                <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
+                    Please enter valid stocklevel!
+                </mat-error>
           </mat-form-field>
         </div>
         <div class="button-row" style="text-align: center;">
-          <button mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
+          <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
         </div>
       </form>
     </div>

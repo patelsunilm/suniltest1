@@ -245,3 +245,29 @@ table {
         }
     }
 }
+
+.cstm-table-store td{padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: top;
+    padding-top: 10px;}
+.cstm-table-store td input{border:1px solid #ccc;}
+.cstm-table-store input.datepicker-add{height: 30px;padding-top: 0px;padding-left: 5px;border:1px solid transparent !important;}
+.cstm-table-store td .mat-form-field-infix{margin-top: -10px;padding-top: 0px;}
+mat-form-field.mat-form-field[_ngcontent-c29]{margin-top: -15px;}
+.cstm-table-store td .img-wrap{border:1px solid transparent;vertical-align: top;}
+.cstm-table-store td .img-wrap img{border:1px solid #039be5;vertical-align: top;}
+.add-row-btn button{float: right;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 5px;
+  box-shadow: none;
+  border: none;
+  background-color: #039be5;
+  color: #fff;}
+ .cstm-table-store td .delete-btn-add {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: red;
+    color: #fff;
+  }

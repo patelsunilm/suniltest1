@@ -177,11 +177,13 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
           fs.unlink('uploads/' + originalFileName, function (err, responce) {
             if (err) {
 
-
+              console.log(err);
             } else {
-              var string = {}
-              string = 'sucesss'
-              res.send(string);
+
+
+              var data = {};
+              data.string = 'sucess.';
+              res.send(data);
             }
           })
         } else {

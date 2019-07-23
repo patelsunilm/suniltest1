@@ -28,6 +28,7 @@ export class UpdateproductComponent implements OnInit {
   urls: Array<File> = [];
   filesToUpload: Array<File> = [];
   image: any;
+  returnUrl: string;
 
   constructor(private ProductService: ProductService, private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -39,20 +40,18 @@ export class UpdateproductComponent implements OnInit {
 
     this.form = this._formBuilder.group({
       image: [''],
-      productname: [''],
-      costprice: [''],
-      markup: [''],
-      sellingprice: [''],
-      date: [''],
-      tilltype: [''],
-      stocklevel: ['']
+      productname: ['', Validators.required],
+      costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      markup: ['', Validators.required],
+      sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      date: ['', Validators.required],
+      tilltype: ['', Validators.required],
+      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
     });
 
     this.route.params.subscribe(params => {
 
       this.ProductService.getallproductbyId(params.id).subscribe(data => {
-
-
         this.image = data.image
         this.form = this._formBuilder.group({
           id: [data._id],
@@ -70,6 +69,7 @@ export class UpdateproductComponent implements OnInit {
     })
 
 
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
   }
 
@@ -91,7 +91,10 @@ export class UpdateproductComponent implements OnInit {
     }
   }
 
+
   close(urls, event, index, i) {
+
+    console.log('test123');
 
     urls.splice(i, 1);
     var temp = new Array<File>();
@@ -108,20 +111,47 @@ export class UpdateproductComponent implements OnInit {
   updateproduct() {
 
 
-    this.ProductService.updateproductgallery(this.filesToUpload).subscribe(data => {
+    if (this.filesToUpload.length > 0) {
 
 
-      for (let i = 0; i < this.form.value.length; i++) {
+      var data = this.filesToUpload.slice(-1);
+      this.ProductService.updateproductgallery(data).subscribe(data => {
 
-        data.forEach(element => {
-          this.form.value[i].image = element;
-        });
 
-      }
-      this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
+        this.form.value.image = data.toString()
+
+        this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
+
+          this.snackBar.open('Product update success fully', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+          this.router.navigate([this.returnUrl]);
+
+        }, error => {
+          console.log(error);
+
+        })
 
       })
+    } else {
+      this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
-    })
+        this.snackBar.open('Product update success fully', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+
+        this.router.navigate([this.returnUrl]);
+      }, error => {
+        console.log(error);
+
+      })
+    }
+
+    return false
+
   }
 }
