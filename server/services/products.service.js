@@ -11,18 +11,18 @@ var service = {};
 service.addproduct = addproduct;
 service.getAllproducts = getAllproducts;
 service.deleteproduct = deleteproduct;
-service.getallproductbyId  = getallproductbyId;
+service.getallproductbyId = getallproductbyId;
 service.updateprodcutdetail = updateprodcutdetail;
 
 function addproduct(addproducts) {
     var deferred = Q.defer();
 
-var ProductsData = [];
-for (let i = 0; i < addproducts.length; i++) {
-    ProductsData.push({ image:addproducts[i].image,productname: addproducts[i].productname,'costprice': addproducts[i].costprice,'markup': addproducts[i].Markup,'sellingprice': addproducts[i].sellingprice,'tilltype': addproducts[i].tilltype,'stocklevel': addproducts[i].stocklevel,'date': addproducts[i].date })
-}
+    var ProductsData = [];
+    for (let i = 0; i < addproducts.length; i++) {
+        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date })
+    }
 
-products.insertMany(ProductsData,function (err, product) {
+    products.insertMany(ProductsData, function (err, product) {
         if (!err) {
 
             deferred.resolve(product);
@@ -55,7 +55,7 @@ function getAllproducts() {
 }
 
 function deleteproduct(productid) {
-    
+
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
     products.deleteOne(
@@ -81,7 +81,7 @@ function getallproductbyId(productid) {
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
 
-    products.findOne({_id : id},function (err, getproducts) {
+    products.findOne({ _id: id }, function (err, getproducts) {
         if (!err) {
             deferred.resolve(getproducts);
         } else {
@@ -95,27 +95,27 @@ function getallproductbyId(productid) {
 
 function updateprodcutdetail(data) {
     var deferred = Q.defer();
-    
-var id = new mongoose.Types.ObjectId(data.id);
-products.findOneAndUpdate({ _id:id} , {
-        image : data.image,
-        productname :data.productname,
-        costprice :data.costprice,
-        sellingprice : data.sellingprice,
-        date : data.date,
-        tilltype : data.tilltype,
-        stocklevel : data.stocklevel,
-        markup:data.markup
-           
-},function (err, updateproducts) {
 
-    if (!err) {
-        deferred.resolve(updateproducts);
-    } else {
-        deferred.reject(err.name + ': ' + err.message);
-    }
-})
-return deferred.promise;
+    var id = new mongoose.Types.ObjectId(data.id);
+    products.findOneAndUpdate({ _id: id }, {
+        image: data.image,
+        productname: data.productname,
+        costprice: data.costprice,
+        sellingprice: data.sellingprice,
+        date: data.date,
+        tilltype: data.tilltype,
+        stocklevel: data.stocklevel,
+        markup: data.markup
+
+    }, function (err, updateproducts) {
+
+        if (!err) {
+            deferred.resolve(updateproducts);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
 }
 module.exports = service;
 

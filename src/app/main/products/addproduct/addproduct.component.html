@@ -6,137 +6,139 @@
   </div> -->
 
   <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
-      fxLayoutAlign.gt-xs="space-between center">
+    fxLayoutAlign.gt-xs="space-between center">
 
-      <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
-          <!-- <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+    <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+      <!-- <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
               image
           </mat-icon> -->
-          <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-              Add Product 
-          </span>
-      </div>
-      <button mat-raised-button="" color="" style="margin-top: 10px;" matTooltip="Back"
-          [routerLink]="['/products']">Back</button>
+      <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+        Add Product
+      </span>
+    </div>
+    <button mat-raised-button="" color="" style="margin-top: 10px;" matTooltip="Back"
+      [routerLink]="['/products']">Back</button>
   </div>
   <!-- / HEADER -->
 
   <!-- CONTENT -->
   <div class="content p-24">
 
-      <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+    <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
 
-        <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
-          <div formArrayName="itemRows">
-          
-            <table class="table table-responsive table-striped cstm-table-store">
-              <tr>
-                <th>image</th>
-                <th>Products Name</th>
-                <th>Cost Price</th>
-                <th>Markup</th>
-                <th>Selling Price</th>
-                <th>Date</th>
-                <th>Till type</th>
-                <th>Stock Level</th>
-                <th></th>
-                <!-- <th>barcode</th> -->
-                
-              </tr>
-              <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
-                <td>
-                  <a  *ngIf="!urls[i]" mat-button color="warn" class="add-file-button" (click)="fileInput1.click()"
+      <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
+        <div formArrayName="itemRows">
+
+          <table class="table table-responsive table-striped cstm-table-store">
+            <tr>
+              <th>image</th>
+              <th>Products Name</th>
+              <th>Cost Price</th>
+              <th>Markup</th>
+              <th>Selling Price</th>
+              <th>Date</th>
+              <th>Till type</th>
+              <th>Stock Level</th>
+              <th></th>
+              <!-- <th>barcode</th> -->
+
+            </tr>
+            <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
+              <td>
+                <a *ngIf="!urls[i]" mat-button color="warn" class="add-file-button" (click)="fileInput1.click()"
                   aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
                   Add Image
-                  </a>
-              <input id="cin" hidden name="cin" #fileInput1 type="file"  accept=".jpg,.jpeg,.png,.raw,.tiff"
+                </a>
+                <input id="cin" hidden name="cin" #fileInput1 type="file" accept=".jpg,.jpeg,.png,.raw,.tiff"
                   (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
-                  
-                  <div  class="remember-me" class="img-wrap">
+
+                <div class="remember-me" class="img-wrap">
                   <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
                   <img *ngIf="urls[i]" [src]="urls[i]" style="width: 150px;height: auto;padding: 5px;">
-                 
-                </div>
-                </td> 
-                <td>
 
-                  <input matInput  formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required autofocus="true">
-                  <!-- <mat-error *ngIf="itemrow.get('productname').hasError('required')">
+                </div>
+              </td>
+              <td>
+
+                <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required
+                  autofocus="true">
+                <!-- <mat-error *ngIf="itemrow.get('productname').hasError('required')">
                     Please enter package name!
                 </mat-error>
                 <mat-error *ngIf="itemrow.get('productname').hasError('pattern')">
                     Please enter valid product name!
                 </mat-error> -->
-                </td>
-                <td>
-                  <input matInput  formControlName="costprice" required>
-                  <!-- <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
+              </td>
+              <td>
+                <input matInput formControlName="costprice" required>
+                <!-- <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
                       Please enter costprice name!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
                       Please enter valid costprice !
                   </mat-error> -->
-                </td>
-                <td>
-                  <input matInput  formControlName="Markup" required >
-                  <!-- <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
+              </td>
+              <td>
+                <input matInput formControlName="Markup" required>
+                <!-- <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
                       Please enter Markup name!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('Markup').hasError('pattern')">
                       Please enter valid Markup !
                   </mat-error> -->
-                </td>
-                <td>
-                  <input matInput  formControlName="sellingprice" required>
-                  <!-- <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
+              </td>
+              <td>
+                <input matInput formControlName="sellingprice" required>
+                <!-- <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
                       Please enter sellingprice!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('sellingprice').hasError('pattern')">
                       Please enter valid sellingprice !
                   </mat-error> -->
-                </td>
-                <td>
-                  
-                  <mat-form-field>
-                    <input required matInput  formControlName="date" [matDatepicker]="picker" placeholder="Choose a date" class="datepicker-add">
-                    <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
-                    <mat-datepicker #picker ></mat-datepicker>
-                  </mat-form-field>
-                  <!-- <mat-error *ngIf="itemrow.get('date').hasError('required')">
+              </td>
+              <td>
+
+                <mat-form-field>
+                  <input required matInput formControlName="date" [matDatepicker]="picker" placeholder="Choose a date"
+                    class="datepicker-add">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <!-- <mat-error *ngIf="itemrow.get('date').hasError('required')">
                       Please enter date!
                   </mat-error> -->
-                </td>
-                <td>
-                  <input matInput  formControlName="tilltype" required>
-                  <!-- <mat-error *ngIf="itemrow.get('tilltype').hasError('required')" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" >
+              </td>
+              <td>
+                <input matInput formControlName="tilltype" required>
+                <!-- <mat-error *ngIf="itemrow.get('tilltype').hasError('required')" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" >
                       Please enter tilltype!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('tilltype').hasError('pattern')">
                       Please enter valid tilltype !
                   </mat-error> -->
-                </td>
-                <td>
-                  <input matInput  formControlName="stocklevel" required>
-                  <!-- <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
+              </td>
+              <td>
+                <input matInput formControlName="stocklevel" required>
+                <!-- <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
                       Please enter stocklevel!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
                       Please enter valid stocklevel !
                   </mat-error> -->
-                </td>
-                <td>
-                    <button  (click)="deleteRow(i)" class="btn btn-danger delete-btn-add">Delete</button>
-                </td>
-<!--                
+              </td>
+              <td>
+                <button (click)="deleteRow(i)" class="btn btn-danger delete-btn-add">Delete</button>
+              </td>
+              <!--                
                 <td>
                   <ngx-barcode format="CODE128" [bc-value]="'123'"  [bc-display-value]="true"></ngx-barcode>
 
                 </td> -->
 
-              </tr>
-  
-            </table>
-            <!-- <tr>
+            </tr>
+
+          </table>
+          <!-- <tr>
               <th>Name</th>
               <th>School</th>
       
@@ -158,19 +160,19 @@
              
              
             </div> -->
-          </div>
-          <div class="button-row" style="text-align: center;">
-            <button [disabled]="productForm.invalid" mat-raised-button="" color="" style="margin-top: 10px;"
-                >Submit</button>
+        </div>
+        <div class="button-row" style="text-align: center;">
+          <button [disabled]="productForm.invalid" mat-raised-button="" color=""
+            style="margin-top: 10px;">Submit</button>
 
         </div>
 
-        </form>
+      </form>
 
-      </div>
-      <div class="add-row-btn">
+    </div>
+    <div class="add-row-btn">
 
-      <button type="button" (click)="addNewRow()" class="btn btn-primary"  >Add new Row</button><br>
+      <button type="button" (click)="addNewRow()" class="btn btn-primary">Add new Row</button><br>
     </div>
   </div>
   <!-- / CONTENT -->

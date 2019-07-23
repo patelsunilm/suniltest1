@@ -65,10 +65,7 @@ export class ProductService {
   }
 
   getallproductbyId(productid) {
-
     return this.http.get<any>(appConfig.apiUrl + '/products/getallproductbyId/' + productid)
-
-
   }
 
   updateprodcutdetail(productdata) {

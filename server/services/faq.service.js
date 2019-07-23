@@ -13,23 +13,30 @@ service.addFaqAnswerByAdmin = addFaqAnswerByAdmin;
 
 
 function addfaqData(faqData) {
+
     var deferred = Q.defer();
     var userId = new mongoose.Types.ObjectId(faqData.userId)
+    if (faqData.faqquestion == '') {
+        var data = {};
+        data.string = 'Please enter question you can not submit an empty field.';
+        deferred.resolve(data);
+    } else {
+        var saveFaq = new faq({
+            userId: userId,
+            faqquestion: faqData.faqquestion,
+            status: faqData.status
+        });
+        saveFaq.save(function (err, saveFaq) {
+            if (!err) {
+                deferred.resolve(saveFaq);
+            } else {
+                console.log(err);
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
 
-    var saveFaq = new faq({
-        userId: userId,
-        faqquestion: faqData.faqquestion,
-        status: faqData.status
-    });
-    saveFaq.save(function (err, saveFaq) {
-        if (!err) {
-            deferred.resolve(saveFaq);
-        } else {
-            console.log(err);
-            deferred.reject(err.name + ': ' + err.message);
-        }
-    });
 
+    }
 
     return deferred.promise;
 }
@@ -99,24 +106,30 @@ function addFaqAnswerByAdmin(answerdata) {
 
     var deferred = Q.defer();
 
-    faq.findById(answerdata.faqId, function (err, getdata) {
-        if (!err) {
-            getdata.faqanswer = answerdata.faqanswer
-            getdata.status = 'true';
-            getdata.datemodified = Date.now();
+    if (answerdata.faqanswer == '') {
+        var data = {};
+        data.string = 'Please enter answer you can not submit an empty field.';
+        deferred.resolve(data);
+    } else {
+        faq.findById(answerdata.faqId, function (err, getdata) {
+            if (!err) {
+                getdata.faqanswer = answerdata.faqanswer
+                getdata.status = 'true';
+                getdata.datemodified = Date.now();
 
-            getdata.save(function (err) {
-                if (!err) {
-                    deferred.resolve(getdata);
-                } else {
-                    deferred.reject(err.name + ': ' + err.message);
-                }
-            });
+                getdata.save(function (err) {
+                    if (!err) {
+                        deferred.resolve(getdata);
+                    } else {
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                });
 
-        } else {
-            deferred.reject(err.name + ': ' + err.message);
-        }
-    });
+            } else {
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
+    }
     return deferred.promise;
 }
 

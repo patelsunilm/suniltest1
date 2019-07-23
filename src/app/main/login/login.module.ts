@@ -9,6 +9,21 @@ import { secretvaluepopupComponent } from './login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
+import { GoogleLoginProvider } from "angularx-social-login";
+
+let config = new AuthServiceConfig([
+    {
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider("96995962899-ham8fkomm5euscplet6fh6ko3ovgje6k.apps.googleusercontent.com")
+    },
+  ]);
+  
+
+  export function provideConfig() {
+    return config;
+  }
+
 const routes = [
     {
         path: 'login',
@@ -35,7 +50,14 @@ const routes = [
         MatInputModule,
         MatSnackBarModule,
         FuseSharedModule,
-        MatDialogModule, HttpClientModule, BrowserModule
+        MatDialogModule, HttpClientModule, BrowserModule,
+        SocialLoginModule
+    ],
+    providers: [
+        {
+            provide: AuthServiceConfig,
+            useFactory: provideConfig
+        }
     ]
 })
 export class Login2Module {

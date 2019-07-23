@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     returnUrl: string;
     urls = new Array<string>();
     filesToUpload: Array<File> = [];
-    images: any;
+    image: any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -100,7 +100,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             Secretanswer: ['', Validators.required],
             backgroundtheme: [''],
             fontcolor: [''],
-            //  image: [''],
+            image: [''],
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -110,7 +110,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
                     data => {
-                        this.images = data.image
+                        this.image = data.image
+
                         this.form = this._formBuilder.group({
 
                             name: [data.name],
@@ -121,7 +122,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             Secretanswer: [data.secretanswer],
                             backgroundtheme: [data.backgroundtheme],
                             fontcolor: [data.fontcolor],
-                            //   image: [this.images],
+                            image: [this.image],
 
                         });
                     },
@@ -134,26 +135,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     }
 
-    // fileChangeEvent(fileInput: any) {
 
-    //     if (fileInput.target.files && fileInput.target.files[0]) {
-    //         var filesAmount = fileInput.target.files.length;
-
-    //         for (let i = 0; i < filesAmount; i++) {
-    //             var reader = new FileReader();
-    //             reader.onload = (fileInput: any) => {
-
-    //                 this.urls.push(fileInput.target.result);
-
-    //             }
-    //             reader.readAsDataURL(fileInput.target.files[i]);
-    //             this.filesToUpload.push(fileInput.target.files[i]);
-
-    //         }
-
-    //     }
-    // }
-
+    fileChangeEvent(fileInput: any, index) {
+        var imagefiles = fileInput.target.files;
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            var testreader = new FileReader();
+            testreader.onload = (fileInput: any) => {
+                this.urls[index] = fileInput.target.result;
+                this.filesToUpload.push(imagefiles[0]);
+            }
+            testreader.readAsDataURL(fileInput.target.files[0]);
+        }
+    }
 
     readLocalStorageValue(key) {
         return localStorage.getItem(key);
@@ -164,111 +157,104 @@ export class ProfileComponent implements OnInit, OnDestroy {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 
-            // if (this.filesToUpload.length > 0) {
+            if (this.filesToUpload.length > 0) {
 
+                var data = this.filesToUpload.slice(-1);
+                this.ProfileService.uploadLogoImage(data)
+                    .subscribe(data => {
+                        this.form.value.image = data[0].toString();
+                        this.form.value._id = user._id;
+                        this.form.value.userType = user.userType;
+                        this.form.value.fontcolor = $("#fontcolor").val()
+                        this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-            //     this.ProfileService.uploadLogoImage(this.filesToUpload)
-            //         .subscribe(
-            //             data => {
+                        this.ProfileService.updateprofile(this.form.value)
+                            .subscribe(
+                                data => {
 
-            //                 this.form.value.image = data[0];
-            //                 this.form.value._id = user._id;
-            //                 this.form.value.userType = user.userType;
-            //                 this.form.value.fontcolor = $("#fontcolor").val()
-            //                 this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+                                    if (data.string == 'Email is already exist.') {
+                                        this.snackBar.open('Email is already exist.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                    } if (data.string == 'BusinessName is already exist.') {
+                                        this.snackBar.open('BusinessName is already exist.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                    } else {
+                                        this.snackBar.open('Profile updated successfully.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                        this.router.navigate([this.returnUrl]);
+                                    }
 
+                                },
+                                error => {
 
-            //                 this.ProfileService.updateprofile(this.form.value)
-            //                     .subscribe(
-            //                         data => {
+                                    console.log(error);
+                                    this.snackBar.open('Please try again!', '', {
+                                        duration: 3000,
+                                        horizontalPosition: this.horizontalPosition,
+                                        verticalPosition: this.verticalPosition,
+                                    });
+                                    this.router.navigate([this.returnUrl]);
 
-            //                             if (data.string == 'Email is already exist.') {
-            //                                 this.snackBar.open('Email is already exist.', '', {
-            //                                     duration: 3000,
-            //                                     horizontalPosition: this.horizontalPosition,
-            //                                     verticalPosition: this.verticalPosition,
-            //                                 });
-            //                             } if (data.string == 'BusinessName is already exist.') {
-            //                                 this.snackBar.open('BusinessName is already exist.', '', {
-            //                                     duration: 3000,
-            //                                     horizontalPosition: this.horizontalPosition,
-            //                                     verticalPosition: this.verticalPosition,
-            //                                 });
-            //                             } else {
-            //                                 this.snackBar.open('Profile updated successfully.', '', {
-            //                                     duration: 3000,
-            //                                     horizontalPosition: this.horizontalPosition,
-            //                                     verticalPosition: this.verticalPosition,
-            //                                 });
-            //                                 this.router.navigate([this.returnUrl]);
-            //                             }
+                                });
+                    });
 
+            } else {
 
-            //                         },
-            //                         error => {
+                this.form.value._id = user._id;
+                this.form.value.userType = user.userType;
+                this.form.value.fontcolor = $("#fontcolor").val()
+                this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-            //                             console.log(error);
-            //                             this.snackBar.open('Please try again!', '', {
-            //                                 duration: 3000,
-            //                                 horizontalPosition: this.horizontalPosition,
-            //                                 verticalPosition: this.verticalPosition,
-            //                             });
-            //                             this.router.navigate([this.returnUrl]);
+                this.ProfileService.updateprofile(this.form.value)
+                    .subscribe(
+                        data => {
 
-            //                         });
-            //             });
+                            if (data.string == 'Email is already exist.') {
+                                this.snackBar.open('Email is already exist.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                            } if (data.string == 'BusinessName is already exist.') {
+                                this.snackBar.open('BusinessName is already exist.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                            } else {
+                                this.snackBar.open('Profile updated successfully.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                                this.router.navigate([this.returnUrl]);
+                            }
 
+                        },
+                        error => {
 
-            // } 
-            // else {
-
-
-            this.form.value._id = user._id;
-            this.form.value.userType = user.userType;
-            this.form.value.fontcolor = $("#fontcolor").val()
-            this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
-
-            this.ProfileService.updateprofile(this.form.value)
-                .subscribe(
-                    data => {
-
-                        if (data.string == 'Email is already exist.') {
-                            this.snackBar.open('Email is already exist.', '', {
-                                duration: 3000,
-                                horizontalPosition: this.horizontalPosition,
-                                verticalPosition: this.verticalPosition,
-                            });
-                        } if (data.string == 'BusinessName is already exist.') {
-                            this.snackBar.open('BusinessName is already exist.', '', {
-                                duration: 3000,
-                                horizontalPosition: this.horizontalPosition,
-                                verticalPosition: this.verticalPosition,
-                            });
-                        } else {
-                            this.snackBar.open('Profile updated successfully.', '', {
+                            console.log(error);
+                            this.snackBar.open('Please try again!', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
                             this.router.navigate([this.returnUrl]);
-                        }
 
-
-                    },
-                    error => {
-
-                        console.log(error);
-                        this.snackBar.open('Please try again!', '', {
-                            duration: 3000,
-                            horizontalPosition: this.horizontalPosition,
-                            verticalPosition: this.verticalPosition,
                         });
-                        this.router.navigate([this.returnUrl]);
 
-                    });
-            // }
+            }
 
-        });
+        })
     }
 
     /**

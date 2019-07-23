@@ -161,13 +161,22 @@ export class FaqPopupComponent {
 
             .subscribe(
                 data => {
-                    this.snackBar.open('Faq question added successfully.', '', {
-                        duration: 3000,
-                        horizontalPosition: this.horizontalPosition,
-                        verticalPosition: this.verticalPosition,
-                    });
+                    if (data.string == 'Please enter question you can not submit an empty field.') {
+                        this.snackBar.open('Please enter question you can not submit an empty field.', '', {
+                            duration: 3000,
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                        });
+                    } else {
+                        this.snackBar.open('Faq question added successfully.', '', {
+                            duration: 3000,
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                        });
 
-                    this.router.navigate([this.returnUrl]);
+                        this.router.navigate([this.returnUrl]);
+                    }
+
 
                 },
                 error => {
@@ -181,12 +190,21 @@ export class FaqPopupComponent {
         this.FAQService.addFaqAnswerByAdmin(this.Form.value)
             .subscribe(
                 data => {
-                    this.snackBar.open('Faq answer added successfully.', '', {
-                        duration: 3000,
-                        horizontalPosition: this.horizontalPosition,
-                        verticalPosition: this.verticalPosition,
-                    });
-                    this.router.navigate([this.returnUrl]);
+                    if (data.string == 'Please enter answer you can not submit an empty field.') {
+                        this.snackBar.open('Please enter answer you can not submit an empty field.', '', {
+                            duration: 3000,
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                        });
+                    } else {
+                        this.snackBar.open('Faq answer added successfully.', '', {
+                            duration: 3000,
+                            horizontalPosition: this.horizontalPosition,
+                            verticalPosition: this.verticalPosition,
+                        });
+                        this.router.navigate([this.returnUrl]);
+                    }
+
                 },
                 error => {
 

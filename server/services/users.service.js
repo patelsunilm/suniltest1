@@ -31,6 +31,7 @@ function authenticate(email, password) {
                     name: user.name,
                     secretquestion: user.secretquestion,
                     secretanswer: user.secretanswer,
+                    image: user.image,
                     token: jwt.sign({ sub: user._id }, config.secret)
                 });
             } else {
@@ -43,6 +44,7 @@ function authenticate(email, password) {
                         secretquestion: user.secretquestion,
                         secretanswer: user.secretanswer,
                         ipaddress: user.ipaddress,
+                        image: user.image,
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
@@ -129,28 +131,30 @@ function updateipaddress(ipdata) {
 
     var deferred = Q.defer();
 
-    Users.findById(ipdata._id, function (err, data) {
+    Users.findOne({ _id: ipdata._id }, function (err, getvalue) {
 
-        if (!err) {
-            data.ipaddress = ipdata.ipAddress;
-            data.datemodified = Date.now();
+        if (getvalue.secretanswer == ipdata.secretanswer) {
 
-            data.save(function (err) {
+            Users.findById(ipdata._id, function (err, data) {
+
                 if (!err) {
-                    deferred.resolve(data);
+                    data.ipaddress = ipdata.ipAddress;
+                    data.datemodified = Date.now();
+
+                    data.save(function (err) {
+                        if (!err) {
+                            deferred.resolve(data);
+                        } else {
+                            deferred.reject(err.name + ': ' + err.message);
+                        }
+                    });
+
                 } else {
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
-
-        } else {
-            deferred.reject(err.name + ': ' + err.message);
         }
-
-
-
-    });
-
+    })
     return deferred.promise;
 }
 

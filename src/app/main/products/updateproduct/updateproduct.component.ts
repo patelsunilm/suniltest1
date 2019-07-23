@@ -94,8 +94,6 @@ export class UpdateproductComponent implements OnInit {
 
   close(urls, event, index, i) {
 
-    console.log('test123');
-
     urls.splice(i, 1);
     var temp = new Array<File>();
     for (var j = 0; j < this.filesToUpload.length; j++) {
@@ -122,7 +120,7 @@ export class UpdateproductComponent implements OnInit {
 
         this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
-          this.snackBar.open('Product update success fully', '', {
+          this.snackBar.open('Product updated successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -138,7 +136,7 @@ export class UpdateproductComponent implements OnInit {
     } else {
       this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
-        this.snackBar.open('Product update success fully', '', {
+        this.snackBar.open('Product updated successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

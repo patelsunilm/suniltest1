@@ -24,6 +24,7 @@ export class AuthenticationService {
                     localStorage.setItem('email', user.email);
                     localStorage.setItem('userType', user.userType);
                     localStorage.setItem('name', user.name);
+                    localStorage.setItem('myprofilelogoimage', user.image);
                     localStorage.setItem('token', user.token);
                 }
                 return user;
@@ -36,7 +37,7 @@ export class AuthenticationService {
         localStorage.removeItem('email');
         localStorage.removeItem('userType');
         localStorage.removeItem('name');
-        //  localStorage.removeItem('username');
+        localStorage.removeItem('myprofilelogoimage');
     }
 
 
@@ -55,5 +56,8 @@ export class AuthenticationService {
         return this.http.post<any>(appConfig.apiUrl + '/users/updateipaddress', data)
     }
 
+    submitgoogledetails(googledata) {
+        return this.http.post<any>(appConfig.apiUrl + '/users/submitgoogledetails', googledata);
+    }
 
 }

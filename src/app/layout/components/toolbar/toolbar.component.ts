@@ -29,6 +29,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     selectedLanguage: any;
     userStatusOptions: any[];
     name: string;
+    myprofilelogoimage:string;
     usertype: string;
     returnUrl: string;
 
@@ -51,6 +52,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         private router: Router,
     ) {
         this.name = localStorage.getItem('name');
+        this.myprofilelogoimage = localStorage.getItem('myprofilelogoimage');
         this.usertype = localStorage.getItem('userType');
         // Set the defaults
         this.userStatusOptions = [

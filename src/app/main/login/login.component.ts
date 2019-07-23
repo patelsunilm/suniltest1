@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from '../../_services/index';
 import { MatPaginator, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
+import { GoogleLoginProvider, SocialUser, AuthService } from "angularx-social-login";
 
 @Component({
     selector: 'login-2',
@@ -20,6 +21,7 @@ export class Login2Component implements OnInit {
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     hide = true;
     ipAddress: any;
+    public user: SocialUser;
     /**
      * Constructor
      *
@@ -35,6 +37,7 @@ export class Login2Component implements OnInit {
         private AuthenticationService: AuthenticationService,
         public snackBar: MatSnackBar,
         private http: HttpClient,
+        private authService: AuthService,
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -84,6 +87,37 @@ export class Login2Component implements OnInit {
         });
         localStorage.removeItem('userType');
     }
+
+    Sociallogin(value) {
+
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((userData) => {
+            this.user = userData
+            console.log(this.user)
+
+            var GoogleObj = {
+                googleid: this.user.id,
+                fullname: this.user.name,
+                firstName: this.user.firstName,
+                lastName: this.user.lastName,
+                email: this.user.email,
+                photoUrl: this.user.photoUrl,
+                provider: this.user.provider,
+            };
+
+            this.AuthenticationService.submitgoogledetails(GoogleObj)
+            .subscribe(
+              data => {
+
+              },
+              error => {
+                console.log(error);
+              });
+   
+        })
+
+
+    }
+
 
     login() {
 

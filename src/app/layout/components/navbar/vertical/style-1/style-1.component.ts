@@ -56,7 +56,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
             {
                 id: 'faq',
-                title: 'Faq',
+                title: 'Feedback',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
@@ -79,7 +79,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
             },
             {
                 id: 'faq',
-                title: 'Faq',
+                title: 'Feedback',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
@@ -107,7 +107,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
                         {
                             id: 'faq',
-                            title: 'Faq',
+                            title: 'Feedback',
                             url: '/faq',
                             type: 'item',
                             icon: 'help'
@@ -132,7 +132,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
                         {
                             id: 'faq',
-                            title: 'Faq',
+                            title: 'Feedback',
                             url: '/faq',
                             type: 'item',
                             icon: 'help'
