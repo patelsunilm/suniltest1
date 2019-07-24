@@ -14,6 +14,7 @@ var ProductsSchema = new Schema({
   stocklevel:String,
   uniqueid : Number,
   image: String,
+  barcode : String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

@@ -17,7 +17,7 @@
         <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add</mat-icon>Csv Import  
        
       </button> -->
-      <input hidden  type="file" placeholder="Image" (change)="fileEvent($event)" #fileInput required accept=".csv"/>
+      <input hidden id="csvFileInput" type="file" placeholder="Image" (change)="fileEvent($event)" #fileInput required accept=".csv"/>
                     <button  style="margin-left:650px" mat-raised-button  class="add-file-button" (click)="fileInput.click()" aria-label="Add file"
                         [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
                         Csv Import</button>
@@ -48,7 +48,7 @@
   
           <ng-container matColumnDef="proName">
             <th mat-header-cell *matHeaderCellDef>Products Name </th>
-            <td mat-cell *matCellDef="let element" >{{element.productname}}  </td>
+            <td mat-cell  *matCellDef="let element" >{{element.productname}}  </td>
           </ng-container>
   
           <ng-container matColumnDef="costprice">
@@ -68,7 +68,7 @@
   
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef> Date </th>
-            <td mat-cell *matCellDef="let element">{{element.date }}  </td>
+            <td mat-cell *matCellDef="let element">{{element.date | date: 'EE MMMM dd  y'}}  </td>
           </ng-container>
   
           <ng-container matColumnDef="tilltype">
@@ -84,7 +84,12 @@
               
             </td>
           </ng-container>
-  
+          <!-- <ng-container matColumnDef="barcode">
+            <th mat-header-cell *matHeaderCellDef> barcode </th>
+            <td mat-cell *matCellDef="let element">
+              <ngx-barcode [bc-value]="element.barcode" [bc-display-value]="true"></ngx-barcode>
+            </td>
+          </ng-container> -->
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
             <td mat-cell *matCellDef="let element">

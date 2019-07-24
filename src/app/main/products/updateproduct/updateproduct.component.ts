@@ -57,12 +57,12 @@ export class UpdateproductComponent implements OnInit {
         id:[data._id],
         image: [ this.image],
         productname : [data.productname],
-        costprice: [data.costprice],
+        costprice: [data.costprice,Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
         markup : [data.markup],
-        sellingprice : [data.sellingprice],
+        sellingprice : [data.sellingprice,Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
         date : [data.date],
         tilltype : [data.tilltype],
-        stocklevel: [data.stocklevel]
+        stocklevel: [data.stocklevel,Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
     });
     })
 
@@ -116,9 +116,9 @@ if(this.filesToUpload.length > 0) {
   
   var data = this.filesToUpload.slice(-1);
   this.ProductService.updateproductgallery(data).subscribe(data => {
+   
+ this.form.value.image = data[0].s3url
 
-
- this.form.value.image = data.toString()
 
 this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
  

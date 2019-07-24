@@ -23,6 +23,7 @@ import { deleteproductPopupComponent } from './products.component';
 import { UpdateproductComponent } from './updateproduct/updateproduct.component';
 
 import { NgxBarcodeModule } from 'ngx-barcode';
+ import { NgxLoadingModule } from 'ngx-loading';
 
 
 const routes = [
@@ -81,6 +82,7 @@ const routes = [
         BrowserAnimationsModule,
         MatTableModule,
         MatDialogModule,
+        NgxLoadingModule,
         MatPaginatorModule,MatDatepickerModule,NgxBarcodeModule
     ]
 })

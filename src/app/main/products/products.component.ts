@@ -3,7 +3,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBa
 import { MatPaginatorModule } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
-import {ProductService} from '../../_services/index';
+import { ProductService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 
 export interface PeriodicElement {
@@ -28,7 +28,7 @@ export interface PeriodicElement {
 
 
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype', 'stocklevel','action'];
+  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype', 'stocklevel', 'action'];
   dataSource;
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -45,7 +45,10 @@ export class ProductsComponent implements OnInit {
 
 
   }
-  constructor(public dialog: MatDialog , private ProductService : ProductService,public snackBar: MatSnackBar) { }
+  public showAlert(): void {
+    alert('ngx-loading rocks!');
+  }
+  constructor(public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
   openDialog() {
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
@@ -59,9 +62,10 @@ export class ProductsComponent implements OnInit {
       .subscribe(
         data => {
 
+
           this.dataSource = new MatTableDataSource(data);
           this.dataSource.paginator = this.paginator;
-        
+
         }, error => {
           console.log(error);
         });
@@ -72,55 +76,71 @@ export class ProductsComponent implements OnInit {
 
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
-        
-        productid : id
-
+        productid: id
       },
       width: '450px'
     });
-   
+
     dialogRef.afterClosed().subscribe(result => {
       this.ProductService.getAllproducts()
-      .subscribe(
-        data => {
+        .subscribe(
+          data => {
 
-          this.dataSource = new MatTableDataSource(data);
-          this.dataSource.paginator = this.paginator;
-        
-        }, error => {
-          console.log(error);
-        });
-  
+            this.dataSource = new MatTableDataSource(data);
+            this.dataSource.paginator = this.paginator;
+
+          }, error => {
+            console.log(error);
+          });
+
     })
   }
 
-fileEvent($event) {
+  fileEvent($event) {
 
 
-this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
- 
-  this.snackBar.open('Csv import success fully', '', {
-    duration: 3000,
-    horizontalPosition: this.horizontalPosition,
-    verticalPosition: this.verticalPosition,
-  });
-  this.ProductService.getAllproducts()
-  .subscribe(
-    data => {
+    var regex = new RegExp("(.*?)\.(csv)$");
 
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-    
-    }, error => {
-      console.log(error);
-    });
+    if (!(regex.test($event.target.value.toLowerCase()))) {
+      $event.target.value = '';
+      this.snackBar.open('Please select correct file format', '', {
+        duration: 3000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    } else {
 
 
+      this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
-}, error => {
-  console.log(error);
-})
+        if (data.string == "Csv import success fully") {
+          this.snackBar.open('Csv import success fully', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+          this.ProductService.getAllproducts()
+            .subscribe(
+              data => {
 
+                this.dataSource = new MatTableDataSource(data);
+                this.dataSource.paginator = this.paginator;
+
+              }, error => {
+                console.log(error);
+              });
+        } else {
+
+          this.snackBar.open('please correct csv file select', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      }, error => {
+        console.log(error);
+      })
+    }
 
   }
 
@@ -155,14 +175,14 @@ export class deleteproductPopupComponent {
     this.ProductService.deleteoneproduct(id)
       .subscribe(
         data => {
- 
+
           this.snackBar.open('Product deleted successfully', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
 
-  })
+        })
 
   }
 }
