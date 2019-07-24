@@ -10,6 +10,8 @@ service.authenticate = authenticate;
 service.addsignupuser = addsignupuser;
 service.addsecretValuedata = addsecretValuedata;
 service.updateipaddress = updateipaddress;
+service.submitgoogledetails = submitgoogledetails;
+
 
 function authenticate(email, password) {
 
@@ -155,6 +157,77 @@ function updateipaddress(ipdata) {
             });
         }
     })
+    return deferred.promise;
+}
+
+
+function submitgoogledetails(googledata) {
+
+    var deferred = Q.defer();
+
+    Users.findOne({ email: googledata.email }, function (err, getresult) {
+        if (getresult) {
+            Users.findOneAndUpdate({ _id: getresult._id }, {
+
+                googleid: googledata.googleid,
+                authToken: googledata.authToken,
+                datemodified: Date.now(),
+
+            }, function (err, user) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    deferred.resolve({
+                        _id: user._id,
+                        email: user.email,
+                        userType: user.userType,
+                        name: user.name,
+                        googleid: user.googleid,
+                        authToken: user.authToken,
+                        token: jwt.sign({ sub: user._id }, config.secret),
+                        secretquestion: user.secretquestion,
+                        secretanswer: user.secretanswer,
+                        image: user.image,
+                        token: jwt.sign({ sub: user._id }, config.secret)
+                    });
+                }
+            })
+
+        } else {
+
+            var saveData = new Users({
+                name: googledata.name,
+                email: googledata.email,
+                status: 'true',
+                uniqueid: googledata.uniqueid,
+                googleid: googledata.googleid,
+                userType: googledata.userType,
+                authToken: googledata.authToken,
+                dateadded: Date.now(),
+                datemodified: Date.now(),
+            });
+
+            saveData.save(function (err, user) {
+                if (!err) {
+                    deferred.resolve({
+                        _id: user._id,
+                        email: user.email,
+                        userType: user.userType,
+                        name: user.name,
+                        googleid: user.googleid,
+                        authToken: user.authToken,
+                        token: jwt.sign({ sub: user._id }, config.secret)
+                    });
+                } else {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+        }
+
+    })
+
     return deferred.promise;
 }
 

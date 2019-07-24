@@ -18,6 +18,9 @@ var UserSchema = new Schema({
   uniqueid: Number,
   backgroundtheme: String,
   fontcolor: String,
+  googleid: String,
+  authToken: String,
+  idToken: String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

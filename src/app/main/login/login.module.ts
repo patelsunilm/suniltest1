@@ -14,15 +14,15 @@ import { GoogleLoginProvider } from "angularx-social-login";
 
 let config = new AuthServiceConfig([
     {
-      id: GoogleLoginProvider.PROVIDER_ID,
-      provider: new GoogleLoginProvider("96995962899-ham8fkomm5euscplet6fh6ko3ovgje6k.apps.googleusercontent.com")
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider("96995962899-ham8fkomm5euscplet6fh6ko3ovgje6k.apps.googleusercontent.com")
     },
-  ]);
-  
+]);
 
-  export function provideConfig() {
+
+export function provideConfig() {
     return config;
-  }
+}
 
 const routes = [
     {
@@ -58,6 +58,9 @@ const routes = [
             provide: AuthServiceConfig,
             useFactory: provideConfig
         }
+    ],
+    exports: [
+        Login2Component
     ]
 })
 export class Login2Module {

@@ -6,7 +6,7 @@ router.post('/authenticate', authenticate);
 router.post('/addsignupuser', addsignupuser);
 router.post('/addsecretValuedata', addsecretValuedata)
 router.post('/updateipaddress', updateipaddress)
-
+router.post('/submitgoogledetails', submitgoogledetails);
 
 module.exports = router;
 
@@ -77,4 +77,21 @@ function updateipaddress(req, res) {
         .catch(function (err) {
             res.status(400).send(err);
         });
+}
+
+
+function submitgoogledetails(req,res)
+{
+    userService.submitgoogledetails(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+    
+        res.status(400).send(err);
+    });
 }

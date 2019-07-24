@@ -91,6 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         var user = JSON.parse(localStorage.getItem('currentUser'));
+
         this.form = this._formBuilder.group({
             name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
@@ -110,6 +111,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
                     data => {
+
                         this.image = data.image
 
                         this.form = this._formBuilder.group({
@@ -158,7 +160,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(params => {
 
             if (this.filesToUpload.length > 0) {
-
+               
                 var data = this.filesToUpload.slice(-1);
                 this.ProfileService.uploadLogoImage(data)
                     .subscribe(data => {

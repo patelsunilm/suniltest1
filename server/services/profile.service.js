@@ -16,7 +16,9 @@ function getprofileInfo(userId) {
     var userId = new mongoose.Types.ObjectId(userId);
 
     Users.findOne(userId, function (err, data) {
+      
         if (!err) {
+
             deferred.resolve(data);
         } else {
             deferred.reject(err.name + ': ' + err.message);

@@ -24,6 +24,7 @@ export class ProfileService {
 
 
     getprofileInfo(userId) {
+       
         return this.http.get<any>(appConfig.apiUrl + '/profile/getprofileInfo/' + userId)
     }
 

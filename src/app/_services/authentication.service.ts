@@ -30,6 +30,7 @@ export class AuthenticationService {
                 return user;
             });
     }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
@@ -37,6 +38,8 @@ export class AuthenticationService {
         localStorage.removeItem('email');
         localStorage.removeItem('userType');
         localStorage.removeItem('name');
+        localStorage.removeItem('googleid');
+        localStorage.removeItem('authToken');
         localStorage.removeItem('myprofilelogoimage');
     }
 
@@ -57,7 +60,23 @@ export class AuthenticationService {
     }
 
     submitgoogledetails(googledata) {
-        return this.http.post<any>(appConfig.apiUrl + '/users/submitgoogledetails', googledata);
+        return this.http.post<any>(appConfig.apiUrl + '/users/submitgoogledetails', googledata)
+            .map(user => {
+
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('userId', user._id);
+                localStorage.setItem('email', user.email);
+                localStorage.setItem('userType', user.userType);
+                localStorage.setItem('name', user.name);
+                localStorage.setItem('googleid', user.googleid);
+                localStorage.setItem('authToken', user.authToken);
+                localStorage.setItem('myprofilelogoimage', user.image);
+                localStorage.setItem('token', user.token);
+
+                return user;
+            });
+
+
     }
 
 }

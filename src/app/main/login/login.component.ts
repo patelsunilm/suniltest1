@@ -21,6 +21,7 @@ export class Login2Component implements OnInit {
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     hide = true;
     ipAddress: any;
+    uniqueid: any;
     public user: SocialUser;
     /**
      * Constructor
@@ -64,6 +65,15 @@ export class Login2Component implements OnInit {
         //     })
     }
 
+    signInWithGoogle(): void {
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    }
+
+    signOut(): void {
+        this.authService.signOut();
+    }
+
+
     openDialog() {
         const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
@@ -88,31 +98,42 @@ export class Login2Component implements OnInit {
         localStorage.removeItem('userType');
     }
 
-    Sociallogin(value) {
+    Sociallogin() {
 
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((userData) => {
             this.user = userData
-            console.log(this.user)
+            this.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
 
             var GoogleObj = {
+
                 googleid: this.user.id,
                 fullname: this.user.name,
-                firstName: this.user.firstName,
+                name: this.user.firstName,
                 lastName: this.user.lastName,
                 email: this.user.email,
+                authToken: this.user.authToken,
+                idToken: this.user.idToken,
                 photoUrl: this.user.photoUrl,
                 provider: this.user.provider,
+                status: true,
+                uniqueid: this.uniqueid,
+                userType: "Merchant",
             };
 
-            this.AuthenticationService.submitgoogledetails(GoogleObj)
-            .subscribe(
-              data => {
 
-              },
-              error => {
-                console.log(error);
-              });
-   
+            this.AuthenticationService.submitgoogledetails(GoogleObj)
+                .subscribe(
+                    data => {
+
+                        if (localStorage.getItem('currentUser')) {
+                            this.router.navigate(['dashboard']);
+                        }
+
+                    },
+                    error => {
+                        console.log(error);
+                    });
+
         })
 
 

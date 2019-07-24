@@ -111,6 +111,7 @@ app.use(expressJwt({
     '/users/addsecretValuedata',
     '/users/updateipaddress',
     '/users/addsignupuser',
+    '/users/submitgoogledetails',
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile']
 }));
