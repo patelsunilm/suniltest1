@@ -65,7 +65,6 @@ export class AddproductComponent implements OnInit {
   }
 
   addNewRow() {
-
     this.formArr.push(this.initItemRows());
   }
 
