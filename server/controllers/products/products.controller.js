@@ -27,7 +27,9 @@ exports.addproduct = function(req, res) {
 }
 
 exports.getAllproducts = function(req, res) {
-    productservice.getAllproducts()
+   
+ 
+    productservice.getAllproducts(req.params.userId)
     .then(function (getproductdata) {
 
         if (getproductdata) {

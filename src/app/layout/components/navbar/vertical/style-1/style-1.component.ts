@@ -14,6 +14,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
     styleUrls: ['./style-1.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
+
 export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;

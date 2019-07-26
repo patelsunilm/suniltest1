@@ -15,6 +15,7 @@ var UserSchema = new Schema({
   secretanswer: String,
   ipaddress: String,
   status: Boolean,
+  phone:String,
   uniqueid: Number,
   backgroundtheme: String,
   fontcolor: String,

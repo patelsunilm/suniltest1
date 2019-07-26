@@ -3,7 +3,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var ProductsSchema = new Schema({
-  
+ 
+ 
+  userid : ObjectId,
   image:String,
   productname: String,
   costprice: String,
@@ -14,6 +16,7 @@ var ProductsSchema = new Schema({
   stocklevel:String,
   uniqueid : Number,
   image: String,
+  barcode : String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

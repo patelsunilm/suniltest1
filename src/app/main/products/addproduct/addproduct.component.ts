@@ -9,8 +9,13 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 import { FormControl, FormArray } from '@angular/forms';
 
 import { ProductService } from '../../../_services/index';
-import { element } from '@angular/core/src/render3';
-import { Observable } from 'rxjs/Observable';
+
+import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+const PrimaryWhite = '#ffffff';
+const SecondaryGrey = '#ccc';
+const PrimaryRed = '#dd0031';
+const SecondaryBlue = '#006ddd';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-addproduct',
@@ -35,10 +40,35 @@ export class AddproductComponent implements OnInit {
 
 
   }
+  @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
+  @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading = false;
+  public primaryColour = PrimaryWhite;
+  public secondaryColour = SecondaryGrey;
+  public coloursEnabled = false;
+  public loadingTemplate: TemplateRef<any>;
+  public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
 
+  // Private
+  private _unsubscribeAll: Subject<any>;
+
+  public toggleColours(): void {
+    this.coloursEnabled = !this.coloursEnabled;
+
+    if (this.coloursEnabled) {
+        this.primaryColour = PrimaryRed;
+        this.secondaryColour = SecondaryBlue;
+    } else {
+        this.primaryColour = PrimaryWhite;
+        this.secondaryColour = SecondaryGrey;
+    }
+}
   ngOnInit() {
     this.productForm = this._fb.group({
-      itemRows: this._fb.array([this.initItemRows()])
+      itemRows: this._fb.array([this.initItemRows(
+
+      )])
     });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
@@ -56,7 +86,7 @@ export class AddproductComponent implements OnInit {
       image: [''],
       productname: ['', Validators.required],
       costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-      Markup: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      Markup: ['', Validators.required],
       sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       date: ['', Validators.required],
       tilltype: ['', Validators.required],
@@ -66,11 +96,24 @@ export class AddproductComponent implements OnInit {
 
   addNewRow() {
     this.formArr.push(this.initItemRows());
+   
   }
 
-  deleteRow(index: number) {
-    this.formArr.removeAt(index);
+  deleteRow(indexs: number , urls) {
+    
+  
+    this.formArr.removeAt(indexs);
+     urls.splice(indexs, 1);
+    var temp = new Array<File>();
+    for (var j = 0; j < this.filesToUpload.length; j++) {
+      if (j != indexs) {        
+        temp.push(this.filesToUpload[j]);
+      }
+    }
+    
+    this.filesToUpload = temp;
   }
+  
 
 
 
@@ -82,8 +125,6 @@ export class AddproductComponent implements OnInit {
 
       var testreader = new FileReader();
       testreader.onload = (fileInput: any) => {
-
-
         this.urls[index] = fileInput.target.result;
         this.filesToUpload.push(imagefiles[0]);
       }
@@ -95,13 +136,16 @@ export class AddproductComponent implements OnInit {
   close(urls, event, index, i) {
 
 
+    
+
     urls.splice(i, 1);
     var temp = new Array<File>();
     for (var j = 0; j < this.filesToUpload.length; j++) {
-      if (j != i) {
+      if (j != i) {        
         temp.push(this.filesToUpload[j]);
       }
     }
+    
     this.filesToUpload = temp;
 
   }
@@ -109,10 +153,10 @@ export class AddproductComponent implements OnInit {
 
   addproduct() {
 
-
+    this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
-
-      this.snackBar.open('Please select image.', '', {
+      this.loading = false;
+      this.snackBar.open('Please select image', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
@@ -121,17 +165,19 @@ export class AddproductComponent implements OnInit {
 
       this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
+        data.sort(function (obj1, obj2) {
+          return obj1.index - obj2.index;
 
+        });
 
-        for (let index = 0; index < this.productForm.value.itemRows.length; index++) {
-
-          data.forEach(element => {
-            this.productForm.value.itemRows[index].image = element;
-          });
-
+        for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
+          var datetime = new Date(new Date).valueOf();
+          var randomnumber = Math.floor((Math.random() * 100) + 1);
+         
+          this.productForm.value.itemRows[i].image = data[i].s3url;
+          this.productForm.value.itemRows[i].barcode = datetime + randomnumber
+          this.productForm.value.itemRows[i].userId = localStorage.getItem('userId');
         }
-
-
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
@@ -140,6 +186,7 @@ export class AddproductComponent implements OnInit {
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
+          this.loading = false;
 
           this.router.navigate([this.returnUrl]);
 

@@ -100,6 +100,7 @@ app.use(expressJwt({
   secret: config.secret,
   getToken: function (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+     
       return req.headers.authorization.split(' ')[1];
     } else if (req.query && req.query.token) {
       return req.query.token;
@@ -113,7 +114,10 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword', '/products/addcsvfile']
+    '/forgot-password-2/resetpassword', '/products/addcsvfile'
+     
+  
+  ]
 }));
 
 
@@ -163,36 +167,77 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
-  var file = req.files[0];
-  var originalFileName = file.originalname
+var file = req.files[0];
+var userid = req.body.uploads
 
-  const results = [];
-  fs.createReadStream('uploads/' + originalFileName)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
+var originalFileName = file.originalname;
 
-      products.insertMany(results, function (err, product) {
+ const results = [];
+
+
+ var strem =  fs.createReadStream('uploads/' + originalFileName , {headers : true})
+  .pipe(csv())
+  .on('data', (data) =>
+  results.push(data))
+  .on('end', () => {
+   
+    var arr1 = ['productname',
+    'costprice',
+    'markup',
+    'sellingprice',
+    'date',
+    'tilltype',
+    'stocklevel'];
+    var arr2 = results[0].headers;
+    
+    if (arr1.length == arr2.length
+        && arr1.every(function(u, i) {
+            return u === arr2[i];
+        })
+    ) {
+       
+       for (let i = 0; i < results.length; i++) {
+        var datetime = new Date(new Date).valueOf();
+        var randomnumber = Math.floor((Math.random() * 100) + 1);
+  
+        results[i].barcode = datetime + randomnumber
+        results[i].userid  = userid
+      }
+
+       products.insertMany(results,function (err, product) {
         if (!err) {
+          
+            fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
+               if(err) {
+             
+               console.log(err);
+               } else {
+  
+  
+                var data = {};
+                data.string = 'Csv import success fully';
+                 res.send(data);    
+              }
+            })
+          } else {
+            console.log(err);
+          }
+        });
+    } else {
 
-          fs.unlink('uploads/' + originalFileName, function (err, responce) {
-            if (err) {
-
-              console.log(err);
-            } else {
-
-
-              var data = {};
-              data.string = 'sucess.';
-              res.send(data);
-            }
-          })
+      fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
+        if(err) {
+      
+        console.log(err);
         } else {
 
-        }
-      });
 
-
+         var data = {};
+         data.string = 'error';
+          res.send(data);    
+       }
+     })
+    }
     });
 })
 
@@ -241,7 +286,8 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
           }
           else {
 
-            s3data.push(resultdata.Location)
+            //s3data.push(resultdata.Location)
+            s3data.push({ 's3url': resultdata.Location, 'index':i });
 
             if (s3data.length == uploadedfiles.length) {
               res.send(s3data);

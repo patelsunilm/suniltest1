@@ -41,7 +41,7 @@
             (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
           <div *ngIf="!urls[i]" class="remember-me" class="img-wrap">
 
-            <img [src]="image" style="width: 100px;height: 100px;padding: 5px;">
+                    <img *ngIf="image"  [src]="image" style="width: 100px;height: 100px;padding: 5px;">
 
           </div>
           <div class="remember-me" class="img-wrap">

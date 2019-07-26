@@ -45,6 +45,17 @@
             Please enter valid address!
           </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone" pattern="(?!^ +$)^.+$" required>
+          <mat-error *ngIf="registerForm.get('phone').hasError('required')">
+            Please enter phone!
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('phone').hasError('pattern')">
+            Please enter valid phone!
+          </mat-error>
+        </mat-form-field>
+
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>

@@ -24,8 +24,12 @@
   <!-- CONTENT -->
   <div class="content p-24">
 
-    <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
 
+    <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+      <ngx-loading [show]="loading"
+        [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}"
+        [template]="loadingTemplate">
+      </ngx-loading>
       <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
         <div formArrayName="itemRows">
 
@@ -40,7 +44,7 @@
               <th>Till type</th>
               <th>Stock level</th>
               <th></th>
-              <!-- <th>barcode</th> -->
+              
 
             </tr>
             <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
@@ -53,117 +57,122 @@
                   (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
 
                 <div class="remember-me" class="img-wrap">
+
+
                   <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
-                  <img *ngIf="urls[i]" [src]="urls[i]" style="width: 150px;height: auto;padding: 5px;">
+                  <img *ngIf="urls[i]" [src]="urls[i]" style="width: 120px;height: auto;padding: 5px;">
 
                 </div>
               </td>
               <td>
+                <mat-form-field appearance="outline">
+                  <mat-label>product name</mat-label>
+                  <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
 
-                <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required
-                  autofocus="true">
-                <!-- <mat-error *ngIf="itemrow.get('productname').hasError('required')">
-                    Please enter package name!
-                </mat-error>
-                <mat-error *ngIf="itemrow.get('productname').hasError('pattern')">
+                  <mat-error *ngIf="itemrow.get('productname').hasError('required')">
+                    Please enter product name!
+                  </mat-error>
+                  <mat-error *ngIf="itemrow.get('productname').hasError('pattern')">
                     Please enter valid product name!
-                </mat-error> -->
+                  </mat-error>
+                </mat-form-field>
+
               </td>
               <td>
-                <input matInput formControlName="costprice" required>
-                <!-- <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
-                      Please enter costprice name!
+                <mat-form-field appearance="outline">
+                  <mat-label>cost price</mat-label>
+
+                  <input matInput formControlName="costprice" required>
+                  <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
+                    Please enter costprice name!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
-                      Please enter valid costprice !
-                  </mat-error> -->
+                    Please enter valid costprice !
+                  </mat-error>
+                </mat-form-field>
               </td>
               <td>
-                <input matInput formControlName="Markup" required>
-                <!-- <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
-                      Please enter Markup name!
+                <mat-form-field appearance="outline">
+                  <mat-label>markup</mat-label>
+
+                  <input matInput formControlName="Markup" required>
+                  <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
+                    Please enter Markup name!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('Markup').hasError('pattern')">
-                      Please enter valid Markup !
-                  </mat-error> -->
+                    Please enter valid Markup !
+                  </mat-error>
+                </mat-form-field>
               </td>
               <td>
-                <input matInput formControlName="sellingprice" required>
-                <!-- <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
-                      Please enter sellingprice!
+                <mat-form-field appearance="outline">
+                  <mat-label>selling price</mat-label>
+
+                  <input matInput formControlName="sellingprice" required>
+
+                  <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
+                    Please enter sellingprice!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('sellingprice').hasError('pattern')">
-                      Please enter valid sellingprice !
-                  </mat-error> -->
+                    Please enter valid sellingprice !
+                  </mat-error>
+                </mat-form-field>
               </td>
               <td>
 
-                <mat-form-field>
-                  <input required matInput formControlName="date" [matDatepicker]="picker" placeholder="Choose a date"
-                    class="datepicker-add">
+                <mat-form-field appearance="outline">
+                  <mat-label>date</mat-label>
+
+                  <input required matInput formControlName="date"  [matDatepicker]="picker"
+                    placeholder="Choose a date" class="datepicker-add">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-datepicker #picker disabled="false"></mat-datepicker>
+                  <mat-error *ngIf="itemrow.get('date').hasError('required')">
+                    Please enter date!
+                  </mat-error>
+                  <!-- <mat-error *ngIf="itemrow.get('date').hasError('pattern')">
+                        Please enter valid date !
+                      </mat-error> -->
                 </mat-form-field>
-                <!-- <mat-error *ngIf="itemrow.get('date').hasError('required')">
-                      Please enter date!
-                  </mat-error> -->
+
               </td>
               <td>
-                <input matInput formControlName="tilltype" required>
-                <!-- <mat-error *ngIf="itemrow.get('tilltype').hasError('required')" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" >
-                      Please enter tilltype!
+                <mat-form-field appearance="outline">
+                  <mat-label>till type</mat-label>
+
+                  <input matInput formControlName="tilltype" required>
+                  <mat-error *ngIf="itemrow.get('tilltype').hasError('required')"
+                    pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$">
+                    Please enter tilltype!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('tilltype').hasError('pattern')">
-                      Please enter valid tilltype !
-                  </mat-error> -->
+                    Please enter valid tilltype !
+                  </mat-error>
+                </mat-form-field>
               </td>
               <td>
-                <input matInput formControlName="stocklevel" required>
-                <!-- <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
-                      Please enter stocklevel!
+                <mat-form-field appearance="outline">
+                  <mat-label>stock level</mat-label>
+
+                  <input matInput formControlName="stocklevel" required>
+                  <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
+                    Please enter stocklevel!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
-                      Please enter valid stocklevel !
-                  </mat-error> -->
+                    Please enter valid stocklevel !
+                  </mat-error>
+                </mat-form-field>
               </td>
               <td>
-                <button (click)="deleteRow(i)" class="btn btn-danger delete-btn-add">Delete</button>
+                <button (click)="deleteRow(i ,urls)" class="btn btn-danger delete-btn-add">Delete</button>
               </td>
-              <!--                
-                <td>
-                  <ngx-barcode format="CODE128" [bc-value]="'123'"  [bc-display-value]="true"></ngx-barcode>
-
-                </td> -->
-
             </tr>
-
           </table>
-          <!-- <tr>
-              <th>Name</th>
-              <th>School</th>
-      
-            </tr>
-            <tr *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
-              <td>
-                <div class="col-sm-6">
-                  <input class="form-control" type="text"  formControlName="name"/>
-                </div>
-              </td>
-              <td>
-                <div class="col-sm-6">
-                  <input class="form-control" type="text"  formControlName="school"/>
-                </div>
-              </td>
-            </tr>
-            <div *ngFor="let itemrow of invoiceForm.controls.itemRows.controls; let i=index"  [formGroupName]="i">
-           
-             
-             
-            </div> -->
         </div>
         <div class="button-row" style="text-align: center;">
-          <button [disabled]="productForm.invalid" mat-raised-button="" color=""
-            style="margin-top: 10px;">Submit</button>
+          <button (click)="toggleColours()" [disabled]="productForm.invalid" mat-raised-button="" color=""
+            style="margin-top: 10px;">Submit
+          </button>
 
         </div>
 
@@ -172,7 +181,7 @@
     </div>
     <div class="add-row-btn">
 
-      <button type="button" (click)="addNewRow()" class="btn btn-primary">Add new Row</button><br>
+      <button type="button" (click)="addNewRow()" class="btn btn-primary">Add new product</button><br>
     </div>
   </div>
   <!-- / CONTENT -->

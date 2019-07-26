@@ -22,7 +22,7 @@ table {
   
   mat-form-field.mat-form-field {
     font-size: 12px;
-    width: 260px;
+    width: 110px;
   }
   
   .control_wrapper {
@@ -246,14 +246,14 @@ table {
     }
 }
 
-.cstm-table-store td{padding-left: 10px;
-    padding-right: 10px;
-    vertical-align: top;
-    padding-top: 10px;}
-.cstm-table-store td input{border:1px solid #ccc;}
-.cstm-table-store input.datepicker-add{height: 30px;padding-top: 0px;padding-left: 5px;border:1px solid transparent !important;}
-.cstm-table-store td .mat-form-field-infix{margin-top: -10px;padding-top: 0px;}
-mat-form-field.mat-form-field[_ngcontent-c29]{margin-top: -15px;}
+// .cstm-table-store td{padding-left: 10px;
+//     padding-right: 10px;
+//     vertical-align: top;
+//     padding-top: 10px;}
+// .cstm-table-store td input{border:1px solid #ccc;}
+// .cstm-table-store input.datepicker-add{height: 30px;padding-top: 0px;padding-left: 5px;border:1px solid transparent !important;}
+// .cstm-table-store td .mat-form-field-infix{margin-top: -10px;padding-top: 0px;}
+// mat-form-field.mat-form-field[_ngcontent-c29]{margin-top: -15px;}
 .cstm-table-store td .img-wrap{border:1px solid transparent;vertical-align: top;}
 .cstm-table-store td .img-wrap img{border:1px solid #039be5;vertical-align: top;}
 .add-row-btn button{float: right;
@@ -271,3 +271,5 @@ mat-form-field.mat-form-field[_ngcontent-c29]{margin-top: -15px;}
     background-color: red;
     color: #fff;
   }
+
+.cstm-table-store tbody tr td{padding-bottom: 10px;}

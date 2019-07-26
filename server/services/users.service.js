@@ -14,9 +14,15 @@ service.submitgoogledetails = submitgoogledetails;
 
 
 function authenticate(email, password) {
-
     var deferred = Q.defer();
-    Users.findOne({ email: email }, function (err, user) {
+
+    Users.findOne({ 
+        $and: [
+            { $or: [{ "email": email }, { "phone": email }] },
+        ]
+    },
+     
+        function (err, user) {
 
         if (err) {
             console.log(err);
@@ -25,6 +31,7 @@ function authenticate(email, password) {
 
         if (user && bcrypt.compareSync(password, user.password)) {
 
+          
             if (user.userType == 'admin') {
                 deferred.resolve({
                     _id: user._id,
@@ -86,7 +93,8 @@ function addsignupuser(signupdata) {
         ipaddress: signupdata.ipAddress,
         status: signupdata.status,
         uniqueid: signupdata.uniqueid,
-        userType: signupdata.usertype
+        userType: signupdata.usertype,
+        phone : signupdata.phone,
     });
 
     saveallsignup.save(function (err, saveallsignup) {
