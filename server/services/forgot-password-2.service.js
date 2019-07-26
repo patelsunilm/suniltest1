@@ -38,7 +38,7 @@ function sendlink(sendlinkdata, baseurl) {
                 from: 'swatisuthar1494@gmail.com',
                 to: sendlinkdata.email,
                 text: 'This Is Your Link To Reset Password',
-                html: '<a href="' + baseurl + '/#'  + '/resetpassword/' + userid + '">Reset Password Link</a>',
+                html: '<a href="' + baseurl + '/#' + '/resetpassword/' + userid + '">Reset Password Link</a>',
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -66,7 +66,7 @@ function sendlink(sendlinkdata, baseurl) {
 }
 
 function resetpassword(resetpassworddata) {
-  
+
     var deferred = Q.defer();
 
 

@@ -52,7 +52,7 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Products Name</mat-label>
+            <mat-label>Products name</mat-label>
             <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true"
               required>
             <mat-error *ngIf="form.get('productname').hasError('required')">
@@ -63,13 +63,13 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Cost Price</mat-label>
+            <mat-label>Cost price</mat-label>
             <input matInput formControlName="costprice" required>
             <mat-error *ngIf="form.get('costprice').hasError('required')">
-              Please enter costprice!
+              Please enter cost price!
             </mat-error>
             <mat-error *ngIf="form.get('costprice').hasError('pattern')">
-              Please enter valid costprice!
+              Please enter valid cost price!
             </mat-error>
           </mat-form-field>
         </div>
@@ -85,13 +85,13 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Selling Price</mat-label>
+            <mat-label>Selling price</mat-label>
             <input matInput formControlName="sellingprice" required>
             <mat-error *ngIf="form.get('sellingprice').hasError('required')">
-              Please enter sellingprice!
+              Please enter selling price!
             </mat-error>
             <mat-error *ngIf="form.get('sellingprice').hasError('pattern')">
-              Please enter valid sellingprice!
+              Please enter valid selling price!
             </mat-error>
           </mat-form-field>
         </div>
@@ -112,22 +112,22 @@
             <mat-label>Till type</mat-label>
             <input matInput formControlName="tilltype" required>
             <mat-error *ngIf="form.get('tilltype').hasError('required')">
-              Please enter tilltype!
+              Please enter till type!
             </mat-error>
             <mat-error *ngIf="form.get('tilltype').hasError('pattern')">
-              Please enter valid tilltype!
+              Please enter valid till type!
             </mat-error>
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Stock Level</mat-label>
+            <mat-label>Stock level</mat-label>
             <input matInput formControlName="stocklevel" required>
             <mat-error *ngIf="form.get('stocklevel').hasError('required')">
-              Please enter stocklevel!
+              Please enter stock level!
             </mat-error>
             <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
-              Please enter valid stocklevel!
+              Please enter valid stock level!
             </mat-error>
           </mat-form-field>
         </div>

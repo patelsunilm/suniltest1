@@ -58,11 +58,12 @@ export class Login2Component implements OnInit {
             }
         };
 
-        // this.http.get<{ ip: string }>('https://jsonip.com')
-        //     .subscribe(data => {
+        this.http.get<{ ip: string }>('https://jsonip.com')
+            .subscribe(data => {
 
-        //         this.ipAddress = data.ip
-        //     })
+                this.ipAddress = data.ip
+
+            })
     }
 
     signInWithGoogle(): void {
@@ -124,10 +125,19 @@ export class Login2Component implements OnInit {
             this.AuthenticationService.submitgoogledetails(GoogleObj)
                 .subscribe(
                     data => {
-
-                        if (localStorage.getItem('currentUser')) {
-                            this.router.navigate(['dashboard']);
+                       
+                        if (data.string == 'Admin could not access any social login.') {
+                            this.snackBar.open('Admin could not access any social login.', '', {
+                                duration: 3000,
+                                horizontalPosition: this.horizontalPosition,
+                                verticalPosition: this.verticalPosition,
+                            });
+                        } else {
+                            if (localStorage.getItem('currentUser')) {
+                                this.router.navigate(['dashboard']);
+                            }
                         }
+
 
                     },
                     error => {
@@ -146,7 +156,7 @@ export class Login2Component implements OnInit {
             .subscribe(
                 data => {
 
-                    this.ipAddress = '27.121.104.92'
+
                     if (data.string == 'You cannot logged in as your Status is off.') {
                         this.snackBar.open('You cannot logged in as your Status is off.', '', {
                             duration: 3000,
@@ -162,11 +172,13 @@ export class Login2Component implements OnInit {
 
                             }
                         } else {
+                            
                             let dialogRef = this.dialog.open(secretvaluepopupComponent, {
                                 data: {
                                     id: data._id,
                                     secretanswer: data.secretanswer,
                                     secretquestion: data.secretquestion,
+                                    ipAddress: this.ipAddress,
                                 },
                                 width: '450px'
                             });
@@ -204,7 +216,7 @@ export class Login2Component implements OnInit {
     templateUrl: './secretvaluepopup.html'
 })
 export class secretvaluepopupComponent {
-    ipAddress: any;
+
     loginForm: FormGroup;
     returnUrl: string;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -227,7 +239,6 @@ export class secretvaluepopupComponent {
 
     ) {
 
-
     }
     ngOnInit() {
 
@@ -241,13 +252,15 @@ export class secretvaluepopupComponent {
 
     }
 
-    submit(_id) {
+    submit(_id, ipAddress) {
 
         this.AuthenticationService.addsecretValuedata(_id, this.loginForm.value)
             .subscribe(
                 data => {
 
+
                     if (data.string == 'Please enter right secret answer.') {
+                      
                         this.snackBar.open('Please enter right secret answer.', '', {
                             duration: 3000,
                             horizontalPosition: this.horizontalPosition,
@@ -260,6 +273,18 @@ export class secretvaluepopupComponent {
 
                             this.router.navigate(['dashboard']);
 
+                            this.loginForm.value.ipAddress = ipAddress;
+                            this.loginForm.value._id = _id;
+
+                            this.AuthenticationService.updateipaddress(this.loginForm.value)
+                                .subscribe(
+                                    data => {
+
+                                    },
+                                    error => {
+
+                                        console.log(error);
+                                    });
                         }
                     }
                 },
@@ -268,21 +293,5 @@ export class secretvaluepopupComponent {
                 });
     }
 
-    updateip(_id) {
-
-        this.ipAddress = '27.121.104.92'
-        this.loginForm.value.ipAddress = this.ipAddress;
-        this.loginForm.value._id = _id;
-
-        this.AuthenticationService.updateipaddress(this.loginForm.value)
-            .subscribe(
-                data => {
-
-                },
-                error => {
-
-                    console.log(error);
-                });
-    }
 }
 export class DialogContentExampleDialog { }

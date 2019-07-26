@@ -65,7 +65,7 @@ function addsecretValuedata(req, res) {
 }
 
 function updateipaddress(req, res) {
-
+  
     userService.updateipaddress(req.body)
         .then(function (data) {
             if (data) {
@@ -80,18 +80,17 @@ function updateipaddress(req, res) {
 }
 
 
-function submitgoogledetails(req,res)
-{
+function submitgoogledetails(req, res) {
     userService.submitgoogledetails(req.body)
-    .then(function (data) {
-        if (data) {
-            res.send(data);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-    
-        res.status(400).send(err);
-    });
+        .then(function (data) {
+            if (data) {
+                res.send(data);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+
+            res.status(400).send(err);
+        });
 }

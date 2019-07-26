@@ -59,9 +59,7 @@ const routes = [
             useFactory: provideConfig
         }
     ],
-    exports: [
-        Login2Component
-    ]
+    bootstrap: []
 })
 export class Login2Module {
 }

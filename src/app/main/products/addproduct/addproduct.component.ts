@@ -182,7 +182,7 @@ export class AddproductComponent implements OnInit {
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
-          this.snackBar.open('Product add success fully', '', {
+          this.snackBar.open('Product added successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

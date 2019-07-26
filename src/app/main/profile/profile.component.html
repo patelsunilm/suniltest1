@@ -12,7 +12,7 @@
                 My Profile
             </span>
         </div>
-
+        <button mat-raised-button matTooltip="Resellers" [routerLink]="['/dashboard']">Back</button>
     </div>
     <!-- / HEADER -->
 
@@ -118,7 +118,7 @@
                             </a>
                             <input id="cin" hidden name="cin" #fileInput1 type="file"
                                 accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent($event,i)" />
-                            <div class="remember-me" class="img-wrap" *ngIf="image" >
+                            <div class="remember-me" class="img-wrap" *ngIf="image">
                                 <img *ngIf="!urls[i];" [src]="image" style="width: 100px;height: 100px;padding: 5px;">
                             </div>
                             <div class="remember-me" class="img-wrap">
@@ -191,13 +191,13 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Select background Color</mat-label>
+                            <mat-label>Select background color</mat-label>
                             <input matInput id="backgroundthemecolor" formControlName="backgroundtheme"
                                 [(colorPicker)]="color2" [value]="color2" readonly="true">
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Select font Color</mat-label>
+                            <mat-label>Select font color</mat-label>
                             <input matInput id="fontcolor" formControlName="fontcolor" readonly="true" [value]="color1"
                                 [(colorPicker)]="color1">
 
