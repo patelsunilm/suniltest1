@@ -7,6 +7,7 @@ exports.getprofileInfo = function (req, res) {
     profileService.getprofileInfo(req.params.userId)
         .then(function (getprofiledata) {
             if (getprofiledata) {
+
                 res.send(getprofiledata);
             } else {
                 res.sendStatus(404);

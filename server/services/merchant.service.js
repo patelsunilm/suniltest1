@@ -3,6 +3,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var users = require('../controllers/Users/users.model');
+var faqs = require('../controllers/faq/faq.model');
 var mongoose = require('mongoose');
 
 var service = {};
@@ -15,7 +16,7 @@ service.deletemerchantData = deletemerchantData;
 function getallMerchentsData() {
     var deferred = Q.defer();
 
-    users.find({ userType: 'Merchant'}, function (err, getData) {
+    users.find({ userType: 'Merchant' }, function (err, getData) {
         if (!err) {
             deferred.resolve(getData);
         } else {
@@ -123,7 +124,6 @@ function merchantStatusToggle(merchantdata) {
 
 
 function deletemerchantData(merchantDataId) {
-
     var deferred = Q.defer();
 
     users.deleteOne({ _id: new mongoose.Types.ObjectId(merchantDataId) }, function (err) {
@@ -132,6 +132,16 @@ function deletemerchantData(merchantDataId) {
             deferred.reject(err.name + ': ' + err.message);
         }
         else {
+            faqs.deleteMany({ userId: new mongoose.Types.ObjectId(merchantDataId) }, function (err) {
+                if (err) {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+                else {
+                    deferred.resolve();
+                }
+
+            });
             deferred.resolve();
         }
 

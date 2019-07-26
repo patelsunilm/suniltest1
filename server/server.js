@@ -100,6 +100,7 @@ app.use(expressJwt({
   secret: config.secret,
   getToken: function (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+     
       return req.headers.authorization.split(' ')[1];
     } else if (req.query && req.query.token) {
       return req.query.token;
@@ -111,8 +112,12 @@ app.use(expressJwt({
     '/users/addsecretValuedata',
     '/users/updateipaddress',
     '/users/addsignupuser',
+    '/users/submitgoogledetails',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword', '/products/addcsvfile']
+    '/forgot-password-2/resetpassword', '/products/addcsvfile'
+     
+  
+  ]
 }));
 
 
@@ -163,6 +168,8 @@ var upload = multer({ storage: storage });
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 var file = req.files[0];
+var userid = req.body.uploads
+
 var originalFileName = file.originalname;
 
  const results = [];
@@ -188,13 +195,13 @@ var originalFileName = file.originalname;
             return u === arr2[i];
         })
     ) {
-       console.log(true);
+       
        for (let i = 0; i < results.length; i++) {
         var datetime = new Date(new Date).valueOf();
         var randomnumber = Math.floor((Math.random() * 100) + 1);
   
         results[i].barcode = datetime + randomnumber
-      
+        results[i].userid  = userid
       }
 
        products.insertMany(results,function (err, product) {

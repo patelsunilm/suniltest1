@@ -16,7 +16,9 @@ function getprofileInfo(userId) {
     var userId = new mongoose.Types.ObjectId(userId);
 
     Users.findOne(userId, function (err, data) {
+      
         if (!err) {
+
             deferred.resolve(data);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -45,6 +47,7 @@ function updateprofile(getprofiledata) {
                 Users.findById(getprofiledata._id, function (err, getdata) {
 
                     if (!err) {
+                        getdata.image = getprofiledata.image
                         getdata.name = getprofiledata.name;
                         getdata.email = getprofiledata.email;
                         getdata.address = getprofiledata.address;
@@ -89,6 +92,7 @@ function updateprofile(getprofiledata) {
                         Users.findById(getprofiledata._id, function (err, getdata) {
 
                             if (!err) {
+                                getdata.image = getprofiledata.image;
                                 getdata.name = getprofiledata.name;
                                 getdata.email = getprofiledata.email;
                                 getdata.address = getprofiledata.address;

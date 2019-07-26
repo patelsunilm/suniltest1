@@ -17,14 +17,12 @@ import * as $ from 'jquery';
 export class ProfileComponent implements OnInit, OnDestroy {
 
     form: FormGroup;
-    lat: number;
-    lng: number;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     returnUrl: string;
-    packagename: any[];
-    latnew: any;
-    longnew: any;
+    urls = new Array<string>();
+    filesToUpload: Array<File> = [];
+    image: any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -78,8 +76,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         public snackBar: MatSnackBar,
     ) {
         // Set the private defaults
-        this.lat = -34.397;
-        this.lng = 150.644;
 
         this._unsubscribeAll = new Subject();
     }
@@ -95,6 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         var user = JSON.parse(localStorage.getItem('currentUser'));
+
         this.form = this._formBuilder.group({
             name: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
@@ -104,6 +101,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             Secretanswer: ['', Validators.required],
             backgroundtheme: [''],
             fontcolor: [''],
+            image: [''],
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -113,6 +111,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
                     data => {
+
+                        this.image = data.image
 
                         this.form = this._formBuilder.group({
 
@@ -124,6 +124,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             Secretanswer: [data.secretanswer],
                             backgroundtheme: [data.backgroundtheme],
                             fontcolor: [data.fontcolor],
+                            image: [this.image],
 
                         });
                     },
@@ -134,6 +135,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         });
 
+    }
+
+
+    fileChangeEvent(fileInput: any, index) {
+        var imagefiles = fileInput.target.files;
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            var testreader = new FileReader();
+            testreader.onload = (fileInput: any) => {
+                this.urls[index] = fileInput.target.result;
+                this.filesToUpload.push(imagefiles[0]);
+            }
+            testreader.readAsDataURL(fileInput.target.files[0]);
+        }
     }
 
     readLocalStorageValue(key) {
@@ -142,54 +156,107 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     updatemyprofile() {
 
-
-
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
-            this.form.value._id = user._id;
-            this.form.value.userType = user.userType;
-            this.form.value.fontcolor = $("#fontcolor").val()
-            this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-            this.ProfileService.updateprofile(this.form.value)
-                .subscribe(
-                    data => {
+            if (this.filesToUpload.length > 0) {
+               
+                var data = this.filesToUpload.slice(-1);
+                this.ProfileService.uploadLogoImage(data)
+                    .subscribe(data => {
+                        this.form.value.image = data[0].toString();
+                        this.form.value._id = user._id;
+                        this.form.value.userType = user.userType;
+                        this.form.value.fontcolor = $("#fontcolor").val()
+                        this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-                        if (data.string == 'Email is already exist.') {
-                            this.snackBar.open('Email is already exist.', '', {
-                                duration: 3000,
-                                horizontalPosition: this.horizontalPosition,
-                                verticalPosition: this.verticalPosition,
-                            });
-                        } if (data.string == 'BusinessName is already exist.') {
-                            this.snackBar.open('BusinessName is already exist.', '', {
-                                duration: 3000,
-                                horizontalPosition: this.horizontalPosition,
-                                verticalPosition: this.verticalPosition,
-                            });
-                        } else {
-                            this.snackBar.open('Profile updated successfully.', '', {
+                        this.ProfileService.updateprofile(this.form.value)
+                            .subscribe(
+                                data => {
+
+                                    if (data.string == 'Email is already exist.') {
+                                        this.snackBar.open('Email is already exist.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                    } if (data.string == 'BusinessName is already exist.') {
+                                        this.snackBar.open('BusinessName is already exist.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                    } else {
+                                        this.snackBar.open('Profile updated successfully.', '', {
+                                            duration: 3000,
+                                            horizontalPosition: this.horizontalPosition,
+                                            verticalPosition: this.verticalPosition,
+                                        });
+                                        this.router.navigate([this.returnUrl]);
+                                    }
+
+                                },
+                                error => {
+
+                                    console.log(error);
+                                    this.snackBar.open('Please try again!', '', {
+                                        duration: 3000,
+                                        horizontalPosition: this.horizontalPosition,
+                                        verticalPosition: this.verticalPosition,
+                                    });
+                                    this.router.navigate([this.returnUrl]);
+
+                                });
+                    });
+
+            } else {
+
+                this.form.value._id = user._id;
+                this.form.value.userType = user.userType;
+                this.form.value.fontcolor = $("#fontcolor").val()
+                this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+
+                this.ProfileService.updateprofile(this.form.value)
+                    .subscribe(
+                        data => {
+
+                            if (data.string == 'Email is already exist.') {
+                                this.snackBar.open('Email is already exist.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                            } if (data.string == 'BusinessName is already exist.') {
+                                this.snackBar.open('BusinessName is already exist.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                            } else {
+                                this.snackBar.open('Profile updated successfully.', '', {
+                                    duration: 3000,
+                                    horizontalPosition: this.horizontalPosition,
+                                    verticalPosition: this.verticalPosition,
+                                });
+                                this.router.navigate([this.returnUrl]);
+                            }
+
+                        },
+                        error => {
+
+                            console.log(error);
+                            this.snackBar.open('Please try again!', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
                             this.router.navigate([this.returnUrl]);
-                        }
 
-
-                    },
-                    error => {
-
-                        console.log(error);
-                        this.snackBar.open('Please try again!', '', {
-                            duration: 3000,
-                            horizontalPosition: this.horizontalPosition,
-                            verticalPosition: this.verticalPosition,
                         });
-                        this.router.navigate([this.returnUrl]);
 
-                    });
-        });
+            }
+
+        })
     }
 
     /**

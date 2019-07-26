@@ -27,7 +27,9 @@ exports.addproduct = function(req, res) {
 }
 
 exports.getAllproducts = function(req, res) {
-    productservice.getAllproducts()
+   
+ 
+    productservice.getAllproducts(req.params.userId)
     .then(function (getproductdata) {
 
         if (getproductdata) {
@@ -75,8 +77,6 @@ exports.getallproductbyId = function(req, res) {
 
 exports.updateprodcutdetail = function(req, res) {
  
-    console.log('req.body');
-    console.log(req.body)
     productservice.updateprodcutdetail(req.body)
     .then(function (getproduct) {
         if (getproduct) {

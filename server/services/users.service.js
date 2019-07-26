@@ -10,11 +10,19 @@ service.authenticate = authenticate;
 service.addsignupuser = addsignupuser;
 service.addsecretValuedata = addsecretValuedata;
 service.updateipaddress = updateipaddress;
+service.submitgoogledetails = submitgoogledetails;
+
 
 function authenticate(email, password) {
-
     var deferred = Q.defer();
-    Users.findOne({ email: email }, function (err, user) {
+
+    Users.findOne({ 
+        $and: [
+            { $or: [{ "email": email }, { "phone": email }] },
+        ]
+    },
+     
+        function (err, user) {
 
         if (err) {
             console.log(err);
@@ -23,6 +31,7 @@ function authenticate(email, password) {
 
         if (user && bcrypt.compareSync(password, user.password)) {
 
+          
             if (user.userType == 'admin') {
                 deferred.resolve({
                     _id: user._id,
@@ -31,6 +40,7 @@ function authenticate(email, password) {
                     name: user.name,
                     secretquestion: user.secretquestion,
                     secretanswer: user.secretanswer,
+                    image: user.image,
                     token: jwt.sign({ sub: user._id }, config.secret)
                 });
             } else {
@@ -43,6 +53,7 @@ function authenticate(email, password) {
                         secretquestion: user.secretquestion,
                         secretanswer: user.secretanswer,
                         ipaddress: user.ipaddress,
+                        image: user.image,
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
@@ -82,7 +93,8 @@ function addsignupuser(signupdata) {
         ipaddress: signupdata.ipAddress,
         status: signupdata.status,
         uniqueid: signupdata.uniqueid,
-        userType: signupdata.usertype
+        userType: signupdata.usertype,
+        phone : signupdata.phone,
     });
 
     saveallsignup.save(function (err, saveallsignup) {
@@ -129,27 +141,100 @@ function updateipaddress(ipdata) {
 
     var deferred = Q.defer();
 
-    Users.findById(ipdata._id, function (err, data) {
+    Users.findOne({ _id: ipdata._id }, function (err, getvalue) {
 
-        if (!err) {
-            data.ipaddress = ipdata.ipAddress;
-            data.datemodified = Date.now();
+        if (getvalue.secretanswer == ipdata.secretanswer) {
 
-            data.save(function (err) {
+            Users.findById(ipdata._id, function (err, data) {
+
                 if (!err) {
-                    deferred.resolve(data);
+                    data.ipaddress = ipdata.ipAddress;
+                    data.datemodified = Date.now();
+
+                    data.save(function (err) {
+                        if (!err) {
+                            deferred.resolve(data);
+                        } else {
+                            deferred.reject(err.name + ': ' + err.message);
+                        }
+                    });
+
                 } else {
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
+        }
+    })
+    return deferred.promise;
+}
+
+
+function submitgoogledetails(googledata) {
+
+    var deferred = Q.defer();
+
+    Users.findOne({ email: googledata.email }, function (err, getresult) {
+        if (getresult) {
+            Users.findOneAndUpdate({ _id: getresult._id }, {
+
+                googleid: googledata.googleid,
+                authToken: googledata.authToken,
+                datemodified: Date.now(),
+
+            }, function (err, user) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    deferred.resolve({
+                        _id: user._id,
+                        email: user.email,
+                        userType: user.userType,
+                        name: user.name,
+                        googleid: user.googleid,
+                        authToken: user.authToken,
+                        token: jwt.sign({ sub: user._id }, config.secret),
+                        secretquestion: user.secretquestion,
+                        secretanswer: user.secretanswer,
+                        image: user.image,
+                        token: jwt.sign({ sub: user._id }, config.secret)
+                    });
+                }
+            })
 
         } else {
-            deferred.reject(err.name + ': ' + err.message);
+
+            var saveData = new Users({
+                name: googledata.name,
+                email: googledata.email,
+                status: 'true',
+                uniqueid: googledata.uniqueid,
+                googleid: googledata.googleid,
+                userType: googledata.userType,
+                authToken: googledata.authToken,
+                dateadded: Date.now(),
+                datemodified: Date.now(),
+            });
+
+            saveData.save(function (err, user) {
+                if (!err) {
+                    deferred.resolve({
+                        _id: user._id,
+                        email: user.email,
+                        userType: user.userType,
+                        name: user.name,
+                        googleid: user.googleid,
+                        authToken: user.authToken,
+                        token: jwt.sign({ sub: user._id }, config.secret)
+                    });
+                } else {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
         }
 
-
-
-    });
+    })
 
     return deferred.promise;
 }

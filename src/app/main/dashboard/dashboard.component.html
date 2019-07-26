@@ -29,7 +29,24 @@
             <div class="widget-group p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom>
 
                 <div class="content p-24">
-
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <div style="cursor: pointer;" class="fuse-card one" [routerLink]="['/products']">
+                            <div class="p-16">
+                                <div class="h5 secondary-text csttext">Products</div>
+                                <div class="cstnum font-size-72 line-height-72 font-size-54 font-weight-300 line-height-1 mt-8">
+                                 10
+                                </div>
+                            </div>
+                        </div>
+                        <div style="cursor: pointer;" class="fuse-card two" [routerLink]="['/faq']">
+                            <div class="p-16">
+                                <div class="h5 secondary-text csttext">Feedback</div>
+                                <div class="cstnum font-size-72 line-height-72 font-size-54 font-weight-300 line-height-1 mt-8">
+                                    20
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

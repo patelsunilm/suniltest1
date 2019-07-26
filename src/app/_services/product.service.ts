@@ -7,73 +7,74 @@ import { appConfig } from '../app.config';
 
 @Injectable()
 export class ProductService {
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
+
+
+  addproduct(productdata) {
+
+    return this.http.post<any>(appConfig.apiUrl + '/products/addproduct', productdata)
+
+  }
+
+  getAllproducts() {
     
+    var userId = localStorage.getItem('userId');
+    return this.http.get<any>(appConfig.apiUrl + '/products/getAllproducts/' + userId)
+
+  }
+
+  deleteoneproduct(productid) {
+
+    return this.http.delete<any>(appConfig.apiUrl + '/products/deleteproduct/' + productid)
+
+  }
+
+  addcsvfile(Files): Observable<any> {
+    var userId = localStorage.getItem('userId');
+
+    const formData: any = new FormData();
+    const files: Array<File> = Files;
     
-    addproduct(productdata) {
 
-        return this.http.post<any>(appConfig.apiUrl + '/products/addproduct', productdata)
+    formData.append("uploads", files);
+    formData.append("uploads", userId);
 
-      }
+    return this.http.post<any>(appConfig.apiUrl + '/addcsvfile', formData )
 
-      getAllproducts() {
+  }
 
-        return this.http.get<any>(appConfig.apiUrl + '/products/getAllproducts')
+  addproductgallery(Files): Observable<any> {
 
-      }
+    const formData: any = new FormData();
+    const files: Array<File> = Files;
+    for (let i = 0; i < Files.length; i++) {
 
-      deleteoneproduct(productid) {
-      
-        return this.http.delete<any>(appConfig.apiUrl + '/products/deleteproduct/' +  productid)
+      formData.append("uploads[]", files[i], files[i]['name']);
 
-      }
+    }
+    return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
+  }
 
-      addcsvfile(Files): Observable<any> {
+  updateproductgallery(Files): Observable<any> {
 
-        const formData: any = new FormData();
-        const files: Array<File> = Files;
-        formData.append("uploads", files);
-    
-        
-        return this.http.post<any>(appConfig.apiUrl + '/addcsvfile' ,formData)
- 
-      }
+    const formData: any = new FormData();
+    const files: Array<File> = Files;
+    for (let i = 0; i < Files.length; i++) {
 
-      addproductgallery(Files): Observable<any> {
+      formData.append("uploads[]", files[i], files[i]['name']);
 
-        const formData: any = new FormData();
-        const files: Array<File> = Files;
-        for (let i = 0; i < Files.length; i++) {
-    
-          formData.append("uploads[]", files[i], files[i]['name']);
-        
-        }
-        return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
-      }
+    }
+    return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
+  }
 
-      updateproductgallery(Files): Observable<any> {
+  getallproductbyId(productid) {
+    return this.http.get<any>(appConfig.apiUrl + '/products/getallproductbyId/' + productid)
+  }
 
-        const formData: any = new FormData();
-        const files: Array<File> = Files;
-        for (let i = 0; i < Files.length; i++) {
-    
-          formData.append("uploads[]", files[i], files[i]['name']);
-        
-        }
-        return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
-      }
-  
-      getallproductbyId(productid) {
-     
-        return this.http.get<any>(appConfig.apiUrl + '/products/getallproductbyId/' + productid)
+  updateprodcutdetail(productdata) {
 
+    return this.http.post<any>(appConfig.apiUrl + '/products/updateprodcutdetail', productdata)
 
-      }
-
-      updateprodcutdetail(productdata) {
-      
-        return this.http.post<any>(appConfig.apiUrl + '/products/updateprodcutdetail' , productdata)
-
-      }
+  }
 }

@@ -162,7 +162,31 @@ export class DashboardComponent implements OnInit {
      */
 
     ngOnInit() {
-     
+  
+        // this.DashbordService.getAllcountsproducts()
+        // .subscribe(
+        //     data => {
+
+        //         this.countPackages = JSON.stringify(data.Packages);
+
+        //     },
+        //     error => {
+        //         console.log(error);
+
+        //     });       
+
+        //     this.DashbordService.getAllcountfaqs()
+        //     .subscribe(
+        //         data => {
+    
+        //             this.countPackages = JSON.stringify(data.Packages);
+    
+        //         },
+        //         error => {
+        //             console.log(error);
+    
+        //         });  
+
     }
 
     // -----------------------------------------------------------------------------------------------------

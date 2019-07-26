@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from '../../_services/index';
 import { MatPaginator, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
+import { GoogleLoginProvider, SocialUser, AuthService } from "angularx-social-login";
 
 @Component({
     selector: 'login-2',
@@ -20,6 +21,8 @@ export class Login2Component implements OnInit {
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     hide = true;
     ipAddress: any;
+    uniqueid: any;
+    public user: SocialUser;
     /**
      * Constructor
      *
@@ -35,6 +38,7 @@ export class Login2Component implements OnInit {
         private AuthenticationService: AuthenticationService,
         public snackBar: MatSnackBar,
         private http: HttpClient,
+        private authService: AuthService,
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -58,10 +62,17 @@ export class Login2Component implements OnInit {
         //     .subscribe(data => {
 
         //         this.ipAddress = data.ip
-        //         console.log('new')
-        //         console.log(this.ipAddress);
         //     })
     }
+
+    signInWithGoogle(): void {
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    }
+
+    signOut(): void {
+        this.authService.signOut();
+    }
+
 
     openDialog() {
         const dialogRef = this.dialog.open(DialogContentExampleDialog);
@@ -86,6 +97,48 @@ export class Login2Component implements OnInit {
         });
         localStorage.removeItem('userType');
     }
+
+    Sociallogin() {
+
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((userData) => {
+            this.user = userData
+            this.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
+
+            var GoogleObj = {
+
+                googleid: this.user.id,
+                fullname: this.user.name,
+                name: this.user.firstName,
+                lastName: this.user.lastName,
+                email: this.user.email,
+                authToken: this.user.authToken,
+                idToken: this.user.idToken,
+                photoUrl: this.user.photoUrl,
+                provider: this.user.provider,
+                status: true,
+                uniqueid: this.uniqueid,
+                userType: "Merchant",
+            };
+
+
+            this.AuthenticationService.submitgoogledetails(GoogleObj)
+                .subscribe(
+                    data => {
+
+                        if (localStorage.getItem('currentUser')) {
+                            this.router.navigate(['dashboard']);
+                        }
+
+                    },
+                    error => {
+                        console.log(error);
+                    });
+
+        })
+
+
+    }
+
 
     login() {
 
@@ -143,7 +196,6 @@ export class Login2Component implements OnInit {
                 });
 
     }
-
 
 }
 

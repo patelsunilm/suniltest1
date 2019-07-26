@@ -31,8 +31,6 @@ exports.getAllfaqs = function (req, res) {
         .catch(function (err) {
             res.status(400).send(err);
         });
-
-
 }
 
 exports.addFaqAnswerByAdmin = function (req, res) {

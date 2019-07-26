@@ -3,7 +3,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var ProductsSchema = new Schema({
-  
+ 
+ 
+  userid : ObjectId,
   image:String,
   productname: String,
   costprice: String,

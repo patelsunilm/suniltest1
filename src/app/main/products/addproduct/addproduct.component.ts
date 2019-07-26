@@ -35,7 +35,11 @@ export class AddproductComponent implements OnInit {
   urls: Array<File> = [];
   filesToUpload: Array<File> = [];
 
+  constructor(private route: ActivatedRoute, private router: Router
+    , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
 
+
+  }
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
@@ -45,18 +49,9 @@ export class AddproductComponent implements OnInit {
   public coloursEnabled = false;
   public loadingTemplate: TemplateRef<any>;
   public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
+
   // Private
   private _unsubscribeAll: Subject<any>;
-
-
-
-
-  constructor(private route: ActivatedRoute, private router: Router
-    , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
-
-
-  }
-
 
   public toggleColours(): void {
     this.coloursEnabled = !this.coloursEnabled;
@@ -182,7 +177,7 @@ export class AddproductComponent implements OnInit {
          
           this.productForm.value.itemRows[i].image = data[i].s3url;
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
-    
+          this.productForm.value.itemRows[i].userId = localStorage.getItem('userId');
         }
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {

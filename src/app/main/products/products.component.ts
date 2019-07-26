@@ -98,7 +98,6 @@ export class ProductsComponent implements OnInit {
 
   fileEvent($event) {
 
-
     var regex = new RegExp("(.*?)\.(csv)$");
 
     if (!(regex.test($event.target.value.toLowerCase()))) {
@@ -110,8 +109,12 @@ export class ProductsComponent implements OnInit {
       });
     } else {
 
-
-      this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
+    var userId =  localStorage.getItem('userId');
+   
+    $event.target.files[0].userId =userId  
+   
+    
+    this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully") {
           this.snackBar.open('Csv import success fully', '', {

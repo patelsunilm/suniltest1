@@ -11,5 +11,15 @@ export class DashbordService {
   constructor(private http: HttpClient) { }
   
 
+  getAllcountsproducts() {
+
+    var userId = localStorage.getItem('userId');
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountsproducts/' + userId)
+  }
+
+  getAllcountfaqs() {
+    var userId = localStorage.getItem('userId');
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountfaqs/' + userId)
+  }
 
 }

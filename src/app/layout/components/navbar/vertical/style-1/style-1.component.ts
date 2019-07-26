@@ -14,6 +14,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
     styleUrls: ['./style-1.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
+
 export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;
@@ -56,7 +57,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
             {
                 id: 'faq',
-                title: 'Faq',
+                title: 'Feedback',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
@@ -79,7 +80,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
             },
             {
                 id: 'faq',
-                title: 'Faq',
+                title: 'Feedback',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
@@ -107,7 +108,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
                         {
                             id: 'faq',
-                            title: 'Faq',
+                            title: 'Feedback',
                             url: '/faq',
                             type: 'item',
                             icon: 'help'
@@ -132,7 +133,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
                         {
                             id: 'faq',
-                            title: 'Faq',
+                            title: 'Feedback',
                             url: '/faq',
                             type: 'item',
                             icon: 'help'
