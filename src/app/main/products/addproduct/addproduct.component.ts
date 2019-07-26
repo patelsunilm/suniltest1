@@ -113,7 +113,7 @@ export class AddproductComponent implements OnInit {
 
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
 
-      this.snackBar.open('Please select image', '', {
+      this.snackBar.open('Please select image.', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
@@ -136,7 +136,7 @@ export class AddproductComponent implements OnInit {
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
-          this.snackBar.open('Product add success fully', '', {
+          this.snackBar.open('Product added successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

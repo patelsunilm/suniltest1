@@ -56,6 +56,7 @@ export class AuthenticationService {
 
 
     updateipaddress(data) {
+       
         return this.http.post<any>(appConfig.apiUrl + '/users/updateipaddress', data)
     }
 

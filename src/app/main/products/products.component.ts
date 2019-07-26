@@ -99,7 +99,7 @@ fileEvent($event) {
 
 this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
  
-  this.snackBar.open('Csv import success fully', '', {
+  this.snackBar.open('CSV imported successfully.', '', {
     duration: 3000,
     horizontalPosition: this.horizontalPosition,
     verticalPosition: this.verticalPosition,
@@ -156,7 +156,7 @@ export class deleteproductPopupComponent {
       .subscribe(
         data => {
  
-          this.snackBar.open('Product deleted successfully', '', {
+          this.snackBar.open('Product deleted successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

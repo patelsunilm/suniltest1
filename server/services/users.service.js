@@ -167,33 +167,44 @@ function submitgoogledetails(googledata) {
 
     Users.findOne({ email: googledata.email }, function (err, getresult) {
         if (getresult) {
-            Users.findOneAndUpdate({ _id: getresult._id }, {
 
-                googleid: googledata.googleid,
-                authToken: googledata.authToken,
-                datemodified: Date.now(),
+            if (getresult.userType == 'Merchant') {
 
-            }, function (err, user) {
-                if (err) {
-                    throw err;
-                }
-                else {
-                    deferred.resolve({
-                        _id: user._id,
-                        email: user.email,
-                        userType: user.userType,
-                        name: user.name,
-                        googleid: user.googleid,
-                        authToken: user.authToken,
-                        token: jwt.sign({ sub: user._id }, config.secret),
-                        secretquestion: user.secretquestion,
-                        secretanswer: user.secretanswer,
-                        image: user.image,
-                        token: jwt.sign({ sub: user._id }, config.secret)
-                    });
-                }
-            })
+                Users.findOneAndUpdate({ _id: getresult._id }, {
 
+                    googleid: googledata.googleid,
+                    authToken: googledata.authToken,
+                    datemodified: Date.now(),
+
+                }, function (err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        deferred.resolve({
+                            _id: user._id,
+                            email: user.email,
+                            userType: user.userType,
+                            name: user.name,
+                            googleid: user.googleid,
+                            authToken: user.authToken,
+                            token: jwt.sign({ sub: user._id }, config.secret),
+                            secretquestion: user.secretquestion,
+                            secretanswer: user.secretanswer,
+                            image: user.image,
+                            token: jwt.sign({ sub: user._id }, config.secret)
+                        });
+                    }
+                })
+
+
+            } else {
+               
+                var data = {};
+                data.string = 'Admin could not access any social login.';
+                deferred.resolve(data);
+
+            }
         } else {
 
             var saveData = new Users({

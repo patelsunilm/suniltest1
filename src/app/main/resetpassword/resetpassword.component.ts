@@ -68,8 +68,8 @@ export class ResetPasswordComponent implements OnInit {
 
 
         this.loginForm = this._formBuilder.group({
-            newPassword: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+            newPassword: ['', { validators: [Validators.minLength(6)] }],
+            confirmPassword: ['', { validators: [Validators.minLength(6)] }],
         });
         // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/resellers';
     }
