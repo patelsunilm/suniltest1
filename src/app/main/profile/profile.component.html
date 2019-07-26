@@ -12,7 +12,7 @@
                 My Profile
             </span>
         </div>
-
+        <button mat-raised-button matTooltip="Resellers" [routerLink]="['/dashboard']">Back</button>
     </div>
     <!-- / HEADER -->
 
@@ -118,7 +118,7 @@
                             </a>
                             <input id="cin" hidden name="cin" #fileInput1 type="file"
                                 accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent($event,i)" />
-                            <div class="remember-me" class="img-wrap" *ngIf="image" >
+                            <div class="remember-me" class="img-wrap" *ngIf="image">
                                 <img *ngIf="!urls[i];" [src]="image" style="width: 100px;height: 100px;padding: 5px;">
                             </div>
                             <div class="remember-me" class="img-wrap">

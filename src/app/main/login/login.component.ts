@@ -58,11 +58,12 @@ export class Login2Component implements OnInit {
             }
         };
 
-        // this.http.get<{ ip: string }>('https://jsonip.com')
-        //     .subscribe(data => {
-
-        //         this.ipAddress = data.ip
-        //     })
+        this.http.get<{ip:string}>('https://jsonip.com')
+        .subscribe( data => {
+          
+          this.ipAddress = data.ip
+        
+        })
     }
 
     signInWithGoogle(): void {
@@ -145,6 +146,8 @@ export class Login2Component implements OnInit {
         this.AuthenticationService.login(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
             .subscribe(
                 data => {
+                     console.log('check ip addresh');
+                     console.log(this.ipAddress);
 
                     this.ipAddress = '27.121.104.92'
                     if (data.string == 'You cannot logged in as your Status is off.') {
