@@ -16,11 +16,11 @@ export class AuthGuardCommon implements CanActivate {
         // if ((localStorage.getItem('currentUser')) && (localStorage.getItem('userType')=='Super Admin')) {
         if (localStorage.getItem('currentUser')) {
 
-            setTimeout(function () {
-                localStorage.removeItem("currentUser");
-            }, 1000 * 60 * 60);
+            // setTimeout(function () {
+            //     localStorage.removeItem("currentUser");
+            // }, (1*6)/24);
 
-            return true;
+            // return true;
 
             // logged in so return true
 

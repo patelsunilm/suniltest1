@@ -19,11 +19,11 @@ export class AuthGuardCo implements CanActivate {
             
             if(localStorage.getItem('userType')=='Merchant')
             {
-                setTimeout(function(){
-                    localStorage.removeItem("currentUser");
-                }, 1000*60*60);
+                // setTimeout(function () {
+                //     localStorage.removeItem("currentUser");
+                // }, (1*6)/24);
     
-                 return true;
+                //  return true;
             }
             // logged in so return true
            
