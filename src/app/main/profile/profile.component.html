@@ -225,37 +225,72 @@
                         </mat-form-field>
 
                     </div>
-
-                    <!-- 
+                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                            <mat-label>Merchant Category list</mat-label>
+                            <mat-select formControlName="merchantcatname" required>
+                                <mat-option>Select Merchant Category list</mat-option>
+                                <mat-option *ngFor="let merchant of merchantcategories" [value]="merchant._id">
+                                    {{merchant.merchantcatname}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Please select Merchant Category list!</mat-error>
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                            <mat-label>countri list</mat-label>
+                            <mat-select formControlName="countries" required (selectionChange)="selectcountries($event.value)">
+                                <mat-option>Select countri list</mat-option>
+                                <mat-option *ngFor="let countrie of allcountries" [value]="countrie.id">
+                                     
+                                    {{countrie.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('countries').hasError('required')">
+                                Please select countri list!
+                            </mat-error>
+                           
+                        </mat-form-field>
+                 
+                    </div>
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                            <mat-label>Category List</mat-label>
-                            <input matInput>
-                            <mat-error *ngIf="form.get('email').hasError('required')">
-                                Please enter email!
-                            </mat-error>
-                            <mat-error *ngIf="form.get('email').hasError('email')">
-                                Please enter valid email!
+                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                            <mat-label>State list</mat-label>
+                            <mat-select formControlName="states"  required (selectionChange)="selectstate($event.value)">
+                                <mat-option value="Selectstatelist" >Select state list</mat-option>
+                                <mat-option *ngFor="let state of states"  [value]="state.id">
+                                    {{state.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('states').hasError('required')">
+                                Please select state list!
                             </mat-error>
                         </mat-form-field>
-                    </div> -->
-
-
-
+                       
+                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                            <mat-label>City list</mat-label>
+                           
+                            <mat-select formControlName="city" required>
+                                <mat-option>Select city list</mat-option>
+                                <mat-option *ngFor="let city of citys" [value]="city.id">
+                                    {{city.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.get('city').hasError('required')">
+                                    Please select city list!
+                                </mat-error>
+                        </mat-form-field>
+                      
+                 
+                    </div>
                     <div class="button-row" style="text-align: center;">
                         <button mat-raised-button="" color="" style="margin-top: 10px;"
                             [disabled]="form.invalid">Submit</button>
                     </div>
-
                 </form>
             </div>
-
-
-
         </div>
-
-
         <!-- / CONTENT -->
     </div>
 </div>

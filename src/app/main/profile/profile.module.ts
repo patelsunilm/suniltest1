@@ -12,7 +12,6 @@ import { AgmCoreModule } from '@agm/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { ProfileComponent } from './profile.component';
 import { AuthGuardCommon } from './../../_guards/index';
-
 const routes = [
     {
         path: 'profile',

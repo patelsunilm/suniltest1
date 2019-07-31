@@ -12,6 +12,8 @@ service.merchantStatusToggle = merchantStatusToggle;
 service.updatemerchantData = updatemerchantData;
 service.getmerchantDatabyId = getmerchantDatabyId;
 service.deletemerchantData = deletemerchantData;
+service.getMerchentsbyId = getMerchentsbyId;
+
 
 function getallMerchentsData() {
     var deferred = Q.defer();
@@ -150,5 +152,28 @@ function deletemerchantData(merchantDataId) {
     return deferred.promise;
 
 }
+
+function getMerchentsbyId(catid) {
+
+console.log('catid');
+console.log(catid);    
+var merchantId = new mongoose.Types.ObjectId(catid);
+
+var deferred = Q.defer();
+
+    users.find({merchantcatid : merchantId}, function (err, merchant) {
+        if (!err) {
+           
+            deferred.resolve(merchant);
+      
+        } else {
+           
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+
+}
+
 
 module.exports = service;

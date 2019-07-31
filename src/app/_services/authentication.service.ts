@@ -80,4 +80,11 @@ export class AuthenticationService {
 
     }
 
+
+    getmerchantcategories() {
+        
+
+        return this.http.get<any>(appConfig.apiUrl + '/users/getmerchantcategories')
+
+    }
 }

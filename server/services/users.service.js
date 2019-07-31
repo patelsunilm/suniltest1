@@ -4,6 +4,12 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var Users = require('../controllers/Users/users.model');// get our mongoose model
+var Merchant = require('../controllers/Users/merchantcategories.model');
+
+
+var nodemailer = require('nodemailer');
+const Nexmo = require('nexmo');
+
 
 var service = {};
 service.authenticate = authenticate;
@@ -11,40 +17,38 @@ service.addsignupuser = addsignupuser;
 service.addsecretValuedata = addsecretValuedata;
 service.updateipaddress = updateipaddress;
 service.submitgoogledetails = submitgoogledetails;
+service.sendotp = sendotp;
+service.matchotp = matchotp;
+service.getmerchantcategories = getmerchantcategories;
 
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'swatisuthar1494@gmail.com',
+        pass: 'swati1494'
+    }
+});
 
 function authenticate(email, password) {
     var deferred = Q.defer();
 
-    Users.findOne({ 
+    Users.findOne({
         $and: [
             { $or: [{ "email": email }, { "phone": email }] },
         ]
     },
-     
+
         function (err, user) {
 
-        if (err) {
-            console.log(err);
-            deferred.reject(err.name + ': ' + err.message);
-        }
+            if (err) {
+                console.log(err);
+                deferred.reject(err.name + ': ' + err.message);
+            }
 
-        if (user && bcrypt.compareSync(password, user.password)) {
+            if (user && bcrypt.compareSync(password, user.password)) {
 
-          
-            if (user.userType == 'admin') {
-                deferred.resolve({
-                    _id: user._id,
-                    email: user.email,
-                    userType: user.userType,
-                    name: user.name,
-                    secretquestion: user.secretquestion,
-                    secretanswer: user.secretanswer,
-                    image: user.image,
-                    token: jwt.sign({ sub: user._id }, config.secret)
-                });
-            } else {
-                if (user.status == true) {
+
+                if (user.userType == 'admin') {
                     deferred.resolve({
                         _id: user._id,
                         email: user.email,
@@ -52,24 +56,36 @@ function authenticate(email, password) {
                         name: user.name,
                         secretquestion: user.secretquestion,
                         secretanswer: user.secretanswer,
-                        ipaddress: user.ipaddress,
                         image: user.image,
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
-                    var data = {};
-                    data.string = 'You cannot logged in as your Status is off.';
+                    if (user.status == true) {
+                        deferred.resolve({
+                            _id: user._id,
+                            email: user.email,
+                            userType: user.userType,
+                            name: user.name,
+                            secretquestion: user.secretquestion,
+                            secretanswer: user.secretanswer,
+                            ipaddress: user.ipaddress,
+                            image: user.image,
+                            token: jwt.sign({ sub: user._id }, config.secret)
+                        });
+                    } else {
+                        var data = {};
+                        data.string = 'You cannot logged in as your Status is off.';
 
-                    deferred.resolve(data);
+                        deferred.resolve(data);
+                    }
                 }
+
+
+            } else {
+
+                deferred.resolve();
             }
-
-
-        } else {
-
-            deferred.resolve();
-        }
-    });
+        });
 
     return deferred.promise;
 
@@ -94,7 +110,9 @@ function addsignupuser(signupdata) {
         status: signupdata.status,
         uniqueid: signupdata.uniqueid,
         userType: signupdata.usertype,
-        phone : signupdata.phone,
+        phone: signupdata.phone,
+       
+  
     });
 
     saveallsignup.save(function (err, saveallsignup) {
@@ -207,7 +225,7 @@ function submitgoogledetails(googledata) {
 
 
             } else {
-               
+
                 var data = {};
                 data.string = 'Admin could not access any social login.';
                 deferred.resolve(data);
@@ -248,6 +266,125 @@ function submitgoogledetails(googledata) {
     })
 
     return deferred.promise;
+}
+
+
+function getmerchantcategories() {
+
+    var deferred = Q.defer();
+
+    Merchant.find(function (err, merchantcategories) {
+        if (!err) {
+           
+            deferred.resolve(merchantcategories);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+}
+
+
+
+function sendotp(data) {
+
+
+    var deferred = Q.defer();
+
+    var string = data.email;
+    var isEmail = string.includes("@");
+    var email = '';
+
+    if (isEmail) {
+
+        var email = data.email;
+        var number = Math.floor(100000 + Math.random() * 900000);
+        var otp = number.toString();
+
+        var mailOptions = {
+
+            from: 'swatisuthar1494@gmail.com',
+            to: email,
+            // subject :"otp verification",
+            text: 'This Is Your Link To Reset Password',
+            // html: '<a href="' + oto + '/#' + '/resetpassword/' + email + '">Reset Password Link</a>',
+            html: otp
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+
+                console.log(error);
+            } else {
+
+                var data = {};
+                data.string = 'Message send successfully.';
+                deferred.resolve(data);
+                Users.findOneAndUpdate({ email: email }, { otp: otp }, function (err, data) {
+                    if (err) {
+
+
+                        deferred.reject(err);
+
+                    } else {
+
+                        console.log('sucess');
+
+                    }
+                    return deferred.promise;
+                })
+
+            }
+        });
+
+    } else {
+
+        //     var number = Math.floor(100000 + Math.random() * 900000)
+        //     var otp = number.toString();
+        //     var phone = data.email
+
+        //     const nexmo = new Nexmo({
+        //         apiKey: 'bc107ac0',
+        //         apiSecret: 'MzkndlVG1KXBfZts',
+        //     });
+
+        //     const from = 'Nexmo';
+        //     const to = phone;
+        //     const text = 'Hello from Nexmo';
+
+        //     nexmo.message.sendSms(from, to, text);
+
+    }
+    return deferred.promise;
+}
+
+
+function matchotp(data) {
+
+    var deferred = Q.defer();
+    Users.findOne({ "otp": data.otp }, function (err, user) {
+        if (err) {
+
+            deferred.reject(err.name + ': ' + err.message);
+
+        } else {
+
+            if (user == null || user == 'user') {
+                var data = {};
+                data.string = 'Increate otp.';
+                deferred.resolve(data);
+
+            } else {
+
+                deferred.resolve(user);
+            }
+
+        }
+
+    })
+
+    return deferred.promise;
+
 }
 
 

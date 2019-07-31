@@ -113,10 +113,13 @@ app.use(expressJwt({
     '/users/updateipaddress',
     '/users/addsignupuser',
     '/users/submitgoogledetails',
+    '/users/getmerchantcategories',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword', '/products/addcsvfile'
-     
-  
+    '/forgot-password-2/resetpassword', '/products/addcsvfile',
+   
+    '/users/sendotp',
+    '/users/matchotp'
+
   ]
 }));
 
@@ -146,9 +149,6 @@ AWS.config.region = "us-east-1";
 AWS.config.apiVersions = {
   "s3": "2012-10-17"
 }
-
-
-
 
 
 var storage = multer.diskStorage({
@@ -230,7 +230,6 @@ var originalFileName = file.originalname;
       
         console.log(err);
         } else {
-
 
          var data = {};
          data.string = 'error';

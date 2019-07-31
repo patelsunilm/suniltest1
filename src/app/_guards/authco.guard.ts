@@ -23,7 +23,7 @@ export class AuthGuardCo implements CanActivate {
                 //     localStorage.removeItem("currentUser");
                 // }, (1*6)/24);
     
-                //  return true;
+                  return true;
             }
             // logged in so return true
            

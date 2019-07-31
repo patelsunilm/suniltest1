@@ -21,6 +21,11 @@ var UserSchema = new Schema({
   fontcolor: String,
   googleid: String,
   authToken: String,
+  otp :String,
+  merchantcatid: ObjectId,
+  countriid: Number,
+  stateid: Number,
+  cityid:Number,    
   idToken: String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }

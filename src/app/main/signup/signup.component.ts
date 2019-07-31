@@ -24,6 +24,7 @@ export class SignupComponent implements OnInit {
   ipAddress: any;
   registerForm: FormGroup;
   private _unsubscribeAll: Subject<any>;
+  merchantcategories : any;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -76,8 +77,19 @@ export class SignupComponent implements OnInit {
       BusinessName: ['', Validators.required],
       Secretquestion: ['', Validators.required],
       Secretanswer: ['', Validators.required],
+      // merchantcatname : ['', Validators.required]
 
     });
+
+  
+    this.AuthenticationService.getmerchantcategories()
+    .subscribe(data => {
+      
+      this.merchantcategories = data;
+     
+     
+
+    })
   }
 
   addsignupuser() {
@@ -86,7 +98,8 @@ export class SignupComponent implements OnInit {
     this.registerForm.value.status = false;
     this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
     this.registerForm.value.usertype = "Merchant";
-
+   
+   
     this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
       data => {
 
@@ -95,6 +108,7 @@ export class SignupComponent implements OnInit {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
+        
         this.router.navigate(['login']);
 
 
@@ -102,13 +116,17 @@ export class SignupComponent implements OnInit {
       error => {
         console.log(error);
       });
+
+
   }
 
 
   ngOnDestroy(): void {
+  
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  
   }
 
 
