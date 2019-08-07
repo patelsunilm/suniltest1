@@ -20,13 +20,17 @@ var UserSchema = new Schema({
   backgroundtheme: String,
   fontcolor: String,
   googleid: String,
+  facebookid: String,
   authToken: String,
-  otp :String,
   merchantcatid: ObjectId,
-  countriid: Number,
+  countryid: Number,
   stateid: Number,
-  cityid:Number,    
+  cityid: String,    
   idToken: String,
+  
+  // otp :String,
+  // DeviceToken: String,
+  // DeviceType: String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

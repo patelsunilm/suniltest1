@@ -4,7 +4,11 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
 var Users = require('../controllers/Users/users.model');// get our mongoose model
+
+var appusers = require('../controllers/Users/appusers.model');
+
 var Merchant = require('../controllers/Users/merchantcategories.model');
+
 
 
 var nodemailer = require('nodemailer');
@@ -20,6 +24,9 @@ service.submitgoogledetails = submitgoogledetails;
 service.sendotp = sendotp;
 service.matchotp = matchotp;
 service.getmerchantcategories = getmerchantcategories;
+service.submitfacebookdetails = submitfacebookdetails;
+
+
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -60,6 +67,7 @@ function authenticate(email, password) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
+
                     if (user.status == true) {
                         deferred.resolve({
                             _id: user._id,
@@ -96,6 +104,7 @@ function addsignupuser(signupdata) {
 
     var deferred = Q.defer();
     var hashUserPassword = bcrypt.hashSync(signupdata.password, 10);
+  
 
     var saveallsignup = new Users({
 
@@ -111,8 +120,14 @@ function addsignupuser(signupdata) {
         uniqueid: signupdata.uniqueid,
         userType: signupdata.usertype,
         phone: signupdata.phone,
-       
-  
+        cityid :signupdata.cityid ,
+        stateid :signupdata.stateid ,
+        countryid :signupdata.countriid ,
+        categoryid :signupdata.categoryid,
+        fontcolor :signupdata.fontcolor,
+        backgroundtheme :signupdata.backgroundtheme,
+        image :signupdata.image,
+        
     });
 
     saveallsignup.save(function (err, saveallsignup) {
@@ -275,7 +290,7 @@ function getmerchantcategories() {
 
     Merchant.find(function (err, merchantcategories) {
         if (!err) {
-           
+
             deferred.resolve(merchantcategories);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -288,57 +303,104 @@ function getmerchantcategories() {
 
 function sendotp(data) {
 
-
     var deferred = Q.defer();
-
     var string = data.email;
     var isEmail = string.includes("@");
     var email = '';
 
     if (isEmail) {
 
-        var email = data.email;
-        var number = Math.floor(100000 + Math.random() * 900000);
-        var otp = number.toString();
+        var deferred = Q.defer();
+        var userType = 'user';
+        var random = Math.floor(100 + Math.random() * 900);
+        var random1 = Math.floor(100 + Math.random() * 900);
+        var otp = random.toString() + random1.toString();
 
         var mailOptions = {
 
             from: 'swatisuthar1494@gmail.com',
-            to: email,
-            // subject :"otp verification",
+            to: data.email,
             text: 'This Is Your Link To Reset Password',
-            // html: '<a href="' + oto + '/#' + '/resetpassword/' + email + '">Reset Password Link</a>',
             html: otp
         };
+        var userdata =
+        {
+            "status": "1",
+            "message": "Successful",
+            "data": {
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
+            }
+        }
+        appusers.find({ $and: [{ email: data.email }] }
+            , function (err, user) {
+                if (err) {
 
-                console.log(error);
-            } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                } else {
+                    if (user == '') {
 
-                var data = {};
-                data.string = 'Message send successfully.';
-                deferred.resolve(data);
-                Users.findOneAndUpdate({ email: email }, { otp: otp }, function (err, data) {
-                    if (err) {
+                        var saveuser = new appusers({
+
+                            email: data.email,
+                          
+                            otp: otp,
+                            firstname: '',
+                            lastname: '',
+                            image: '',
+                            phone: ''
+
+                        });
+
+                        saveuser.save(function (err, saveanewuser) {
+                            if (!err) {
+
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+
+                                        console.log(error);
+                                    } else {
+
+                                        deferred.resolve(userdata);
+
+                                    }
+                                });
 
 
-                        deferred.reject(err);
+                            } else {
+
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+                        })
 
                     } else {
 
-                        console.log('sucess');
+                        var email = user[0].email;
+                        var id = user[0]._id
 
+                        appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
+                            if (err) {
+
+
+                                deferred.reject(err);
+
+                            } else {
+
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+
+                                        console.log(error);
+                                    } else {
+
+                                        deferred.resolve(userdata);
+                                    }
+                                });
+                            }
+                            return deferred.promise;
+                        })
                     }
-                    return deferred.promise;
-                })
-
-            }
-        });
-
+                }
+            });
     } else {
-
         //     var number = Math.floor(100000 + Math.random() * 900000)
         //     var otp = number.toString();
         //     var phone = data.email
@@ -362,7 +424,7 @@ function sendotp(data) {
 function matchotp(data) {
 
     var deferred = Q.defer();
-    Users.findOne({ "otp": data.otp }, function (err, user) {
+    appusers.findOne({ "otp": data.otp }, function (err, user) {
         if (err) {
 
             deferred.reject(err.name + ': ' + err.message);
@@ -370,15 +432,46 @@ function matchotp(data) {
         } else {
 
             if (user == null || user == 'user') {
-                var data = {};
-                data.string = 'Increate otp.';
-                deferred.resolve(data);
+                var userdata = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
 
             } else {
+               
+                var userdata =
+                {
+                    "status": "1",
+                    "message": "Successful",
+                    "data": {
+                        "userid": user._id,
+                        "email": user.email,
+                        "phone": user.phone,
+                        "name": user.name,
+                        "firstname": user.firstname,
+                        "lastname": user.lastname,
+                        "image": user.image
+                    }
+                }
+                appusers.findOneAndUpdate({ _id: user._id }, {
+    
+                    deviceToken: data.DeviceToken == undefined ? '' : data.DeviceToken,
+                    deviceType: data.DeviceType == undefined ? '' : data.DeviceType
 
-                deferred.resolve(user);
+                }, function (err, data) {
+                    if (err) {
+
+
+                        deferred.reject(err);
+
+                    } 
+                    return deferred.promise;
+                })
+
             }
-
+            deferred.resolve(userdata);
         }
 
     })
@@ -386,6 +479,89 @@ function matchotp(data) {
     return deferred.promise;
 
 }
+
+function submitfacebookdetails(facebookdata) {
+
+
+    var deferred = Q.defer();
+
+    Users.findOne({ email: facebookdata.email }, function (err, getresult) {
+        if (getresult) {
+
+            if (getresult.userType == 'Merchant') {
+
+                Users.findOneAndUpdate({ _id: getresult._id }, {
+
+                    facebookid: facebookdata.facebookid,
+                    authToken: facebookdata.authToken,
+                    datemodified: Date.now(),
+
+                }, function (err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        deferred.resolve({
+                            _id: user._id,
+                            email: user.email,
+                            userType: user.userType,
+                            name: user.name,
+                            facebookid: user.facebookid,
+                            authToken: user.authToken,
+                            token: jwt.sign({ sub: user._id }, config.secret),
+                            secretquestion: user.secretquestion,
+                            secretanswer: user.secretanswer,
+                            image: user.image,
+                            token: jwt.sign({ sub: user._id }, config.secret)
+                        });
+                    }
+                })
+
+
+            } else {
+
+                var data = {};
+                data.string = 'Admin could not access any social login.';
+                deferred.resolve(data);
+
+            }
+        } else {
+
+            var saveData = new Users({
+                name: facebookdata.name,
+                email: facebookdata.email,
+                status: 'true',
+                uniqueid: facebookdata.uniqueid,
+                facebookid: facebookdata.facebookid,
+                userType: facebookdata.userType,
+                authToken: facebookdata.authToken,
+                dateadded: Date.now(),
+                datemodified: Date.now(),
+            });
+
+            saveData.save(function (err, user) {
+                if (!err) {
+                    deferred.resolve({
+                        _id: user._id,
+                        email: user.email,
+                        userType: user.userType,
+                        name: user.name,
+                        facebookid: user.facebookid,
+                        authToken: user.authToken,
+                        token: jwt.sign({ sub: user._id }, config.secret)
+                    });
+                } else {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+        }
+
+    })
+
+    return deferred.promise;
+}
+
 
 
 module.exports = service;

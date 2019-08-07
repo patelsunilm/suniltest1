@@ -37,6 +37,7 @@
             <tr>
               <th>Image</th>
               <th>Products name</th>
+              <th>Cat name</th>
               <th>Cost price</th>
               <th>Markup</th>
               <th>Selling price</th>
@@ -78,6 +79,29 @@
                 </mat-form-field>
 
               </td>
+           
+              <td>
+                <mat-form-field appearance="outline" >
+                    <!-- *ngIf="test != 'true'" -->
+                  <mat-label>Catlist</mat-label>
+                 
+                  <mat-select formControlName="productcategories" required>
+                    <mat-option>Select product new category list</mat-option>
+                    <!-- <button mat-button (click)="addnewcategory(i)" >add product category</button> -->
+                    <mat-option *ngFor="let procatname of catName" [value]="procatname._id">
+                        {{procatname.catName}}
+                    </mat-option>
+                   
+                </mat-select>
+              </mat-form-field>
+
+              <!-- <mat-form-field  appearance="outline" *ngIf="test == 'true'">
+                <mat-label>product name</mat-label>
+                <input  formControlName="productcatname"   matInput>
+              </mat-form-field> -->
+
+              </td>
+           
               <td>
                 <mat-form-field appearance="outline">
                   <mat-label>cost price</mat-label>
@@ -130,9 +154,7 @@
                   <mat-error *ngIf="itemrow.get('date').hasError('required')">
                     Please enter date!
                   </mat-error>
-                  <!-- <mat-error *ngIf="itemrow.get('date').hasError('pattern')">
-                        Please enter valid date !
-                      </mat-error> -->
+                 
                 </mat-form-field>
 
               </td>
@@ -173,11 +195,8 @@
           <button (click)="toggleColours()" [disabled]="productForm.invalid" mat-raised-button="" color=""
             style="margin-top: 10px;">Submit
           </button>
-
         </div>
-
       </form>
-
     </div>
     <div class="add-row-btn">
 

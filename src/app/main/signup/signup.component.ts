@@ -94,12 +94,21 @@ export class SignupComponent implements OnInit {
 
   addsignupuser() {
 
-    this.registerForm.value.ipAddress = this.ipAddress;
+    this.registerForm.value.ipAddress = this.ipAddress == undefined ? '' :this.ipAddress;
     this.registerForm.value.status = false;
     this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
     this.registerForm.value.usertype = "Merchant";
-   
-   
+     
+    this.registerForm.value.cityid = '';
+    this.registerForm.value.stateid = '';
+    this.registerForm.value.countriid = '';
+    this.registerForm.value.categoryid = '';
+    this.registerForm.value.fontcolor = '';
+    this.registerForm.value.backgroundtheme = '';
+    this.registerForm.value.image = '';
+    
+  
+    
     this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
       data => {
 

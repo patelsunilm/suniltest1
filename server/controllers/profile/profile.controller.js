@@ -79,3 +79,21 @@ exports.getcity = function(req, res) {
         res.status(400).send(err);
     });  
 }
+
+
+exports.getuserprofile = function(req, res) {
+ 
+    
+    profileService.getuserprofile(req.body)
+ 
+    .then(function (userprofile) {
+        if (userprofile) {
+            res.send(userprofile);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+}

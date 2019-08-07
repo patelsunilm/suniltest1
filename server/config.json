@@ -1,5 +1,5 @@
 {
-    "DB_HOST": "localhost",
+    "DB_HOST": "ec2-52-30-169-168.eu-west-1.compute.amazonaws.com",
     "DB_User": "smafuser",
     "DB_Pass": "Smaf123!@#",
     "DB_PORT": "27017",

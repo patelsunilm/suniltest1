@@ -19,11 +19,14 @@ var path = require('path');
 const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
 
+var appuser = require('../server/controllers/Users/appusers.model');
+
 gm = require('gm');
 
 
-var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
-//var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+//var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+
 // Database options
 // Option auto_reconnect is defaulted to true
 var dbOptions = {
@@ -100,7 +103,7 @@ app.use(expressJwt({
   secret: config.secret,
   getToken: function (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-     
+
       return req.headers.authorization.split(' ')[1];
     } else if (req.query && req.query.token) {
       return req.query.token;
@@ -113,13 +116,15 @@ app.use(expressJwt({
     '/users/updateipaddress',
     '/users/addsignupuser',
     '/users/submitgoogledetails',
+    '/users/submitfacebookdetails',
     '/users/getmerchantcategories',
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
-   
-    '/users/sendotp',
-    '/users/matchotp'
 
+    '/users/sendotp',
+    '/users/matchotp',
+
+  
   ]
 }));
 
@@ -128,6 +133,8 @@ app.use(expressJwt({
 // routes
 app.use(routes);
 app.use('/users', require('./controllers/Users/users.controller'));
+
+
 
 app.use('/forgot-password-2', require('./controllers/forgot-password-2/forgot-password-2.controller'));
 
@@ -167,76 +174,77 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
-var file = req.files[0];
-var userid = req.body.uploads
+  var file = req.files[0];
+  var userid = req.body.uploads
 
-var originalFileName = file.originalname;
+  var originalFileName = file.originalname;
 
- const results = [];
+  const results = [];
 
 
- var strem =  fs.createReadStream('uploads/' + originalFileName , {headers : true})
-  .pipe(csv())
-  .on('data', (data) =>
-  results.push(data))
-  .on('end', () => {
-   
-    var arr1 = ['productname',
-    'costprice',
-    'markup',
-    'sellingprice',
-    'date',
-    'tilltype',
-    'stocklevel'];
-    var arr2 = results[0].headers;
-    
-    if (arr1.length == arr2.length
-        && arr1.every(function(u, i) {
-            return u === arr2[i];
+  var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
+    .pipe(csv())
+    .on('data', (data) =>
+      results.push(data))
+    .on('end', () => {
+
+      var arr1 = ['productname',
+        'costprice',
+        'markup',
+        'sellingprice',
+        'date',
+        'tilltype',
+        'stocklevel'];
+      var arr2 = results[0].headers;
+
+      if (arr1.length == arr2.length
+        && arr1.every(function (u, i) {
+          return u === arr2[i];
         })
-    ) {
-       
-       for (let i = 0; i < results.length; i++) {
-        var datetime = new Date(new Date).valueOf();
-        var randomnumber = Math.floor((Math.random() * 100) + 1);
-  
-        results[i].barcode = datetime + randomnumber
-        results[i].userid  = userid
-      }
+      ) {
 
-       products.insertMany(results,function (err, product) {
-        if (!err) {
-          
-            fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
-               if(err) {
-             
-               console.log(err);
-               } else {
-  
-  
+        for (let i = 0; i < results.length; i++) {
+          var datetime = new Date(new Date).valueOf();
+          var randomnumber = Math.floor((Math.random() * 100) + 1);
+
+          results[i].barcode = datetime + randomnumber
+          results[i].merchantid = userid
+        }
+              
+
+        products.insertMany(results, function (err, product) {
+          if (!err) {
+
+            fs.unlink('uploads/' + originalFileName, function (err, responce) {
+              if (err) {
+
+                console.log(err);
+              } else {
+
+
                 var data = {};
                 data.string = 'Csv import success fully';
-                 res.send(data);    
+                res.send(data);
               }
             })
           } else {
             console.log(err);
           }
         });
-    } else {
+      } else {
 
-      fs.unlink( 'uploads/' + originalFileName,function(err, responce) {
-        if(err) {
-      
-        console.log(err);
-        } else {
+        fs.unlink('uploads/' + originalFileName, function (err, responce) {
+          if (err) {
 
-         var data = {};
-         data.string = 'error';
-          res.send(data);    
-       }
-     })
-    }
+            console.log(err);
+          } else {
+
+            var data = {};
+            data.string = 'error';
+            res.send(data);
+          }
+        })
+      }
     });
 })
 
@@ -286,7 +294,7 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
           else {
 
             //s3data.push(resultdata.Location)
-            s3data.push({ 's3url': resultdata.Location, 'index':i });
+            s3data.push({ 's3url': resultdata.Location, 'index': i });
 
             if (s3data.length == uploadedfiles.length) {
               res.send(s3data);
@@ -295,6 +303,89 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
         })
       })
   }
+})
+
+
+
+
+
+app.post('/updateuserprofile', upload.any('uploads'), function (req, res) {
+  var s3data = [];
+  var uploadedfiles = req.files;
+    var s3 = new AWS.S3();
+
+    var sizeOf = require('image-size');
+    var dimensions = sizeOf(uploadedfiles[0].path);
+
+    var logowidth = 100;
+    var logoheight = 100;
+    sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+      // .flatten(true)
+      // .background('#F6F8FA')
+      // .embed()
+      .resize(logowidth, logoheight).toBuffer(function (err, data) {
+        var datetime = new Date(new Date).valueOf();
+        var randomnumber = Math.floor((Math.random() * 100) + 1);
+        var seperate = uploadedfiles[0].originalname;
+        var sep = seperate.split(".");
+
+        var params = {
+          'Bucket': 'smaf',
+          'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
+          'Body': data,
+          'ContentEncoding': 'base64',
+          ACL: 'public-read',
+          Metadata: {
+            'Content-Type': 'image/' + sep[1]
+          }
+        };
+
+        s3.upload(params, function (err, resultdata) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+          
+            appuser.findById(req.body.userid, function (err, getdata) {
+
+              if (!err) {
+
+                getdata.email = req.body.email
+                getdata.firstname = req.body.firstname;
+                getdata.lastname = req.body.lastname;
+                getdata.phone = req.body.phone;
+                getdata.image = resultdata.Location;
+
+                getdata.save(function (err) {
+                  if (!err) {
+
+                    var userprofile = {
+                      "status": "1",
+                      "message": "Success",
+                      "data":
+                        {}
+                    }
+
+                    res.send(userprofile);
+                  } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                  }
+                });
+
+              } else {
+
+                var userprofile = {
+                  "status": "0",
+                  "message": "No data found",
+                  "data":
+                    {}
+                }
+                res.send(userprofile);
+              }
+            });
+          }
+        })
+      })
 })
 
 

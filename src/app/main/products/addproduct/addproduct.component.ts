@@ -34,7 +34,8 @@ export class AddproductComponent implements OnInit {
   returnUrl: string;
   urls: Array<File> = [];
   filesToUpload: Array<File> = [];
-
+  catName : any;
+  test : any;
   constructor(private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
 
@@ -73,6 +74,20 @@ export class AddproductComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
+
+    this.ProductService.getAllProductcategories()
+    .subscribe(
+        data => {
+
+            this.catName = data;
+             
+        },
+        error => {
+            console.log(error);
+
+        });
+
+
   }
 
   get formArr() {
@@ -85,6 +100,8 @@ export class AddproductComponent implements OnInit {
     return this._fb.group({
       image: [''],
       productname: ['', Validators.required],
+      productcategories : ['' ,Validators.required],
+      productcatname : [''],
       costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       Markup: ['', Validators.required],
       sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
@@ -150,9 +167,6 @@ export class AddproductComponent implements OnInit {
 
   close(urls, event, index, i) {
 
-
-    
-
     urls.splice(i, 1);
     var temp = new Array<File>();
     for (var j = 0; j < this.filesToUpload.length; j++) {
@@ -167,6 +181,7 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
+
 
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
@@ -191,7 +206,8 @@ export class AddproductComponent implements OnInit {
          
           this.productForm.value.itemRows[i].image = data[i].s3url;
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
-          this.productForm.value.itemRows[i].userId = localStorage.getItem('userId');
+          this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
+      
         }
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
@@ -209,8 +225,21 @@ export class AddproductComponent implements OnInit {
           console.log(error);
 
         })
+
       })
 
     }
   }
+
+
+  // addnewcategory(i) {
+
+  //    console.log('i');
+  //    console.log(i);
+
+  //   this.test = 'true';
+  
+  // }
+
+  
 }

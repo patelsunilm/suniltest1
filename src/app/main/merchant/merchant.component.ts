@@ -71,13 +71,15 @@ export class MerchantComponent implements OnInit {
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {
-                    this.allmerchantdata = data;
-                    const merchantdata = data;
+                    this.allmerchantdata = data.data;
+                    const merchantdata = data.data;
                     const allmerchantdata = [];
                     merchantdata.forEach(element => {
+                          
 
+                        
                         allmerchantdata.push(element);
-
+ 
                     });
                     this.dataSource = new MatTableDataSource(allmerchantdata);
                     this.dataSource.paginator = this.paginator;
