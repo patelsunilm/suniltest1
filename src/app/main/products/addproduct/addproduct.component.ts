@@ -15,7 +15,10 @@ const PrimaryWhite = '#ffffff';
 const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer ,SafeHtml  } from '@angular/platform-browser';
+import $ from "jquery";
+import { template } from '@angular/core/src/render3';
+
 
 @Component({
   selector: 'app-addproduct',
@@ -36,7 +39,19 @@ export class AddproductComponent implements OnInit {
   filesToUpload: Array<File> = [];
   catName : any;
   test : any;
-  constructor(private route: ActivatedRoute, private router: Router
+  htmlContent : any;
+  htmlContent12 : any;
+   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
+  // private _inputpdf: string = '<input type="text">';
+
+  
+//   public get inputpdf()  {
+//     return this._sanitizer.bypassSecurityTrustHtml(this._inputpdf);
+//  }
+  
+
+
+  constructor(private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
 
 
@@ -80,7 +95,6 @@ export class AddproductComponent implements OnInit {
         data => {
 
             this.catName = data;
-             
         },
         error => {
             console.log(error);
@@ -114,7 +128,7 @@ export class AddproductComponent implements OnInit {
   addNewRow() {
 
     this.formArr.push(this.initItemRows());
-   
+     
   }
 
   deleteRow(indexs: number , urls) {
@@ -181,8 +195,6 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
-
-
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
@@ -210,6 +222,8 @@ export class AddproductComponent implements OnInit {
       
         }
 
+        
+
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
           this.snackBar.open('Product added successfully.', '', {
@@ -221,6 +235,10 @@ export class AddproductComponent implements OnInit {
 
           this.router.navigate([this.returnUrl]);
 
+
+
+
+          
         }, error => {
           console.log(error);
 
@@ -232,14 +250,70 @@ export class AddproductComponent implements OnInit {
   }
 
 
-  // addnewcategory(i) {
+  addnewcategory(i) {
 
-  //    console.log('i');
-  //    console.log(i);
+    this.test = 'true';
+    // console.log(this._sanitizer);
+    $("#div_"+i).hide();
+    
+    var a = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>'; 
+    // var b  = '<button type="button"  (click)="addproductcategories(i)">submit</button>'
+    // this.htmlContent = this._sanitizer.bypassSecurityTrustHtml(a);
+    
 
-  //   this.test = 'true';
+    document.getElementById(i).innerHTML = a;
+    //  document.getElementById(i).innerHTML = b;
+
+  }
+
+
+  addproductcategories(i) {
+    console.log('i')
+    console.log(i);
+   var catname = ($("#pro").val())
+
+   
+   this.ProductService.addproductcategories(catname)
+   .subscribe(
+       data => {
+
+         if(data.string == "Product Category is already exist.") {
+          this.snackBar.open('Product Category is already exist.', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+         } else {
+          this.snackBar.open('Product Category added successfully.', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+      
+          this.ProductService.getAllProductcategories()
+          .subscribe(
+              data => {
+      
+                  this.catName = data;
+                   
+                  
+              },
+              error => {
+                  console.log(error);
+      
+              });
+               this.test = 'false';
+               this.formArr.value[i].productcategories = "data._id";
   
-  // }
+         }
+            
+       },
+       error => {
+           console.log(error);
 
-  
+       });
+
+
+
+  }
 }

@@ -125,3 +125,42 @@ exports.getAllProductcategories = function(req, res) {
     
 
 }
+
+
+exports.getproducts = function(req, res) {
+   
+    productservice.getproducts(req.params.userid)
+   
+    .then(function (getproduct) {
+        if (getproduct) {
+            res.send(getproduct);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+}
+
+
+exports.addproductcategories = function(req , res) {
+
+  
+    productservice.addproductcategories(req.params.catname)
+    .then(function (addproductcategory) {
+
+        if (addproductcategory) {
+
+            res.send(addproductcategory);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
+}

@@ -26,6 +26,7 @@ router.post('/password/passwordmatch', passworddata.passwordmatch);
 var productsdata = require('./controllers/products/products.controller');
 
 router.post('/products/addproduct', productsdata.addproduct);
+router.get('/products/getproducts/:userid',productsdata.getproducts);
 router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
 router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
 router.post('/products/updateprodcutdetail', productsdata.updateprodcutdetail);
@@ -34,8 +35,9 @@ router.post('/products/getbarcodedetail' ,productsdata.getbarcodedetail);
 
 router.get('/products/getAllProductcategories' ,productsdata.getAllProductcategories);
 
+router.get('/products/addproductcategories/:catname' ,productsdata.addproductcategories);
 
-
+// /products/addproductcategories
 var merchentdata = require('./controllers/merchant/merchant.controller');
 router.get('/merchant/getallMerchentsData', merchentdata.getallMerchentsData);
 router.get('/merchant/getmerchantDatabyId/:merchantDataId', merchentdata.getmerchantDatabyId);

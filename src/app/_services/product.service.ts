@@ -17,11 +17,9 @@ export class ProductService {
 
   }
 
-  getAllproducts(userId) {
-    console.log('userid');
-    console.log(userId);
-
-    return this.http.post<any>(appConfig.apiUrl + '/products/getAllproducts' , userId)
+  getproducts(userId) {
+    
+    return this.http.get<any>(appConfig.apiUrl + '/products/getproducts/' + userId)
 
   }
 
@@ -84,6 +82,14 @@ export class ProductService {
 
     return this.http.get<any>(appConfig.apiUrl + '/products/getAllProductcategories')
 
+
+  }
+
+
+  addproductcategories(catname) {
+
+
+    return this.http.get<any>(appConfig.apiUrl + '/products/addproductcategories/' + catname);
 
   }
 

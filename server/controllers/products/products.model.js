@@ -6,6 +6,7 @@ var ProductsSchema = new Schema({
  
  
   id : ObjectId,
+  productcatid : ObjectId,
   image:String,
   productname: String,
   costprice: String,

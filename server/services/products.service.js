@@ -15,16 +15,24 @@ service.getallproductbyId = getallproductbyId;
 service.updateprodcutdetail = updateprodcutdetail;
 service.getbarcodedetail = getbarcodedetail;
 service.getAllProductcategories = getAllProductcategories;
+service.getproducts = getproducts;
+service.addproductcategories = addproductcategories;
+
+
 
 function addproduct(addproducts) {
+   
    
     var deferred = Q.defer();
     var ProductsData = [];
     for (let i = 0; i < addproducts.length; i++) {
         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
+        var productcatid = new mongoose.Types.ObjectId(addproducts[i].productcategories);
 
-        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId })
+        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId, 'productcatid':productcatid })
     }
+    
+   
 
     products.insertMany(ProductsData, function (err, product) {
         if (!err) {
@@ -224,6 +232,54 @@ function getAllProductcategories() {
     return deferred.promise;
 
 }
+
+
+function getproducts(merchantId) {
+
+
+var deferred = Q.defer();
+   
+products.find({merchantid : merchantId},function (err, getproductscategories) {
+    if (!err) {
+        deferred.resolve(getproductscategories);
+    } else {
+        deferred.reject(err.name + ': ' + err.message);
+    }
+}).sort({ dateadded: -1 });
+return deferred.promise;
+}
+
+function addproductcategories(catname) {
+
+    var deferred = Q.defer();
+    Productcategories.find({catName : catname}, function(err, getcategory){
+        if (getcategory.length > 0) {
+            var data = {};
+            data.string = 'Product Category is already exist.';
+            deferred.resolve(data);
+        } else {
+          var procat = new Productcategories({
+             catName : catname
+
+        });
+        procat.save(function (err, productcategory) {
+            if (!err) {
+                deferred.resolve(productcategory);
+            } else {
+               
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
+
+        }
+    })
+
+    return deferred.promise;
+    
+}
+
+
+
 module.exports = service;
 
 

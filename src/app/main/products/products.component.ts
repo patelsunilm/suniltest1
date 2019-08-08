@@ -59,7 +59,7 @@ export class ProductsComponent implements OnInit {
   }
   ngOnInit() {
     var userId = localStorage.getItem('userId');
-    this.ProductService.getAllproducts(userId)
+    this.ProductService.getproducts(userId)
       .subscribe(
         data => {
 
@@ -85,7 +85,7 @@ export class ProductsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       var userId = localStorage.getItem('userId');
 
-      this.ProductService.getAllproducts(userId)
+      this.ProductService.getproducts(userId)
         .subscribe(
           data => {
 
@@ -127,7 +127,7 @@ export class ProductsComponent implements OnInit {
           });
           var userId = localStorage.getItem('userId');
 
-          this.ProductService.getAllproducts(userId)
+          this.ProductService.getproducts(userId)
             .subscribe(
               data => {
 
