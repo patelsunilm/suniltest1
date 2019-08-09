@@ -252,27 +252,25 @@ export class AddproductComponent implements OnInit {
 
   addnewcategory(i) {
 
-    this.test = 'true';
-    // console.log(this._sanitizer);
     $("#div_"+i).hide();
     
-    var a = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>'; 
-    // var b  = '<button type="button"  (click)="addproductcategories(i)">submit</button>'
-    // this.htmlContent = this._sanitizer.bypassSecurityTrustHtml(a);
-    
+    $("#divshow_"+i).show();
 
-    document.getElementById(i).innerHTML = a;
+    
+     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat'+i+'">category name</mat-label><input matInput formControlName="productcatname" id="cat'+i+'"></mat-form-field>'; 
+      
+    document.getElementById(i).innerHTML = Categoryhtml;
     //  document.getElementById(i).innerHTML = b;
 
   }
 
 
   addproductcategories(i) {
-    console.log('i')
-    console.log(i);
-   var catname = ($("#pro").val())
+   
 
    
+   var catname = ($("#cat"+i).val())
+
    this.ProductService.addproductcategories(catname)
    .subscribe(
        data => {
@@ -290,20 +288,26 @@ export class AddproductComponent implements OnInit {
             verticalPosition: this.verticalPosition,
           });
       
-          this.ProductService.getAllProductcategories()
-          .subscribe(
-              data => {
-      
-                  this.catName = data;
-                   
-                  
-              },
-              error => {
-                  console.log(error);
-      
-              });
-               this.test = 'false';
-               this.formArr.value[i].productcategories = "data._id";
+              $("#divshow_"+i).hide();
+              $("#cat"+ i).hide();
+              $("#matcat"+ i).hide();
+              $("#div_"+i).show();
+              this.ProductService.getAllProductcategories()
+              .subscribe(
+                  data => {
+          
+                      this.catName = data;
+                        
+                      
+                  },
+                  error => {
+                      console.log(error);
+          
+                  });
+            
+               // console.log(this.catname)
+               //  this.test = 'false';
+              //  this.formArr.value[i].productcategories = "data._id";
   
          }
             
@@ -312,8 +316,5 @@ export class AddproductComponent implements OnInit {
            console.log(error);
 
        });
-
-
-
   }
 }

@@ -24,8 +24,8 @@ var appuser = require('../server/controllers/Users/appusers.model');
 gm = require('gm');
 
 
-//var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
-var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+//var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 
 
 // Database options
@@ -310,7 +310,7 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
 
 
-app.post('/updateuserprofile', upload.any('uploads'), function (req, res) {
+app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
   var uploadedfiles = req.files;
     var s3 = new AWS.S3();
@@ -369,7 +369,13 @@ app.post('/updateuserprofile', upload.any('uploads'), function (req, res) {
 
                     res.send(userprofile);
                   } else {
-                    deferred.reject(err.name + ': ' + err.message);
+                    var userprofile = {
+                      "status": "0",
+                      "message": "No data found",
+                      "data":
+                        {}
+                    }
+                    res.send(userprofile);
                   }
                 });
 

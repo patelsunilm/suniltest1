@@ -53,8 +53,8 @@ function addproduct(addproducts) {
 function getAllproducts(merchantId) {
         
 
-    var startPage = 2;
-    var pageLimit =  4;
+    var startPage = 0;
+    var pageLimit =  10;
     
     var deferred = Q.defer();
     products.find({ merchantid: merchantId }, function (err, getallproducts) {
