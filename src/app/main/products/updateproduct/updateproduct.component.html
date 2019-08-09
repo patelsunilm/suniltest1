@@ -41,7 +41,7 @@
             (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
           <div *ngIf="!urls[i]" class="remember-me" class="img-wrap">
 
-                    <img *ngIf="image"  [src]="image" style="width: 100px;height: 100px;padding: 5px;">
+            <img *ngIf="image" [src]="image" style="width: 100px;height: 100px;padding: 5px;">
 
           </div>
           <div class="remember-me" class="img-wrap">
@@ -56,10 +56,10 @@
             <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true"
               required>
             <mat-error *ngIf="form.get('productname').hasError('required')">
-              Please enter product name!
+              Please enter product!
             </mat-error>
             <mat-error *ngIf="form.get('productname').hasError('pattern')">
-              Please enter valid name!
+              Please enter valid product!
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">

@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(params => {
 
             if (this.filesToUpload.length > 0) {
-               
+
                 var data = this.filesToUpload.slice(-1);
                 this.ProfileService.uploadLogoImage(data)
                     .subscribe(data => {

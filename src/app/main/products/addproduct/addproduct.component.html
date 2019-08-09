@@ -44,7 +44,7 @@
               <th>Till type</th>
               <th>Stock level</th>
               <th></th>
-              
+
 
             </tr>
             <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
@@ -66,65 +66,65 @@
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>product name</mat-label>
+                  <mat-label>Product name</mat-label>
                   <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
 
                   <mat-error *ngIf="itemrow.get('productname').hasError('required')">
-                    Please enter product name!
+                    Please enter product!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('productname').hasError('pattern')">
-                    Please enter valid product name!
+                    Please enter valid product!
                   </mat-error>
                 </mat-form-field>
 
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>cost price</mat-label>
+                  <mat-label>Cost price</mat-label>
 
                   <input matInput formControlName="costprice" required>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
-                    Please enter costprice name!
+                    Please enter cost price!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
-                    Please enter valid costprice !
+                    Please enter valid cost price !
                   </mat-error>
                 </mat-form-field>
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>markup</mat-label>
+                  <mat-label> Markup</mat-label>
 
                   <input matInput formControlName="Markup" required>
                   <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
-                    Please enter Markup name!
+                    Please enter Markup!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('Markup').hasError('pattern')">
-                    Please enter valid Markup !
+                    Please enter valid Markup!
                   </mat-error>
                 </mat-form-field>
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>selling price</mat-label>
+                  <mat-label>Selling price</mat-label>
 
                   <input matInput formControlName="sellingprice" required>
 
                   <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
-                    Please enter sellingprice!
+                    Please enter selling price!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('sellingprice').hasError('pattern')">
-                    Please enter valid sellingprice !
+                    Please enter valid selling price!
                   </mat-error>
                 </mat-form-field>
               </td>
               <td>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>date</mat-label>
+                  <mat-label>Date</mat-label>
 
-                  <input required matInput formControlName="date"  [matDatepicker]="picker"
-                    placeholder="Choose a date" class="datepicker-add">
+                  <input required matInput formControlName="date" [matDatepicker]="picker" placeholder="Choose a date"
+                    class="datepicker-add">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker disabled="false"></mat-datepicker>
                   <mat-error *ngIf="itemrow.get('date').hasError('required')">
@@ -138,28 +138,28 @@
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>till type</mat-label>
+                  <mat-label>Till type</mat-label>
 
                   <input matInput formControlName="tilltype" required>
                   <mat-error *ngIf="itemrow.get('tilltype').hasError('required')"
                     pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$">
-                    Please enter tilltype!
+                    Please enter till type!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('tilltype').hasError('pattern')">
-                    Please enter valid tilltype !
+                    Please enter valid till type!
                   </mat-error>
                 </mat-form-field>
               </td>
               <td>
                 <mat-form-field appearance="outline">
-                  <mat-label>stock level</mat-label>
+                  <mat-label>Stock level</mat-label>
 
                   <input matInput formControlName="stocklevel" required>
                   <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
-                    Please enter stocklevel!
+                    Please enter stock level!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
-                    Please enter valid stocklevel !
+                    Please enter valid stock level!
                   </mat-error>
                 </mat-form-field>
               </td>
