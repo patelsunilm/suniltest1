@@ -5,7 +5,8 @@ var ObjectId = Schema.ObjectId;
 var ProductsSchema = new Schema({
  
  
-  userid : ObjectId,
+  id : ObjectId,
+  productcatid : ObjectId,
   image:String,
   productname: String,
   costprice: String,
@@ -14,7 +15,7 @@ var ProductsSchema = new Schema({
   date:Date,
   tilltype:String,
   stocklevel:String,
-  uniqueid : Number,
+  merchantid : String,
   image: String,
   barcode : String,
   dateadded: { type: Date, default: Date.now },

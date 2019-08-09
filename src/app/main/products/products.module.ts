@@ -25,6 +25,7 @@ import { UpdateproductComponent } from './updateproduct/updateproduct.component'
 import { NgxBarcodeModule } from 'ngx-barcode';
  import { NgxLoadingModule } from 'ngx-loading';
 
+ import {MatSelectModule} from '@angular/material/select';
 
 const routes = [
     {
@@ -83,6 +84,7 @@ const routes = [
         MatTableModule,
         MatDialogModule,
         NgxLoadingModule,
+        MatSelectModule,
         MatPaginatorModule,MatDatepickerModule,NgxBarcodeModule
     ]
 })

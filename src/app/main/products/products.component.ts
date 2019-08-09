@@ -50,6 +50,7 @@ export class ProductsComponent implements OnInit {
   }
   constructor(public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
   openDialog() {
+    
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -57,8 +58,8 @@ export class ProductsComponent implements OnInit {
     });
   }
   ngOnInit() {
-
-    this.ProductService.getAllproducts()
+    var userId = localStorage.getItem('userId');
+    this.ProductService.getproducts(userId)
       .subscribe(
         data => {
 
@@ -82,7 +83,9 @@ export class ProductsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ProductService.getAllproducts()
+      var userId = localStorage.getItem('userId');
+
+      this.ProductService.getproducts(userId)
         .subscribe(
           data => {
 
@@ -122,7 +125,9 @@ export class ProductsComponent implements OnInit {
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
-          this.ProductService.getAllproducts()
+          var userId = localStorage.getItem('userId');
+
+          this.ProductService.getproducts(userId)
             .subscribe(
               data => {
 

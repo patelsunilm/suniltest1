@@ -7,6 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 import { ColorPickerService, Cmyk } from 'ngx-color-picker';
 import * as $ from 'jquery';
+import { AuthenticationService } from '../../_services/index';
+import { id } from '@swimlane/ngx-charts/release/utils';
 
 @Component({
     selector: 'app-profile',
@@ -24,6 +26,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     filesToUpload: Array<File> = [];
     image: any;
     // Private
+    allcountries: any;
+    merchantcategories: any;
+    states: any;
+    citys: any;
+    a : any;
+    
     private _unsubscribeAll: Subject<any>;
 
 
@@ -74,6 +82,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         private router: Router,
         private ProfileService: ProfileService,
         public snackBar: MatSnackBar,
+        private AuthenticationService: AuthenticationService
     ) {
         // Set the private defaults
 
@@ -89,7 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
+  
         var user = JSON.parse(localStorage.getItem('currentUser'));
 
         this.form = this._formBuilder.group({
@@ -102,6 +111,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
             backgroundtheme: [''],
             fontcolor: [''],
             image: [''],
+            merchantcatname: ['', Validators.required],
+            countries: ['', Validators.required],
+            states: ['', Validators.required],
+            city: ['', Validators.required]
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
@@ -110,12 +123,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(params => {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
+                   
                     data => {
-
+                       
                         this.image = data.image
-
                         this.form = this._formBuilder.group({
-
                             name: [data.name],
                             email: [data.email],
                             address: [data.address],
@@ -125,18 +137,114 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             backgroundtheme: [data.backgroundtheme],
                             fontcolor: [data.fontcolor],
                             image: [this.image],
+                            merchantcatname: [data.merchantcatid],
+                            countries: [''],
+                            states: [''],
+                            city: ['']
 
                         });
+                 
+                        // this.ProfileService.getstates(data.countriid)
+                        // .subscribe(
+                        //     data => {
+        
+                        //         this.states = data
+        
+                        //     },
+                        //     error => {
+        
+                        //         console.log(error);
+                        //     });
+                 
+                        //     var num = data.stateid;
+                        //     var n = num.toString();
+                        //     this.ProfileService.getcity(n)
+                        //     .subscribe(
+                        //         data => {
+            
+                        //             this.citys = data;
+                                 
+                        //         },
+                        //         error => {
+            
+                        //             console.log(error);
+                        //         });
                     },
+                  
                     error => {
                         console.log(error);
 
                     });
-
         });
+
+        this.AuthenticationService.getmerchantcategories()
+            .subscribe(data => {
+
+                this.merchantcategories = data;
+           
+            },
+                error => {
+                    console.log(error);
+
+                });
+
+
+        this.ProfileService.getcountries()
+            .subscribe(data => {
+
+                this.allcountries = data;
+
+            },
+                error => {
+                    console.log(error);
+
+                });
+    }
+
+    selectcountries(stateid) {
+
+        if (stateid == undefined || stateid == 'undefined') {
+          
+
+        } else {
+         
+
+          this.form.controls['states'].setValue('')
+            this.ProfileService.getstates(stateid)
+                .subscribe(
+                    data => {
+                        this.states = data
+                    },
+                    error => {
+
+                        console.log(error);
+                    });
+        }
 
     }
 
+    selectstate(cityid) {
+
+        if (cityid == undefined || cityid == 'undefined') {
+
+        } else {
+
+            this.form.controls['city'].setValue('')
+
+            this.ProfileService.getcity(cityid)
+                .subscribe(
+                    data => {
+
+                        this.citys = data;
+
+                    },
+                    error => {
+
+                        console.log(error);
+                    });
+
+        }
+    }
 
     fileChangeEvent(fileInput: any, index) {
         var imagefiles = fileInput.target.files;
@@ -156,6 +264,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     updatemyprofile() {
 
+      
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 
@@ -169,6 +278,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
                         this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+
 
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(
@@ -253,7 +363,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             this.router.navigate([this.returnUrl]);
 
                         });
-
             }
 
         })

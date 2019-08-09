@@ -4,11 +4,20 @@ var bcrypt = require('bcryptjs');
 var Q = require('q');
 
 var mongoose = require('mongoose');
+
 var Users = require('../controllers/Users/users.model');// get our mongoose model
+var contries = require('../controllers/profile/countries.model');
+var states = require('../controllers/profile/states.model');
+var city = require('../controllers/profile/cities.model');
+var appuser = require('../controllers/Users/appusers.model');
 
 var service = {};
 service.getprofileInfo = getprofileInfo;
 service.updateprofile = updateprofile;
+service.getcountries = getcountries;
+service.getstates = getstates;
+service.getcity = getcity;
+service.getuserprofile = getuserprofile;
 
 
 function getprofileInfo(userId) {
@@ -92,6 +101,7 @@ function updateprofile(getprofiledata) {
                         Users.findById(getprofiledata._id, function (err, getdata) {
 
                             if (!err) {
+
                                 getdata.image = getprofiledata.image;
                                 getdata.name = getprofiledata.name;
                                 getdata.email = getprofiledata.email;
@@ -101,6 +111,11 @@ function updateprofile(getprofiledata) {
                                 getdata.secretanswer = getprofiledata.Secretanswer;
                                 getdata.backgroundtheme = getprofiledata.backgroundtheme;
                                 getdata.fontcolor = getprofiledata.fontcolor;
+
+                                getdata.merchantcatid = getprofiledata.merchantcatname
+                                getdata.countryid = getprofiledata.countries
+                                getdata.stateid = getprofiledata.states
+                                getdata.cityid = getprofiledata.city
                                 getdata.datemodified = Date.now();
 
                                 getdata.save(function (err) {
@@ -131,4 +146,103 @@ function updateprofile(getprofiledata) {
 }
 
 
+function getcountries() {
+
+    var deferred = Q.defer();
+
+    contries.find(function (err, contries) {
+        if (!err) {
+
+            deferred.resolve(contries);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+
+}
+
+
+function getstates(id) {
+    var deferred = Q.defer();
+    var countryid = parseInt(id);
+
+    states.find({ country_id: countryid }, function (err, data) {
+
+        if (!err) {
+
+            deferred.resolve(data);
+
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+}
+
+
+function getcity(id) {
+
+    var deferred = Q.defer();
+    var stateid = parseInt(id);
+
+    city.find({ state_id: stateid }, function (err, data) {
+
+        if (!err) {
+
+            deferred.resolve(data);
+
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+}
+
+
+function getuserprofile(profile) {
+
+
+    var deferred = Q.defer();
+    var appusersnodatafound =
+    {
+        "status": "0",
+        "message": "No data found.",
+        "data": {
+
+        }
+    }
+    appuser.findOne({ _id: profile.userid }, function (err, userdetail) {
+
+        if (!err) {
+
+            if (userdetail) {
+                var appuserdetails =
+                {
+                    "status": "1",
+                    "message": "Successful",
+                    "data": {
+                        "email": userdetail.email,
+                        "phone": userdetail.phone,
+                        "firstname": userdetail.firstname,
+                        "lastname": userdetail.lastname,
+                        "image": userdetail.image
+                    }
+                }
+                deferred.resolve(appuserdetails);
+            } else {
+
+                deferred.resolve(appusersnodatafound);
+            }
+
+        } else {
+
+            deferred.resolve(appusersnodatafound);
+        }
+    });
+    return deferred.promise;
+
+}
 module.exports = service;

@@ -54,7 +54,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'people'
             },
-
+            {
+                id: 'users',
+                title: 'Users',
+                url: '/users',
+                type: 'item',
+                icon: 'people'
+            },
             {
                 id: 'faq',
                 title: 'Feedback',
@@ -78,6 +84,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'shopping_cart'
             },
+            
             {
                 id: 'faq',
                 title: 'Feedback',
@@ -105,7 +112,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'people'
                         },
-
+                        {
+                            id: 'users',
+                            title: 'Users',
+                            url: '/users',
+                            type: 'item',
+                            icon: 'people'
+                        },
                         {
                             id: 'faq',
                             title: 'Feedback',

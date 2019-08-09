@@ -7,8 +7,16 @@ router.post('/addsignupuser', addsignupuser);
 router.post('/addsecretValuedata', addsecretValuedata)
 router.post('/updateipaddress', updateipaddress)
 router.post('/submitgoogledetails', submitgoogledetails);
+router.post('/submitfacebookdetails' , submitfacebookdetails);
 
-module.exports = router;
+router.post('/sendotp' ,sendotp);
+router.post('/matchotp' ,matchotp);
+router.get('/getmerchantcategories' , getmerchantcategories);
+
+ 
+
+
+ module.exports = router;
 
 function authenticate(req, res) {
 
@@ -93,4 +101,90 @@ function submitgoogledetails(req, res) {
 
             res.status(400).send(err);
         });
+}
+
+
+function sendotp(req, res) {
+  
+    userService.sendotp(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });
+}
+
+
+function matchotp(req , res) {
+    
+    userService.matchotp(req.body)
+  
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });
+}
+
+function getmerchantcategories(req, res) {
+   
+    userService.getmerchantcategories(req.body)
+  
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });  
+}
+
+
+function submitfacebookdetails(req, res) {
+  
+    userService.submitfacebookdetails(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });
+}
+
+
+exports.GetallUsersDetails = function(req , res) {
+
+    userService.GetallUsersDetails()
+    .then(function (getusersdata) {
+        if (getusersdata) {
+
+            res.send(getusersdata);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
 }

@@ -78,3 +78,18 @@ exports.deletemerchantData = function (req, res) {
         });
 
 }
+
+
+exports.getMerchentsbyId = function (req , res) {
+
+    merchentService.getMerchentsbyId(req.params.catid)
+    .then(function (data) {
+        res.json(data);
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
+}
+
+

@@ -6,7 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from '../../_services/index';
 import { MatPaginator, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
-import { GoogleLoginProvider, SocialUser, AuthService } from "angularx-social-login";
+import { GoogleLoginProvider,FacebookLoginProvider, SocialUser, AuthService } from "angularx-social-login";
 
 @Component({
     selector: 'login-2',
@@ -39,6 +39,7 @@ export class Login2Component implements OnInit {
         public snackBar: MatSnackBar,
         private http: HttpClient,
         private authService: AuthService,
+        private socialAuthService: AuthService
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -149,6 +150,58 @@ export class Login2Component implements OnInit {
 
     }
 
+    Facebooklogin() {
+   
+      
+    var  socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+
+    this.socialAuthService.signIn(socialPlatformProvider).then(
+        (userData) => {
+           
+            var facebookdata = userData
+            this.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
+    
+            var FacebookObj = {
+
+                facebookid: facebookdata.id,
+                name: facebookdata.name,
+                firstName: facebookdata.firstName,
+                lastName: facebookdata.lastName,
+                email: facebookdata.email,
+                authToken: facebookdata.authToken,
+                // idToken: this.user.idToken,
+                photoUrl: facebookdata.photoUrl,
+                provider: facebookdata.provider,
+                status: true,
+                uniqueid: this.uniqueid,
+                userType: "Merchant",
+            };
+
+           
+            this.AuthenticationService.submitfacebookdetails(FacebookObj)
+            .subscribe(data => {
+
+            
+              if (data.string == 'Admin could not access any social login.') {
+                this.snackBar.open('Admin could not access any social login.', '', {
+                    duration: 3000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+            } else {
+                if (localStorage.getItem('currentUser')) {
+                    this.router.navigate(['dashboard']);
+                }
+            }
+
+
+        },
+        error => {
+            console.log(error);
+        });
+           
+        });
+    }
 
     login() {
 

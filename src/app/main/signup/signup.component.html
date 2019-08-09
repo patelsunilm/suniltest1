@@ -102,12 +102,10 @@
         </mat-form-field>
 
         <!-- <mat-form-field appearance="outline">
-          <mat-label>Category list</mat-label>
-          <select matNativeControl required>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
+          <mat-label>Merchant Category list</mat-label>
+          <select matNativeControl required  formControlName="merchantcatname">
+            <option   *ngFor="let merchant of merchantcategories">{{merchant.merchantcatname}}</option>
+           
           </select>
         </mat-form-field> -->
 

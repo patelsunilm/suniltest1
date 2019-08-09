@@ -37,6 +37,7 @@
             <tr>
               <th>Image</th>
               <th>Products name</th>
+              <th>Cat name</th>
               <th>Cost price</th>
               <th>Markup</th>
               <th>Selling price</th>
@@ -57,8 +58,6 @@
                   (change)="fileChangeEvent($event,i)" placeholder="Upload a file..." multiple />
 
                 <div class="remember-me" class="img-wrap">
-
-
                   <span *ngIf="urls[i]" class="close" (click)="close(urls,$event,$index,i)">&times;</span>
                   <img *ngIf="urls[i]" [src]="urls[i]" style="width: 120px;height: auto;padding: 5px;">
 
@@ -77,6 +76,30 @@
                   </mat-error>
                 </mat-form-field>
 
+
+
+
+              </td>
+           
+              <td>
+                <mat-form-field appearance="outline" id="div_{{i}}"  >
+                  <mat-label>Catlist</mat-label>
+                 
+                  <mat-select  formControlName="productcategories" required>
+                    <mat-option>Select product new category list</mat-option>
+                    <button mat-button (click)="addnewcategory(i)" >add product category</button>
+                   
+                   
+                    <mat-option *ngFor="let procatname of catName" [value]="procatname._id">
+                        {{procatname.catName}}
+                    </mat-option>
+                 </mat-select>
+              
+                </mat-form-field>
+
+
+              <div id="{{i}}"></div>
+              <button style="display:none;"  id="divshow_{{i}}" type="button"  (click)="addproductcategories(i)">submit</button>
               </td>
               <td>
                 <mat-form-field appearance="outline">
@@ -130,9 +153,7 @@
                   <mat-error *ngIf="itemrow.get('date').hasError('required')">
                     Please enter date!
                   </mat-error>
-                  <!-- <mat-error *ngIf="itemrow.get('date').hasError('pattern')">
-                        Please enter valid date !
-                      </mat-error> -->
+                 
                 </mat-form-field>
 
               </td>
@@ -173,11 +194,8 @@
           <button (click)="toggleColours()" [disabled]="productForm.invalid" mat-raised-button="" color=""
             style="margin-top: 10px;">Submit
           </button>
-
         </div>
-
       </form>
-
     </div>
     <div class="add-row-btn">
 

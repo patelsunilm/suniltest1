@@ -6,3 +6,4 @@ export * from './password.service';
 export * from './merchant.service';
 export * from './faq.service';
 export * from './product.service';
+export * from './users.services';

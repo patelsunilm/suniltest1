@@ -19,11 +19,15 @@ var path = require('path');
 const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
 
+var appuser = require('../server/controllers/Users/appusers.model');
+
 gm = require('gm');
 
 
 var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 //var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+
+
 // Database options
 // Option auto_reconnect is defaulted to true
 var dbOptions = {
@@ -113,10 +117,15 @@ app.use(expressJwt({
     '/users/updateipaddress',
     '/users/addsignupuser',
     '/users/submitgoogledetails',
+    '/users/submitfacebookdetails',
+    '/users/getmerchantcategories',
     '/forgot-password-2/sendlink',
-    '/forgot-password-2/resetpassword', '/products/addcsvfile'
+    '/forgot-password-2/resetpassword', '/products/addcsvfile',
 
+    '/users/sendotp',
+    '/users/matchotp',
 
+  
   ]
 }));
 
@@ -125,6 +134,8 @@ app.use(expressJwt({
 // routes
 app.use(routes);
 app.use('/users', require('./controllers/Users/users.controller'));
+
+
 
 app.use('/forgot-password-2', require('./controllers/forgot-password-2/forgot-password-2.controller'));
 
@@ -146,9 +157,6 @@ AWS.config.region = "us-east-1";
 AWS.config.apiVersions = {
   "s3": "2012-10-17"
 }
-
-
-
 
 
 var storage = multer.diskStorage({
@@ -201,8 +209,9 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
           var randomnumber = Math.floor((Math.random() * 100) + 1);
 
           results[i].barcode = datetime + randomnumber
-          results[i].userid = userid
+          results[i].merchantid = userid
         }
+              
 
         products.insertMany(results, function (err, product) {
           if (!err) {
@@ -230,7 +239,6 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
             console.log(err);
           } else {
-
 
             var data = {};
             data.string = 'error';
@@ -296,6 +304,95 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
         })
       })
   }
+})
+
+
+
+
+
+app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
+  var s3data = [];
+  var uploadedfiles = req.files;
+    var s3 = new AWS.S3();
+
+    var sizeOf = require('image-size');
+    var dimensions = sizeOf(uploadedfiles[0].path);
+
+    var logowidth = 100;
+    var logoheight = 100;
+    sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+      // .flatten(true)
+      // .background('#F6F8FA')
+      // .embed()
+      .resize(logowidth, logoheight).toBuffer(function (err, data) {
+        var datetime = new Date(new Date).valueOf();
+        var randomnumber = Math.floor((Math.random() * 100) + 1);
+        var seperate = uploadedfiles[0].originalname;
+        var sep = seperate.split(".");
+
+        var params = {
+          'Bucket': 'smaf',
+          'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
+          'Body': data,
+          'ContentEncoding': 'base64',
+          ACL: 'public-read',
+          Metadata: {
+            'Content-Type': 'image/' + sep[1]
+          }
+        };
+
+        s3.upload(params, function (err, resultdata) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+          
+            appuser.findById(req.body.userid, function (err, getdata) {
+
+              if (!err) {
+
+                getdata.email = req.body.email
+                getdata.firstname = req.body.firstname;
+                getdata.lastname = req.body.lastname;
+                getdata.phone = req.body.phone;
+                getdata.image = resultdata.Location;
+
+                getdata.save(function (err) {
+                  if (!err) {
+
+                    var userprofile = {
+                      "status": "1",
+                      "message": "Success",
+                      "data":
+                        {}
+                    }
+
+                    res.send(userprofile);
+                  } else {
+                    var userprofile = {
+                      "status": "0",
+                      "message": "No data found",
+                      "data":
+                        {}
+                    }
+                    res.send(userprofile);
+                  }
+                });
+
+              } else {
+
+                var userprofile = {
+                  "status": "0",
+                  "message": "No data found",
+                  "data":
+                    {}
+                }
+                res.send(userprofile);
+              }
+            });
+          }
+        })
+      })
 })
 
 

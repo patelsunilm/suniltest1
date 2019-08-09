@@ -32,5 +32,10 @@ export class MerchantService {
         return this.http.delete<any>(appConfig.apiUrl + '/merchant/deletemerchantData/' + merchantDataId + '/' + userId + '/' + name)
     }
 
+    getMerchentsbyId(catid) {
 
+        return this.http.get<any>(appConfig.apiUrl + '/merchant/getMerchentsbyId/' + catid)
+
+
+    }
 }

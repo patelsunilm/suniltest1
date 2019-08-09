@@ -15,7 +15,10 @@ const PrimaryWhite = '#ffffff';
 const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer ,SafeHtml  } from '@angular/platform-browser';
+import $ from "jquery";
+import { template } from '@angular/core/src/render3';
+
 
 @Component({
   selector: 'app-addproduct',
@@ -34,8 +37,21 @@ export class AddproductComponent implements OnInit {
   returnUrl: string;
   urls: Array<File> = [];
   filesToUpload: Array<File> = [];
+  catName : any;
+  test : any;
+  htmlContent : any;
+  htmlContent12 : any;
+   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
+  // private _inputpdf: string = '<input type="text">';
 
-  constructor(private route: ActivatedRoute, private router: Router
+  
+//   public get inputpdf()  {
+//     return this._sanitizer.bypassSecurityTrustHtml(this._inputpdf);
+//  }
+  
+
+
+  constructor(private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
 
 
@@ -73,6 +89,19 @@ export class AddproductComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
+
+    this.ProductService.getAllProductcategories()
+    .subscribe(
+        data => {
+
+            this.catName = data;
+        },
+        error => {
+            console.log(error);
+
+        });
+
+
   }
 
   get formArr() {
@@ -85,6 +114,8 @@ export class AddproductComponent implements OnInit {
     return this._fb.group({
       image: [''],
       productname: ['', Validators.required],
+      productcategories : ['' ,Validators.required],
+      productcatname : [''],
       costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       Markup: ['', Validators.required],
       sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
@@ -97,6 +128,7 @@ export class AddproductComponent implements OnInit {
   addNewRow() {
     this.formArr.push(this.initItemRows());
 
+     
   }
 
   deleteRow(indexs: number, urls) {
@@ -121,6 +153,19 @@ export class AddproductComponent implements OnInit {
 
     var imagefiles = fileInput.target.files;
     if (fileInput.target.files && fileInput.target.files[0]) {
+     
+      var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
+
+      if (!(regex.test(fileInput.target.value.toLowerCase()))) {
+          fileInput.target.value = ''
+        this.snackBar.open('Please select correct file format', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+     
+      } else {
+     
       var filesAmount = fileInput.target.files.length;
 
       var testreader = new FileReader();
@@ -128,15 +173,13 @@ export class AddproductComponent implements OnInit {
         this.urls[index] = fileInput.target.result;
         this.filesToUpload.push(imagefiles[0]);
       }
-
       testreader.readAsDataURL(fileInput.target.files[0]);
+    }
+     
     }
   }
 
   close(urls, event, index, i) {
-
-
-
 
     urls.splice(i, 1);
     var temp = new Array<File>();
@@ -152,7 +195,6 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
-
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
@@ -176,8 +218,11 @@ export class AddproductComponent implements OnInit {
 
           this.productForm.value.itemRows[i].image = data[i].s3url;
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
-          this.productForm.value.itemRows[i].userId = localStorage.getItem('userId');
+          this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
+      
         }
+
+        
 
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
@@ -190,12 +235,86 @@ export class AddproductComponent implements OnInit {
 
           this.router.navigate([this.returnUrl]);
 
+
+
+
+          
         }, error => {
           console.log(error);
 
         })
+
       })
 
     }
+  }
+
+
+  addnewcategory(i) {
+
+    $("#div_"+i).hide();
+    
+    $("#divshow_"+i).show();
+
+    
+     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat'+i+'">category name</mat-label><input matInput formControlName="productcatname" id="cat'+i+'"></mat-form-field>'; 
+      
+    document.getElementById(i).innerHTML = Categoryhtml;
+    //  document.getElementById(i).innerHTML = b;
+
+  }
+
+
+  addproductcategories(i) {
+   
+
+   
+   var catname = ($("#cat"+i).val())
+
+   this.ProductService.addproductcategories(catname)
+   .subscribe(
+       data => {
+
+         if(data.string == "Product Category is already exist.") {
+          this.snackBar.open('Product Category is already exist.', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+         } else {
+          this.snackBar.open('Product Category added successfully.', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+      
+              $("#divshow_"+i).hide();
+              $("#cat"+ i).hide();
+              $("#matcat"+ i).hide();
+              $("#div_"+i).show();
+              this.ProductService.getAllProductcategories()
+              .subscribe(
+                  data => {
+          
+                      this.catName = data;
+                        
+                      
+                  },
+                  error => {
+                      console.log(error);
+          
+                  });
+            
+               // console.log(this.catname)
+               //  this.test = 'false';
+              //  this.formArr.value[i].productcategories = "data._id";
+  
+         }
+            
+       },
+       error => {
+           console.log(error);
+
+       });
   }
 }

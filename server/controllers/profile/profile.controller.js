@@ -32,3 +32,68 @@ exports.updateprofile = function (req, res) {
             res.status(400).send(err);
         });
 }
+
+
+exports.getcountries = function (req, res) {
+ 
+    profileService.getcountries(req.body)
+    .then(function (countries) {
+        if (countries) {
+            res.send(countries);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+exports.getstates = function(req, res) {
+   
+    profileService.getstates(req.params.stateid)
+    .then(function (states) {
+        if (states) {
+            res.send(states);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
+}
+
+exports.getcity = function(req, res) {
+   
+
+    profileService.getcity(req.params.cityid)
+    .then(function (city) {
+        if (city) {
+            res.send(city);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
+}
+
+
+exports.getuserprofile = function(req, res) {
+ 
+    
+    profileService.getuserprofile(req.body)
+ 
+    .then(function (userprofile) {
+        if (userprofile) {
+            res.send(userprofile);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+}

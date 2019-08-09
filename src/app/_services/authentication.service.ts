@@ -80,4 +80,34 @@ export class AuthenticationService {
 
     }
 
+
+    getmerchantcategories() {
+        
+
+        return this.http.get<any>(appConfig.apiUrl + '/users/getmerchantcategories')
+
+    }
+
+    submitfacebookdetails(facebookdata) {
+
+      
+        return this.http.post<any>(appConfig.apiUrl + '/users/submitfacebookdetails', facebookdata)
+        .map(user => {
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('userId', user._id);
+            localStorage.setItem('email', user.email);
+            localStorage.setItem('userType', user.userType);
+            localStorage.setItem('name', user.name);
+            localStorage.setItem('facebookid', user.facebookid);
+            localStorage.setItem('authToken', user.authToken);
+              // localStorage.setItem('myprofilelogoimage', user.photoUrl);
+            localStorage.setItem('token', user.token);
+
+            return user;
+        
+        });  
+    }
+
+
 }

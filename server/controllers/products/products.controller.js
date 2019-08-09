@@ -26,12 +26,12 @@ exports.addproduct = function(req, res) {
 
 }
 
-exports.getAllproducts = function(req, res) {
-   
- 
-    productservice.getAllproducts(req.params.userId)
-    .then(function (getproductdata) {
 
+exports.getAllproducts = function(req, res) {
+
+ 
+    productservice.getAllproducts(req.body.merchantid)
+    .then(function (getproductdata) {
         if (getproductdata) {
 
             res.send(getproductdata);
@@ -88,4 +88,79 @@ exports.updateprodcutdetail = function(req, res) {
     .catch(function (err) {
         res.status(400).send(err);
     });
+}
+
+
+exports.getbarcodedetail = function(req, res) {
+
+    productservice.getbarcodedetail(req.body)
+   
+    .then(function (getproduct) {
+        if (getproduct) {
+            res.send(getproduct);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
+}
+
+exports.getAllProductcategories = function(req, res) {
+
+    productservice.getAllProductcategories()
+   
+    .then(function (getproduct) {
+        if (getproduct) {
+            res.send(getproduct);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+    
+
+}
+
+
+exports.getproducts = function(req, res) {
+   
+    productservice.getproducts(req.params.userid)
+   
+    .then(function (getproduct) {
+        if (getproduct) {
+            res.send(getproduct);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+}
+
+
+exports.addproductcategories = function(req , res) {
+
+  
+    productservice.addproductcategories(req.params.catname)
+    .then(function (addproductcategory) {
+
+        if (addproductcategory) {
+
+            res.send(addproductcategory);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
 }

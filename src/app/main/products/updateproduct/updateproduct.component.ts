@@ -94,7 +94,7 @@ export class UpdateproductComponent implements OnInit {
 
 close(urls, event, index, i) {
 
-  console.log('test123');
+ 
 
   urls.splice(i, 1);
   var temp = new Array<File>();
@@ -115,10 +115,10 @@ if(this.filesToUpload.length > 0) {
   
   
   var data = this.filesToUpload.slice(-1);
+
   this.ProductService.updateproductgallery(data).subscribe(data => {
    
  this.form.value.image = data[0].s3url
-
 
 this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
  

@@ -39,6 +39,8 @@ import { ProfileService } from './_services/index';
 import { ChangePasswordService } from './_services/index';
 import { ProductService } from './_services/index'
 import { MerchantService } from './_services/index';
+import { UsersService } from './_services/index';
+
 import { FAQService } from './_services/index';
 
 
@@ -46,6 +48,8 @@ import { FAQService } from './_services/index';
 import { SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
+import { UsersModule } from 'app/main/users/users.module';
+
 
 const appRoutes: Routes = [
     {
@@ -86,7 +90,8 @@ const appRoutes: Routes = [
         ResetPasswordModule,
         MerchantModule,
         ProductsModule,
-        FaqModule
+        FaqModule,
+        UsersModule
 
     ], providers: [
 
@@ -102,7 +107,8 @@ const appRoutes: Routes = [
         FAQService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
-        ProductService
+        ProductService,
+        UsersService
     ],
     bootstrap: [
         AppComponent

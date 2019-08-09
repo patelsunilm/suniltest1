@@ -33,5 +33,23 @@ export class ProfileService {
         return this.http.post<any>(appConfig.apiUrl + '/profile/updateprofile', profiledata)
     }
 
+    getcountries() {
 
+        return this.http.get<any>(appConfig.apiUrl + '/profile/getcountries')
+
+    }
+
+   
+    getstates(stateid) {
+      
+        return this.http.get<any>(appConfig.apiUrl + '/profile/getstates/' +  stateid)
+
+    }
+
+ 
+    getcity(cityid) {
+
+        return this.http.get<any>(appConfig.apiUrl + '/profile/getcity/' +  cityid)
+
+    }
 }
