@@ -8,7 +8,6 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { DashbordService } from '../../_services/index';
 
 
-
 @Component({
     selector: 'dashboard',
     templateUrl: './dashboard.component.html',
@@ -17,7 +16,7 @@ import { DashbordService } from '../../_services/index';
     animations: fuseAnimations
 })
 export class DashboardComponent implements OnInit {
-  
+
     countPackages: any;
     countDomains: any;
     countCompanies: any;
@@ -35,6 +34,9 @@ export class DashboardComponent implements OnInit {
     widget8: any = {};
     widget9: any = {};
     widget11: any = {};
+
+    admin: any;
+    Merchant: any;
 
     dateNow = Date.now();
 
@@ -162,31 +164,9 @@ export class DashboardComponent implements OnInit {
      */
 
     ngOnInit() {
-  
-        // this.DashbordService.getAllcountsproducts()
-        // .subscribe(
-        //     data => {
 
-        //         this.countPackages = JSON.stringify(data.Packages);
-
-        //     },
-        //     error => {
-        //         console.log(error);
-
-        //     });       
-
-        //     this.DashbordService.getAllcountfaqs()
-        //     .subscribe(
-        //         data => {
-    
-        //             this.countPackages = JSON.stringify(data.Packages);
-    
-        //         },
-        //         error => {
-        //             console.log(error);
-    
-        //         });  
-
+        this.admin = localStorage.getItem('userType') == 'admin';
+        this.Merchant = localStorage.getItem('userType') == 'Merchant';
     }
 
     // -----------------------------------------------------------------------------------------------------

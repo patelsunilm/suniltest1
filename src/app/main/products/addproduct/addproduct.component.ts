@@ -73,13 +73,13 @@ export class AddproductComponent implements OnInit {
     this.coloursEnabled = !this.coloursEnabled;
 
     if (this.coloursEnabled) {
-        this.primaryColour = PrimaryRed;
-        this.secondaryColour = SecondaryBlue;
+      this.primaryColour = PrimaryRed;
+      this.secondaryColour = SecondaryBlue;
     } else {
-        this.primaryColour = PrimaryWhite;
-        this.secondaryColour = SecondaryGrey;
+      this.primaryColour = PrimaryWhite;
+      this.secondaryColour = SecondaryGrey;
     }
-}
+  }
   ngOnInit() {
     this.productForm = this._fb.group({
       itemRows: this._fb.array([this.initItemRows(
@@ -126,26 +126,26 @@ export class AddproductComponent implements OnInit {
   }
 
   addNewRow() {
-
     this.formArr.push(this.initItemRows());
+
      
   }
 
-  deleteRow(indexs: number , urls) {
-    
-  
+  deleteRow(indexs: number, urls) {
+
+
     this.formArr.removeAt(indexs);
-     urls.splice(indexs, 1);
+    urls.splice(indexs, 1);
     var temp = new Array<File>();
     for (var j = 0; j < this.filesToUpload.length; j++) {
-      if (j != indexs) {        
+      if (j != indexs) {
         temp.push(this.filesToUpload[j]);
       }
     }
-    
+
     this.filesToUpload = temp;
   }
-  
+
 
 
 
@@ -184,11 +184,11 @@ export class AddproductComponent implements OnInit {
     urls.splice(i, 1);
     var temp = new Array<File>();
     for (var j = 0; j < this.filesToUpload.length; j++) {
-      if (j != i) {        
+      if (j != i) {
         temp.push(this.filesToUpload[j]);
       }
     }
-    
+
     this.filesToUpload = temp;
 
   }
@@ -198,7 +198,7 @@ export class AddproductComponent implements OnInit {
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
-      this.snackBar.open('Please select image', '', {
+      this.snackBar.open('Please select image.', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
@@ -215,7 +215,7 @@ export class AddproductComponent implements OnInit {
         for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
           var datetime = new Date(new Date).valueOf();
           var randomnumber = Math.floor((Math.random() * 100) + 1);
-         
+
           this.productForm.value.itemRows[i].image = data[i].s3url;
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
           this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');

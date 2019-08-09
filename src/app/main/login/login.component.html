@@ -69,10 +69,6 @@
                         Sign Up?
                     </a>
                 </div>
-                <!-- 
-                <div class="div3"> <img style="width: 50%; height: 50%;" (click)="Sociallogin()"
-                        src="assets/images/logos/google.png">
-                </div> -->
 
                 <button mat-raised-button color="accent" class="submit-button" aria-label="LOGIN"
                     [disabled]="loginForm.invalid">
@@ -81,9 +77,13 @@
 
             </form>
 
+            <div class="separator">
+                <span class="text">OR</span>
+            </div>
+
             <div fxLayout="column" fxLayoutAlign="start center">
 
-                <button mat-raised-button class="google" (click)="Sociallogin()">
+                <button mat-raised-button class="google" (click)="SocialloginGoogle()">
                     Log in with Google
                 </button>
                 <button mat-raised-button class="facebook" (click)="Facebooklogin()">
