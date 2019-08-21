@@ -69,6 +69,7 @@ router.delete('/appusers/deleteappuser/:userid', appusersdetails.deleteappuser);
 router.get('/appusers/getuserbyId/:userid', appusersdetails.getuserbyId);
 router.post('/appusers/updateuserdetails' , appusersdetails.updateuserdetails);
 
+router.post('/appusers/getCartDetails', appusersdetails.getCartDetails);
 router.post('/appusers/UserLogout' ,appusersdetails.UserLogout);
 
 

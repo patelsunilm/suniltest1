@@ -13,7 +13,7 @@ service.deleteappuser = deleteappuser;
 service.getuserbyId = getuserbyId;
 service.updateuserdetails = updateuserdetails;
 service.UserLogout = UserLogout;
-
+service.getCartDetails = getCartDetails;
 
 
 function GetallUsersDetails() {
@@ -126,4 +126,16 @@ function UserLogout(user) {
     return deferred.promise;
 
 }
+
+function getCartDetails(cartid) {
+    
+    console.log('details');
+    console.log(cartid);
+
+}
+
+
+
+
+
 module.exports = service;

@@ -69,6 +69,24 @@ exports.updateuserdetails = function(req, res) {
     });   
 }
 
+exports.getCartDetails = function(req, res) {
+   
+    appusersService.getCartDetails(req.body)
+   
+    .then(function (CartDetails) {
+        if (CartDetails) {
+            res.send(CartDetails);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+
+}
+
+
 
 exports.UserLogout = function(req, res) {
 
