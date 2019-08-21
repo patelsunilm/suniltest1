@@ -76,7 +76,7 @@ export class ForgotPassword2Component implements OnInit {
 
 
     sendforgotpasswordlink() {
-       
+
         this.ForgotPasswordService.sendlink(this.forgotPasswordForm.value)
             .subscribe(
                 data => {
@@ -88,7 +88,7 @@ export class ForgotPassword2Component implements OnInit {
                             verticalPosition: this.verticalPosition,
                         });
                     } else {
-                        
+
                         this.snackBar.open('Email send successfully.', '', {
                             duration: 3000,
                             horizontalPosition: this.horizontalPosition,

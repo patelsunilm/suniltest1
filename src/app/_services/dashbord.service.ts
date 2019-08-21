@@ -9,34 +9,39 @@ import { appConfig } from '../app.config';
 export class DashbordService {
 
   constructor(private http: HttpClient) { }
-  
+
 
 
   getAllcountfaqs() {
-     var userId = localStorage.getItem('userId');
-    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountfaqs/')
- 
+    var userId = localStorage.getItem('userId');
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountfaqs/' + userId)
+
   }
 
+  getAllcountproducts() {
+
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountproducts')
+
+  }
 
   getAllmerchantcounts() {
 
-   
-    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllmerchantcounts' )
- 
+
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllmerchantcounts')
+
   }
- 
- 
+
+
   getAllusercount() {
-    
-    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllusercount' )
+
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllusercount')
 
   }
 
 
   getAllcountfeedback() {
 
-    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountfeedback' )
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountfeedback')
 
   }
 }

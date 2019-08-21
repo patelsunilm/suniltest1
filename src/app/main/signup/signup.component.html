@@ -15,7 +15,8 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
-          <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
+          <input matInput formControlName="name" autofocus="true" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
+            required>
           <mat-error *ngIf="registerForm.get('name').hasError('required')">
             Please enter name!
           </mat-error>
@@ -47,11 +48,14 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Phone</mat-label>
-          <input matInput formControlName="phone" pattern="(?!^ +$)^.+$" required>
+          <input matInput formControlName="phone"
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            maxlength="10" minlength="10" pattern="[0-9]*" required>
           <mat-error *ngIf="registerForm.get('phone').hasError('required')">
             Please enter phone!
           </mat-error>
-          <mat-error *ngIf="registerForm.get('phone').hasError('pattern')">
+          <mat-error
+            *ngIf="registerForm.get('phone').hasError('pattern') || registerForm.get('phone').errors?.minlength">
             Please enter valid phone!
           </mat-error>
         </mat-form-field>
@@ -79,7 +83,7 @@
           </mat-error>
           <mat-error
             *ngIf="registerForm.get('password').hasError('pattern') || registerForm.get('password').errors?.minlength">
-            Please enter valid password!
+            Password must contain at least 6 characters!
           </mat-error>
 
         </mat-form-field>
@@ -112,7 +116,7 @@
 
         <button mat-raised-button color="accent" class="submit-button" aria-label="CREATE AN ACCOUNT"
           [disabled]="registerForm.invalid">
-          SIGNUP
+          Sign Up
         </button>
 
       </form>

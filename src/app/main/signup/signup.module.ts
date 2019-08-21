@@ -6,7 +6,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { SignupComponent } from 'app/main/signup/signup.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 const routes = [
     {
@@ -21,7 +21,7 @@ const routes = [
     ],
     imports: [
         RouterModule.forChild(routes),
-
+        AutofocusModule,
         MatButtonModule,
         MatCheckboxModule,
         MatFormFieldModule,

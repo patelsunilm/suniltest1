@@ -17,33 +17,33 @@ import { UsersService } from '../../_services/index';
   animations: fuseAnimations
 })
 export class UsersComponent implements OnInit {
-  displayedColumns: string[] = ['image', 'email', 'firstname', 'lastname', 'phone','action'];
+  displayedColumns: string[] = ['image', 'email', 'firstname', 'lastname', 'phone', 'action'];
   dataSource;
   form: FormGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  isTableHasData  = true;
-
+  isTableHasData = true;
+  isTableHasDataAgain = true;
   applyFilter(filterValue: any) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-      if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-      }
-      if(this.dataSource.filteredData.length > 0){
-         
-          this.isTableHasData = true;
-        } else {
-           
-          this.isTableHasData = false;
-        }
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+    if (this.dataSource.filteredData.length > 0) {
+
+      this.isTableHasData = true;
+    } else {
+
+      this.isTableHasData = false;
+    }
 
 
 
   }
-  constructor(public dialog: MatDialog, private UsersService : UsersService) { }
+  constructor(public dialog: MatDialog, private UsersService: UsersService) { }
 
   openDialog() {
-   
+
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -54,23 +54,30 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
 
     this.UsersService.GetallUsersDetails()
-            .subscribe(
-                data => {
-                   
-                    const users = data
-                    const allappusers = [];
-                    users.forEach(element => {
+      .subscribe(
+        data => {
 
-                        allappusers.push(element);
+          const users = data
+          const allappusers = [];
+          users.forEach(element => {
 
-                    });
-                    this.dataSource = new MatTableDataSource(allappusers);
-                    this.dataSource.paginator = this.paginator;
-                },
-                error => {
-                    console.log(error);
-                });
-   
+            allappusers.push(element);
+
+          });
+
+          if (allappusers.length > 0) {
+            this.dataSource = new MatTableDataSource(allappusers);
+            this.dataSource.paginator = this.paginator;
+            this.isTableHasDataAgain = true;
+          } else {
+            this.isTableHasDataAgain = false;
+          }
+
+        },
+        error => {
+          console.log(error);
+        });
+
   }
 
 
@@ -86,22 +93,27 @@ export class UsersComponent implements OnInit {
       var userId = localStorage.getItem('userId');
 
       this.UsersService.GetallUsersDetails()
-      .subscribe(
+        .subscribe(
           data => {
-             
-              const users = data
-              const allappusers = [];
-              users.forEach(element => {
 
-                  allappusers.push(element);
+            const users = data
+            const allappusers = [];
+            users.forEach(element => {
 
-              });
+              allappusers.push(element);
+
+            });
+            if (allappusers.length > 0) {
               this.dataSource = new MatTableDataSource(allappusers);
               this.dataSource.paginator = this.paginator;
+              this.isTableHasDataAgain = true;
+            } else {
+              this.isTableHasDataAgain = false;
+            }
           },
-       
+
           error => {
-              console.log(error);
+            console.log(error);
           });
 
     })
@@ -125,8 +137,8 @@ export class deleteproductPopupComponent {
     private route: ActivatedRoute,
     private router: Router,
     public snackBar: MatSnackBar,
-    private UsersService : UsersService
-    
+    private UsersService: UsersService
+
   ) {
 
 

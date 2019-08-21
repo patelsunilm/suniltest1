@@ -21,6 +21,7 @@ import { FAQService } from '../../_services/index';
 export class FaqComponent implements OnInit, OnDestroy {
     faqsvalue: any;
     merchantname: any;
+    mydatalength: any;
     Form: FormGroup;
     horizontalPosition: MatSnackBarHorizontalPosition = 'right';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -64,6 +65,7 @@ export class FaqComponent implements OnInit, OnDestroy {
 
                     this.faqsvalue = data
                     this.merchantname = data
+                    this.mydatalength = data.length
                 },
                 error => {
 

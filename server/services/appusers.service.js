@@ -21,7 +21,7 @@ function GetallUsersDetails() {
     var deferred = Q.defer();
 
     appuser.find(function (err, data) {
-
+    
         if (!err) {
             deferred.resolve(data);
         } else {
@@ -56,7 +56,7 @@ function deleteappuser(userid) {
 
 function getuserbyId(userid) {
     var deferred = Q.defer();
-  
+
     appuser.findOne({ _id: userid }, function (err, getuser) {
         if (!err) {
 
@@ -65,7 +65,7 @@ function getuserbyId(userid) {
             deferred.reject(err.name + ': ' + err.message);
         }
     }).sort({ dateadded: -1 });
-    
+
     return deferred.promise;
 
 }
@@ -76,31 +76,46 @@ function updateuserdetails(userdata) {
     var deferred = Q.defer();
 
     var id = new mongoose.Types.ObjectId(userdata.id);
-    appuser.findOneAndUpdate({ _id: id }, {
-        image: userdata.image,
-        email: userdata.email,
-        firstname: userdata.firstname,
-        lastname: userdata.lastname,
-        phone: userdata.phone,
-       
-    }, function (err, updateuserprofile) {
 
-        if (!err) {
-            deferred.resolve(updateuserprofile);
+    var email = new RegExp("^" + userdata.email + "$", "i")
+    appuser.find({ $and: [{ email: email }, { _id: { $ne: id } }] }, function (err, getappuserdata) {
+        if (getappuserdata.length > 0) {
+
+            var data = {};
+            data.string = 'Email is already exist.';
+            deferred.resolve(data);
+
         } else {
-            deferred.reject(err.name + ': ' + err.message);
+
+            appuser.findOneAndUpdate({ _id: id }, {
+                image: userdata.image,
+                email: userdata.email,
+                firstname: userdata.firstname,
+                lastname: userdata.lastname,
+                phone: userdata.phone,
+
+            }, function (err, updateuserprofile) {
+
+                if (!err) {
+                    deferred.resolve(updateuserprofile);
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            })
+
         }
     })
+
     return deferred.promise;
 }
 
 
 function UserLogout(user) {
-   
-   var deferred = Q.defer();
-   appuser.update({ _id:user.userId}, {
-        deviceToken : ""
-       
+
+    var deferred = Q.defer();
+    appuser.update({ _id: user.userId }, {
+        deviceToken: ""
+
     }, function (err, updateuserprofile) {
         if (!err) {
 
@@ -110,8 +125,8 @@ function UserLogout(user) {
                 "data":
                     {}
             }
-           
-           
+
+
         } else {
 
             var userlogoutresponce = {
@@ -128,9 +143,7 @@ function UserLogout(user) {
 }
 
 function getCartDetails(cartid) {
-    
-    console.log('details');
-    console.log(cartid);
+
 
 }
 

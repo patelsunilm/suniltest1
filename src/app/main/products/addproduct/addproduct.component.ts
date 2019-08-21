@@ -313,7 +313,7 @@ export class AddproductComponent implements OnInit {
           
                   });
             
-               // console.log(this.catname)
+             
                //  this.test = 'false';
               //  this.formArr.value[i].productcategories = "data._id";
   

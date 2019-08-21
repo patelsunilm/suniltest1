@@ -30,7 +30,7 @@
 
                 <mat-form-field appearance="outline">
                     <mat-label>Email *</mat-label>
-                    <input matInput formControlName="email" pattern="[^' ']+" autofocus>
+                    <input matInput formControlName="email" pattern="[^' ']+" autofocus="true">
                     <mat-icon matSuffix class="secondary-text">mail</mat-icon>
                     <mat-error *ngIf="loginForm.get('email').hasError('required')">
                         Please enter email!

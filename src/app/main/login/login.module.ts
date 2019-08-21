@@ -10,8 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import { GoogleLoginProvider,FacebookLoginProvider } from "angularx-social-login";
-
+import { GoogleLoginProvider, FacebookLoginProvider } from "angularx-social-login";
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 let config = new AuthServiceConfig([
     {
@@ -22,7 +22,7 @@ let config = new AuthServiceConfig([
     {
         id: FacebookLoginProvider.PROVIDER_ID,
         provider: new FacebookLoginProvider("2408456992749842")
-      },
+    },
 ]);
 
 
@@ -51,7 +51,7 @@ const routes = [
     ],
     imports: [
         RouterModule.forChild(routes),
-
+        AutofocusModule,
         MatButtonModule,
         MatCheckboxModule,
         MatFormFieldModule,
@@ -61,7 +61,7 @@ const routes = [
         FuseSharedModule,
         MatDialogModule, HttpClientModule, BrowserModule,
         SocialLoginModule,
-        
+
     ],
     providers: [
         {
