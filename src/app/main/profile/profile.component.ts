@@ -192,7 +192,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.ProfileService.getcountries()
             .subscribe(data => {
 
-                this.allcountries = data;
+                this.allcountries = data.data;
 
             },
                 error => {
@@ -213,7 +213,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.ProfileService.getstates(stateid)
                 .subscribe(
                     data => {
-                        this.states = data
+
+                        
+                        this.states = data.data
                     },
                     error => {
 
@@ -235,7 +237,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 .subscribe(
                     data => {
 
-                        this.citys = data;
+                        this.citys = data.data
 
                     },
                     error => {
@@ -273,13 +275,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 var data = this.filesToUpload.slice(-1);
                 this.ProfileService.uploadLogoImage(data)
                     .subscribe(data => {
+                     
+                      
                         this.form.value.image = data[0].toString();
                         this.form.value._id = user._id;
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
-                        this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+                        // this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-
+                        this.form.value.backgroundtheme =   $('#backgroundthemecolor').val().replace(/rgb/g,"rgba");
+                          
+                        //    console.log('this form value forntcolor');
+                        //     console.log(this.form.value.fontcolor);
+                        //     console.log( this.form.value.backgroundtheme)
+                      
+                        // return false
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(
                                 data => {
@@ -325,7 +335,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.form.value.userType = user.userType;
                 this.form.value.fontcolor = $("#fontcolor").val()
                 this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
-
                 this.ProfileService.updateprofile(this.form.value)
                     .subscribe(
                         data => {

@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var StatesSchema = new Schema({
-
+    
+    id : Number,
     name: String,
     country_id: Number
 

@@ -78,18 +78,18 @@ export class ProductService {
 
   }
 
-  getAllProductcategories() {
+  getAllProductcategories(merchantId) {
 
-    return this.http.get<any>(appConfig.apiUrl + '/products/getAllProductcategories')
+    
+    
+    return this.http.post<any>(appConfig.apiUrl + '/products/getAllProductcategories' , { 'merchantId': merchantId} )
 
 
   }
 
 
-  addproductcategories(catname) {
-
-
-    return this.http.get<any>(appConfig.apiUrl + '/products/addproductcategories/' + catname);
+  addproductcategories(catname ,merchantId) {
+    return this.http.get<any>(appConfig.apiUrl + '/products/addproductcategories/' + catname + '/' + merchantId);
 
   }
 

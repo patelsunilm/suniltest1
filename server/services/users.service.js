@@ -26,6 +26,7 @@ service.matchotp = matchotp;
 service.getmerchantcategories = getmerchantcategories;
 service.submitfacebookdetails = submitfacebookdetails;
 
+service.lastvisitMerchant = lastvisitMerchant;
 
 
 var transporter = nodemailer.createTransport({
@@ -104,7 +105,7 @@ function addsignupuser(signupdata) {
 
     var deferred = Q.defer();
     var hashUserPassword = bcrypt.hashSync(signupdata.password, 10);
-  
+
 
     var saveallsignup = new Users({
 
@@ -120,14 +121,14 @@ function addsignupuser(signupdata) {
         uniqueid: signupdata.uniqueid,
         userType: signupdata.usertype,
         phone: signupdata.phone,
-        cityid :signupdata.cityid ,
-        stateid :signupdata.stateid ,
-        countryid :signupdata.countriid ,
-        categoryid :signupdata.categoryid,
-        fontcolor :signupdata.fontcolor,
-        backgroundtheme :signupdata.backgroundtheme,
-        image :signupdata.image,
-        
+        cityid: signupdata.cityid,
+        stateid: signupdata.stateid,
+        countryid: signupdata.countriid,
+        categoryid: signupdata.categoryid,
+        fontcolor: signupdata.fontcolor,
+        backgroundtheme: signupdata.backgroundtheme,
+        image: signupdata.image,
+
     });
 
     saveallsignup.save(function (err, saveallsignup) {
@@ -335,7 +336,7 @@ function sendotp(data) {
         appusers.find({ $and: [{ email: data.email }] }
             , function (err, user) {
                 if (err) {
-                      
+
                     console.log('err 1');
                     deferred.reject(err.name + ': ' + err.message);
                 } else {
@@ -357,11 +358,11 @@ function sendotp(data) {
 
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
-                                        console.log('mail send error'); 
+                                        console.log('mail send error');
                                         console.log(error);
-                                  
+
                                     } else {
-                                         
+
                                         console.log('sucess');
                                         deferred.resolve(userdata);
 
@@ -392,12 +393,12 @@ function sendotp(data) {
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
 
-                                        console.log('mail send error update'); 
+                                        console.log('mail send error update');
                                         console.log(error);
                                     } else {
                                         console.log('sucess update');
                                         deferred.resolve(userdata);
-                                  
+
                                     }
                                 });
                             }
@@ -429,15 +430,16 @@ function sendotp(data) {
 
 function matchotp(data) {
 
+   
     var deferred = Q.defer();
-    appusers.findOne({ "otp": data.otp }, function (err, user) {
+
+    appusers.findOne({ $and: [{ otp: data.otp }, { email: data.email }] }, function (err, user) {
         if (err) {
 
             deferred.reject(err.name + ': ' + err.message);
 
         } else {
-
-            if (user == null || user == 'user') {
+            if (user == null || user == 'user' || user == '') {
                 var userdata = {
                     "status": "0",
                     "message": "no data found",
@@ -446,40 +448,38 @@ function matchotp(data) {
                 }
 
             } else {
-               
+
                 var userdata =
                 {
                     "status": "1",
                     "message": "Successful",
                     "data": {
-                        "userid": user._id,
+                        "userId": user._id,
                         "email": user.email,
                         "phone": user.phone,
-                        "name": user.name,
-                        "firstname": user.firstname,
-                        "lastname": user.lastname,
-                        "image": user.image
+                        "firstName": user.firstname,
+                        "lastnName": user.lastname,
+                        "image": user.image,
+                        "lastMerchantId": user.lastMerchantId == undefined ? '' : user.lastMerchantId
+
+
                     }
                 }
+
                 appusers.findOneAndUpdate({ _id: user._id }, {
-    
+
                     deviceToken: data.DeviceToken == undefined ? '' : data.DeviceToken,
                     deviceType: data.DeviceType == undefined ? '' : data.DeviceType
 
                 }, function (err, data) {
                     if (err) {
-
-
                         deferred.reject(err);
-
-                    } 
+                    }
                     return deferred.promise;
                 })
-
             }
             deferred.resolve(userdata);
         }
-
     })
 
     return deferred.promise;
@@ -557,7 +557,6 @@ function submitfacebookdetails(facebookdata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
-                    console.log(err);
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
@@ -569,5 +568,65 @@ function submitfacebookdetails(facebookdata) {
 }
 
 
+function lastvisitMerchant(data) {
+
+    var deferred = Q.defer();
+    var userdata1 = {
+        "status": "0",
+        "message": "no data found",
+        "data":
+            {}
+    }
+
+appusers.findOne({lastMerchantId :data.merchantId }, function(err , Merchant){
+    if (!err) { 
+
+     
+        appusers.findOneAndUpdate({ _id: data.userId }, { $set: { lastMerchantId: data.merchantId } }, function (err, user) {
+        if (!err) {
+            if (user == null) {
+                
+                deferred.resolve(userdata1);
+            } else {
+            
+            
+                var userdata =
+                {
+                    "status": "1",
+                    "message": "Successful",
+                    "data": {
+                    }
+                }
+                deferred.resolve(userdata);
+            }
+           
+        } else {
+          
+            var userdata1 = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+            
+            deferred.resolve(userdata1);
+        }
+    })
+    } else {
+ 
+       
+        var userdata1 = {
+            "status": "0",
+            "message": "no data found",
+            "data":
+                {}
+        }
+        deferred.resolve(userdata1);
+    }
+    
+})
+
+    return deferred.promise;
+}
 
 module.exports = service;

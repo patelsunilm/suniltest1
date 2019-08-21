@@ -6,7 +6,7 @@ var Q = require('q');
 var mongoose = require('mongoose');
 
 var Users = require('../controllers/Users/users.model');// get our mongoose model
-var contries = require('../controllers/profile/countries.model');
+var countries = require('../controllers/profile/countries.model');
 var states = require('../controllers/profile/states.model');
 var city = require('../controllers/profile/cities.model');
 var appuser = require('../controllers/Users/appusers.model');
@@ -150,10 +150,42 @@ function getcountries() {
 
     var deferred = Q.defer();
 
-    contries.find(function (err, contries) {
+    countries.find(function (err, countriesresults) {
         if (!err) {
+            if (countriesresults) {
 
-            deferred.resolve(contries);
+                var allcountries = [];
+                countriesresults.forEach(element => {
+
+                    var productcat = {}
+                    productcat.countrieName = element.name;
+                    productcat.countrieId = element.id
+                    allcountries.push(productcat);
+
+                });
+
+                var contriesdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allcountries
+                }
+
+
+            } else {
+
+                var contriesdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+
+            }
+
+            deferred.resolve(contriesdetails);
+
+
         } else {
             deferred.reject(err.name + ': ' + err.message);
         }
@@ -167,12 +199,38 @@ function getstates(id) {
     var deferred = Q.defer();
     var countryid = parseInt(id);
 
-    states.find({ country_id: countryid }, function (err, data) {
+    states.find({ country_id: countryid }, function (err, stateresults) {
 
         if (!err) {
 
-            deferred.resolve(data);
+            if (stateresults == '') {
+                var statesdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
 
+            } else {
+                var allstate = [];
+                stateresults.forEach(element => {
+
+                    var states = {}
+                    states.stateId = element.id;
+                    states.stateName = element.name
+                    allstate.push(states);
+
+                });
+
+                var statesdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allstate
+                }
+
+            }
+            deferred.resolve(statesdetails);
         } else {
 
             deferred.reject(err.name + ': ' + err.message);
@@ -187,13 +245,42 @@ function getcity(id) {
     var deferred = Q.defer();
     var stateid = parseInt(id);
 
-    city.find({ state_id: stateid }, function (err, data) {
+
+
+    city.find({ state_id: stateid }, function (err, cityresults) {
 
         if (!err) {
 
-            deferred.resolve(data);
+            if (cityresults == '') {
+                var citydetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+            } else {
+                var allcity = [];
+                cityresults.forEach(element => {
+                    var citys = {}
+                    citys.cityId = element.id;
+                    citys.cityName = element.name
+                    allcity.push(citys);
+
+                });
+
+                var citydetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allcity
+                }
+
+            }
+
+            deferred.resolve(citydetails);
 
         } else {
+
 
             deferred.reject(err.name + ': ' + err.message);
         }

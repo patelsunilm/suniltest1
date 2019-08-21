@@ -17,15 +17,14 @@ import { DashbordService } from '../../_services/index';
 })
 export class DashboardComponent implements OnInit {
 
-    countPackages: any;
-    countDomains: any;
-    countCompanies: any;
-    countReseller: any;
-    countUpdates: any;
-    countProducts: any;
-    countSubscriber: any;
+    countfeedback: any;
+    countmerchant: any;
+    countappusers: any;
+    
     projects: any[];
     selectedProject: any;
+
+
 
     widgets: any;
     widget5: any = {};
@@ -167,6 +166,63 @@ export class DashboardComponent implements OnInit {
 
         this.admin = localStorage.getItem('userType') == 'admin';
         this.Merchant = localStorage.getItem('userType') == 'Merchant';
+  
+    
+        this.DashbordService.getAllcountfeedback()
+        .subscribe(
+            data => {
+
+           this.countfeedback = JSON.stringify(data.feedback);
+           console.log('count feed back') 
+           console.log(this.countfeedback)
+           
+        
+
+            },
+            error => {
+                console.log(error);
+
+            });
+       
+        this.DashbordService.getAllmerchantcounts()
+        .subscribe(
+            data => {
+                   this.countmerchant = JSON.stringify(data.merchantcount);
+                    
+            },
+            error => {
+                console.log(error);
+
+            });
+
+         this.DashbordService.getAllusercount()
+        .subscribe(
+            data => {
+
+               this.countappusers = JSON.stringify(data.usercount);
+
+
+               
+            },
+            error => {
+                console.log(error);
+
+            });
+
+
+        //  this.DashbordService.getAllusercount()
+        // .subscribe(
+        //     data => {
+
+        //         // this.countPackages = JSON.stringify(data.Packages);
+
+        //     },
+        //     error => {
+        //         console.log(error);
+
+        //     });
+
+  
     }
 
     // -----------------------------------------------------------------------------------------------------

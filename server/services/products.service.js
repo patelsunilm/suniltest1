@@ -5,7 +5,13 @@ var Q = require('q');
 
 var mongoose = require('mongoose');
 var products = require('../controllers/products/products.model');// get our mongoose model
-var Productcategories = require('../controllers/products/productcategories.model'); 
+var Productcategories = require('../controllers/products/productcategories.model');
+var cartdetails = require('../controllers/products/cartdetails.model');
+
+
+var appuser = require('../controllers/Users/appusers.model');
+
+
 var service = {};
 
 service.addproduct = addproduct;
@@ -17,22 +23,22 @@ service.getbarcodedetail = getbarcodedetail;
 service.getAllProductcategories = getAllProductcategories;
 service.getproducts = getproducts;
 service.addproductcategories = addproductcategories;
-
-
+service.addtocart = addtocart;
+service.RemoveCart = RemoveCart;
 
 function addproduct(addproducts) {
-   
-   
+
+
     var deferred = Q.defer();
     var ProductsData = [];
     for (let i = 0; i < addproducts.length; i++) {
         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
         var productcatid = new mongoose.Types.ObjectId(addproducts[i].productcategories);
 
-        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId, 'productcatid':productcatid })
+        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId, 'productcatid': productcatid })
     }
-    
-   
+
+
 
     products.insertMany(ProductsData, function (err, product) {
         if (!err) {
@@ -51,11 +57,11 @@ function addproduct(addproducts) {
 
 
 function getAllproducts(merchantId) {
-        
 
-    var startPage = 0;
-    var pageLimit =  10;
-    
+
+    var startLimit = 0;
+    var endLimit = 10;
+
     var deferred = Q.defer();
     products.find({ merchantid: merchantId }, function (err, getallproducts) {
         if (!err) {
@@ -77,14 +83,14 @@ function getAllproducts(merchantId) {
                     product.data = element.data;
                     product.merchantid = element.merchantid;
                     allproduct.push(product);
-                    
+
                 });
 
                 var productresponcedata = {
                     "status": "1",
                     "message": "Success",
                     "data":
-                    allproduct
+                        allproduct
                 }
             } else {
                 var productresponcedata = {
@@ -100,7 +106,7 @@ function getAllproducts(merchantId) {
 
             deferred.reject(err.name + ': ' + err.message);
         }
-    }).skip(startPage).limit(pageLimit)
+    }).skip(startLimit).limit(endLimit)
     return deferred.promise;
 
 }
@@ -172,30 +178,30 @@ function updateprodcutdetail(data) {
 function getbarcodedetail(id) {
 
     var deferred = Q.defer();
-   
-    
-    products.findOne({ barcode:id.barcode }, function (err, getproducts) {
+
+
+    products.findOne({ barcode: id.barcode }, function (err, getproducts) {
 
         if (!err) {
-            
-           
+
+
             if (getproducts) {
-              
+
                 var productresponcedata =
                 {
                     "status": "1",
                     "message": "Successful",
                     "data": {
-                        "productid" :getproducts._id,
+                        "productId": getproducts._id,
                         "image": getproducts.image,
-                        "productname": getproducts.productname,
-                        "costprice": getproducts.costprice,
+                        "productName": getproducts.productname,
+                        "costPrice": getproducts.costprice,
                         "markup": getproducts.markup,
-                        "sellingprice": getproducts.sellingprice,
-                        "tilltype": getproducts.tilltype,
-                        "stocklevel": getproducts.stocklevel,
-                         "merchantid" : getproducts.merchantid
-                         
+                        "sellingPrice": getproducts.sellingprice,
+                        "tillType": getproducts.tilltype,
+                        "stockLevel": getproducts.stocklevel,
+                        "merchantId": getproducts.merchantid
+
                     }
                 }
             } else {
@@ -219,14 +225,51 @@ function getbarcodedetail(id) {
 }
 
 
-function getAllProductcategories() {
+function getAllProductcategories(details) {
     var deferred = Q.defer();
-   
-    Productcategories.find(function (err, getproductscategories) {
+
+
+    Productcategories.find({ merchantId: details.merchantId }, function (err, getproductscategories) {
         if (!err) {
-            deferred.resolve(getproductscategories);
+            if (getproductscategories == '') {
+
+
+                var productresponcedata = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+
+            } else {
+                var allproductctegory = [];
+                getproductscategories.forEach(element => {
+
+                    var productcat = {}
+                    productcat.productCatId = element._id;
+                    productcat.catName = element.catName;
+
+
+                    allproductctegory.push(productcat);
+
+                });
+
+                var productresponcedata = {
+                    "status": "1",
+                    "message": "Success",
+                    "data":
+                        allproductctegory
+                }
+
+            }
+
+            deferred.resolve(productresponcedata);
+
+
         } else {
             deferred.reject(err.name + ': ' + err.message);
+
+
         }
     }).sort({ dateadded: -1 });
     return deferred.promise;
@@ -237,48 +280,254 @@ function getAllProductcategories() {
 function getproducts(merchantId) {
 
 
-var deferred = Q.defer();
-   
-products.find({merchantid : merchantId},function (err, getproductscategories) {
-    if (!err) {
-        deferred.resolve(getproductscategories);
-    } else {
-        deferred.reject(err.name + ': ' + err.message);
-    }
-}).sort({ dateadded: -1 });
-return deferred.promise;
+    var deferred = Q.defer();
+
+    products.find({ merchantid: merchantId }, function (err, getproductscategories) {
+        if (!err) {
+            deferred.resolve(getproductscategories);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    }).sort({ dateadded: -1 });
+    return deferred.promise;
 }
 
-function addproductcategories(catname) {
+function addproductcategories(catname, merchantId) {
 
     var deferred = Q.defer();
-    Productcategories.find({catName : catname}, function(err, getcategory){
+    var id = new mongoose.Types.ObjectId(merchantId);
+    Productcategories.find({ $and: [{ catName: catname }, { merchantId: id }] }, function (err, getcategory) {
         if (getcategory.length > 0) {
             var data = {};
             data.string = 'Product Category is already exist.';
             deferred.resolve(data);
         } else {
-          var procat = new Productcategories({
-             catName : catname
 
-        });
-        procat.save(function (err, productcategory) {
-            if (!err) {
-                deferred.resolve(productcategory);
-            } else {
-               
-                deferred.reject(err.name + ': ' + err.message);
-            }
-        });
+            var procat = new Productcategories({
+                catName: catname,
+                merchantId: id
+            });
+            procat.save(function (err, productcategory) {
+                if (!err) {
+                    deferred.resolve(productcategory);
+                } else {
+
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
 
         }
     })
 
     return deferred.promise;
-    
+
 }
 
 
+
+function addtocart(cart) {
+
+    var count = cart.count
+    var productresponcedata = {
+        "status": "0",
+        "message": "no data found",
+        "data":
+            {}
+    }
+    var deferred = Q.defer();
+    appuser.findOne({ _id: cart.userId }, function (err, User) {
+        if (!err) {
+
+            products.findOne({ _id: cart.productId }, function (err, getproductsdetails) {
+                if (!err) {
+
+                    var id = new mongoose.Types.ObjectId(cart.userId);
+                    cartdetails.findOne({
+                        userId: id
+
+                    }, function (err, cart) {
+                        if (!err) {
+
+                            if (cart == '' || cart == null || cart == 'null') {
+
+                                var cart = new cartdetails({
+                                    userId: User._id,
+                                    status: "pending",
+                                    productdetails: [{
+                                        productId: getproductsdetails._id,
+                                        quantity: count,
+                                        image: getproductsdetails.image,
+                                        productName: getproductsdetails.productname,
+                                        costPrice: getproductsdetails.costprice,
+                                        markUp: getproductsdetails.markup,
+                                        sellingPrice: getproductsdetails.sellingprice,
+                                        merchantId: getproductsdetails.merchantid,
+                                        barcode: getproductsdetails.barcode
+                                    }
+                                    ]
+                                });
+
+                                cart.save(function (err, cartdetails) {
+                                    if (!err) {
+                                        var cartsucessresponce = {
+                                            "status": "1",
+                                            "message": "Success",
+                                            "data":
+                                                {}
+                                        }
+                                        deferred.resolve(cartsucessresponce);
+                                    } else {
+
+                                        deferred.resolve(productresponcedata);
+
+                                    }
+
+                                });
+                            } else {
+                                var id = new mongoose.Types.ObjectId(getproductsdetails._id);
+                                var cartid = new mongoose.Types.ObjectId(cart._id);
+                                cartdetails.findOne(
+
+                                    { "_id": cartid },
+                                    { productdetails: { $elemMatch: { productId: id } } }
+                                    , function (err, carts) {
+                                        if (carts.productdetails == null || carts.productdetails == 'null' || carts.productdetails == '') {
+
+                                            var productData = [];
+                                            var i;
+                                            productData.push({ 'productId': getproductsdetails._id, 'image': getproductsdetails.image, 'productName': getproductsdetails.productname, 'costPrice': getproductsdetails.costprice, 'markUp': getproductsdetails.markup, 'sellingPrice': getproductsdetails.sellingprice, 'merchantId': getproductsdetails.merchantid, 'barcode': getproductsdetails.barcode, 'quantity': count })
+                                            cartdetails.findOneAndUpdate({
+                                                userId: User._id
+                                            },
+                                                {
+                                                    $push: {
+                                                        productdetails: productData
+                                                    },
+                                                }, function (err, responce) {
+                                                    if (err) {
+
+                                                        deferred.resolve(productresponcedata);
+
+                                                    } else {
+
+                                                        var cartsucessresponce = {
+                                                            "status": "1",
+                                                            "message": "Success",
+                                                            "data":
+                                                                {}
+                                                        }
+                                                        deferred.resolve(cartsucessresponce);
+                                                    }
+                                                })
+
+                                        } else {
+
+                                            var carid = new mongoose.Types.ObjectId(carts._id)
+                                            var procatid = new mongoose.Types.ObjectId(carts.productdetails[0]._id);
+
+                                            var quantity = count.toString();
+                                            cartdetails.updateOne(
+                                                { _id: carid, "productdetails._id": procatid },
+                                                { $set: { "productdetails.$.quantity": quantity } }
+                                                , function (err, cartdetailsupdates) {
+
+                                                    if (err) {
+
+                                                        deferred.resolve(cartresponcedata);
+
+                                                    } else {
+                                                        var cartsucessresponce = {
+                                                            "status": "1",
+                                                            "message": "Success",
+                                                            "data":
+                                                                {}
+                                                        }
+                                                        deferred.resolve(cartsucessresponce);
+                                                    }
+
+                                                });
+                                        }
+                                    })
+
+                            }
+                        } else {
+
+                            deferred.resolve(productresponcedata);
+                        }
+                    })
+                } else {
+
+                    deferred.resolve(productresponcedata);
+                }
+            })
+
+        } else {
+            deferred.resolve(productresponcedata);
+        }
+    })
+    return deferred.promise;
+}
+
+function RemoveCart(cart) {
+
+    var cartresponcedata = {
+        "status": "0",
+        "message": "no data found",
+        "data":
+            {}
+    }
+    var deferred = Q.defer();
+    cartdetails.updateOne({ userId: cart.userId },
+
+        { $pull: { productdetails: { productId: cart.productId } } },
+        { multi: true },
+        function (err, cartresults) {
+            if (!err) {
+                if (cartresults.nModified == 0) {
+                    
+                    deferred.resolve(cartresponcedata);
+
+                } else {
+                    var cartsucessresponce = {
+                        "status": "1",
+                        "message": "Success",
+                        "data":
+                            {}
+                    }
+
+                    cartdetails.find({ userId: cart.userId }, function (err, products) {
+                        if (!err) {
+                            if(products[0].productdetails.length == 0) {
+                               
+                                cartdetails.deleteOne(
+                                    { userId: cart.userId },
+                                    function (err) {
+                                        if (err) {
+                                          
+                                            deferred.reject(err.name + ': ' + err.message);
+                                        }
+                                        else {
+                                            
+                                            deferred.resolve();
+                                        }
+                                    });
+
+                            }
+                        } else {
+                            deferred.reject(err.name + ': ' + err.message);
+                        }
+                    });
+
+                    deferred.resolve(cartsucessresponce);
+                }
+            }
+            else {
+                deferred.resolve(cartresponcedata);
+            }
+        });
+
+    return deferred.promise;
+}
 
 module.exports = service;
 

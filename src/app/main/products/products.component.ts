@@ -101,22 +101,23 @@ export class ProductsComponent implements OnInit {
 
   fileEvent($event) {
 
-    var regex = new RegExp("(.*?)\.(csv)$");
-
+     var regex = new RegExp("(.*?)\.(csv)$");
+    
     if (!(regex.test($event.target.value.toLowerCase()))) {
+    
       $event.target.value = '';
       this.snackBar.open('Please select correct file format', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       });
+    
     } else {
 
     var userId =  localStorage.getItem('userId');
    
-    $event.target.files[0].userId =userId  
+    $event.target.files[0].userId = userId  
    
-    
     this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully") {
@@ -126,6 +127,8 @@ export class ProductsComponent implements OnInit {
             verticalPosition: this.verticalPosition,
           });
           var userId = localStorage.getItem('userId');
+
+
 
           this.ProductService.getproducts(userId)
             .subscribe(

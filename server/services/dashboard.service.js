@@ -6,46 +6,67 @@ var mongoose = require('mongoose');
 
 var products = require('../controllers/products/products.model');// get our mongoose model
 var faq = require('../controllers/faq/faq.model');
+var users = require('../controllers/Users/users.model');
+var appuser = require('../controllers/Users/appusers.model');
+
 
 var service = {};
 
-service.getAllcountsproducts = getAllcountsproducts;
-service.getAllcountfaqs = getAllcountfaqs;
+service.getAllusercount = getAllusercount;
+service.getAllcountfeedback = getAllcountfeedback;
+service.getAllmerchantcounts = getAllmerchantcounts;
 
 
-function getAllcountsproducts(userid) {
+function getAllusercount() {
+    
+
+    var deferred = Q.defer();
+    appuser.count(function (err, allappusers) {
+        if (!err) {
+
+            deferred.resolve(allappusers);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
 
 
-var deferred = Q.defer();
-var id = new mongoose.Types.ObjectId(userid);
-console.log('id');
-console.log(id);
-// products.count({ userid: id }, function (err, count) {
-//     if (!err) {
 
-//         deferred.resolve(count);
-//     } else {
-
-//         deferred.reject(err.name + ': ' + err.message);
-//     }
-// })
-// return deferred.promise;
 }
 
-function getAllcountfaqs(userid) {
+function getAllcountfeedback() {
+     
+    
+
+    var deferred = Q.defer();
+    faq.count(function (err, feedback) {
+        if (!err) {
+
+            deferred.resolve(feedback);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+
+}
+
+function getAllmerchantcounts() {
+    var deferred = Q.defer();
    
-    // var deferred = Q.defer();
-    // var id = new mongoose.Types.ObjectId(userid);
-    // faq.count({ userid: id }, function (err, count) {
-    //     if (!err) {
 
-    //         deferred.resolve(count);
-    //     } else {
+    users.count({ userType: 'Merchant' }, function (err, merchantcount) {
+        if (!err) {
 
-    //         deferred.reject(err.name + ': ' + err.message);
-    //     }
-    // })
-    // return deferred.promise;
+            deferred.resolve(merchantcount);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
 }
-
 module.exports = service;

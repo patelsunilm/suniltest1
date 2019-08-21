@@ -16,7 +16,6 @@ var ProductsSchema = new Schema({
   tilltype:String,
   stocklevel:String,
   merchantid : String,
-  image: String,
   barcode : String,
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }

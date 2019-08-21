@@ -4,42 +4,62 @@ var router = express.Router();
 var dashboardservice = require('./../../services/dashboard.service')
 
 
-exports.getAllcountsproducts = function(req, res) {
-   
- 
-    dashboardservice.getAllcountsproducts(req.params.userId)
-    .then(function (getproductdata) {
 
-        if (getproductdata) {
+exports.getAllusercount = function (req, res) {
+    
+    dashboardservice.getAllusercount(req.params.userId)
 
-            res.send(getproductdata);
-
+    .then(function (allcounts) {
+        if (allcounts) {
+     
+            res.send({ 'usercount': allcounts });
+           
         } else {
-
-            res.sendStatus(404);
+            res.send({ 'usercount': 0 });
         }
     })
     .catch(function (err) {
+        console.log(err);
         res.status(400).send(err);
     });
+
 }
 
-exports.getAllcountfaqs = function(req, res) {
-   
- 
-    dashboardservice.getAllcountfaqs(req.params.userId)
-    .then(function (getAllcountfaqs) {
+exports.getAllcountfeedback = function (req, res) {
+    
+    dashboardservice.getAllcountfeedback(req.params.userId)
 
-        if (getAllcountfaqs) {
-
-            res.send(getAllcountfaqs);
-
+    .then(function (allcounts) {
+        if (allcounts) {
+     
+            res.send({ 'feedback': allcounts });
+           
         } else {
-
-            res.sendStatus(404);
+            res.send({ 'feedback': 0 });
         }
     })
     .catch(function (err) {
+        console.log(err);
         res.status(400).send(err);
     });
+
+}
+exports.getAllmerchantcounts = function (req, res) {
+   
+    dashboardservice.getAllmerchantcounts(req.params.userId)
+
+    .then(function (allcounts) {
+        if (allcounts) {
+     
+            res.send({ 'merchantcount': allcounts });
+           
+        } else {
+            res.send({ 'merchantcount': 0 });
+        }
+    })
+    .catch(function (err) {
+        console.log(err);
+        res.status(400).send(err);
+    });
+
 }

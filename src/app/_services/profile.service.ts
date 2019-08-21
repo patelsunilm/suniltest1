@@ -40,16 +40,18 @@ export class ProfileService {
     }
 
    
-    getstates(stateid) {
+    getstates(countrieid) {
       
-        return this.http.get<any>(appConfig.apiUrl + '/profile/getstates/' +  stateid)
+
+        
+        return this.http.post<any>(appConfig.apiUrl + '/profile/getstates' ,  {'countrieId' : countrieid })
 
     }
 
  
-    getcity(cityid) {
+    getcity(stateid) {
 
-        return this.http.get<any>(appConfig.apiUrl + '/profile/getcity/' +  cityid)
+        return this.http.post<any>(appConfig.apiUrl + '/profile/getcity' , {'stateId' : stateid} )
 
     }
 }

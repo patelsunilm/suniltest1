@@ -14,18 +14,22 @@ var AWS = require('aws-sdk');
 var sharp = require('sharp');
 
 var Q = require('q');
+
 uploads = require("express-fileupload")
 var path = require('path');
+
 const csv = require('csv-parser')
 var products = require('../server/controllers/products/products.model');// get our mongoose model
 
 var appuser = require('../server/controllers/Users/appusers.model');
+var productcategory = require('../server/controllers/products/productcategories.model');
 
 gm = require('gm');
 
 
 //var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+
 
 
 // Database options
@@ -61,6 +65,7 @@ var connectWithRetry = function () {
     }
   });
 };
+
 
 connectWithRetry();
 var http = require('https');
@@ -118,14 +123,17 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/users/submitfacebookdetails',
+   
     '/users/getmerchantcategories',
+   
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
 
     '/users/sendotp',
     '/users/matchotp',
+   
+    '/users/lastvisitMerchant'
 
-  
   ]
 }));
 
@@ -175,6 +183,9 @@ var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
+
+
+
   var file = req.files[0];
   var userid = req.body.uploads
 
@@ -189,7 +200,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
       results.push(data))
     .on('end', () => {
 
-      var arr1 = ['productname',
+      var arr1 = ['productname', 'productcategory',
         'costprice',
         'markup',
         'sellingprice',
@@ -198,40 +209,130 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         'stocklevel'];
       var arr2 = results[0].headers;
 
-      if (arr1.length == arr2.length
-        && arr1.every(function (u, i) {
-          return u === arr2[i];
-        })
-      ) {
+      if (arr1.length == arr2.length && arr1.every(function (u, i) {
+        return u === arr2[i];
+      })) {
+
+        var allproducts = [];
 
         for (let i = 0; i < results.length; i++) {
+
+
           var datetime = new Date(new Date).valueOf();
           var randomnumber = Math.floor((Math.random() * 100) + 1);
 
           results[i].barcode = datetime + randomnumber
           results[i].merchantid = userid
-        }
+
+          // { $and: [{ catName: catname }, { merchantId: id }]}
+
+       productcategory.findOne({ $and: [{ catName: results[i].productcategory },{ merchantId: results[i].merchantid }]}, function (err, getcategory) {
+          if (getcategory) {
+           
+                results[i].productcatid = getcategory._id;
+      
+
+                console.log('test1 ');
+
+            } else {
               
+              var procat = new productcategory({
+                catName: results[i].productcategory,
+                merchantId : results[i].merchantid
 
-        products.insertMany(results, function (err, product) {
-          if (!err) {
+              });
+              
+              procat.save(function (err, productcategory) {
+                  if (!err) {
+                   
+                   
+                    console.log('new');
+                    results[i].productcatid = productcategory._id;
+                  
+                } else {
 
-            fs.unlink('uploads/' + originalFileName, function (err, responce) {
-              if (err) {
+                }
+               });
+                 
+            }
+          
+            console.log('res');
+          
+           if(results[i].productcatid) {
+           
+            console.log('pro'); 
+            console.log(results[i].productcatid);  
 
-                console.log(err);
-              } else {
+           }
 
-
+           return false
+            var allproducts = new products({
+              productname: results[i].productname,
+              productcatid: results[i].productcatid,
+              costprice: results[i].costprice,
+              markup: results[i].markup,
+              sellingprice: results[i].sellingprice,
+              date: results[i].date,
+              tilltype: results[i].tilltype,
+              stocklevel: results[i].stocklevel,
+              barcode: results[i].barcode,
+              merchantid: results[i].merchantid,
+             
+            });
+            
+             allproducts.save(function (err, product) {
+              if (!err) { 
+                
+                if((i+ 1) == results.length) {
+                   
                 var data = {};
                 data.string = 'Csv import success fully';
                 res.send(data);
+                   } 
+                    
+
+              } else {
+
               }
-            })
-          } else {
-            console.log(err);
-          }
-        });
+
+            });
+          
+          }) 
+        }
+
+       
+        // console.log('cat');
+        // console.log(results);
+
+        // console.log(productarray);
+        //  productcategory.find({catName : })
+
+
+
+        // productcategory
+
+
+        // products.insertMany(results, function (err, product) {
+        //   if (!err) {
+
+        //     fs.unlink('uploads/' + originalFileName, function (err, responce) {
+        //       if (err) {
+
+        //         console.log(err);
+        //       } else {
+
+
+        //         var data = {};
+        //         data.string = 'Csv import success fully';
+        //         res.send(data);
+        //       }
+        //     })
+        //   } else {
+        //     console.log(err);
+        //   }
+        // });
+
+
       } else {
 
         fs.unlink('uploads/' + originalFileName, function (err, responce) {
@@ -313,86 +414,86 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
   var uploadedfiles = req.files;
-    var s3 = new AWS.S3();
+  var s3 = new AWS.S3();
 
-    var sizeOf = require('image-size');
-    var dimensions = sizeOf(uploadedfiles[0].path);
+  var sizeOf = require('image-size');
+  var dimensions = sizeOf(uploadedfiles[0].path);
 
-    var logowidth = 100;
-    var logoheight = 100;
-    sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
-      // .flatten(true)
-      // .background('#F6F8FA')
-      // .embed()
-      .resize(logowidth, logoheight).toBuffer(function (err, data) {
-        var datetime = new Date(new Date).valueOf();
-        var randomnumber = Math.floor((Math.random() * 100) + 1);
-        var seperate = uploadedfiles[0].originalname;
-        var sep = seperate.split(".");
+  var logowidth = 100;
+  var logoheight = 100;
+  sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+    // .flatten(true)
+    // .background('#F6F8FA')
+    // .embed()
+    .resize(logowidth, logoheight).toBuffer(function (err, data) {
+      var datetime = new Date(new Date).valueOf();
+      var randomnumber = Math.floor((Math.random() * 100) + 1);
+      var seperate = uploadedfiles[0].originalname;
+      var sep = seperate.split(".");
 
-        var params = {
-          'Bucket': 'smaf',
-          'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
-          'Body': data,
-          'ContentEncoding': 'base64',
-          ACL: 'public-read',
-          Metadata: {
-            'Content-Type': 'image/' + sep[1]
-          }
-        };
+      var params = {
+        'Bucket': 'smaf',
+        'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
+        'Body': data,
+        'ContentEncoding': 'base64',
+        ACL: 'public-read',
+        Metadata: {
+          'Content-Type': 'image/' + sep[1]
+        }
+      };
 
-        s3.upload(params, function (err, resultdata) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-          
-            appuser.findById(req.body.userid, function (err, getdata) {
+      s3.upload(params, function (err, resultdata) {
+        if (err) {
+          console.log(err);
+        }
+        else {
 
-              if (!err) {
+          appuser.findById(req.body.userid, function (err, getdata) {
 
-                getdata.email = req.body.email
-                getdata.firstname = req.body.firstname;
-                getdata.lastname = req.body.lastname;
-                getdata.phone = req.body.phone;
-                getdata.image = resultdata.Location;
+            if (!err) {
 
-                getdata.save(function (err) {
-                  if (!err) {
+              getdata.email = req.body.email
+              getdata.firstname = req.body.firstname;
+              getdata.lastname = req.body.lastname;
+              getdata.phone = req.body.phone;
+              getdata.image = resultdata.Location;
 
-                    var userprofile = {
-                      "status": "1",
-                      "message": "Success",
-                      "data":
-                        {}
-                    }
+              getdata.save(function (err) {
+                if (!err) {
 
-                    res.send(userprofile);
-                  } else {
-                    var userprofile = {
-                      "status": "0",
-                      "message": "No data found",
-                      "data":
-                        {}
-                    }
-                    res.send(userprofile);
+                  var userprofile = {
+                    "status": "1",
+                    "message": "Success",
+                    "data":
+                      {}
                   }
-                });
 
-              } else {
-
-                var userprofile = {
-                  "status": "0",
-                  "message": "No data found",
-                  "data":
-                    {}
+                  res.send(userprofile);
+                } else {
+                  var userprofile = {
+                    "status": "0",
+                    "message": "No data found",
+                    "data":
+                      {}
+                  }
+                  res.send(userprofile);
                 }
-                res.send(userprofile);
+              });
+
+            } else {
+
+              var userprofile = {
+                "status": "0",
+                "message": "No data found",
+                "data":
+                  {}
               }
-            });
-          }
-        })
+              res.send(userprofile);
+            }
+          });
+        }
       })
+    })
 })
 
 

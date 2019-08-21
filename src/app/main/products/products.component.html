@@ -17,10 +17,13 @@
         <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add</mat-icon>Csv Import  
        
       </button> -->
-      <input hidden  type="file" placeholder="Image" (change)="fileEvent($event)" #fileInput required accept=".csv"/>
-                    <button  style="margin-left:650px" mat-raised-button  class="add-file-button" (click)="fileInput.click()" aria-label="Add file"
+      <input hidden  type="file"  (change)="fileEvent($event)" #fileInput required accept=".csv"/>
+                  
+      <button  style="margin-left:650px" mat-raised-button  class="add-file-button" (click)="fileInput.click()" aria-label="Add file"
                         [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
                         Csv Import</button>
+  
+  
       <button  mat-raised-button matTooltip="Add New Product" [routerLink]="['/addproduct']">
         <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add</mat-icon>Add Product
        

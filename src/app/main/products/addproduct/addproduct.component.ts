@@ -89,13 +89,12 @@ export class AddproductComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
-
-    this.ProductService.getAllProductcategories()
+    var merchantId = localStorage.getItem('userId');
+    this.ProductService.getAllProductcategories(merchantId)
     .subscribe(
         data => {
-
-            this.catName = data;
-        },
+               this.catName = data.data;
+          },
         error => {
             console.log(error);
 
@@ -195,6 +194,7 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
+ 
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
@@ -268,10 +268,15 @@ export class AddproductComponent implements OnInit {
   addproductcategories(i) {
    
 
-   
+   var merchantId = localStorage.getItem('userId');
+
+
    var catname = ($("#cat"+i).val())
 
-   this.ProductService.addproductcategories(catname)
+
+
+   
+   this.ProductService.addproductcategories(catname ,merchantId)
    .subscribe(
        data => {
 
@@ -292,7 +297,10 @@ export class AddproductComponent implements OnInit {
               $("#cat"+ i).hide();
               $("#matcat"+ i).hide();
               $("#div_"+i).show();
-              this.ProductService.getAllProductcategories()
+            
+              
+            
+              this.ProductService.getAllProductcategories(merchantId)
               .subscribe(
                   data => {
           

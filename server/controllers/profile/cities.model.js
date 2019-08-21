@@ -3,8 +3,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var CitiesSchema = new Schema({
-
-    cityname: String,
+    
+    id : Number,
+    name: String,
 })
 // set up a mongoose model
 

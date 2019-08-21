@@ -93,3 +93,36 @@ exports.getMerchentsbyId = function (req , res) {
 }
 
 
+exports.getMerchantCategories = function(req, res) {
+    
+    merchentService.getMerchantCategories()
+    .then(function (getcategorydata) {
+        if (getcategorydata) {
+            res.send(getcategorydata);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
+
+}
+
+
+exports.SearchMerchant = function(req , res) {
+   
+    merchentService.SearchMerchant(req.body)
+    .then(function (SearchMerchantdetails) {
+        if (SearchMerchantdetails) {
+            res.send(SearchMerchantdetails);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+
+}

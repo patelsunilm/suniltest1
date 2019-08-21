@@ -57,9 +57,9 @@ exports.updateuserdetails = function(req, res) {
 
     appusersService.updateuserdetails(req.body)
    
-    .then(function (getuserdata) {
-        if (getuserdata) {
-            res.send(getuserdata);
+    .then(function (updateuserdata) {
+        if (updateuserdata) {
+            res.send(updateuserdata);
         } else {
             res.sendStatus(404);
         }
@@ -67,4 +67,21 @@ exports.updateuserdetails = function(req, res) {
     .catch(function (err) {
         res.status(400).send(err);
     });   
+}
+
+
+exports.UserLogout = function(req, res) {
+
+    appusersService.UserLogout(req.body)
+   
+    .then(function (appuserslogout) {
+        if (appuserslogout) {
+            res.send(appuserslogout);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
 }

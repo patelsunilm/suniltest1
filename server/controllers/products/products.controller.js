@@ -110,7 +110,8 @@ exports.getbarcodedetail = function(req, res) {
 
 exports.getAllProductcategories = function(req, res) {
 
-    productservice.getAllProductcategories()
+
+    productservice.getAllProductcategories(req.body)
    
     .then(function (getproduct) {
         if (getproduct) {
@@ -147,7 +148,7 @@ exports.getproducts = function(req, res) {
 exports.addproductcategories = function(req , res) {
 
   
-    productservice.addproductcategories(req.params.catname)
+    productservice.addproductcategories(req.params.catname,req.params.merchantId)
     .then(function (addproductcategory) {
 
         if (addproductcategory) {
@@ -163,4 +164,45 @@ exports.addproductcategories = function(req , res) {
         res.status(400).send(err);
     });
 
+}
+
+
+
+exports.addtocart = function(req, res) {
+   
+    productservice.addtocart(req.body)
+    .then(function (addtocart) {
+
+        if (addtocart) {
+
+            res.send(addtocart);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+
+exports.RemoveCart = function(req, res) {
+
+    productservice.RemoveCart(req.body)
+    .then(function (Removecart) {
+
+        if (Removecart) {
+
+            res.send(Removecart);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
 }

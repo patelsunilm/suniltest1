@@ -12,7 +12,7 @@ router.post('/submitfacebookdetails' , submitfacebookdetails);
 router.post('/sendotp' ,sendotp);
 router.post('/matchotp' ,matchotp);
 router.get('/getmerchantcategories' , getmerchantcategories);
-
+router.post('/lastvisitMerchant' , lastvisitMerchant);
  
 
 
@@ -171,6 +171,27 @@ function submitfacebookdetails(req, res) {
         res.status(400).send(err);
     });
 }
+
+
+function lastvisitMerchant(req, res) {
+  
+    userService.lastvisitMerchant(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });
+
+}
+
+
+
 
 
 exports.GetallUsersDetails = function(req , res) {

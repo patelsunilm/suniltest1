@@ -2,11 +2,12 @@ var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
+const rgbHex = require('rgb-hex');
+
 var users = require('../controllers/Users/users.model');
-
 var merchantcategory = require('../controllers/Users/merchantcategories.model');
-
 var faqs = require('../controllers/faq/faq.model');
+
 var mongoose = require('mongoose');
 
 
@@ -18,13 +19,13 @@ service.updatemerchantData = updatemerchantData;
 service.getmerchantDatabyId = getmerchantDatabyId;
 service.deletemerchantData = deletemerchantData;
 service.getMerchentsbyId = getMerchentsbyId;
-
-
+service.getMerchantCategories = getMerchantCategories;
+service.SearchMerchant = SearchMerchant;
 
 function getallMerchentsData() {
 
 
-    
+
 
     var deferred = Q.defer();
     users.aggregate([
@@ -59,12 +60,12 @@ function getallMerchentsData() {
             }
         },
         {
-            $lookup : {
-            from : "merchantcategories",
-             localField : "merchantcatid",
-              foreignField : "_id",
-              as: "merchantcategoriename"
-             }
+            $lookup: {
+                from: "merchantcategories",
+                localField: "merchantcatid",
+                foreignField: "_id",
+                as: "merchantcategoriename"
+            }
         },
 
         {
@@ -107,58 +108,58 @@ function getallMerchentsData() {
                 },
                 "merchantcatname": {
                     $filter: {
-                       input: "$merchantcategoriename",
-                       as: "merchantcategoriename",
-                       cond: { $eq: [ "$$merchantcategoriename._id", "$merchantcatid" ] }
+                        input: "$merchantcategoriename",
+                        as: "merchantcategoriename",
+                        cond: { $eq: ["$$merchantcategoriename._id", "$merchantcatid"] }
                     }
-                 },
+                },
             }
         },
         { $sort: { createddate: -1 } },
-      
-       
-       ]).exec(function (err, getMerchentData) {
-            if (!err) {
 
 
-                var allmerchant = [];
-                getMerchentData.forEach(element => {
+    ]).exec(function (err, getMerchentData) {
+        if (!err) {
 
-                    var merchantdetails = {}
-                    merchantdetails.merchantid =   element._id;
-                    merchantdetails.name = element.name == undefined ? '' : element.name;
-                    merchantdetails.email = element.email == undefined ? '' : element.email;
-                    merchantdetails.address = element.address == undefined ? '' : element.address;
-                    merchantdetails.phone = element.phone == undefined ? '' : element.phone;
-                    merchantdetails.businessname = element.businessname == undefined ? '' : element.businessname;
-                    merchantdetails.image = element.image == undefined ? '' : element.image;
-                    merchantdetails.backgroundtheme = element.backgroundtheme == undefined ? '' : element.backgroundtheme;
-                    merchantdetails.fontcolor = element.fontcolor == undefined ? '' : element.fontcolor;
-                    merchantdetails.cityid = element.cityid == undefined ? '' : element.cityid;
-                    merchantdetails.stateid = element.stateid == undefined ? '' : element.stateid;
-                    merchantdetails.countryid = element.countryid == undefined ? '' : element.countryid;
-                    merchantdetails.categoryid = element.merchantcatid == undefined ? '' : element.merchantcatid;
-                    merchantdetails.ipaddress = element.ipaddress == undefined ? '' : element.ipaddress;
-                    merchantdetails.countryname = element.countriesname.length > 0 ?element.countriesname[0].name:"";
-                    merchantdetails.statename = element.statename.length > 0 ? element.statename[0].name : "";
-                    merchantdetails.cityname = element.cityname.length > 0 ? element.cityname[0].name : "";
-                    merchantdetails.merchantcatname = element.merchantcatname.length > 0 ?  element.merchantcatname[0].merchantcatname : "";
-                    allmerchant.push(merchantdetails);
 
-                });
-                
-                var merchentdata = {
-                    "status": "1",
-                    "message": "Sucess",
-                    "data":
-                        allmerchant
-                }
+            var allmerchant = [];
+            getMerchentData.forEach(element => {
 
-                deferred.resolve(merchentdata);
-            } else {
-                deferred.reject(err.name + ': ' + err.message);
+                var merchantdetails = {}
+                merchantdetails.merchantId = element._id;
+                merchantdetails.name = element.name == undefined ? '' : element.name;
+                merchantdetails.email = element.email == undefined ? '' : element.email;
+                merchantdetails.address = element.address == undefined ? '' : element.address;
+                merchantdetails.phone = element.phone == undefined ? '' : element.phone;
+                merchantdetails.businessName = element.businessname == undefined ? '' : element.businessname;
+                merchantdetails.image = element.image == undefined ? '' : element.image;
+                merchantdetails.backgroundTheme = (element.backgroundtheme == undefined || element.backgroundtheme == '' || element.backgroundtheme == null || element.backgroundtheme == 'null' || !element.backgroundtheme) ? '' : rgbHex(element.backgroundtheme);
+                merchantdetails.fontColor = (element.fontcolor == undefined || element.fontcolor == '' || element.fontcolor == null || element.fontcolor == 'null' || !element.fontcolor) ? '' : rgbHex(element.fontcolor);
+                merchantdetails.cityId = element.cityid == undefined ? '' : element.cityid;
+                merchantdetails.stateId = element.stateid == undefined ? '' : element.stateid;
+                merchantdetails.countryId = element.countryid == undefined ? '' : element.countryid;
+                merchantdetails.categoryId = element.merchantcatid == undefined ? '' : element.merchantcatid;
+                merchantdetails.ipAddress = element.ipaddress == undefined ? '' : element.ipaddress;
+                merchantdetails.countryName = element.countriesname.length > 0 ? element.countriesname[0].name : "";
+                merchantdetails.stateName = element.statename.length > 0 ? element.statename[0].name : "";
+                merchantdetails.cityName = element.cityname.length > 0 ? element.cityname[0].name : "";
+                merchantdetails.merchantCatName = element.merchantcatname.length > 0 ? element.merchantcatname[0].merchantcatname : "";
+                allmerchant.push(merchantdetails);
+
+            });
+
+            var merchentdata = {
+                "status": "1",
+                "message": "Sucess",
+                "data":
+                    allmerchant
             }
-        });
+
+            deferred.resolve(merchentdata);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
 
     return deferred.promise;
 
@@ -290,7 +291,7 @@ function deletemerchantData(merchantDataId) {
 
 function getMerchentsbyId(catid) {
 
-    
+
     var merchantId = new mongoose.Types.ObjectId(catid);
 
     var deferred = Q.defer();
@@ -310,5 +311,109 @@ function getMerchentsbyId(catid) {
 }
 
 
+function getMerchantCategories() {
+
+    var deferred = Q.defer();
+
+    merchantcategory.find(function (err, merchantcategories) {
+        if (!err) {
+
+            if (merchantcategories) {
+
+                var allcategories = [];
+                merchantcategories.forEach(element => {
+
+                    var category = {}
+
+                    category.merchantCatId = element._id,
+                        category.merchantCatName = element.merchantcatname
+
+                    allcategories.push(category);
+
+                });
+
+                var merchentcatdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allcategories
+                }
+
+
+            } else {
+                var merchentcatdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+
+            }
+            deferred.resolve(merchentcatdetails);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+
+        }
+    })
+    return deferred.promise;
+
+}
+
+
+function SearchMerchant(merchantdetail) {
+
+    var deferred = Q.defer();
+    var startlimit = parseInt(merchantdetail.startLimit);
+    var endlimit = parseInt(merchantdetail.endLimit);
+    var countrieId = parseInt(merchantdetail.countrieId)
+
+    var merchentcatdetails = {
+        "status": "0",
+        "message": "no data found",
+        "data":
+            {}
+    }
+
+    users.find({ $and: [{ merchantcatid: merchantdetail.merchantCatId }, { countryid: countrieId }] }, function (err, MerchantResults) {
+        if (!err) {
+            if (MerchantResults == '') {
+                deferred.resolve(merchentcatdetails);
+            } else {
+                var allmerchant = [];
+                MerchantResults.forEach(element => {
+                    var merchantdetails = {}
+                    merchantdetails.merchantId = element._id;
+                    merchantdetails.name = element.name == undefined ? '' : element.name;
+                    merchantdetails.email = element.email == undefined ? '' : element.email;
+                    merchantdetails.backgroundTheme = (element.backgroundtheme == undefined || element.backgroundtheme == '' || element.backgroundtheme == null || element.backgroundtheme == 'null' || !element.backgroundtheme) ? '' : rgbHex(element.backgroundtheme);
+                    merchantdetails.fontColor = (element.fontcolor == undefined || element.fontcolor == '' || element.fontcolor == null || element.fontcolor == 'null' || !element.fontcolor) ? '' : rgbHex(element.fontcolor);
+                    merchantdetails.merchantCatId = element.merchantcatid == undefined ? '' : element.merchantcatid;
+                    allmerchant.push(merchantdetails);
+                });
+
+                users.find({ $and: [{ merchantcatid: merchantdetail.merchantCatId }, { countryid: countrieId }] }, function (err, merchantcount) {
+                    if (!err) {
+
+                         var merchentdetails = {
+                            "status": "1",
+                            "message": "Sucess",
+                            "data": {
+                                allmerchant,
+                                totalCounts :  merchantcount.length
+                            },
+                             
+                        }
+                        deferred.resolve(merchentdetails);
+                    }
+                })
+            }
+        } else {
+
+            deferred.resolve(merchentcatdetails);
+        }
+
+    }).skip(startlimit).limit(endlimit)
+    return deferred.promise;
+}
 
 module.exports = service;

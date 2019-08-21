@@ -51,7 +51,8 @@ exports.getcountries = function (req, res) {
 
 exports.getstates = function(req, res) {
    
-    profileService.getstates(req.params.stateid)
+
+    profileService.getstates(req.body.countrieId)
     .then(function (states) {
         if (states) {
             res.send(states);
@@ -67,7 +68,7 @@ exports.getstates = function(req, res) {
 exports.getcity = function(req, res) {
    
 
-    profileService.getcity(req.params.cityid)
+    profileService.getcity(req.body.stateId)
     .then(function (city) {
         if (city) {
             res.send(city);

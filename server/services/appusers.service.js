@@ -12,6 +12,9 @@ service.GetallUsersDetails = GetallUsersDetails;
 service.deleteappuser = deleteappuser;
 service.getuserbyId = getuserbyId;
 service.updateuserdetails = updateuserdetails;
+service.UserLogout = UserLogout;
+
+
 
 function GetallUsersDetails() {
 
@@ -89,5 +92,38 @@ function updateuserdetails(userdata) {
         }
     })
     return deferred.promise;
+}
+
+
+function UserLogout(user) {
+   
+   var deferred = Q.defer();
+   appuser.update({ _id:user.userId}, {
+        deviceToken : ""
+       
+    }, function (err, updateuserprofile) {
+        if (!err) {
+
+            var userlogoutresponce = {
+                "status": "1",
+                "message": "Success",
+                "data":
+                    {}
+            }
+           
+           
+        } else {
+
+            var userlogoutresponce = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+        }
+        deferred.resolve(userlogoutresponce);
+    })
+    return deferred.promise;
+
 }
 module.exports = service;
