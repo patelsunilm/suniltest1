@@ -21,7 +21,7 @@ function GetallUsersDetails() {
     var deferred = Q.defer();
 
     appuser.find(function (err, data) {
-
+    
         if (!err) {
             deferred.resolve(data);
         } else {
@@ -76,21 +76,36 @@ function updateuserdetails(userdata) {
     var deferred = Q.defer();
 
     var id = new mongoose.Types.ObjectId(userdata.id);
-    appuser.findOneAndUpdate({ _id: id }, {
-        image: userdata.image,
-        email: userdata.email,
-        firstname: userdata.firstname,
-        lastname: userdata.lastname,
-        phone: userdata.phone,
 
-    }, function (err, updateuserprofile) {
+    var email = new RegExp("^" + userdata.email + "$", "i")
+    appuser.find({ $and: [{ email: email }, { _id: { $ne: id } }] }, function (err, getappuserdata) {
+        if (getappuserdata.length > 0) {
 
-        if (!err) {
-            deferred.resolve(updateuserprofile);
+            var data = {};
+            data.string = 'Email is already exist.';
+            deferred.resolve(data);
+
         } else {
-            deferred.reject(err.name + ': ' + err.message);
+
+            appuser.findOneAndUpdate({ _id: id }, {
+                image: userdata.image,
+                email: userdata.email,
+                firstname: userdata.firstname,
+                lastname: userdata.lastname,
+                phone: userdata.phone,
+
+            }, function (err, updateuserprofile) {
+
+                if (!err) {
+                    deferred.resolve(updateuserprofile);
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            })
+
         }
     })
+
     return deferred.promise;
 }
 

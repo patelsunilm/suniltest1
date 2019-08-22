@@ -31,9 +31,9 @@ export class MerchantComponent implements OnInit {
     allmerchantdata: any[];
     displayedColumns: string[] = ['name', 'address', 'email', 'businessname', 'status', 'action'];
     dataSource;
-    merchantcategories : any;
+    merchantcategories: any;
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    isTableHasData  = true;
+    isTableHasData = true;
 
     applyFilter(filterValue: any) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -41,22 +41,19 @@ export class MerchantComponent implements OnInit {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
-        if(this.dataSource.filteredData.length > 0){
-           
+        if (this.dataSource.filteredData.length > 0) {
+
             this.isTableHasData = true;
-          } else {
-             
+        } else {
+
             this.isTableHasData = false;
-          }
-  
-  
-  
+        }
     }
 
 
     constructor(public dialog: MatDialog,
         private MerchantService: MerchantService,
-        private AuthenticationService : AuthenticationService
+        private AuthenticationService: AuthenticationService
     ) { }
 
     openDialog() {
@@ -71,15 +68,14 @@ export class MerchantComponent implements OnInit {
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {
+                    console.log(data)
                     this.allmerchantdata = data.data;
                     const merchantdata = data.data;
                     const allmerchantdata = [];
                     merchantdata.forEach(element => {
-                          
 
-                        
                         allmerchantdata.push(element);
- 
+                        console.log(element)
                     });
                     this.dataSource = new MatTableDataSource(allmerchantdata);
                     this.dataSource.paginator = this.paginator;
@@ -87,20 +83,20 @@ export class MerchantComponent implements OnInit {
                 error => {
                     console.log(error);
                 });
-   
-                this.AuthenticationService.getmerchantcategories()
-                .subscribe(data => {
-    
-                    this.merchantcategories = data;
-             
-                },
-                    error => {
-                        console.log(error);
-    
-                    });
-   
-   
-            }
+
+        this.AuthenticationService.getmerchantcategories()
+            .subscribe(data => {
+
+                this.merchantcategories = data;
+
+            },
+                error => {
+                    console.log(error);
+
+                });
+
+
+    }
 
 
     merchantStatusToggle(status, id) {
@@ -128,11 +124,12 @@ export class MerchantComponent implements OnInit {
             this.MerchantService.getallMerchentsData()
                 .subscribe(
                     data => {
-                        this.allmerchantdata = data;
-                        const merchantdata = data;
+                        this.allmerchantdata = data.data;
+                        const merchantdata = data.data;
                         const allmerchantdata = [];
                         merchantdata.forEach(element => {
 
+                            console.log(element)
                             allmerchantdata.push(element);
 
                         });
@@ -142,68 +139,69 @@ export class MerchantComponent implements OnInit {
                     error => {
                         console.log(error);
                     });
+
         });
     }
 
 
-selecategory(catid) {
-   
+    selecategory(catid) {
 
-   if(catid == "SelectCategory") {
-    this.MerchantService.getallMerchentsData()
-    .subscribe(
-        data => {
-            this.allmerchantdata = data;
-            const merchantdata = data;
-            const allmerchantdata = [];
-            merchantdata.forEach(element => {
 
-                allmerchantdata.push(element);
+        if (catid == "SelectCategory") {
+            this.MerchantService.getallMerchentsData()
+                .subscribe(
+                    data => {
+                        this.allmerchantdata = data.data;
+                        const merchantdata = data.data;
+                        const allmerchantdata = [];
+                        merchantdata.forEach(element => {
 
-            });
-            if(allmerchantdata.length > 0) {
-      
-                this.dataSource = new MatTableDataSource(allmerchantdata);
-                this.dataSource.paginator = this.paginator;
-                this.isTableHasData = true;
-                } else {
-                  
-                    this.isTableHasData = false;
-                }
-        },
-        error => {
-            console.log(error);
-        });
-   } else {
-   this.MerchantService.getMerchentsbyId(catid)
-   .subscribe(
-       data => {
-         this.allmerchantdata = data;
-         const merchantdata = data;
-         const allmerchantdata = [];
-         merchantdata.forEach(element => {
+                            allmerchantdata.push(element);
 
-             allmerchantdata.push(element);
+                        });
+                        if (allmerchantdata.length > 0) {
 
-         });
-        
-         if(allmerchantdata.length > 0) {
-      
-         this.dataSource = new MatTableDataSource(allmerchantdata);
-         this.dataSource.paginator = this.paginator;
-         this.isTableHasData = true;
-         } else {
-           
-             this.isTableHasData = false;
-         }
-       
-       
-        },
-       error => {
-           console.log(error);
-       });
-}
-}
+                            this.dataSource = new MatTableDataSource(allmerchantdata);
+                            this.dataSource.paginator = this.paginator;
+                            this.isTableHasData = true;
+                        } else {
+
+                            this.isTableHasData = false;
+                        }
+                    },
+                    error => {
+                        console.log(error);
+                    });
+        } else {
+            this.MerchantService.getMerchentsbyId(catid)
+                .subscribe(
+                    data => {
+                        this.allmerchantdata = data;
+                        const merchantdata = data;
+                        const allmerchantdata = [];
+                        merchantdata.forEach(element => {
+
+                            allmerchantdata.push(element);
+
+                        });
+
+                        if (allmerchantdata.length > 0) {
+
+                            this.dataSource = new MatTableDataSource(allmerchantdata);
+                            this.dataSource.paginator = this.paginator;
+                            this.isTableHasData = true;
+                        } else {
+
+                            this.isTableHasData = false;
+                        }
+
+
+                    },
+                    error => {
+                        console.log(error);
+                    });
+        }
+    }
 }
 
 @Component({

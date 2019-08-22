@@ -337,7 +337,6 @@ function sendotp(data) {
             , function (err, user) {
                 if (err) {
 
-                    console.log('err 1');
                     deferred.reject(err.name + ': ' + err.message);
                 } else {
                     if (user == '') {
@@ -358,12 +357,12 @@ function sendotp(data) {
 
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
-                                        console.log('mail send error');
+                                      
                                         console.log(error);
 
                                     } else {
 
-                                        console.log('sucess');
+                                     
                                         deferred.resolve(userdata);
 
                                     }
@@ -372,7 +371,7 @@ function sendotp(data) {
 
                             } else {
 
-                                console.log('save error');
+                     
                                 deferred.reject(err.name + ': ' + err.message);
                             }
                         })
@@ -385,7 +384,7 @@ function sendotp(data) {
                         appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
                             if (err) {
 
-                                console.log('update error');
+                             
                                 deferred.reject(err);
 
                             } else {
@@ -393,10 +392,10 @@ function sendotp(data) {
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
 
-                                        console.log('mail send error update');
+                                   
                                         console.log(error);
                                     } else {
-                                        console.log('sucess update');
+                                    
                                         deferred.resolve(userdata);
 
                                     }

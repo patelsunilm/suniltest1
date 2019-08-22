@@ -25,8 +25,6 @@ service.SearchMerchant = SearchMerchant;
 function getallMerchentsData() {
 
 
-
-
     var deferred = Q.defer();
     users.aggregate([
         {
@@ -129,6 +127,8 @@ function getallMerchentsData() {
                 merchantdetails.merchantId = element._id;
                 merchantdetails.name = element.name == undefined ? '' : element.name;
                 merchantdetails.email = element.email == undefined ? '' : element.email;
+                merchantdetails.status = element.status == undefined ? '' : element.status;
+
                 merchantdetails.address = element.address == undefined ? '' : element.address;
                 merchantdetails.phone = element.phone == undefined ? '' : element.phone;
                 merchantdetails.businessName = element.businessname == undefined ? '' : element.businessname;
@@ -183,7 +183,7 @@ function getmerchantDatabyId(merchantDataId) {
 
 
 function updatemerchantData(merchantdata) {
-
+    
     var deferred = Q.defer();
     var email = new RegExp("^" + merchantdata.email + "$", "i")
     users.find({ $and: [{ email: email }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
@@ -394,14 +394,14 @@ function SearchMerchant(merchantdetail) {
                 users.find({ $and: [{ merchantcatid: merchantdetail.merchantCatId }, { countryid: countrieId }] }, function (err, merchantcount) {
                     if (!err) {
 
-                         var merchentdetails = {
+                        var merchentdetails = {
                             "status": "1",
                             "message": "Sucess",
                             "data": {
                                 allmerchant,
-                                totalCounts :  merchantcount.length
+                                totalCounts: merchantcount.length
                             },
-                             
+
                         }
                         deferred.resolve(merchentdetails);
                     }

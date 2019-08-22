@@ -1,6 +1,5 @@
 :host {
 
-
     .img-wrap {
       position: relative;
       display: inline-block;
@@ -49,6 +48,8 @@
       }
     }
   
+    .no-data-av{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
+    .no-re-found{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
     p {
       font-family: Lato;
     }
@@ -137,3 +138,4 @@ table {
 .csv {
     margin-left: 500;
 }
+mat-icon.s-24{cursor: pointer;}

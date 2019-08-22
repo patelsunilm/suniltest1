@@ -15,10 +15,11 @@ var service = {};
 service.getAllusercount = getAllusercount;
 service.getAllcountfeedback = getAllcountfeedback;
 service.getAllmerchantcounts = getAllmerchantcounts;
-
+service.getAllcountproducts = getAllcountproducts;
+service.getAllcountfaqs = getAllcountfaqs;
 
 function getAllusercount() {
-    
+
 
     var deferred = Q.defer();
     appuser.count(function (err, allappusers) {
@@ -37,8 +38,8 @@ function getAllusercount() {
 }
 
 function getAllcountfeedback() {
-     
-    
+
+
 
     var deferred = Q.defer();
     faq.count(function (err, feedback) {
@@ -56,7 +57,7 @@ function getAllcountfeedback() {
 
 function getAllmerchantcounts() {
     var deferred = Q.defer();
-   
+
 
     users.count({ userType: 'Merchant' }, function (err, merchantcount) {
         if (!err) {
@@ -69,4 +70,40 @@ function getAllmerchantcounts() {
     })
     return deferred.promise;
 }
+
+
+function getAllcountproducts() {
+    var deferred = Q.defer();
+
+
+    products.count(function (err, data) {
+        if (!err) {
+
+            deferred.resolve(data);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+}
+
+
+
+function getAllcountfaqs(userId) {
+    var deferred = Q.defer();
+
+    faq.count({ $or: [{ "status": true }, { userId: userId }] }, function (err, data) {
+        if (!err) {
+
+            deferred.resolve(data);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
+}
+
+
 module.exports = service;

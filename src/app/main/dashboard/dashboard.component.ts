@@ -20,7 +20,9 @@ export class DashboardComponent implements OnInit {
     countfeedback: any;
     countmerchant: any;
     countappusers: any;
-    
+    countproduct: any;
+    countfaqs: any;
+
     projects: any[];
     selectedProject: any;
 
@@ -166,48 +168,68 @@ export class DashboardComponent implements OnInit {
 
         this.admin = localStorage.getItem('userType') == 'admin';
         this.Merchant = localStorage.getItem('userType') == 'Merchant';
-  
-    
+
+
         this.DashbordService.getAllcountfeedback()
-        .subscribe(
-            data => {
+            .subscribe(
+                data => {
 
-           this.countfeedback = JSON.stringify(data.feedback);
-           console.log('count feed back') 
-           console.log(this.countfeedback)
-           
-        
+                    this.countfeedback = JSON.stringify(data.feedback);
 
-            },
-            error => {
-                console.log(error);
 
-            });
-       
+
+                },
+                error => {
+                    console.log(error);
+
+                });
+
         this.DashbordService.getAllmerchantcounts()
-        .subscribe(
-            data => {
-                   this.countmerchant = JSON.stringify(data.merchantcount);
-                    
-            },
-            error => {
-                console.log(error);
+            .subscribe(
+                data => {
+                    this.countmerchant = JSON.stringify(data.merchantcount);
 
-            });
+                },
+                error => {
+                    console.log(error);
 
-         this.DashbordService.getAllusercount()
-        .subscribe(
-            data => {
+                });
 
-               this.countappusers = JSON.stringify(data.usercount);
+        this.DashbordService.getAllcountproducts()
+            .subscribe(
+                data => {
+                    this.countproduct = JSON.stringify(data.productcount);
+
+                },
+                error => {
+                    console.log(error);
+
+                });
+
+                this.DashbordService.getAllcountfaqs()
+                .subscribe(
+                    data => {
+                        this.countfaqs = JSON.stringify(data.faqscount);
+    
+                    },
+                    error => {
+                        console.log(error);
+    
+                    });
+
+        this.DashbordService.getAllusercount()
+            .subscribe(
+                data => {
+
+                    this.countappusers = JSON.stringify(data.usercount);
 
 
-               
-            },
-            error => {
-                console.log(error);
 
-            });
+                },
+                error => {
+                    console.log(error);
+
+                });
 
 
         //  this.DashbordService.getAllusercount()
@@ -222,7 +244,7 @@ export class DashboardComponent implements OnInit {
 
         //     });
 
-  
+
     }
 
     // -----------------------------------------------------------------------------------------------------

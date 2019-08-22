@@ -30,8 +30,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     merchantcategories: any;
     states: any;
     citys: any;
-    a : any;
-    
+    a: any;
+
     private _unsubscribeAll: Subject<any>;
 
 
@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-  
+
         var user = JSON.parse(localStorage.getItem('currentUser'));
 
         this.form = this._formBuilder.group({
@@ -123,9 +123,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(params => {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
-                   
+
                     data => {
-                       
+
                         this.image = data.image
                         this.form = this._formBuilder.group({
                             name: [data.name],
@@ -143,34 +143,34 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             city: ['']
 
                         });
-                 
+
                         // this.ProfileService.getstates(data.countriid)
                         // .subscribe(
                         //     data => {
-        
+
                         //         this.states = data
-        
+
                         //     },
                         //     error => {
-        
+
                         //         console.log(error);
                         //     });
-                 
+
                         //     var num = data.stateid;
                         //     var n = num.toString();
                         //     this.ProfileService.getcity(n)
                         //     .subscribe(
                         //         data => {
-            
+
                         //             this.citys = data;
-                                 
+
                         //         },
                         //         error => {
-            
+
                         //             console.log(error);
                         //         });
                     },
-                  
+
                     error => {
                         console.log(error);
 
@@ -181,7 +181,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             .subscribe(data => {
 
                 this.merchantcategories = data;
-           
+
             },
                 error => {
                     console.log(error);
@@ -204,17 +204,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     selectcountries(stateid) {
 
         if (stateid == undefined || stateid == 'undefined') {
-          
+
 
         } else {
-         
 
-          this.form.controls['states'].setValue('')
+
+            this.form.controls['states'].setValue('')
             this.ProfileService.getstates(stateid)
                 .subscribe(
                     data => {
 
-                        
+
                         this.states = data.data
                     },
                     error => {
@@ -266,7 +266,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     updatemyprofile() {
 
-      
+
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 
@@ -275,20 +275,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 var data = this.filesToUpload.slice(-1);
                 this.ProfileService.uploadLogoImage(data)
                     .subscribe(data => {
-                     
-                      
+
+
                         this.form.value.image = data[0].toString();
                         this.form.value._id = user._id;
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
                         // this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
 
-                        this.form.value.backgroundtheme =   $('#backgroundthemecolor').val().replace(/rgb/g,"rgba");
-                          
+                        this.form.value.backgroundtheme = $('#backgroundthemecolor').val().replace(/rgb/g, "rgba");
+
                         //    console.log('this form value forntcolor');
                         //     console.log(this.form.value.fontcolor);
                         //     console.log( this.form.value.backgroundtheme)
-                      
+
                         // return false
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(

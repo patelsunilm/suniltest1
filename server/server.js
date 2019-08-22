@@ -123,7 +123,9 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/users/submitfacebookdetails',
+
     '/users/getmerchantcategories',
+
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
     '/users/sendotp',
@@ -221,35 +223,47 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
           
 
-       productcategory.findOne({ $and: [{ catName: results[i].productcategory },{ merchantId: results[i].merchantid }]}, function (err, getcategory) {
-          if (getcategory) {
-           
-                 results[i].productcatid = getcategory._id;
-               
+          productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
+            if (getcategory) {
+
+              results[i].productcatid = getcategory._id;
+
+
+              console.log('test1 ');
+
             } else {
-              
+
               var procat = new productcategory({
                 catName: results[i].productcategory,
-                merchantId : results[i].merchantid
+                merchantId: results[i].merchantid
 
               });
-              
+
               procat.save(function (err, productcategory) {
-                  if (!err) {
-                   
-                     results[i].productcatid = productcategory._id;
-                   
+                if (!err) {
+
+
+                  console.log('new');
+                  results[i].productcatid = productcategory._id;
+
                 } else {
 
                 }
-               });
-                 
-            }
-           
-          //  console.log('results i'); 
-          //  console.log(results[i].productcatid);
+              });
 
-          var allproducts = new products({
+            }
+
+            console.log('res');
+
+            if (results[i].productcatid) {
+
+              console.log('pro');
+              console.log(results[i].productcatid);
+
+            }
+
+            return false
+            var allproducts = new products({
               productname: results[i].productname,
               productcatid: results[i].productcatid,
               costprice: results[i].costprice,
@@ -260,33 +274,40 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               stocklevel: results[i].stocklevel,
               barcode: results[i].barcode,
               merchantid: results[i].merchantid,
-             
+
             });
-            
-             allproducts.save(function (err, product) {
-              if (!err) { 
-                
-                if((i+ 1) == results.length) {
-                   
-                var data = {};
-                data.string = 'Csv import success fully';
-                res.send(data);
-                   } 
-                    
+
+            allproducts.save(function (err, product) {
+              if (!err) {
+
+                if ((i + 1) == results.length) {
+
+                  var data = {};
+                  data.string = 'Csv import success fully';
+                  res.send(data);
+                }
+
 
               } else {
 
               }
 
-            
-          
-        }) 
+            });
 
-           }) 
+          })
         }
-      
-       
-    
+
+
+        // console.log('cat');
+        // console.log(results);
+
+        // console.log(productarray);
+        //  productcategory.find({catName : })
+
+
+
+        // productcategory
+
 
         // products.insertMany(results, function (err, product) {
         //   if (!err) {

@@ -1,10 +1,10 @@
 {
-    "DB_HOST": "ec2-34-245-11-228.eu-west-1.compute.amazonaws.com",
-    "DB_User": "smafuser",
-    "DB_Pass": "Smaf123!@#",
-    "DB_PORT": "27017",
-    "DB_NAME": "smaf",
-    "secret": "vishfini"
-  }
-  
-  
+  "DB_HOST": "ec2-34-245-11-228.eu-west-1.compute.amazonaws.com",
+  "DB_User": "smafuser",
+  "DB_Pass": "Smaf123!@#",
+  "DB_PORT": "27017",
+  "DB_NAME": "smaf",
+  "secret": "vishfini",
+  "mail_user": "info@finikart.com",
+  "mail_pass": "info123!@#"
+}

@@ -26,7 +26,7 @@
         <div class="mat-elevation-z8">
 
             <div *ngIf="readLocalStorageValue('userType') == 'admin'">
-
+                <div>Total number of feedbacks:- {{mydatalength}}</div>
                 <div class="content px-16 py-24 px-sm-24 py-sm-32">
 
                     <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">
@@ -59,7 +59,7 @@
 
 
             <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
-
+                <div>Total number of feedbacks:- {{mydatalength}}</div>
                 <div class="content px-16 py-24 px-sm-24 py-sm-32">
 
                     <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">

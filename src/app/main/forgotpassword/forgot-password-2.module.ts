@@ -5,10 +5,11 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } fr
 import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ForgotPassword2Component } from 'app/main/forgotpassword/forgot-password-2.component';
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 const routes = [
     {
-        path     : 'forgot-password',
+        path: 'forgot-password',
         component: ForgotPassword2Component
     }
 ];
@@ -17,9 +18,9 @@ const routes = [
     declarations: [
         ForgotPassword2Component
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
-
+        AutofocusModule,
         MatButtonModule,
         MatFormFieldModule,
         MatIconModule,
@@ -28,6 +29,5 @@ const routes = [
         FuseSharedModule,
     ]
 })
-export class ForgotPassword2Module
-{
+export class ForgotPassword2Module {
 }

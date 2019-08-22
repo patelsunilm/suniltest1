@@ -10,6 +10,8 @@ var dashboards = require('./controllers/dashboards/dashboard.controller');
 router.get('/dashboard/getAllusercount' , dashboards.getAllusercount);
 router.get('/dashboard/getAllcountfeedback', dashboards.getAllcountfeedback);
 router.get('/dashboard/getAllmerchantcounts' ,dashboards.getAllmerchantcounts);
+router.get('/dashboard/getAllcountproducts' ,dashboards.getAllcountproducts);
+router.get('/dashboard/getAllcountfaqs/:userId' ,dashboards.getAllcountfaqs);
 
 
 
