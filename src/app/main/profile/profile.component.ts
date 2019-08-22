@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
+       
         var user = JSON.parse(localStorage.getItem('currentUser'));
 
         this.form = this._formBuilder.group({
@@ -265,8 +265,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     updatemyprofile() {
-
-
+       
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 
@@ -276,14 +275,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.ProfileService.uploadLogoImage(data)
                     .subscribe(data => {
 
-
-                        this.form.value.image = data[0].toString();
+                        this.form.value.image = data[0].s3url.toString();
                         this.form.value._id = user._id;
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
-                        // this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
-
-                        this.form.value.backgroundtheme = $('#backgroundthemecolor').val().replace(/rgb/g, "rgba");
+                        this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
+                        // this.form.value.backgroundtheme = $('#backgroundthemecolor').val().replace(/rgb/g, "rgba");
 
                         //    console.log('this form value forntcolor');
                         //     console.log(this.form.value.fontcolor);
@@ -294,13 +291,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             .subscribe(
                                 data => {
 
-                                    if (data.string == 'Email is already exist.') {
-                                        this.snackBar.open('Email is already exist.', '', {
+                                    if (data.string == "Email is already exist.") {
+                                        this.snackBar.open("Email is already exist.", '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
                                         });
-                                    } if (data.string == 'BusinessName is already exist.') {
+                                    } else if (data.string == "BusinessName is already exist.") {
                                         this.snackBar.open('BusinessName is already exist.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
@@ -334,18 +331,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.form.value._id = user._id;
                 this.form.value.userType = user.userType;
                 this.form.value.fontcolor = $("#fontcolor").val()
+                // this.form.value.backgroundtheme = $('#backgroundthemecolor').val().replace(/rgb/g, "rgba");
                 this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
                 this.ProfileService.updateprofile(this.form.value)
                     .subscribe(
                         data => {
 
-                            if (data.string == 'Email is already exist.') {
+
+                            if (data.string == "Email is already exist.") {
                                 this.snackBar.open('Email is already exist.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
                                 });
-                            } if (data.string == 'BusinessName is already exist.') {
+                            } else if (data.string == "BusinessName is already exist.") {
                                 this.snackBar.open('BusinessName is already exist.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,

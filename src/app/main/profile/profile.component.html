@@ -33,8 +33,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
-                                required>
+                            <input matInput formControlName="name" autofocus="true"
+                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
                             </mat-error>
@@ -89,7 +89,7 @@
 
                     <div class="button-row" style="text-align: center;">
                         <button mat-raised-button="" color="" style="margin-top: 10px;"
-                            [disabled]="form.invalid">Submit</button>
+                            [disabled]="form.invalid" >Submit</button>
                     </div>
 
                 </form>
@@ -133,8 +133,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
-                                required>
+                            <input matInput formControlName="name" autofocus="true"
+                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
                             </mat-error>

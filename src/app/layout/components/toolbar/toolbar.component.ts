@@ -29,7 +29,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     selectedLanguage: any;
     userStatusOptions: any[];
     name: string;
-    myprofilelogoimage:string;
+    myprofilelogoimage: string;
     usertype: string;
     returnUrl: string;
 
@@ -110,6 +110,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+
         // Subscribe to the config changes
         this._fuseConfigService.config
             .pipe(takeUntil(this._unsubscribeAll))
@@ -152,7 +153,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      */
     search(value): void {
         // Do your search here...
-     
+
     }
 
     /**

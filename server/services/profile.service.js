@@ -56,15 +56,19 @@ function updateprofile(getprofiledata) {
                 Users.findById(getprofiledata._id, function (err, getdata) {
 
                     if (!err) {
-                        getdata.image = getprofiledata.image
+                        getdata.image = getprofiledata.image;
                         getdata.name = getprofiledata.name;
                         getdata.email = getprofiledata.email;
                         getdata.address = getprofiledata.address;
                         getdata.datemodified = Date.now();
 
-                        getdata.save(function (err) {
+                        getdata.save(function (err, user) {
+                          
                             if (!err) {
-                                deferred.resolve(getdata);
+                                deferred.resolve({
+                                    name: user.name,
+                                    image: user.image,
+                                });
                             } else {
                                 deferred.reject(err.name + ': ' + err.message);
                             }
@@ -75,7 +79,6 @@ function updateprofile(getprofiledata) {
                     }
 
                 });
-
             }
         })
 
@@ -129,19 +132,12 @@ function updateprofile(getprofiledata) {
                             } else {
                                 deferred.reject(err.name + ': ' + err.message);
                             }
-
                         });
-
                     }
                 })
-
             }
         })
-
     }
-
-
-
     return deferred.promise;
 }
 

@@ -12,6 +12,9 @@ import { AgmCoreModule } from '@agm/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { ProfileComponent } from './profile.component';
 import { AuthGuardCommon } from './../../_guards/index';
+import { AutofocusModule } from 'angular-autofocus-fix';
+
+
 const routes = [
     {
         path: 'profile',
@@ -25,7 +28,7 @@ const routes = [
         ProfileComponent],
     imports: [
         RouterModule.forChild(routes),
-
+        AutofocusModule,
         MatButtonModule,
         MatDividerModule,
         MatFormFieldModule,
