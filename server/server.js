@@ -27,8 +27,8 @@ var productcategory = require('../server/controllers/products/productcategories.
 gm = require('gm');
 
 
-//var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
-var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+//var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 
 
 
@@ -123,15 +123,11 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/users/submitfacebookdetails',
-   
     '/users/getmerchantcategories',
-   
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
-
     '/users/sendotp',
     '/users/matchotp',
-   
     '/users/lastvisitMerchant'
 
   ]
@@ -184,14 +180,12 @@ var upload = multer({ storage: storage });
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 
-
-
   var file = req.files[0];
   var userid = req.body.uploads
 
   var originalFileName = file.originalname;
 
-  const results = [];
+  var results = [];
 
 
   var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
@@ -214,7 +208,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
       })) {
 
         var allproducts = [];
-
+      
+         var j = 0;
         for (let i = 0; i < results.length; i++) {
 
 
@@ -224,16 +219,13 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
           results[i].barcode = datetime + randomnumber
           results[i].merchantid = userid
 
-          // { $and: [{ catName: catname }, { merchantId: id }]}
+          
 
        productcategory.findOne({ $and: [{ catName: results[i].productcategory },{ merchantId: results[i].merchantid }]}, function (err, getcategory) {
           if (getcategory) {
            
-                results[i].productcatid = getcategory._id;
-      
-
-                console.log('test1 ');
-
+                 results[i].productcatid = getcategory._id;
+               
             } else {
               
               var procat = new productcategory({
@@ -245,28 +237,19 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               procat.save(function (err, productcategory) {
                   if (!err) {
                    
+                     results[i].productcatid = productcategory._id;
                    
-                    console.log('new');
-                    results[i].productcatid = productcategory._id;
-                  
                 } else {
 
                 }
                });
                  
             }
-          
-            console.log('res');
-          
-           if(results[i].productcatid) {
            
-            console.log('pro'); 
-            console.log(results[i].productcatid);  
+          //  console.log('results i'); 
+          //  console.log(results[i].productcatid);
 
-           }
-
-           return false
-            var allproducts = new products({
+          var allproducts = new products({
               productname: results[i].productname,
               productcatid: results[i].productcatid,
               costprice: results[i].costprice,
@@ -295,22 +278,15 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
               }
 
-            });
+            
           
-          }) 
+        }) 
+
+           }) 
         }
-
+      
        
-        // console.log('cat');
-        // console.log(results);
-
-        // console.log(productarray);
-        //  productcategory.find({catName : })
-
-
-
-        // productcategory
-
+    
 
         // products.insertMany(results, function (err, product) {
         //   if (!err) {

@@ -94,6 +94,8 @@ export class AddproductComponent implements OnInit {
     .subscribe(
         data => {
                this.catName = data.data;
+
+               console.log(this.catName)
           },
         error => {
             console.log(error);
@@ -304,8 +306,13 @@ export class AddproductComponent implements OnInit {
               .subscribe(
                   data => {
           
-                      this.catName = data;
-                        
+                    this.catName = data.data;
+                   
+                    // this.catName.forEach(element => {
+                    //  if(element.catName  == catname){
+                    //   console.log(element.productCatId) 
+                    //  }
+                    // });
                       
                   },
                   error => {
@@ -313,9 +320,9 @@ export class AddproductComponent implements OnInit {
           
                   });
             
-               // console.log(this.catname)
-               //  this.test = 'false';
-              //  this.formArr.value[i].productcategories = "data._id";
+                // console.log(this.catname)
+                //  this.test = 'false';
+                //this.formArr.value[i].productcategories = "data._id";
   
          }
             

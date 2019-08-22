@@ -325,9 +325,9 @@ function getMerchantCategories() {
 
                     var category = {}
 
-                    category.merchantCatId = element._id,
-                        category.merchantCatName = element.merchantcatname
-
+                        category.merchantCatId =  element._id == undefined ? '' : element._id,
+                        category.merchantCatName = element.merchantcatname == undefined ? '' : element.merchantcatname
+                       
                     allcategories.push(category);
 
                 });

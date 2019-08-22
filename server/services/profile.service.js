@@ -158,8 +158,8 @@ function getcountries() {
                 countriesresults.forEach(element => {
 
                     var productcat = {}
-                    productcat.countrieName = element.name;
-                    productcat.countrieId = element.id
+                    productcat.countrieName =  element.name == undefined ? '' : element.name;
+                    productcat.countrieId = element.id == undefined ? '' : element.id
                     allcountries.push(productcat);
 
                 });
@@ -216,8 +216,8 @@ function getstates(id) {
                 stateresults.forEach(element => {
 
                     var states = {}
-                    states.stateId = element.id;
-                    states.stateName = element.name
+                    states.stateId = element.id == undefined ? '' : element.id;
+                    states.stateName = element.name == undefined ? '' : element.name;
                     allstate.push(states);
 
                 });
@@ -262,8 +262,8 @@ function getcity(id) {
                 var allcity = [];
                 cityresults.forEach(element => {
                     var citys = {}
-                    citys.cityId = element.id;
-                    citys.cityName = element.name
+                    citys.cityId = element.id == undefined ? '' :  element.id;
+                    citys.cityName = element.name == undefined ? '' : element.name;
                     allcity.push(citys);
 
                 });
