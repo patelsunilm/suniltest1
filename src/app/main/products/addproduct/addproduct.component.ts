@@ -56,6 +56,7 @@ export class AddproductComponent implements OnInit {
 
 
   }
+  @ViewChild('mySelect') mySelect;
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
@@ -95,7 +96,7 @@ export class AddproductComponent implements OnInit {
         data => {
                this.catName = data.data;
 
-               console.log(this.catName)
+               
           },
         error => {
             console.log(error);
@@ -236,10 +237,6 @@ export class AddproductComponent implements OnInit {
           this.loading = false;
 
           this.router.navigate([this.returnUrl]);
-
-
-
-
           
         }, error => {
           console.log(error);
@@ -253,30 +250,36 @@ export class AddproductComponent implements OnInit {
 
 
   addnewcategory(i) {
-
+    
+   
+   
     $("#div_"+i).hide();
     
     $("#divshow_"+i).show();
-
-    
      var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat'+i+'">category name</mat-label><input matInput formControlName="productcatname" id="cat'+i+'"></mat-form-field>'; 
       
     document.getElementById(i).innerHTML = Categoryhtml;
     //  document.getElementById(i).innerHTML = b;
-
+    this.mySelect.close();
   }
 
 
   addproductcategories(i) {
+    
+    
    
 
    var merchantId = localStorage.getItem('userId');
-
-
    var catname = ($("#cat"+i).val())
 
-
-
+   if(!catname) {
+    this.snackBar.open('Pls Add Product Category.', '', {
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+   } else {
+    
    
    this.ProductService.addproductcategories(catname ,merchantId)
    .subscribe(
@@ -308,11 +311,15 @@ export class AddproductComponent implements OnInit {
           
                     this.catName = data.data;
                    
-                    // this.catName.forEach(element => {
-                    //  if(element.catName  == catname){
-                    //   console.log(element.productCatId) 
-                    //  }
-                    // });
+                    this.catName.forEach(element => {
+                     if(element.catName  == catname){
+                       console.log(element.productCatId)
+                      this.productForm.controls['productcategories'].value(element.productCatId)
+                      // this.formArr.value[i].productcategories = element.productCatId;
+                      // console.log(this.formArr.value[i]) 
+                     
+                    }
+                    });
                       
                   },
                   error => {
@@ -322,7 +329,7 @@ export class AddproductComponent implements OnInit {
             
              
                //  this.test = 'false';
-              //  this.formArr.value[i].productcategories = "data._id";
+              
   
          }
             
@@ -331,5 +338,6 @@ export class AddproductComponent implements OnInit {
            console.log(error);
 
        });
+      }
   }
 }

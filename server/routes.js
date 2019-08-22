@@ -5,8 +5,7 @@ var router = express.Router();
 
 
 var dashboards = require('./controllers/dashboards/dashboard.controller');
-// router.get('/dashboard/getAllcountsproducts/:userId', dashboards.getAllcountsproducts);
-// router.get('/dashboard/getAllcountfaqs/:userId', dashboards.getAllcountfaqs);
+
 router.get('/dashboard/getAllusercount' , dashboards.getAllusercount);
 router.get('/dashboard/getAllcountfeedback', dashboards.getAllcountfeedback);
 router.get('/dashboard/getAllmerchantcounts' ,dashboards.getAllmerchantcounts);
@@ -18,10 +17,12 @@ router.get('/dashboard/getAllcountfaqs/:userId' ,dashboards.getAllcountfaqs);
 var profiledata = require('./controllers/profile/profile.controller');
 router.get('/profile/getprofileInfo/:userId', profiledata.getprofileInfo);
 router.post('/profile/updateprofile', profiledata.updateprofile);
-router.get('/profile/getcountries' , profiledata.getcountries);
+
+router.post('/profile/getcountries' , profiledata.getcountries);
 router.post('/profile/getstates' , profiledata.getstates);
 router.post('/profile/getcity' , profiledata.getcity);
 router.post('/profile/getuserprofile' , profiledata.getuserprofile);
+router.get('/profile/getAllcountries' , profiledata.getAllcountries);
 
 
 var passworddata = require('./controllers/password/password.controller');

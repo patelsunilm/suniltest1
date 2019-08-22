@@ -18,7 +18,7 @@ service.getcountries = getcountries;
 service.getstates = getstates;
 service.getcity = getcity;
 service.getuserprofile = getuserprofile;
-
+service.getAllcountries = getAllcountries;
 
 function getprofileInfo(userId) {
     var deferred = Q.defer();
@@ -142,51 +142,112 @@ function updateprofile(getprofiledata) {
 }
 
 
-function getcountries() {
+
+
+
+
+
+
+function getcountries(catid) {
+
 
     var deferred = Q.defer();
-
-    countries.find(function (err, countriesresults) {
-        if (!err) {
-            if (countriesresults) {
-
-                var allcountries = [];
-                countriesresults.forEach(element => {
-
-                    var productcat = {}
-                    productcat.countrieName = element.name == undefined ? '' : element.name;
-                    productcat.countrieId = element.id == undefined ? '' : element.id
-                    allcountries.push(productcat);
-
-                });
-
-                var contriesdetails = {
-                    "status": "1",
-                    "message": "Sucess",
-                    "data":
-                        allcountries
-                }
+    var catid = new mongoose.Types.ObjectId(catid.merchantCatId);
 
 
-            } else {
-
-                var contriesdetails = {
-                    "status": "0",
-                    "message": "no data found",
-                    "data":
-                        {}
-                }
-
+    Users.aggregate([
+        { "$match": { "merchantcatid": catid } },
+        {
+            $lookup: {
+                from: "countries",
+                localField: "countryid",
+                foreignField: "id",
+                as: "countriesname"
             }
 
-            deferred.resolve(contriesdetails);
+        },
+        { $sort: { dateadded: -1 } }]).exec(function (err, countrie) {
+            if (!err) {
 
+                if (countrie == '' || countrie == null || countrie == 'null') {
+                 
+                    var contriesdetails = {
+                        "status": "0",
+                        "message": "no data found",
+                        "data":
+                            {}
+                    }
+                } else {
 
-        } else {
-            deferred.reject(err.name + ': ' + err.message);
-        }
-    })
+                    var allcountries = [];
+                    countrie.forEach(element => {
+
+                        var productcat = {}
+                        productcat.countrieName = element.countriesname[0].name == undefined ? '' : element.countriesname[0].name;
+                        productcat.countrieId = element.countriesname[0].id == undefined ? '' : element.countriesname[0].id
+                        allcountries.push(productcat);
+                    })
+                    var contriesdetails = {
+                        "status": "1",
+                        "message": "Sucess",
+                        "data":
+                            allcountries
+                    }
+                }
+                deferred.resolve(contriesdetails);
+            } else {
+
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
     return deferred.promise;
+
+
+    // var deferred = Q.defer();
+
+    // Users.find({merchantcatid : catid.merchantCatId}, function (err, countriesresults) {
+    //     if (!err) {
+    //         if (countriesresults) {
+
+    //             var allcountries = [];
+    //             countriesresults.forEach(element => {
+
+
+    //                 console.log(element)
+    //                 var productcat = {}
+    //                 productcat.countrieName =  element.name == undefined ? '' : element.name;
+    //                 productcat.countrieId = element.id == undefined ? '' : element.countryid
+    //                 allcountries.push(productcat);
+
+    //             });
+
+    //             var contriesdetails = {
+    //                 "status": "1",
+    //                 "message": "Sucess",
+    //                 "data":
+    //                     allcountries
+    //             }
+
+
+    //         } else {
+
+    //             var contriesdetails = {
+    //                 "status": "0",
+    //                 "message": "no data found",
+    //                 "data":
+    //                     {}
+    //             }
+
+    //         }
+
+    //         deferred.resolve(contriesdetails);
+
+
+    //     } else {
+    //         deferred.reject(err.name + ': ' + err.message);
+    //     }
+    // })
+    // return deferred.promise;
 
 }
 
@@ -327,5 +388,52 @@ function getuserprofile(profile) {
     });
     return deferred.promise;
 
+}
+
+
+function getAllcountries() {
+    var deferred = Q.defer();
+
+    countries.find(function (err, countriesresults) {
+        if (!err) {
+            if (countriesresults) {
+
+                var allcountries = [];
+                countriesresults.forEach(element => {
+
+                    var productcat = {}
+                    productcat.countrieName =  element.name == undefined ? '' : element.name;
+                    productcat.countrieId = element.id == undefined ? '' : element.id
+                    allcountries.push(productcat);
+
+                });
+
+                var contriesdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allcountries
+                }
+
+
+            } else {
+
+                var contriesdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+
+            }
+
+            deferred.resolve(contriesdetails);
+
+
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+    return deferred.promise;
 }
 module.exports = service;

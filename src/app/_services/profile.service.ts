@@ -46,9 +46,9 @@ export class ProfileService {
             });
     }
 
-    getcountries() {
+    getAllcountries() {
 
-        return this.http.get<any>(appConfig.apiUrl + '/profile/getcountries')
+        return this.http.get<any>(appConfig.apiUrl + '/profile/getAllcountries')
 
     }
 

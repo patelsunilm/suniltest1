@@ -83,10 +83,10 @@
            
               <td>
               
-                <mat-form-field appearance="outline" id="div_{{i}}"  >
+                <mat-form-field  appearance="outline" id="div_{{i}}"  >
                   <mat-label>Catlist</mat-label>
                  
-                  <mat-select  formControlName="productcategories" required>
+                  <mat-select #mySelect  formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
                     <button mat-button (click)="addnewcategory(i)" >add product category</button>
                    
