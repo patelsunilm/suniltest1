@@ -35,18 +35,18 @@ exports.updateprofile = function (req, res) {
 
 
 exports.getcountries = function (req, res) {
- 
+
     profileService.getcountries(req.body)
-    .then(function (countries) {
-        if (countries) {
-            res.send(countries);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    }); 
+        .then(function (countries) {
+            if (countries) {
+                res.send(countries);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 exports.getAllcountries = function(req, res) {
@@ -70,48 +70,48 @@ exports.getstates = function(req, res) {
    
 
     profileService.getstates(req.body.countrieId)
-    .then(function (states) {
-        if (states) {
-            res.send(states);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });  
+        .then(function (states) {
+            if (states) {
+                res.send(states);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
-exports.getcity = function(req, res) {
-   
+exports.getcity = function (req, res) {
+
 
     profileService.getcity(req.body.stateId)
-    .then(function (city) {
-        if (city) {
-            res.send(city);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });  
+        .then(function (city) {
+            if (city) {
+                res.send(city);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }
 
 
-exports.getuserprofile = function(req, res) {
- 
-    
+exports.getuserprofile = function (req, res) {
+
+
     profileService.getuserprofile(req.body)
- 
-    .then(function (userprofile) {
-        if (userprofile) {
-            res.send(userprofile);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });   
+
+        .then(function (userprofile) {
+            if (userprofile) {
+                res.send(userprofile);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 }

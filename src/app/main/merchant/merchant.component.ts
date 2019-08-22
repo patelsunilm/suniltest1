@@ -68,14 +68,14 @@ export class MerchantComponent implements OnInit {
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {
-                    console.log(data)
+               
                     this.allmerchantdata = data.data;
                     const merchantdata = data.data;
                     const allmerchantdata = [];
                     merchantdata.forEach(element => {
 
                         allmerchantdata.push(element);
-                        console.log(element)
+                  
                     });
                     this.dataSource = new MatTableDataSource(allmerchantdata);
                     this.dataSource.paginator = this.paginator;
@@ -129,7 +129,7 @@ export class MerchantComponent implements OnInit {
                         const allmerchantdata = [];
                         merchantdata.forEach(element => {
 
-                            console.log(element)
+                         
                             allmerchantdata.push(element);
 
                         });
