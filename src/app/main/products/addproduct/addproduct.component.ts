@@ -94,6 +94,8 @@ export class AddproductComponent implements OnInit {
     .subscribe(
         data => {
                this.catName = data.data;
+
+               console.log(this.catName)
           },
         error => {
             console.log(error);
@@ -304,8 +306,13 @@ export class AddproductComponent implements OnInit {
               .subscribe(
                   data => {
           
-                      this.catName = data;
-                        
+                    this.catName = data.data;
+                   
+                    // this.catName.forEach(element => {
+                    //  if(element.catName  == catname){
+                    //   console.log(element.productCatId) 
+                    //  }
+                    // });
                       
                   },
                   error => {

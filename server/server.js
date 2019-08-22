@@ -128,10 +128,8 @@ app.use(expressJwt({
 
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
-
     '/users/sendotp',
     '/users/matchotp',
-
     '/users/lastvisitMerchant'
 
   ]
@@ -184,14 +182,12 @@ var upload = multer({ storage: storage });
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 
-
-
   var file = req.files[0];
   var userid = req.body.uploads
 
   var originalFileName = file.originalname;
 
-  const results = [];
+  var results = [];
 
 
   var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
@@ -214,7 +210,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
       })) {
 
         var allproducts = [];
-
+      
+         var j = 0;
         for (let i = 0; i < results.length; i++) {
 
 
@@ -224,7 +221,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
           results[i].barcode = datetime + randomnumber
           results[i].merchantid = userid
 
-          // { $and: [{ catName: catname }, { merchantId: id }]}
+          
 
           productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
             if (getcategory) {

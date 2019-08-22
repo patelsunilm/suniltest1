@@ -5,7 +5,7 @@ var Q = require('q');
 
 var mongoose = require('mongoose');
 var appuser = require('../controllers/Users/appusers.model');
-
+var cartdetails = require('../controllers/products/cartdetails.model');
 
 var service = {};
 service.GetallUsersDetails = GetallUsersDetails;
@@ -136,6 +136,7 @@ function UserLogout(user) {
                     {}
             }
         }
+
         deferred.resolve(userlogoutresponce);
     })
     return deferred.promise;
@@ -144,11 +145,70 @@ function UserLogout(user) {
 
 function getCartDetails(cartid) {
 
+    var startlimit = parseInt(cartid.startLimit);
+    var endlimit = parseInt(cartid.endLimit);
+    var deferred = Q.defer();
+    var usercartresponce = {
+        "status": "0",
+        "message": "no data found",
+        "data":
+            {}
+    }
+   
+    cartdetails.findOne({ userId: cartid.userId }, { productdetails: { $slice: [startlimit, endlimit] } }, function (err, cartresults) {
+        if (!err) {
+            
+            if(cartresults == null || cartresults == 'null') {
+                deferred.resolve(usercartresponce);
+           
+            } else {
 
+             if(cartresults.productdetails  == '' || cartresults.productdetails == null || cartresults.productdetails == 'null') {
+
+                deferred.resolve(usercartresponce);
+
+            } else {
+
+            var allproductdetails = [];
+           
+            cartresults.productdetails.forEach(element => {
+                var cart = {}
+                cart.productId =element.productId == undefined ? '' : element.productId;
+                cart.image =element.image == undefined ? '' : element.image;
+                cart.productName = element.productName == undefined ? '' :element.productName;
+                cart.costPrice =element.costPrice == undefined ? '' : element.costPrice;
+                cart.markUp =element.markUp == undefined ? '' : element.markUp.toString();
+                cart.sellingPrice = element.sellingPrice == undefined ? '' : element.sellingPrice.toString();
+                cart.merchantId = element.merchantId == undefined ? '' : element.merchantId;
+                cart.barCode = element.barcode == undefined ? '' : element.barcode;
+                cart.quantity = element.quantity == undefined ? '' : element.quantity.toString();
+                allproductdetails.push(cart);
+
+            });
+
+            cartdetails.findOne({ userId: cartid.userId }, function (err, productcount) {
+               
+                if (!err) {
+
+                    var producrsresponce = {
+                        "status": "1",
+                        "message": "Success",
+                        "data":
+                        {
+                            totalCounts: productcount.productdetails.length,
+                            allproductdetails
+                        }
+                    }
+                    deferred.resolve(producrsresponce);
+                } 
+            })
+        }
+    }
+        } else {
+            deferred.resolve(usercartresponce);
+        }
+    })
+    return deferred.promise;
 }
-
-
-
-
 
 module.exports = service;

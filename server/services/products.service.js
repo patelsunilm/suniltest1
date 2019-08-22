@@ -246,10 +246,10 @@ function getAllProductcategories(details) {
                 getproductscategories.forEach(element => {
 
                     var productcat = {}
-                    productcat.productCatId = element._id;
-                    productcat.catName = element.catName;
+                    productcat.productCatId = element._id == undefined ? '' : element._id;
+                    productcat.catName =  element.catName == undefined ? '' : element.catName;
 
-
+                    
                     allproductctegory.push(productcat);
 
                 });

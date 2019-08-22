@@ -82,6 +82,7 @@
               </td>
            
               <td>
+              
                 <mat-form-field appearance="outline" id="div_{{i}}"  >
                   <mat-label>Catlist</mat-label>
                  
@@ -89,8 +90,7 @@
                     <mat-option>Select product new category list</mat-option>
                     <button mat-button (click)="addnewcategory(i)" >add product category</button>
                    
-                   
-                    <mat-option *ngFor="let procatname of catName" [value]="procatname._id">
+                    <mat-option *ngFor="let procatname of catName" [value]="procatname.productCatId">
                         {{procatname.catName}}
                     </mat-option>
                  </mat-select>
