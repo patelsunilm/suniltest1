@@ -63,7 +63,7 @@ function updateprofile(getprofiledata) {
                         getdata.datemodified = Date.now();
 
                         getdata.save(function (err, user) {
-                          
+
                             if (!err) {
                                 deferred.resolve({
                                     name: user.name,
@@ -154,7 +154,7 @@ function getcountries() {
                 countriesresults.forEach(element => {
 
                     var productcat = {}
-                    productcat.countrieName =  element.name == undefined ? '' : element.name;
+                    productcat.countrieName = element.name == undefined ? '' : element.name;
                     productcat.countrieId = element.id == undefined ? '' : element.id
                     allcountries.push(productcat);
 
@@ -258,7 +258,7 @@ function getcity(id) {
                 var allcity = [];
                 cityresults.forEach(element => {
                     var citys = {}
-                    citys.cityId = element.id == undefined ? '' :  element.id;
+                    citys.cityId = element.id == undefined ? '' : element.id;
                     citys.cityName = element.name == undefined ? '' : element.name;
                     allcity.push(citys);
 

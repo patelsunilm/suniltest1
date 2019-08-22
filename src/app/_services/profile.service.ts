@@ -32,12 +32,17 @@ export class ProfileService {
 
         return this.http.post<any>(appConfig.apiUrl + '/profile/updateprofile', profiledata)
             .map(user => {
-                console.log(user)
-                localStorage.setItem('name', user.name);
-                localStorage.setItem('myprofilelogoimage', user.image);
 
-                $('#CurrencyChnage').fadeOut('slow').load('toolbar.component.ts').fadeIn('slow');
-                return user;
+                if (user.string == 'BusinessName is already exist.' || user.string == 'Email is already exist.') {
+                    return user;
+                } else {
+                    localStorage.setItem('name', user.name);
+                    localStorage.setItem('myprofilelogoimage', user.image);
+                    $('#CurrencyChnage').fadeOut('slow').load('toolbar.component.ts').fadeIn('slow');
+                    return user;
+                }
+
+
             });
     }
 

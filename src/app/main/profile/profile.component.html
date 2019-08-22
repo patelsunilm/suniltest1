@@ -89,7 +89,7 @@
 
                     <div class="button-row" style="text-align: center;">
                         <button mat-raised-button="" color="" style="margin-top: 10px;"
-                            [disabled]="form.invalid" >Submit</button>
+                            [disabled]="form.invalid">Submit</button>
                     </div>
 
                 </form>
@@ -231,7 +231,7 @@
                             </mat-select>
                             <mat-error>Please select Merchant Category list!</mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                        <!-- <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
                             <mat-label>Country list</mat-label>
                             <mat-select formControlName="countries" required
                                 (selectionChange)="selectcountries($event.value)">
@@ -243,10 +243,10 @@
                             <mat-error *ngIf="form.get('countries').hasError('required')">
                                 Please select country list!
                             </mat-error>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                        <!-- <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
                             <mat-label>State list</mat-label>
                             <mat-select formControlName="states" required (selectionChange)="selectstate($event.value)">
                                 <mat-option value="Selectstatelist">Select state list</mat-option>
@@ -270,7 +270,7 @@
                             <mat-error *ngIf="form.get('city').hasError('required')">
                                 Please select city list!
                             </mat-error>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                     <div class="button-row" style="text-align: center;">
                         <button mat-raised-button="" color="" style="margin-top: 10px;"

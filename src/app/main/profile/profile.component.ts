@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-       
+
         var user = JSON.parse(localStorage.getItem('currentUser'));
 
         this.form = this._formBuilder.group({
@@ -265,7 +265,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     updatemyprofile() {
-       
+
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 

@@ -36,7 +36,8 @@
         </div>
 
         <div class="mat-elevation-z8">
-            <table [hidden]="!isTableHasData" mat-table [dataSource]="dataSource" class="cstm-resellers-table">
+            <table [hidden]="!isTableHasData" [hidden]="!isTableHasDataAgain" [class.isMobile]="isMobile" mat-table [dataSource]="dataSource"
+                class="cstm-resellers-table">
 
 
                 <ng-container matColumnDef="name">
@@ -89,8 +90,11 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-            <div [hidden]="isTableHasData">
-                no data found
+            <div [hidden]="isTableHasData" class="no-data-av">
+                No Record Found
+            </div>
+            <div [hidden]="isTableHasDataAgain" class="no-re-found">
+                No Data Available In Table
             </div>
 
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
