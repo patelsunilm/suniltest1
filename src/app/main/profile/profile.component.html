@@ -232,16 +232,16 @@
                             <mat-error>Please select Merchant Category list!</mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-                            <mat-label>countri list</mat-label>
+                            <mat-label>Country list</mat-label>
                             <mat-select formControlName="countries" required
                                 (selectionChange)="selectcountries($event.value)">
-                                <mat-option>Select countri list</mat-option>
+                                <mat-option>Select country list</mat-option>
                                 <mat-option *ngFor="let countrie of allcountries" [value]="countrie.countrieId">
                                     {{countrie.countrieName}}
                                 </mat-option>
                             </mat-select>
                             <mat-error *ngIf="form.get('countries').hasError('required')">
-                                Please select countri list!
+                                Please select country list!
                             </mat-error>
                         </mat-form-field>
                     </div>

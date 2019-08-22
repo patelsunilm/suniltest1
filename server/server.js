@@ -27,8 +27,8 @@ var productcategory = require('../server/controllers/products/productcategories.
 gm = require('gm');
 
 
-//var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
-var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+//var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 
 
 
@@ -123,15 +123,15 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/users/submitfacebookdetails',
-   
+
     '/users/getmerchantcategories',
-   
+
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
 
     '/users/sendotp',
     '/users/matchotp',
-   
+
     '/users/lastvisitMerchant'
 
   ]
@@ -226,46 +226,46 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
           // { $and: [{ catName: catname }, { merchantId: id }]}
 
-       productcategory.findOne({ $and: [{ catName: results[i].productcategory },{ merchantId: results[i].merchantid }]}, function (err, getcategory) {
-          if (getcategory) {
-           
-                results[i].productcatid = getcategory._id;
-      
+          productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
+            if (getcategory) {
 
-                console.log('test1 ');
+              results[i].productcatid = getcategory._id;
+
+
+              console.log('test1 ');
 
             } else {
-              
+
               var procat = new productcategory({
                 catName: results[i].productcategory,
-                merchantId : results[i].merchantid
+                merchantId: results[i].merchantid
 
               });
-              
+
               procat.save(function (err, productcategory) {
-                  if (!err) {
-                   
-                   
-                    console.log('new');
-                    results[i].productcatid = productcategory._id;
-                  
+                if (!err) {
+
+
+                  console.log('new');
+                  results[i].productcatid = productcategory._id;
+
                 } else {
 
                 }
-               });
-                 
+              });
+
             }
-          
+
             console.log('res');
-          
-           if(results[i].productcatid) {
-           
-            console.log('pro'); 
-            console.log(results[i].productcatid);  
 
-           }
+            if (results[i].productcatid) {
 
-           return false
+              console.log('pro');
+              console.log(results[i].productcatid);
+
+            }
+
+            return false
             var allproducts = new products({
               productname: results[i].productname,
               productcatid: results[i].productcatid,
@@ -277,30 +277,30 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               stocklevel: results[i].stocklevel,
               barcode: results[i].barcode,
               merchantid: results[i].merchantid,
-             
+
             });
-            
-             allproducts.save(function (err, product) {
-              if (!err) { 
-                
-                if((i+ 1) == results.length) {
-                   
-                var data = {};
-                data.string = 'Csv import success fully';
-                res.send(data);
-                   } 
-                    
+
+            allproducts.save(function (err, product) {
+              if (!err) {
+
+                if ((i + 1) == results.length) {
+
+                  var data = {};
+                  data.string = 'Csv import success fully';
+                  res.send(data);
+                }
+
 
               } else {
 
               }
 
             });
-          
-          }) 
+
+          })
         }
 
-       
+
         // console.log('cat');
         // console.log(results);
 
