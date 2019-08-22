@@ -38,7 +38,7 @@
       </div>
       
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="dataSource" [class.isMobile]="isMobile" [hidden]="!isTableHasData" [hidden]="!isTableHasData12">
           <ng-container matColumnDef="image">
 
             <th mat-header-cell *matHeaderCellDef> Image </th>
@@ -109,6 +109,14 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+      
+        <div [hidden]="isTableHasData" class="no-re-found">
+          No Record Found
+        </div>
+
+        <div [hidden]="isTableHasData12" class="no-data-av">
+          No Data Available In Table
+        </div>
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
       </div>
     </div>

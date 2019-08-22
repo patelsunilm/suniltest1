@@ -33,18 +33,25 @@ export class ProductsComponent implements OnInit {
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
-
+  isTableHasData;
+  isTableHasData12;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+ 
+ 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-
-
+    if (this.dataSource.filteredData.length > 0) {
+      this.isTableHasData = true;
+    } else {
+      this.isTableHasData = false;
+    }
   }
+
+
   public showAlert(): void {
     alert('ngx-loading rocks!');
   }
@@ -64,8 +71,17 @@ export class ProductsComponent implements OnInit {
         data => {
 
 
-          this.dataSource = new MatTableDataSource(data);
-          this.dataSource.paginator = this.paginator;
+       
+          if (data.length > 0) {
+            this.dataSource = new MatTableDataSource(data);
+            this.dataSource.paginator = this.paginator;
+  
+            this.isTableHasData12 = true;
+          } else {
+            this.isTableHasData12 = false;
+          }
+
+
 
         }, error => {
           console.log(error);

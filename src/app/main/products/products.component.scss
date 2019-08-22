@@ -137,3 +137,39 @@ table {
 .csv {
     margin-left: 500;
 }
+
+
+.no-re-found {
+  //display: inline-block;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+.no-data-av {
+ // display: inline-block;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+        font-weight: bold;
+  }
+
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row { 
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+  }
+}

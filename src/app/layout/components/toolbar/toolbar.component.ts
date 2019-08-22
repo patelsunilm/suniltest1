@@ -51,6 +51,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
     ) {
+      
+      
         this.name = localStorage.getItem('name');
         this.myprofilelogoimage = localStorage.getItem('myprofilelogoimage');
         this.usertype = localStorage.getItem('userType');

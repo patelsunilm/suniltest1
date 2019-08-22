@@ -126,6 +126,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
                     data => {
 
+                        console.log('data');   
+                        console.log(data);
                         this.image = data.image
                         this.form = this._formBuilder.group({
                             name: [data.name],
@@ -138,37 +140,38 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             fontcolor: [data.fontcolor],
                             image: [this.image],
                             merchantcatname: [data.merchantcatid],
-                            countries: [''],
-                            states: [''],
-                            city: ['']
+                            countries: [data.countryid],
+                            states: [data.stateid],
+                            city: [parseInt(data.cityid)]
 
                         });
+                        
+                       
+                        this.ProfileService.getstates(data.countryid)
+                        .subscribe(
+                            data => {
+                                
+                                this.states = data.data;
+                               
+                            },
+                            error => {
 
-                        // this.ProfileService.getstates(data.countriid)
-                        // .subscribe(
-                        //     data => {
+                                console.log(error);
+                            });
 
-                        //         this.states = data
+                            var num = data.stateid;
+                            var n = num.toString();
+                            this.ProfileService.getcity(n)
+                            .subscribe(
+                                data => {
 
-                        //     },
-                        //     error => {
+                                    this.citys = data.data;
+                                    
+                                },
+                                error => {
 
-                        //         console.log(error);
-                        //     });
-
-                        //     var num = data.stateid;
-                        //     var n = num.toString();
-                        //     this.ProfileService.getcity(n)
-                        //     .subscribe(
-                        //         data => {
-
-                        //             this.citys = data;
-
-                        //         },
-                        //         error => {
-
-                        //             console.log(error);
-                        //         });
+                                    console.log(error);
+                                });
                     },
 
                     error => {
@@ -189,7 +192,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 });
 
 
-        this.ProfileService.getcountries()
+        this.ProfileService.getAllcountries()
             .subscribe(data => {
 
                 this.allcountries = data.data;

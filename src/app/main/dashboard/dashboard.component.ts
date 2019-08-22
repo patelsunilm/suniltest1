@@ -176,8 +176,6 @@ export class DashboardComponent implements OnInit {
 
                     this.countfeedback = JSON.stringify(data.feedback);
 
-
-
                 },
                 error => {
                     console.log(error);
@@ -206,24 +204,10 @@ export class DashboardComponent implements OnInit {
 
                 });
 
-                this.DashbordService.getAllcountfaqs()
-                .subscribe(
-                    data => {
-                        this.countfaqs = JSON.stringify(data.faqscount);
-    
-                    },
-                    error => {
-                        console.log(error);
-    
-                    });
-
-        this.DashbordService.getAllusercount()
+        this.DashbordService.getAllcountfaqs()
             .subscribe(
                 data => {
-
-                    this.countappusers = JSON.stringify(data.usercount);
-
-
+                    this.countfaqs = JSON.stringify(data.faqscount);
 
                 },
                 error => {
@@ -231,20 +215,16 @@ export class DashboardComponent implements OnInit {
 
                 });
 
+        this.DashbordService.getAllusercount()
+            .subscribe(
+                data => {
 
-        //  this.DashbordService.getAllusercount()
-        // .subscribe(
-        //     data => {
+                    this.countappusers = JSON.stringify(data.usercount);
+                },
+                error => {
+                    console.log(error);
 
-        //         // this.countPackages = JSON.stringify(data.Packages);
-
-        //     },
-        //     error => {
-        //         console.log(error);
-
-        //     });
-
-
+                });
     }
 
     // -----------------------------------------------------------------------------------------------------

@@ -33,9 +33,9 @@ export class ProfileService {
         return this.http.post<any>(appConfig.apiUrl + '/profile/updateprofile', profiledata)
     }
 
-    getcountries() {
+    getAllcountries() {
 
-        return this.http.get<any>(appConfig.apiUrl + '/profile/getcountries')
+        return this.http.get<any>(appConfig.apiUrl + '/profile/getAllcountries')
 
     }
 
