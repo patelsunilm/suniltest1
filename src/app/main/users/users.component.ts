@@ -144,7 +144,7 @@ export class deleteproductPopupComponent {
 
   }
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/companies';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/users';
   }
 
   deleteappuser(userid) {
@@ -152,12 +152,17 @@ export class deleteproductPopupComponent {
       .subscribe(
         data => {
 
-          this.snackBar.open('User deleted successfully', '', {
+          this.snackBar.open('User deleted successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
-        })
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          console.log(error);
+
+        });
 
   }
 }

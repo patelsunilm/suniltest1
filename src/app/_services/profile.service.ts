@@ -41,8 +41,6 @@ export class ProfileService {
                     $('#CurrencyChnage').fadeOut('slow').load('toolbar.component.ts').fadeIn('slow');
                     return user;
                 }
-
-
             });
     }
 

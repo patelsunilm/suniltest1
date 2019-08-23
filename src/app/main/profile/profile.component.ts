@@ -126,12 +126,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
                     data => {
 
-                        console.log('data');   
+                        console.log('data');
                         console.log(data);
                         this.image = data.image
                         this.form = this._formBuilder.group({
                             name: [data.name],
-                            email: [data.email],
+                            email: [data.email, [Validators.required, Validators.email]],
                             address: [data.address],
                             businessname: [data.businessname],
                             Secretquestion: [data.secretquestion],
@@ -145,28 +145,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             city: [parseInt(data.cityid)]
 
                         });
-                        
-                       
+
+
                         this.ProfileService.getstates(data.countryid)
-                        .subscribe(
-                            data => {
-                                
-                                this.states = data.data;
-                               
-                            },
-                            error => {
+                            .subscribe(
+                                data => {
 
-                                console.log(error);
-                            });
+                                    this.states = data.data;
 
-                            var num = data.stateid;
-                            var n = num.toString();
-                            this.ProfileService.getcity(n)
+                                },
+                                error => {
+
+                                    console.log(error);
+                                });
+
+                        var num = data.stateid;
+                        var n = num.toString();
+                        this.ProfileService.getcity(n)
                             .subscribe(
                                 data => {
 
                                     this.citys = data.data;
-                                    
+
                                 },
                                 error => {
 
@@ -254,12 +254,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     fileChangeEvent(fileInput: any, index) {
         var imagefiles = fileInput.target.files;
         if (fileInput.target.files && fileInput.target.files[0]) {
-            var testreader = new FileReader();
-            testreader.onload = (fileInput: any) => {
-                this.urls[index] = fileInput.target.result;
-                this.filesToUpload.push(imagefiles[0]);
+            var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
+
+            if (!(regex.test(fileInput.target.value.toLowerCase()))) {
+                fileInput.target.value = ''
+                this.snackBar.open('Please select correct file format', '', {
+                    duration: 3000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+
+            } else {
+
+                var testreader = new FileReader();
+                testreader.onload = (fileInput: any) => {
+                    this.urls[index] = fileInput.target.result;
+                    this.filesToUpload.push(imagefiles[0]);
+                }
+                testreader.readAsDataURL(fileInput.target.files[0]);
             }
-            testreader.readAsDataURL(fileInput.target.files[0]);
         }
     }
 

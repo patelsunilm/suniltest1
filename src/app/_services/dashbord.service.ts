@@ -19,8 +19,8 @@ export class DashbordService {
   }
 
   getAllcountproducts() {
-
-    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountproducts')
+    var userId = localStorage.getItem('userId');
+    return this.http.get<any>(appConfig.apiUrl + '/dashboard/getAllcountproducts/' + userId)
 
   }
 

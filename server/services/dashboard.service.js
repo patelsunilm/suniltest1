@@ -72,11 +72,12 @@ function getAllmerchantcounts() {
 }
 
 
-function getAllcountproducts() {
+function getAllcountproducts(userId) {
+
     var deferred = Q.defer();
+    var userId = new mongoose.Types.ObjectId(userId);
 
-
-    products.count(function (err, data) {
+    products.count({ merchantid: userId }, function (err, data) {
         if (!err) {
 
             deferred.resolve(data);

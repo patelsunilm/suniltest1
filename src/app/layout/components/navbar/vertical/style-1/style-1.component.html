@@ -1,18 +1,16 @@
 <div class="navbar-top" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
-     
-    <div class="logo">
+
+    <div style="cursor: pointer;" class="logo" [routerLink]="['/dashboard']">
         <img class="logo-icon" src="assets/images/logos/smaflogo.jpg">
         <span class="logo-text secondary-text">SMAF</span>
     </div>
 
     <div class="buttons">
-        <button mat-icon-button class="toggle-sidebar-folded"
-                (click)="toggleSidebarFolded('navbar')" fxHide.lt-lg>
+        <button mat-icon-button class="toggle-sidebar-folded" (click)="toggleSidebarFolded('navbar')" fxHide.lt-lg>
             <mat-icon class="secondary-text">menu</mat-icon>
         </button>
 
-        <button mat-icon-button class="toggle-sidebar-opened"
-                (click)="toggleSidebarOpened('navbar')" fxHide.gt-md>
+        <button mat-icon-button class="toggle-sidebar-opened" (click)="toggleSidebarOpened('navbar')" fxHide.gt-md>
             <mat-icon class="secondary-text">arrow_back</mat-icon>
         </button>
 
@@ -21,11 +19,11 @@
 </div>
 
 
-<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground"
-     fusePerfectScrollbar [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
+<div class="navbar-scroll-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground" fusePerfectScrollbar
+    [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
     <div class="navbar-content">
         <!-- <fuse-navigation  class="material2" layout="vertical"></fuse-navigation> -->
-        <fuse-navigation [navigation]="navigation" ></fuse-navigation>
+        <fuse-navigation [navigation]="navigation"></fuse-navigation>
     </div>
 
 </div>
