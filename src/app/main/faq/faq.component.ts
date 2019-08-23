@@ -92,6 +92,7 @@ export class FaqComponent implements OnInit, OnDestroy {
                     data => {
                         this.faqsvalue = data
                         this.merchantname = data
+                         this.mydatalength = data.length
                     },
                     error => {
 
