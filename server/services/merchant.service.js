@@ -29,7 +29,6 @@ function getallMerchentsData() {
     users.aggregate([
         {
             $match: {
-
                 "userType": 'Merchant'
             }
         },
@@ -183,7 +182,7 @@ function getmerchantDatabyId(merchantDataId) {
 
 
 function updatemerchantData(merchantdata) {
-    
+
     var deferred = Q.defer();
     var email = new RegExp("^" + merchantdata.email + "$", "i")
     users.find({ $and: [{ email: email }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
@@ -325,9 +324,9 @@ function getMerchantCategories() {
 
                     var category = {}
 
-                        category.merchantCatId =  element._id == undefined ? '' : element._id,
+                    category.merchantCatId = element._id == undefined ? '' : element._id,
                         category.merchantCatName = element.merchantcatname == undefined ? '' : element.merchantcatname
-                       
+
                     allcategories.push(category);
 
                 });

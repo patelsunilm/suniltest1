@@ -69,7 +69,7 @@ export class MerchantComponent implements OnInit {
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {
-
+                    console.log(data)
                     this.allmerchantdata = data.data;
                     const merchantdata = data.data;
                     const allmerchantdata = [];
