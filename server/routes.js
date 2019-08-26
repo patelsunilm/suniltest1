@@ -13,7 +13,6 @@ router.get('/dashboard/getAllcountproducts/:userId', dashboards.getAllcountprodu
 router.get('/dashboard/getAllcountfaqs/:userId', dashboards.getAllcountfaqs);
 
 
-
 var profiledata = require('./controllers/profile/profile.controller');
 router.get('/profile/getprofileInfo/:userId', profiledata.getprofileInfo);
 router.post('/profile/updateprofile', profiledata.updateprofile);
