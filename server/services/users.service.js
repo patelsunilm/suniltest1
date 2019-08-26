@@ -290,6 +290,7 @@ function getmerchantcategories() {
     var deferred = Q.defer();
 
     Merchant.find(function (err, merchantcategories) {
+
         if (!err) {
 
             deferred.resolve(merchantcategories);
@@ -357,12 +358,12 @@ function sendotp(data) {
 
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
-                                      
+
                                         console.log(error);
 
                                     } else {
 
-                                     
+
                                         deferred.resolve(userdata);
 
                                     }
@@ -371,7 +372,7 @@ function sendotp(data) {
 
                             } else {
 
-                     
+
                                 deferred.reject(err.name + ': ' + err.message);
                             }
                         })
@@ -384,7 +385,7 @@ function sendotp(data) {
                         appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
                             if (err) {
 
-                             
+
                                 deferred.reject(err);
 
                             } else {
@@ -392,10 +393,10 @@ function sendotp(data) {
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
 
-                                   
+
                                         console.log(error);
                                     } else {
-                                    
+
                                         deferred.resolve(userdata);
 
                                     }
@@ -429,7 +430,7 @@ function sendotp(data) {
 
 function matchotp(data) {
 
-   
+
     var deferred = Q.defer();
 
     appusers.findOne({ $and: [{ otp: data.otp }, { email: data.email }] }, function (err, user) {
@@ -577,53 +578,53 @@ function lastvisitMerchant(data) {
             {}
     }
 
-appusers.findOne({lastMerchantId :data.merchantId }, function(err , Merchant){
-    if (!err) { 
-
-     
-        appusers.findOneAndUpdate({ _id: data.userId }, { $set: { lastMerchantId: data.merchantId } }, function (err, user) {
+    appusers.findOne({ lastMerchantId: data.merchantId }, function (err, Merchant) {
         if (!err) {
-            if (user == null) {
-                
-                deferred.resolve(userdata1);
-            } else {
-            
-            
-                var userdata =
-                {
-                    "status": "1",
-                    "message": "Successful",
-                    "data": {
+
+
+            appusers.findOneAndUpdate({ _id: data.userId }, { $set: { lastMerchantId: data.merchantId } }, function (err, user) {
+                if (!err) {
+                    if (user == null) {
+
+                        deferred.resolve(userdata1);
+                    } else {
+
+
+                        var userdata =
+                        {
+                            "status": "1",
+                            "message": "Successful",
+                            "data": {
+                            }
+                        }
+                        deferred.resolve(userdata);
                     }
+
+                } else {
+
+                    var userdata1 = {
+                        "status": "0",
+                        "message": "no data found",
+                        "data":
+                            {}
+                    }
+
+                    deferred.resolve(userdata1);
                 }
-                deferred.resolve(userdata);
-            }
-           
+            })
         } else {
-          
+
+
             var userdata1 = {
                 "status": "0",
                 "message": "no data found",
                 "data":
                     {}
             }
-            
             deferred.resolve(userdata1);
         }
+
     })
-    } else {
- 
-       
-        var userdata1 = {
-            "status": "0",
-            "message": "no data found",
-            "data":
-                {}
-        }
-        deferred.resolve(userdata1);
-    }
-    
-})
 
     return deferred.promise;
 }

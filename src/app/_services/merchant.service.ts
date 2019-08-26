@@ -16,7 +16,7 @@ export class MerchantService {
     }
 
     getmerchantDatabyId(merchantDataId) {
-       
+
         return this.http.get<any>(appConfig.apiUrl + '/merchant/getmerchantDatabyId/' + merchantDataId)
     }
 
