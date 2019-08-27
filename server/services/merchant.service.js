@@ -362,8 +362,6 @@ function getMerchantCategories() {
 function SearchMerchant(merchantdetail) {
 
     var deferred = Q.defer();
-    var startlimit = parseInt(merchantdetail.startLimit);
-    var endlimit = parseInt(merchantdetail.endLimit);
     var countrieId = parseInt(merchantdetail.countrieId)
 
     var merchentcatdetails = {
@@ -390,28 +388,23 @@ function SearchMerchant(merchantdetail) {
                     allmerchant.push(merchantdetails);
                 });
 
-                users.find({ $and: [{ merchantcatid: merchantdetail.merchantCatId }, { countryid: countrieId }] }, function (err, merchantcount) {
-                    if (!err) {
+                var merchentdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data": {
+                        allmerchant
+                    },
+                }
 
-                        var merchentdetails = {
-                            "status": "1",
-                            "message": "Sucess",
-                            "data": {
-                                allmerchant,
-                                totalCounts: merchantcount.length
-                            },
+                deferred.resolve(merchentdetails);
 
-                        }
-                        deferred.resolve(merchentdetails);
-                    }
-                })
             }
         } else {
 
             deferred.resolve(merchentcatdetails);
         }
 
-    }).skip(startlimit).limit(endlimit)
+    })
     return deferred.promise;
 }
 
