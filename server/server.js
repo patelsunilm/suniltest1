@@ -27,8 +27,8 @@ var productcategory = require('../server/controllers/products/productcategories.
 gm = require('gm');
 
 
-var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
-//var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+//var mongodbUrl = 'mongodb://' + config.DB_User + ':' + encodeURIComponent(config.DB_Pass) + '@' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
+var mongodbUrl = 'mongodb://' + config.DB_HOST + ':' + config.DB_PORT + '/' + config.DB_NAME;
 
 
 
@@ -123,9 +123,7 @@ app.use(expressJwt({
     '/users/addsignupuser',
     '/users/submitgoogledetails',
     '/users/submitfacebookdetails',
-
     '/users/getmerchantcategories',
-
     '/forgot-password-2/sendlink',
     '/forgot-password-2/resetpassword', '/products/addcsvfile',
     '/users/sendotp',
@@ -400,9 +398,6 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 })
 
 
-
-
-
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
   var uploadedfiles = req.files;
@@ -440,28 +435,42 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
         }
         else {
 
-          appuser.findById(req.body.userid, function (err, getdata) {
+          appuser.findById(req.body.userId, function (err, getdata) {
 
             if (!err) {
 
               getdata.email = req.body.email
-              getdata.firstname = req.body.firstname;
-              getdata.lastname = req.body.lastname;
+              getdata.firstname = req.body.firstName;
+              getdata.lastname = req.body.lastName;
               getdata.phone = req.body.phone;
               getdata.image = resultdata.Location;
 
-              getdata.save(function (err) {
+              getdata.save(function (err , usersResults) {
                 if (!err) {
 
-                  var userprofile = {
+                  var user = [];
+              
+                   var userprofile = {
                     "status": "1",
                     "message": "Success",
                     "data":
-                      {}
+                      {
+                        
+                        email : usersResults.email,
+                        firstName :usersResults.firstname,
+                        lastName : usersResults.lastname,
+                        image : usersResults.image,
+                        phone : usersResults.phone,
+                        userId  : usersResults._id,
+                        lastMerchantId : usersResults.lastMerchantId
+                     
+                      }
                   }
 
                   res.send(userprofile);
+               
                 } else {
+               
                   var userprofile = {
                     "status": "0",
                     "message": "No data found",
