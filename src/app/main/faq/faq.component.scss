@@ -20,6 +20,10 @@ table {
     padding-right: 5px;
     padding-left: 24px;
   }
+  
+.no-data-av{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
+.no-re-found{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
+
   th.cstm-th {
     padding-right: 5px;
     padding-left: 5px;
@@ -32,5 +36,11 @@ table {
   .cstm-resellers-table tr td{padding-right: 5px;padding-left: 5px;}
   .cstm-resellers-table tr td:first-child{padding-right: 5px;padding-left: 24px;}
   .cstm-resellers-table tr td:last-child{padding-right: 5px;padding-left: 5px;min-width: 80px;}
-  
+  .mat-elevation-z8.cstm-main-bg{background-color: #fff;}
+  .mat-elevation-z8.cstm-main-bg .header-content{padding: 11px;padding-top: 30px;padding-bottom: 0px;}
+  mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel{margin-bottom: 30px;}
+  .mat-elevation-z8.cstm-main-bg .mat-raised-button{position: absolute;top: 6px;right: 100px;}
+  .cstm-expansion-panel-head .mat-expansion-panel-header{position: relative;}
+  mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-3.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
+  mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-5.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
   

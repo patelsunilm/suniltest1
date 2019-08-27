@@ -85,6 +85,7 @@
     "sharp": "0.22.1",
     "textmagic-rest-client": "1.0.10",
     "web-animations-js": "2.3.1",
+    "xregexp": "4.2.4",
     "zone.js": "0.8.26"
   },
   "devDependencies": {

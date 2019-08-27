@@ -80,49 +80,49 @@ exports.deletemerchantData = function (req, res) {
 }
 
 
-exports.getMerchentsbyId = function (req , res) {
+exports.getMerchentsbyId = function (req, res) {
 
     merchentService.getMerchentsbyId(req.params.catid)
-    .then(function (data) {
-        res.json(data);
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });
+        .then(function (data) {
+            res.json(data);
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 
 }
 
 
-exports.getMerchantCategories = function(req, res) {
-    
+exports.getMerchantCategories = function (req, res) {
+
     merchentService.getMerchantCategories()
-    .then(function (getcategorydata) {
-        if (getcategorydata) {
-            res.send(getcategorydata);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });
+        .then(function (getcategorydata) {
+            if (getcategorydata) {
+                res.send(getcategorydata);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 
 
 }
 
 
-exports.SearchMerchant = function(req , res) {
-   
+exports.SearchMerchant = function (req, res) {
+
     merchentService.SearchMerchant(req.body)
-    .then(function (SearchMerchantdetails) {
-        if (SearchMerchantdetails) {
-            res.send(SearchMerchantdetails);
-        } else {
-            res.sendStatus(404);
-        }
-    })
-    .catch(function (err) {
-        res.status(400).send(err);
-    });
+        .then(function (SearchMerchantdetails) {
+            if (SearchMerchantdetails) {
+                res.send(SearchMerchantdetails);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
 
 }

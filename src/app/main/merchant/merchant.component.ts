@@ -34,6 +34,7 @@ export class MerchantComponent implements OnInit {
     merchantcategories: any;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     isTableHasData = true;
+    isTableHasDataAgain = true;
 
     applyFilter(filterValue: any) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -68,17 +69,23 @@ export class MerchantComponent implements OnInit {
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {
-               
+                    console.log(data)
                     this.allmerchantdata = data.data;
                     const merchantdata = data.data;
                     const allmerchantdata = [];
                     merchantdata.forEach(element => {
 
                         allmerchantdata.push(element);
-                  
+
                     });
-                    this.dataSource = new MatTableDataSource(allmerchantdata);
-                    this.dataSource.paginator = this.paginator;
+
+                    if (allmerchantdata.length > 0) {
+                        this.dataSource = new MatTableDataSource(allmerchantdata);
+                        this.dataSource.paginator = this.paginator;
+                        this.isTableHasDataAgain = true;
+                    } else {
+                        this.isTableHasDataAgain = false;
+                    }
                 },
                 error => {
                     console.log(error);
@@ -129,12 +136,17 @@ export class MerchantComponent implements OnInit {
                         const allmerchantdata = [];
                         merchantdata.forEach(element => {
 
-                         
+
                             allmerchantdata.push(element);
 
                         });
-                        this.dataSource = new MatTableDataSource(allmerchantdata);
-                        this.dataSource.paginator = this.paginator;
+                        if (allmerchantdata.length > 0) {
+                            this.dataSource = new MatTableDataSource(allmerchantdata);
+                            this.dataSource.paginator = this.paginator;
+                            this.isTableHasDataAgain = true;
+                        } else {
+                            this.isTableHasDataAgain = false;
+                        }
                     },
                     error => {
                         console.log(error);
@@ -151,6 +163,7 @@ export class MerchantComponent implements OnInit {
             this.MerchantService.getallMerchentsData()
                 .subscribe(
                     data => {
+                        console.log(data)
                         this.allmerchantdata = data.data;
                         const merchantdata = data.data;
                         const allmerchantdata = [];
@@ -160,13 +173,11 @@ export class MerchantComponent implements OnInit {
 
                         });
                         if (allmerchantdata.length > 0) {
-
                             this.dataSource = new MatTableDataSource(allmerchantdata);
                             this.dataSource.paginator = this.paginator;
-                            this.isTableHasData = true;
+                            this.isTableHasDataAgain = true;
                         } else {
-
-                            this.isTableHasData = false;
+                            this.isTableHasDataAgain = false;
                         }
                     },
                     error => {
@@ -176,6 +187,7 @@ export class MerchantComponent implements OnInit {
             this.MerchantService.getMerchentsbyId(catid)
                 .subscribe(
                     data => {
+
                         this.allmerchantdata = data;
                         const merchantdata = data;
                         const allmerchantdata = [];
@@ -186,13 +198,11 @@ export class MerchantComponent implements OnInit {
                         });
 
                         if (allmerchantdata.length > 0) {
-
                             this.dataSource = new MatTableDataSource(allmerchantdata);
                             this.dataSource.paginator = this.paginator;
-                            this.isTableHasData = true;
+                            this.isTableHasDataAgain = true;
                         } else {
-
-                            this.isTableHasData = false;
+                            this.isTableHasDataAgain = false;
                         }
 
 

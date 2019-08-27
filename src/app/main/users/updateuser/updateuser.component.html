@@ -56,8 +56,8 @@
             <mat-error *ngIf="form.get('email').hasError('required')">
               Please enter email!
             </mat-error>
-            <mat-error *ngIf="form.get('email').hasError('pattern')">
-              Please enter email!
+            <mat-error *ngIf="form.get('email').hasError('email')">
+                Please enter valid email!
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">

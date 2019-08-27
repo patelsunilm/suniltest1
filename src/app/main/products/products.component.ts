@@ -33,11 +33,11 @@ export class ProductsComponent implements OnInit {
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  isTableHasData ;
-  isTableHasData12;
+  isTableHasData = true;
+  isTableHasDataAgain = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
- 
- 
+
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -45,8 +45,10 @@ export class ProductsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
     if (this.dataSource.filteredData.length > 0) {
+
       this.isTableHasData = true;
     } else {
+
       this.isTableHasData = false;
     }
   }
@@ -57,7 +59,7 @@ export class ProductsComponent implements OnInit {
   }
   constructor(public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
   openDialog() {
-    
+
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -70,18 +72,13 @@ export class ProductsComponent implements OnInit {
       .subscribe(
         data => {
 
-
-       
           if (data.length > 0) {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.paginator = this.paginator;
-  
-            this.isTableHasData12 = true;
+            this.isTableHasDataAgain = true;
           } else {
-            this.isTableHasData12 = false;
+            this.isTableHasDataAgain = false;
           }
-
-
 
         }, error => {
           console.log(error);
@@ -107,8 +104,14 @@ export class ProductsComponent implements OnInit {
         .subscribe(
           data => {
 
-            this.dataSource = new MatTableDataSource(data);
-            this.dataSource.paginator = this.paginator;
+            if (data.length > 0) {
+              this.dataSource = new MatTableDataSource(data);
+              this.dataSource.paginator = this.paginator;
+              this.isTableHasDataAgain = true;
+            } else {
+              this.isTableHasDataAgain = false;
+            }
+
 
           }, error => {
             console.log(error);
@@ -119,24 +122,24 @@ export class ProductsComponent implements OnInit {
 
   fileEvent($event) {
 
-     var regex = new RegExp("(.*?)\.(csv)$");
-    
+    var regex = new RegExp("(.*?)\.(csv)$");
+
     if (!(regex.test($event.target.value.toLowerCase()))) {
-    
+
       $event.target.value = '';
       this.snackBar.open('Please select correct file format', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       });
-    
+
     } else {
 
-    var userId =  localStorage.getItem('userId');
-   
-    $event.target.files[0].userId = userId  
-   
-    this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
+      var userId = localStorage.getItem('userId');
+
+      $event.target.files[0].userId = userId
+
+      this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully") {
           this.snackBar.open('Csv import success fully', '', {
@@ -152,8 +155,14 @@ export class ProductsComponent implements OnInit {
             .subscribe(
               data => {
 
-                this.dataSource = new MatTableDataSource(data);
-                this.dataSource.paginator = this.paginator;
+                if (data.length > 0) {
+                  this.dataSource = new MatTableDataSource(data);
+                  this.dataSource.paginator = this.paginator;
+                  this.isTableHasDataAgain = true;
+                } else {
+                  this.isTableHasDataAgain = false;
+                }
+
 
               }, error => {
                 console.log(error);

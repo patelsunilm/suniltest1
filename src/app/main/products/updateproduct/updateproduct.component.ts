@@ -77,17 +77,31 @@ export class UpdateproductComponent implements OnInit {
 
     var imagefiles = fileInput.target.files;
     if (fileInput.target.files && fileInput.target.files[0]) {
-      var filesAmount = fileInput.target.files.length;
+      var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
 
-      var testreader = new FileReader();
-      testreader.onload = (fileInput: any) => {
+      if (!(regex.test(fileInput.target.value.toLowerCase()))) {
+          fileInput.target.value = ''
+        this.snackBar.open('Please select correct file format', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+     
+      }else{
 
+        var filesAmount = fileInput.target.files.length;
 
-        this.urls[index] = fileInput.target.result;
-        this.filesToUpload.push(imagefiles[0]);
+        var testreader = new FileReader();
+        testreader.onload = (fileInput: any) => {
+  
+  
+          this.urls[index] = fileInput.target.result;
+          this.filesToUpload.push(imagefiles[0]);
+        }
+  
+        testreader.readAsDataURL(fileInput.target.files[0]);
+
       }
-
-      testreader.readAsDataURL(fileInput.target.files[0]);
     }
   }
 

@@ -6,23 +6,22 @@ var router = express.Router();
 
 var dashboards = require('./controllers/dashboards/dashboard.controller');
 
-router.get('/dashboard/getAllusercount' , dashboards.getAllusercount);
+router.get('/dashboard/getAllusercount', dashboards.getAllusercount);
 router.get('/dashboard/getAllcountfeedback', dashboards.getAllcountfeedback);
-router.get('/dashboard/getAllmerchantcounts' ,dashboards.getAllmerchantcounts);
-router.get('/dashboard/getAllcountproducts' ,dashboards.getAllcountproducts);
-router.get('/dashboard/getAllcountfaqs/:userId' ,dashboards.getAllcountfaqs);
-
+router.get('/dashboard/getAllmerchantcounts', dashboards.getAllmerchantcounts);
+router.get('/dashboard/getAllcountproducts/:userId', dashboards.getAllcountproducts);
+router.get('/dashboard/getAllcountfaqs/:userId', dashboards.getAllcountfaqs);
 
 
 var profiledata = require('./controllers/profile/profile.controller');
 router.get('/profile/getprofileInfo/:userId', profiledata.getprofileInfo);
 router.post('/profile/updateprofile', profiledata.updateprofile);
 
-router.post('/profile/getcountries' , profiledata.getcountries);
-router.post('/profile/getstates' , profiledata.getstates);
-router.post('/profile/getcity' , profiledata.getcity);
-router.post('/profile/getuserprofile' , profiledata.getuserprofile);
-router.get('/profile/getAllcountries' , profiledata.getAllcountries);
+router.post('/profile/getcountries', profiledata.getcountries);
+router.post('/profile/getstates', profiledata.getstates);
+router.post('/profile/getcity', profiledata.getcity);
+router.post('/profile/getuserprofile', profiledata.getuserprofile);
+router.get('/profile/getAllcountries', profiledata.getAllcountries);
 
 
 var passworddata = require('./controllers/password/password.controller');
@@ -33,17 +32,17 @@ router.post('/password/passwordmatch', passworddata.passwordmatch);
 var productsdata = require('./controllers/products/products.controller');
 
 router.post('/products/addproduct', productsdata.addproduct);
-router.get('/products/getproducts/:userid',productsdata.getproducts);
+router.get('/products/getproducts/:userid', productsdata.getproducts);
 router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
 router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
 router.post('/products/updateprodcutdetail', productsdata.updateprodcutdetail);
 router.post('/products/getAllproducts', productsdata.getAllproducts);
-router.post('/products/getbarcodedetail' ,productsdata.getbarcodedetail);
-router.post('/products/getAllProductcategories' ,productsdata.getAllProductcategories);
-router.get('/products/addproductcategories/:catname/:merchantId' ,productsdata.addproductcategories);
+router.post('/products/getbarcodedetail', productsdata.getbarcodedetail);
+router.post('/products/getAllProductcategories', productsdata.getAllProductcategories);
+router.get('/products/addproductcategories/:catname/:merchantId', productsdata.addproductcategories);
 
-router.post('/products/addtocart' ,productsdata.addtocart);
-router.post('/products/RemoveCart',productsdata.RemoveCart);
+router.post('/products/addtocart', productsdata.addtocart);
+router.post('/products/RemoveCart', productsdata.RemoveCart);
 
 
 var merchentdata = require('./controllers/merchant/merchant.controller');
@@ -56,7 +55,7 @@ router.delete('/merchant/deletemerchantData/:merchantDataId/:userId/:name', merc
 router.get('/merchant/getMerchentsbyId/:catid', merchentdata.getMerchentsbyId);
 router.get('/merchant/getMerchantCategories', merchentdata.getMerchantCategories);
 
-router.post('/merchant/SearchMerchant' , merchentdata.SearchMerchant);
+router.post('/merchant/SearchMerchant', merchentdata.SearchMerchant);
 
 var faqdata = require('./controllers/faq/faq.controller');
 router.post('/faq/addfaqData', faqdata.addfaqData);
@@ -70,10 +69,10 @@ var appusersdetails = require('./controllers/appusers/appusers.controller');
 router.get('/appusers/GetallUsersDetails', appusersdetails.GetallUsersDetails);
 router.delete('/appusers/deleteappuser/:userid', appusersdetails.deleteappuser);
 router.get('/appusers/getuserbyId/:userid', appusersdetails.getuserbyId);
-router.post('/appusers/updateuserdetails' , appusersdetails.updateuserdetails);
+router.post('/appusers/updateuserdetails', appusersdetails.updateuserdetails);
 
 router.post('/appusers/getCartDetails', appusersdetails.getCartDetails);
-router.post('/appusers/UserLogout' ,appusersdetails.UserLogout);
+router.post('/appusers/UserLogout', appusersdetails.UserLogout);
 
 
 module.exports = router;

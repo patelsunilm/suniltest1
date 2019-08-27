@@ -129,7 +129,7 @@ export class UpdateuserComponent implements OnInit {
   delete(urls, event, index, i, _id) {
     this.route.params.subscribe(params => {
       //this.form.value._id = params.id;
-    
+
       urls.splice(i, 1);
 
       //     this.CompanyService.deletearray(params.id, _id)

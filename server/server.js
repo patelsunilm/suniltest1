@@ -210,8 +210,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
       })) {
 
         var allproducts = [];
-      
-         var j = 0;
+
+        var j = 0;
         for (let i = 0; i < results.length; i++) {
 
 
@@ -221,7 +221,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
           results[i].barcode = datetime + randomnumber
           results[i].merchantid = userid
 
-          
+
 
           productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
             if (getcategory) {
