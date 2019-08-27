@@ -44,3 +44,31 @@ table {
   mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-3.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
   mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-5.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
   
+  a {
+    color: #0254EB
+  }
+  a:visited {
+    color: #0254EB
+  }
+  a.morelink {
+    text-decoration:none;
+    outline: none;
+  }
+  .morecontent span {
+    display: none;
+  }
+  .comment {
+    width: 500px;
+    //background-color: #f0f0f0;
+    margin: 10px;
+    
+    height: 40px;
+    
+    word-break: break-all;
+    overflow-x: scroll;
+  }
+  .mat-elevation-z8.cstm-main-bg .mat-raised-button {
+    position: absolute;
+    top: 6px;
+    right: 150px;
+}

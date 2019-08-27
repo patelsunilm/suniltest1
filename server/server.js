@@ -229,7 +229,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               results[i].productcatid = getcategory._id;
 
 
-              console.log('test1 ');
+      
 
             } else {
 
@@ -243,7 +243,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                 if (!err) {
 
 
-                  console.log('new');
+               
                   results[i].productcatid = productcategory._id;
 
                 } else {
@@ -253,12 +253,10 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
             }
 
-            console.log('res');
+         
 
             if (results[i].productcatid) {
 
-              console.log('pro');
-              console.log(results[i].productcatid);
 
             }
 
@@ -298,10 +296,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         }
 
 
-        // console.log('cat');
-        // console.log(results);
-
-        // console.log(productarray);
+   
         //  productcategory.find({catName : })
 
 

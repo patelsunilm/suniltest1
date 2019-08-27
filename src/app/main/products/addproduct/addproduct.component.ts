@@ -313,10 +313,9 @@ export class AddproductComponent implements OnInit {
                    
                     this.catName.forEach(element => {
                      if(element.catName  == catname){
-                       console.log(element.productCatId)
+                     
                       this.productForm.controls['productcategories'].value(element.productCatId)
                       // this.formArr.value[i].productcategories = element.productCatId;
-                      // console.log(this.formArr.value[i]) 
                      
                     }
                     });
