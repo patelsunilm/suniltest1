@@ -33,7 +33,7 @@
       <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
         <div formArrayName="itemRows">
 
-          <table class="table table-responsive table-striped cstm-table-store">
+          <table class="table table-responsive table-striped cstm-table-store"  [class.isMobile]="isMobile" >
             <tr>
               <th>Image</th>
               <th>Products name</th>
@@ -86,13 +86,14 @@
                 <mat-form-field  appearance="outline" id="div_{{i}}"  >
                   <mat-label>Catlist</mat-label>
                  
-                  <mat-select #mySelect  formControlName="productcategories" required>
+                  <mat-select #mySelect id="divs1_{{i}}"  formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
                     <button mat-button (click)="addnewcategory(i)" >add product category</button>
-                   
+              
                     <mat-option *ngFor="let procatname of catName" [value]="procatname.productCatId">
                         {{procatname.catName}}
                     </mat-option>
+
                  </mat-select>
               
                 </mat-form-field>

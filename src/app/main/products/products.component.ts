@@ -33,7 +33,7 @@ export class ProductsComponent implements OnInit {
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  isTableHasData;
+  isTableHasData ;
   isTableHasData12;
   @ViewChild(MatPaginator) paginator: MatPaginator;
  
@@ -91,6 +91,8 @@ export class ProductsComponent implements OnInit {
 
   deleteproduct(id) {
 
+
+    
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
         productid: id
