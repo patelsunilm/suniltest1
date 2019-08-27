@@ -236,16 +236,21 @@ function updatemerchantData(merchantdata) {
 
 function merchantStatusToggle(merchantdata) {
     var deferred = Q.defer();
+
     users.findById(merchantdata.id, function (err, getdata) {
         if (!err) {
+
             getdata.status = merchantdata.status;
             getdata.datemodified = Date.now();
 
             getdata.save(function (err) {
                 if (!err) {
+
                     deferred.resolve(getdata);
 
                 } else {
+                    console.log('err');
+                    console.log(err);
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });

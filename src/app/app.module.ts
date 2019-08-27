@@ -17,6 +17,7 @@ import { PasswordModule } from 'app/main/password/password.module';
 import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module';
 import { MerchantModule } from 'app/main/merchant/merchant.module';
 import { FaqModule } from 'app/main/faq/faq.module';
+import { OrdersModule } from 'app/main/order/order.module';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -91,7 +92,8 @@ const appRoutes: Routes = [
         MerchantModule,
         ProductsModule,
         FaqModule,
-        UsersModule
+        UsersModule,
+        OrdersModule
 
     ], providers: [
 

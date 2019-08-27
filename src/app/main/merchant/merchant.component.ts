@@ -78,8 +78,7 @@ export class MerchantComponent implements OnInit {
                         allmerchantdata.push(element);
 
                     });
-
-                    if (allmerchantdata.length > 0) {
+                   if (allmerchantdata.length > 0) {
                         this.dataSource = new MatTableDataSource(allmerchantdata);
                         this.dataSource.paginator = this.paginator;
                         this.isTableHasDataAgain = true;
