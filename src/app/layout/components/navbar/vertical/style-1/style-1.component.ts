@@ -72,7 +72,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 title: 'Orders',
                 url: '/order',
                 type: 'item',
-                icon: 'file_copy'
+                icon: 'inbox'
             },
         ]
         var custom2 = [
@@ -103,7 +103,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 title: 'Orders',
                 url: '/order',
                 type: 'item',
-                icon: 'file_copy'
+                icon: 'inbox'
             },
         ]
         _router.events.subscribe(
@@ -144,7 +144,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             title: 'Orders',
                             url: '/order',
                             type: 'item',
-                            icon: 'file_copy'
+                            icon: 'inbox'
                         },
                     ]
                     var custom2 = [
@@ -176,7 +176,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             title: 'Orders',
                             url: '/order',
                             type: 'item',
-                            icon: 'file_copy'
+                            icon: 'inbox'
                         },
                     ];
 

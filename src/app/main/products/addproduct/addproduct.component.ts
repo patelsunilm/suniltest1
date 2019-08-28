@@ -273,9 +273,6 @@ export class AddproductComponent implements OnInit {
 
 
   addproductcategories(i) {
-    
-    
-   
 
    var merchantId = localStorage.getItem('userId');
    var catname = ($("#cat"+i).val())

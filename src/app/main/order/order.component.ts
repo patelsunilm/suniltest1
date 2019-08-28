@@ -4,16 +4,15 @@ import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
 
-
+import { OrdersService } from '../../_services/index';
 
 export interface PeriodicElement {
 
-  // name: string;
-  // address: string;
-  // email: string;
-  // businessname: string;
-  // status: Boolean;
-  // action: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: number;
+  action: string;
 }
 
 
@@ -28,8 +27,8 @@ export interface PeriodicElement {
 
 export class OrderComponent implements OnInit {
 
-
-  //displayedColumns: string[] = ['name', 'address', 'email', 'businessname', 'status', 'action'];
+  appusersdata: any;
+  displayedColumns: string[] = ['firstname', 'lastname', 'email', 'phone', 'action'];
   dataSource;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -45,7 +44,7 @@ export class OrderComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog,
-
+    private OrdersService: OrdersService
   ) { }
 
   openDialog() {
@@ -57,7 +56,25 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.OrdersService.getAllorders()
+      .subscribe(
+        data => {
 
+          this.appusersdata = data;
+          const myappdata = data;
+          const appusersdata = [];
+          myappdata.forEach(element => {
+
+            appusersdata.push(element);
+
+          });
+          this.dataSource = new MatTableDataSource(appusersdata);
+          this.dataSource.paginator = this.paginator;
+        },
+        error => {
+
+          console.log(error);
+        });
 
   }
 

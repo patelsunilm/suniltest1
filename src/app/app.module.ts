@@ -41,7 +41,7 @@ import { ChangePasswordService } from './_services/index';
 import { ProductService } from './_services/index'
 import { MerchantService } from './_services/index';
 import { UsersService } from './_services/index';
-
+import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
 
 
@@ -106,6 +106,7 @@ const appRoutes: Routes = [
         ChangePasswordService,
         ForgotPasswordService,
         MerchantService,
+        OrdersService,
         FAQService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,

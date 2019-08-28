@@ -11,7 +11,6 @@ var faqs = require('../controllers/faq/faq.model');
 var mongoose = require('mongoose');
 
 
-
 var service = {};
 service.getallMerchentsData = getallMerchentsData;
 service.merchantStatusToggle = merchantStatusToggle;

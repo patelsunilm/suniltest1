@@ -11,6 +11,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { OrderComponent } from './order.component';
 
+import { ProductorderdetailsComponent } from './productorderdetails/productorderdetails.component';
+
 import { AuthGuardCommon } from './../../_guards/index';
 
 
@@ -19,12 +21,18 @@ const routes = [
     path: 'order',
     component: OrderComponent,
     canActivate: [AuthGuardCommon]
+  },
+  {
+    path: 'order/productorderdetails/:id',
+    component: ProductorderdetailsComponent,
+    canActivate: [AuthGuardCommon]
   }
 ];
 
 @NgModule({
   declarations: [
-    OrderComponent
+    OrderComponent,
+    ProductorderdetailsComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -47,7 +55,8 @@ const routes = [
     MatSlideToggleModule,
   ],
   exports: [
-    OrderComponent
+    OrderComponent,
+    ProductorderdetailsComponent
   ]
 })
 
