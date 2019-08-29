@@ -22,22 +22,23 @@ import { deleteproductPopupComponent } from './users.component';
 import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { NgxLoadingModule } from 'ngx-loading';
 
+import { AuthGuard } from './../../_guards/index';
 
 const routes = [
     {
         path: 'users',
         component: UsersComponent,
-
+        canActivate: [AuthGuard]
     },
     {
         path: 'users',
         component: deleteproductPopupComponent,
-
+        canActivate: [AuthGuard]
     },
     {
         path: 'updateuser/:id',
         component: UpdateuserComponent,
-        // canActivate: [AuthGuardCo]
+        canActivate: [AuthGuard]
     }
 ];
 
