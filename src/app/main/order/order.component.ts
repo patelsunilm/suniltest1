@@ -59,14 +59,11 @@ export class OrderComponent implements OnInit {
     this.OrdersService.getAllorders()
       .subscribe(
         data => {
-
           this.appusersdata = data;
           const myappdata = data;
           const appusersdata = [];
           myappdata.forEach(element => {
-
             appusersdata.push(element);
-
           });
           this.dataSource = new MatTableDataSource(appusersdata);
           this.dataSource.paginator = this.paginator;
