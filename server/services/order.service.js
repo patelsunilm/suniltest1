@@ -27,7 +27,7 @@ function getAllorders(merchantId, userType) {
           as: "appuserdata"
         }
       }]).exec(function (err, getdata) {
-
+     
         if (!err) {
           deferred.resolve(getdata);
         } else {
