@@ -10,7 +10,6 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
 
-
   addproduct(productdata) {
 
     return this.http.post<any>(appConfig.apiUrl + '/products/addproduct', productdata)
@@ -18,7 +17,7 @@ export class ProductService {
   }
 
   getproducts(userId) {
-    
+
     return this.http.get<any>(appConfig.apiUrl + '/products/getproducts/' + userId)
 
   }
@@ -30,17 +29,17 @@ export class ProductService {
   }
 
   addcsvfile(Files): Observable<any> {
-  
+
     var userId = localStorage.getItem('userId');
 
     const formData: any = new FormData();
     const files: Array<File> = Files;
-    
+
 
     formData.append("uploads", files);
     formData.append("uploads", userId);
-      
-    return this.http.post<any>(appConfig.apiUrl + '/addcsvfile', formData )
+
+    return this.http.post<any>(appConfig.apiUrl + '/addcsvfile', formData)
 
   }
 
@@ -80,15 +79,15 @@ export class ProductService {
 
   getAllProductcategories(merchantId) {
 
-    
-    
-    return this.http.post<any>(appConfig.apiUrl + '/products/getAllProductcategories' , { 'merchantId': merchantId} )
+
+
+    return this.http.post<any>(appConfig.apiUrl + '/products/getAllProductcategories', { 'merchantId': merchantId })
 
 
   }
 
 
-  addproductcategories(catname ,merchantId) {
+  addproductcategories(catname, merchantId) {
     return this.http.get<any>(appConfig.apiUrl + '/products/addproductcategories/' + catname + '/' + merchantId);
 
   }
