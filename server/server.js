@@ -400,6 +400,72 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
+
+
+if(req.files == '') {
+
+  appuser.findById(req.body.userId, function (err, getdata) {
+
+    if (!err) {
+      
+    
+      getdata.email = req.body.email
+      getdata.firstname = req.body.firstName;
+      getdata.lastname = req.body.lastName;
+      getdata.phone = req.body.phone;
+      getdata.image = ""; 
+     
+      getdata.save(function (err , usersResults) {
+        if (!err) {
+
+          var user = [];
+          
+           var userprofile = {
+            "status": "1",
+            "message": "Success",
+            "data":
+              {
+                
+                email : usersResults.email  == undefined ? '' : usersResults.email,
+                firstName :usersResults.firstname  == undefined ? '' : usersResults.firstname,
+                lastName : usersResults.lastname  == undefined ? '' : usersResults.lastname,
+                image : usersResults.image  == undefined ? '' : usersResults.image,
+                phone : usersResults.phone  == undefined ? '' : usersResults.phone,
+                userId  : usersResults._id  == undefined ? '' : usersResults._id,
+                lastMerchantId : usersResults.lastMerchantId  == undefined ? '' : usersResults.lastMerchantId,
+             
+              }
+          }
+
+          res.send(userprofile);
+       
+        } else {
+       
+          var userprofile = {
+            "status": "0",
+            "message": "No data found",
+            "data":
+              {}
+          }
+          res.send(userprofile);
+        }
+      });
+
+    } else {
+
+      var userprofile = {
+        "status": "0",
+        "message": "No data found",
+        "data":
+          {}
+      }
+      res.send(userprofile);
+    }
+  });
+} else {
+
+ 
+  
   var uploadedfiles = req.files;
   var s3 = new AWS.S3();
 
@@ -449,20 +515,22 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
                 if (!err) {
 
                   var user = [];
-              
+                 
                    var userprofile = {
                     "status": "1",
                     "message": "Success",
                     "data":
                       {
                         
-                        email : usersResults.email,
-                        firstName :usersResults.firstname,
-                        lastName : usersResults.lastname,
-                        image : usersResults.image,
-                        phone : usersResults.phone,
-                        userId  : usersResults._id,
-                        lastMerchantId : usersResults.lastMerchantId
+                      
+
+                        email : usersResults.email  == undefined ? '' : usersResults.email,
+                        firstName :usersResults.firstname  == undefined ? '' : usersResults.firstname,
+                        lastName : usersResults.lastname  == undefined ? '' : usersResults.lastname,
+                        image : usersResults.image  == undefined ? '' : usersResults.image,
+                        phone : usersResults.phone  == undefined ? '' : usersResults.phone,
+                        userId  : usersResults._id  == undefined ? '' : usersResults._id,
+                        lastMerchantId : usersResults.lastMerchantId  == undefined ? '' : usersResults.lastMerchantId,
                      
                       }
                   }
@@ -495,6 +563,7 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
         }
       })
     })
+  }
 })
 
 

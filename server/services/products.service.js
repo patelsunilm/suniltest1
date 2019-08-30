@@ -25,6 +25,8 @@ service.getproducts = getproducts;
 service.addproductcategories = addproductcategories;
 service.addtocart = addtocart;
 service.RemoveCart = RemoveCart;
+service.getCategoriesProducts = getCategoriesProducts;
+
 
 function addproduct(addproducts) {
 
@@ -56,55 +58,69 @@ function addproduct(addproducts) {
 }
 
 
-function getAllproducts(merchantId) {
+function getAllproducts(details) {
 
 
-    var startLimit = 0;
-    var endLimit = 10;
+    var startLimit = parseInt(details.startLimit)
+    var endLimit = parseInt(details.endLimit)
 
     var deferred = Q.defer();
-    products.find({ merchantid: merchantId }, function (err, getallproducts) {
+    products.find({ merchantid: details.merchantId }, function (err, getallproducts) {
         if (!err) {
-            if (getallproducts) {
 
-                var allproduct = [];
-                getallproducts.forEach(element => {
-
-                    var product = {}
-                    product.productid = element._id;
-                    product.image = element.image;
-                    product.productname = element.productname;
-                    product.markup = element.markup;
-                    product.costprice = element.costprice;
-                    product.sellingprice = element.sellingprice;
-                    product.tilltype = element.tilltype;
-                    product.stocklevel = element.stocklevel;
-                    product.barcode = element.barcode;
-                    product.data = element.data;
-                    product.merchantid = element.merchantid;
-                    allproduct.push(product);
-
-                });
-
-                var productresponcedata = {
-                    "status": "1",
-                    "message": "Success",
-                    "data":
-                        allproduct
-                }
-            } else {
+            if (getallproducts == '' || getallproducts == null || getallproducts == 'null') {
                 var productresponcedata = {
                     "status": "0",
                     "message": "no data found",
                     "data":
                         {}
                 }
+                deferred.resolve(productresponcedata);
+            } else {
+                var allproduct = [];
+                getallproducts.forEach(element => {
+
+                    var product = {}
+                    product.productId = element._id == undefined ? '' : element._id;
+                    product.image = element.image == undefined ? '' : element.image;
+                    product.productName = element.productname == undefined ? '' : element.productname;
+                    product.markup = element.markup == undefined ? '' : element._id;
+                    product.costPrice = element.costprice == undefined ? '' : element.costprice;
+                    product.sellingPrice = element.sellingprice == undefined ? '' : element.sellingprice;
+                    product.tillType = element.tilltype == undefined ? '' : element.tilltype;
+                    product.stockLevel = element.stocklevel == undefined ? '' : element.stocklevel;
+                    product.barcode = element.barcode == undefined ? '' : element.barcode;
+                    product.merchantId = element.merchantid == undefined ? '' : element.merchantid;
+
+                    allproduct.push(product);
+
+                });
+
+                products.find({ merchantid: details.merchantId }, function (err, getallproducts) {
+                    if (!err) {
+
+                        var productresponcedata = {
+                            "status": "1",
+                            "message": "Success",
+                            "data": {
+                                allproduct,
+                                "totalCounts": getallproducts.length
+                            }
+
+                        }
+                        deferred.resolve(productresponcedata);
+                    }
+                })
             }
 
-            deferred.resolve(productresponcedata);
         } else {
-
-            deferred.reject(err.name + ': ' + err.message);
+            var productresponcedata = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+            deferred.resolve(productresponcedata);
         }
     }).skip(startLimit).limit(endLimit)
     return deferred.promise;
@@ -247,9 +263,9 @@ function getAllProductcategories(details) {
 
                     var productcat = {}
                     productcat.productCatId = element._id == undefined ? '' : element._id;
-                    productcat.catName =  element.catName == undefined ? '' : element.catName;
+                    productcat.catName = element.catName == undefined ? '' : element.catName;
 
-                    
+
                     allproductctegory.push(productcat);
 
                 });
@@ -484,7 +500,7 @@ function RemoveCart(cart) {
         function (err, cartresults) {
             if (!err) {
                 if (cartresults.nModified == 0) {
-                    
+
                     deferred.resolve(cartresponcedata);
 
                 } else {
@@ -497,17 +513,17 @@ function RemoveCart(cart) {
 
                     cartdetails.find({ userId: cart.userId }, function (err, products) {
                         if (!err) {
-                            if(products[0].productdetails.length == 0) {
-                               
+                            if (products[0].productdetails.length == 0) {
+
                                 cartdetails.deleteOne(
                                     { userId: cart.userId },
                                     function (err) {
                                         if (err) {
-                                          
+
                                             deferred.reject(err.name + ': ' + err.message);
                                         }
                                         else {
-                                            
+
                                             deferred.resolve();
                                         }
                                     });
@@ -527,6 +543,73 @@ function RemoveCart(cart) {
         });
 
     return deferred.promise;
+}
+
+function getCategoriesProducts(product) {
+
+    var startLimit = parseInt(product.startLimit)
+    var endLimit = parseInt(product.endLimit)
+    var deferred = Q.defer();
+    products.find({ productcatid: product.productCatId }, function (err, getproducts) {
+        if (!err) {
+
+            if (getproducts == '' || getproducts == null || getproducts == 'null') {
+                var productresponcedata = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+                deferred.resolve(productresponcedata);
+            } else {
+                var allproduct = [];
+
+                getproducts.forEach(element => {
+                    var catproduct = {}
+                    catproduct.productId = element._id == undefined ? '' : element._id;
+                    catproduct.image = element.image == undefined ? '' : element.image;
+                    catproduct.productName = element.productname == undefined ? '' : element.productname;
+                    catproduct.markup = element.markup == undefined ? '' : element._id;
+                    catproduct.costPrice = element.costprice == undefined ? '' : element.costprice;
+                    catproduct.sellingPrice = element.sellingprice == undefined ? '' : element.sellingprice;
+                    catproduct.tillType = element.tilltype == undefined ? '' : element.tilltype;
+                    catproduct.stockLevel = element.stocklevel == undefined ? '' : element.stocklevel;
+                    catproduct.barcode = element.barcode == undefined ? '' : element.barcode;
+                    catproduct.merchantId = element.merchantid == undefined ? '' : element.merchantid;
+                    allproduct.push(catproduct);
+
+                });
+
+                products.find({ productcatid: product.productCatId }, function (err, getproducts) {
+                    if (!err) {
+
+                        var productresponcedata = {
+                            "status": "1",
+                            "message": "Success",
+                            "data": {
+                                allproduct,
+                                "totalCounts": getproducts.length
+                            }
+
+                        }
+                        deferred.resolve(productresponcedata);
+                    }
+                })
+            }
+        } else {
+
+            var productresponcedata = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+
+            deferred.resolve(productresponcedata);
+        }
+    }).skip(startLimit).limit(endLimit)
+    return deferred.promise;
+
 }
 
 module.exports = service;

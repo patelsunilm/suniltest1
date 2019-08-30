@@ -40,6 +40,9 @@ router.get('/products/addproductcategories/:catname/:merchantId', productsdata.a
 router.post('/products/addtocart', productsdata.addtocart);
 router.post('/products/RemoveCart', productsdata.RemoveCart);
 
+router.post('/products/getCategoriesProducts' , productsdata.getCategoriesProducts)
+
+
 
 var merchentdata = require('./controllers/merchant/merchant.controller');
 router.get('/merchant/getallMerchentsData', merchentdata.getallMerchentsData);
