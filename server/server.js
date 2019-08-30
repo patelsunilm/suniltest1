@@ -425,10 +425,10 @@ if(req.files == '') {
             "message": "Success",
             "data":
               {
-                
+
                 email : usersResults.email  == undefined ? '' : usersResults.email,
-                firstName :usersResults.firstname  == undefined ? '' : usersResults.firstname,
-                lastName : usersResults.lastname  == undefined ? '' : usersResults.lastname,
+                firstName :  (usersResults.firstname  == undefined  || usersResults.firstname  == null || usersResults.firstname  == "null") ? '' : usersResults.firstname,
+                lastName : (usersResults.lastname  == undefined  || usersResults.firstname  == null || usersResults.firstname  == "null") ? '' : usersResults.lastname,
                 image : usersResults.image  == undefined ? '' : usersResults.image,
                 phone : usersResults.phone  == undefined ? '' : usersResults.phone,
                 userId  : usersResults._id  == undefined ? '' : usersResults._id,
@@ -515,26 +515,6 @@ if(req.files == '') {
                 if (!err) {
 
                   var user = [];
-<<<<<<< HEAD
-                 
-                   var userprofile = {
-                    "status": "1",
-                    "message": "Success",
-                    "data":
-                      {
-                        
-                      
-
-                        email : usersResults.email  == undefined ? '' : usersResults.email,
-                        firstName :usersResults.firstname  == undefined ? '' : usersResults.firstname,
-                        lastName : usersResults.lastname  == undefined ? '' : usersResults.lastname,
-                        image : usersResults.image  == undefined ? '' : usersResults.image,
-                        phone : usersResults.phone  == undefined ? '' : usersResults.phone,
-                        userId  : usersResults._id  == undefined ? '' : usersResults._id,
-                        lastMerchantId : usersResults.lastMerchantId  == undefined ? '' : usersResults.lastMerchantId,
-                     
-                      }
-=======
 
                   var userprofile = {
                     "status": "1",
@@ -542,16 +522,15 @@ if(req.files == '') {
                     "data":
                     {
 
-                      email: usersResults.email,
-                      firstName: usersResults.firstname,
-                      lastName: usersResults.lastname,
-                      image: usersResults.image,
-                      phone: usersResults.phone,
-                      userId: usersResults._id,
-                      lastMerchantId: usersResults.lastMerchantId
+                      email : usersResults.email  == undefined ? '' : usersResults.email,
+                      firstName :  (usersResults.firstname  == undefined  || usersResults.firstname  == null || usersResults.firstname  == "null") ? '' : usersResults.firstname,
+                      lastName : (usersResults.lastname  == undefined  || usersResults.firstname  == null || usersResults.firstname  == "null") ? '' : usersResults.lastname,
+                      image : usersResults.image  == undefined ? '' : usersResults.image,
+                      phone : usersResults.phone  == undefined ? '' : usersResults.phone,
+                      userId  : usersResults._id  == undefined ? '' : usersResults._id,
+                      lastMerchantId : usersResults.lastMerchantId  == undefined ? '' : usersResults.lastMerchantId,
 
                     }
->>>>>>> 123f7d5a1f6ad558a0fb0b0f97218c918453a28c
                   }
 
                   res.send(userprofile);
