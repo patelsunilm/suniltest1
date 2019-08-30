@@ -81,8 +81,8 @@ router.post('/appusers/UserLogout', appusersdetails.UserLogout);
 var tillmanagement = require('./controllers/tillmanagement/tillmanagement.controller');
 
 router.get('/tillmanagement/getalltillType', tillmanagement.getalltillType);
-router.post('/tillmanagement/addtilldetails' ,tillmanagement.addtilldetails);
-router.post('/tillmanagement/getAllsecondarytilltype' , tillmanagement.getAllsecondarytilltype);
+router.post('/tillmanagement/addtilldetails', tillmanagement.addtilldetails);
+router.post('/tillmanagement/getAllsecondarytilltype', tillmanagement.getAllsecondarytilltype);
 
 
 

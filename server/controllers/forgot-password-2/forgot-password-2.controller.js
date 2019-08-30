@@ -8,9 +8,6 @@ router.post('/resetpassword', resetpassword);
 module.exports = router;
 
 
-
-
-
 function sendlink(req, res) {
 
     forgotpasswordService.sendlink(req.body, req.headers.origin)

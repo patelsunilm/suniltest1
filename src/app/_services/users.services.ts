@@ -7,10 +7,8 @@ import { appConfig } from '../app.config';
 
 @Injectable()
 export class UsersService {
-   
+
     constructor(private http: HttpClient) { }
-
-
 
     GetallUsersDetails() {
 
@@ -28,18 +26,18 @@ export class UsersService {
         return this.http.get<any>(appConfig.apiUrl + '/appusers/getuserbyId/' + userid)
 
     }
-   
-    updateuserprofile(Files):Observable<any> {
-      
+
+    updateuserprofile(Files): Observable<any> {
+
         const formData: any = new FormData();
         const files: Array<File> = Files;
         for (let i = 0; i < Files.length; i++) {
-    
-          formData.append("uploads[]", files[i], files[i]['name']);
-    
+
+            formData.append("uploads[]", files[i], files[i]['name']);
+
         }
         return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
-      
+
     }
 
 

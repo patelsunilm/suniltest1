@@ -16,10 +16,13 @@ import { UsersService } from '../../_services/index';
   styleUrls: ['./users.component.scss'],
   animations: fuseAnimations
 })
+
+
 export class UsersComponent implements OnInit {
   displayedColumns: string[] = ['image', 'email', 'firstname', 'lastname', 'phone', 'action'];
   dataSource;
   form: FormGroup;
+  allappusers: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   isTableHasData = true;
   isTableHasDataAgain = true;
@@ -56,7 +59,7 @@ export class UsersComponent implements OnInit {
     this.UsersService.GetallUsersDetails()
       .subscribe(
         data => {
-
+          this.allappusers = data;
           const users = data
           const allappusers = [];
           users.forEach(element => {
@@ -95,7 +98,7 @@ export class UsersComponent implements OnInit {
       this.UsersService.GetallUsersDetails()
         .subscribe(
           data => {
-
+            this.allappusers = data;
             const users = data
             const allappusers = [];
             users.forEach(element => {
@@ -103,6 +106,9 @@ export class UsersComponent implements OnInit {
               allappusers.push(element);
 
             });
+
+
+
             if (allappusers.length > 0) {
               this.dataSource = new MatTableDataSource(allappusers);
               this.dataSource.paginator = this.paginator;
@@ -110,8 +116,8 @@ export class UsersComponent implements OnInit {
             } else {
               this.isTableHasDataAgain = false;
             }
-          },
 
+          },
           error => {
             console.log(error);
           });
@@ -130,7 +136,11 @@ export class deleteproductPopupComponent {
   returnUrl: string;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
+  dataSource;
+  allappusers: any;
+  isTableHasData = true;
+  isTableHasDataAgain = true;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private ProductService: ProductService,
@@ -143,7 +153,7 @@ export class deleteproductPopupComponent {
 
 
   }
-  
+
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/users';
   }
@@ -159,6 +169,7 @@ export class deleteproductPopupComponent {
             verticalPosition: this.verticalPosition,
           });
           this.router.navigate([this.returnUrl]);
+
         },
         error => {
           console.log(error);

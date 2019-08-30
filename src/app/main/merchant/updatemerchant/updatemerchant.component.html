@@ -33,7 +33,8 @@
 
                     <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                         <mat-label>Name </mat-label>
-                        <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
+                        <input matInput formControlName="name" autocomplete="off"
+                            pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                         <mat-error *ngIf="form.get('name').hasError('required')">
                             Please enter name!
                         </mat-error>
@@ -44,7 +45,7 @@
 
                     <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                         <mat-label>Address </mat-label>
-                        <input matInput formControlName="address" pattern="(?!^ +$)^.+$" required>
+                        <input matInput formControlName="address" autocomplete="off" pattern="(?!^ +$)^.+$" required>
                         <mat-error *ngIf="form.get('address').hasError('required')">
                             Please enter address!
                         </mat-error>
@@ -59,7 +60,7 @@
 
                     <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                         <mat-label>Email </mat-label>
-                        <input matInput formControlName="email">
+                        <input matInput formControlName="email" autocomplete="off">
                         <mat-error *ngIf="form.get('email').hasError('required')">
                             Please enter email!
                         </mat-error>
@@ -70,8 +71,8 @@
 
                     <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                         <mat-label>Business name </mat-label>
-                        <input matInput formControlName="businessname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
-                            required>
+                        <input matInput formControlName="businessname" autocomplete="off"
+                            pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                         <mat-error *ngIf="form.get('businessname').hasError('required')">
                             Please enter business name!
                         </mat-error>
@@ -93,8 +94,8 @@
                 </div>
 
                 <div class="button-row" style="text-align: center;">
-                    <button mat-raised-button="" color="" style="margin-top: 10px;" [disabled]="form.invalid"
-                       >Submit</button>
+                    <button mat-raised-button="" color="" style="margin-top: 10px;"
+                        [disabled]="form.invalid">Submit</button>
                 </div>
             </form>
         </div>
