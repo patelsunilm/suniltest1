@@ -97,6 +97,14 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'shopping_cart'
             },
+            {
+
+                id: 'tillmanagement',
+                title: 'Till Management',
+                url: '/tillmanagement',
+                type: 'item',
+                icon: 'shopping_cart'
+            },
 
             {
                 id: 'faq',
@@ -181,6 +189,15 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             id: 'products',
                             title: 'Products',
                             url: '/products',
+                            type: 'item',
+                            icon: 'shopping_cart'
+                        },
+                        
+                        {
+
+                            id: 'tillmanagement',
+                            title: 'Till Management',
+                            url: '/tillmanagement',
                             type: 'item',
                             icon: 'shopping_cart'
                         },

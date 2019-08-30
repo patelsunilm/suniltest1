@@ -8,4 +8,5 @@ export * from './order.service';
 export * from './faq.service';
 export * from './product.service';
 export * from './users.services';
+export * from './tillmanagement.service';
 export * from './graph.service';

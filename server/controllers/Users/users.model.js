@@ -10,7 +10,7 @@ var UserSchema = new Schema({
   userType: String,
   email: String,
   password: String,
-  businessname: String,
+  businessname:  { type : String , unique : true  } ,
   secretquestion: String,
   secretanswer: String,
   ipaddress: String,

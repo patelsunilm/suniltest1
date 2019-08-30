@@ -150,6 +150,7 @@ export class deleteproductPopupComponent {
 
 
   }
+  
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/users';
   }
