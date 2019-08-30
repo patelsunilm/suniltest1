@@ -125,9 +125,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 .subscribe(
 
                     data => {
-
-                        console.log('data');
-                        console.log(data);
                         this.image = data.image
                         this.form = this._formBuilder.group({
                             name: [data.name],

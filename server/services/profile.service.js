@@ -211,9 +211,6 @@ function getcountries(catid) {
 
     //             var allcountries = [];
     //             countriesresults.forEach(element => {
-
-
-    //                 console.log(element)
     //                 var productcat = {}
     //                 productcat.countrieName =  element.name == undefined ? '' : element.name;
     //                 productcat.countrieId = element.id == undefined ? '' : element.countryid

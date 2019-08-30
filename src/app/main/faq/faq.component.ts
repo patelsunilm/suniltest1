@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
 import { FAQService } from '../../_services/index';
+import * as $ from 'jquery';
 
 
 @Component({
@@ -63,6 +64,41 @@ export class FaqComponent implements OnInit, OnDestroy {
             .subscribe(
                 data => {
 
+                    $(document).ready(function () {
+                        var showChar = 80;
+                        var ellipsestext = "...";
+                        var moretext = "more";
+                        var lesstext = "less";
+                        $('.more').each(function () {
+
+                            data = $(this).html();
+
+                            if (data.length > showChar) {
+
+                                var c = data.substr(0, showChar);
+                                var h = data.substr(showChar - 1, data.length - showChar);
+
+                                var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+                                $(this).html(html);
+                            }
+
+                        });
+
+                        $(".morelink").click(function () {
+                            if ($(this).hasClass("less")) {
+                                $(this).removeClass("less");
+                                $(this).html(moretext);
+                            } else {
+                                $(this).addClass("less");
+                                $(this).html(lesstext);
+                            }
+                            $(this).parent().prev().toggle();
+                            $(this).prev().toggle();
+                            return false;
+                        });
+                    });
+
                     this.faqsvalue = data
                     this.merchantname = data
                     this.mydatalength = data.length
@@ -92,7 +128,7 @@ export class FaqComponent implements OnInit, OnDestroy {
                     data => {
                         this.faqsvalue = data
                         this.merchantname = data
-                         this.mydatalength = data.length
+                        this.mydatalength = data.length
                     },
                     error => {
 
