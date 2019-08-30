@@ -52,17 +52,17 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" autofocus="true" required>
+            <input matInput formControlName="email" autocomplete="off" autofocus="true" required>
             <mat-error *ngIf="form.get('email').hasError('required')">
               Please enter email!
             </mat-error>
             <mat-error *ngIf="form.get('email').hasError('email')">
-                Please enter valid email!
+              Please enter valid email!
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstname" required>
+            <input matInput formControlName="firstname" autocomplete="off" required>
             <mat-error *ngIf="form.get('firstname').hasError('required')">
               Please enter firstname!
             </mat-error>
@@ -72,7 +72,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastname" required>
+            <input matInput formControlName="lastname" autocomplete="off" required>
             <mat-error *ngIf="form.get('lastname').hasError('required')">
               Please enter lastname!
             </mat-error>
@@ -82,7 +82,7 @@
             <mat-label>Phone</mat-label>
             <input matInput formControlName="phone"
               oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-              maxlength="10" minlength="10" required pattern="[0-9]*">
+              maxlength="10" minlength="10" required pattern="[0-9]*" autocomplete="off">
             <mat-error *ngIf="form.get('phone').hasError('required')">
               Please enter phone!
             </mat-error>

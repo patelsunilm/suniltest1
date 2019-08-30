@@ -1,5 +1,9 @@
 <style>
-.color-picker{left: inherit !important;right: 0px !important; top:0px !important;}
+    .color-picker {
+        left: inherit !important;
+        right: 0px !important;
+        top: 0px !important;
+    }
 </style>
 <div id="forms" class="page-layout simple fullwidth" fxLayout="column">
 
@@ -36,7 +40,7 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" autofocus="true"
+                            <input matInput formControlName="name" autocomplete="off" autofocus="true"
                                 pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
@@ -48,7 +52,7 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Email</mat-label>
-                            <input matInput formControlName="email" required>
+                            <input matInput formControlName="email" autocomplete="off" required>
                             <mat-error *ngIf="form.get('email').hasError('required')">
                                 Please enter email!
                             </mat-error>
@@ -62,7 +66,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Address</mat-label>
-                            <input matInput formControlName="address" pattern="(?!^ +$)^.+$" required>
+                            <input matInput formControlName="address" autocomplete="off" pattern="(?!^ +$)^.+$"
+                                required>
                             <mat-error *ngIf="form.get('address').hasError('required')">
                                 Please enter address!
                             </mat-error>
@@ -117,7 +122,7 @@
                             fxFlex="1 0 auto">
                             <a mat-button color="warn" class="add-file-button" (click)="fileInput1.click()"
                                 aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-                                Upload logo 
+                                Upload logo
                             </a>
                             <input id="cin" hidden name="cin" #fileInput1 type="file"
                                 accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent($event,i)" />
@@ -136,7 +141,7 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" autofocus="true"
+                            <input matInput formControlName="name" autocomplete="off" autofocus="true"
                                 pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
@@ -148,8 +153,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Business name </mat-label>
-                            <input matInput formControlName="businessname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
-                                required>
+                            <input matInput formControlName="businessname" autocomplete="off"
+                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('businessname').hasError('required')">
                                 Please enter business name!
                             </mat-error>
@@ -169,7 +174,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Address</mat-label>
-                            <input matInput formControlName="address" pattern="(?!^ +$)^.+$" required>
+                            <input matInput formControlName="address" autocomplete="off" pattern="(?!^ +$)^.+$"
+                                required>
                             <mat-error *ngIf="form.get('address').hasError('required')">
                                 Please enter address!
                             </mat-error>
@@ -180,7 +186,7 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Email</mat-label>
-                            <input matInput formControlName="email" required>
+                            <input matInput formControlName="email" autocomplete="off" required>
                             <mat-error *ngIf="form.get('email').hasError('required')">
                                 Please enter email!
                             </mat-error>
@@ -210,14 +216,14 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Secret question</mat-label>
-                            <input matInput formControlName="Secretquestion" required>
+                            <input matInput formControlName="Secretquestion" autocomplete="off" required>
                             <mat-error>
                                 Please enter valid secret question!
                             </mat-error>
                         </mat-form-field>
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Secret answer</mat-label>
-                            <input matInput formControlName="Secretanswer" required>
+                            <input matInput formControlName="Secretanswer" autocomplete="off" required>
                             <mat-error>
                                 Please enter valid secret answer!
                             </mat-error>

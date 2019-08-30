@@ -94,6 +94,7 @@ export class UsersComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       var userId = localStorage.getItem('userId');
+
       this.UsersService.GetallUsersDetails()
         .subscribe(
           data => {
@@ -105,6 +106,8 @@ export class UsersComponent implements OnInit {
               allappusers.push(element);
 
             });
+
+
 
             if (allappusers.length > 0) {
               this.dataSource = new MatTableDataSource(allappusers);
@@ -134,11 +137,11 @@ export class deleteproductPopupComponent {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   dataSource;
-  allappusers:any;
+  allappusers: any;
   isTableHasData = true;
   isTableHasDataAgain = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private ProductService: ProductService,
     private route: ActivatedRoute,
@@ -150,7 +153,7 @@ export class deleteproductPopupComponent {
 
 
   }
-  
+
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/users';
   }
@@ -166,30 +169,7 @@ export class deleteproductPopupComponent {
             verticalPosition: this.verticalPosition,
           });
           this.router.navigate([this.returnUrl]);
-          this.UsersService.GetallUsersDetails()
-          .subscribe(
-            data => {
-              this.allappusers = data;
-              const users = data
-              const allappusers = [];
-              users.forEach(element => {
-  
-                allappusers.push(element);
-  
-              });
-  
-              if (allappusers.length > 0) {
-                this.dataSource = new MatTableDataSource(allappusers);
-                this.dataSource.paginator = this.paginator;
-                this.isTableHasDataAgain = true;
-              } else {
-                this.isTableHasDataAgain = false;
-              }
-  
-            },
-            error => {
-              console.log(error);
-            });
+
         },
         error => {
           console.log(error);
