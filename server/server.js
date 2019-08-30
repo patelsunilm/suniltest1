@@ -227,7 +227,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               results[i].productcatid = getcategory._id;
 
 
-      
+
 
             } else {
 
@@ -241,7 +241,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                 if (!err) {
 
 
-               
+
                   results[i].productcatid = productcategory._id;
 
                 } else {
@@ -251,7 +251,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
             }
 
-         
+
 
             if (results[i].productcatid) {
 
@@ -294,7 +294,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         }
 
 
-   
+
         //  productcategory.find({catName : })
 
 
@@ -445,32 +445,32 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
               getdata.phone = req.body.phone;
               getdata.image = resultdata.Location;
 
-              getdata.save(function (err , usersResults) {
+              getdata.save(function (err, usersResults) {
                 if (!err) {
 
                   var user = [];
-              
-                   var userprofile = {
+
+                  var userprofile = {
                     "status": "1",
                     "message": "Success",
                     "data":
-                      {
-                        
-                        email : usersResults.email,
-                        firstName :usersResults.firstname,
-                        lastName : usersResults.lastname,
-                        image : usersResults.image,
-                        phone : usersResults.phone,
-                        userId  : usersResults._id,
-                        lastMerchantId : usersResults.lastMerchantId
-                     
-                      }
+                    {
+
+                      email: usersResults.email,
+                      firstName: usersResults.firstname,
+                      lastName: usersResults.lastname,
+                      image: usersResults.image,
+                      phone: usersResults.phone,
+                      userId: usersResults._id,
+                      lastMerchantId: usersResults.lastMerchantId
+
+                    }
                   }
 
                   res.send(userprofile);
-               
+
                 } else {
-               
+
                   var userprofile = {
                     "status": "0",
                     "message": "No data found",

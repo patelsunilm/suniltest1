@@ -192,7 +192,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'shopping_cart'
                         },
-                        
+
                         {
 
                             id: 'tillmanagement',
