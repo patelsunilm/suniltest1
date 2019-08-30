@@ -25,7 +25,12 @@ export class MerchantService {
     }
 
     merchantStatusToggle(merchantdata, id) {
+
+
+
         return this.http.post<any>(appConfig.apiUrl + '/merchant/merchantStatusToggle/', { 'status': merchantdata, 'id': id })
+
+
     }
 
     deletemerchantData(merchantDataId, name) {

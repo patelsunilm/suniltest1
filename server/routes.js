@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-
-
-
 var dashboards = require('./controllers/dashboards/dashboard.controller');
 
 router.get('/dashboard/getAllusercount', dashboards.getAllusercount);
@@ -11,7 +8,6 @@ router.get('/dashboard/getAllcountfeedback', dashboards.getAllcountfeedback);
 router.get('/dashboard/getAllmerchantcounts', dashboards.getAllmerchantcounts);
 router.get('/dashboard/getAllcountproducts/:userId', dashboards.getAllcountproducts);
 router.get('/dashboard/getAllcountfaqs/:userId', dashboards.getAllcountfaqs);
-
 
 var profiledata = require('./controllers/profile/profile.controller');
 router.get('/profile/getprofileInfo/:userId', profiledata.getprofileInfo);
@@ -62,6 +58,10 @@ router.post('/faq/addfaqData', faqdata.addfaqData);
 router.get('/faq/getAllfaqs/:userId/:userType', faqdata.getAllfaqs);
 router.post('/faq/addFaqAnswerByAdmin', faqdata.addFaqAnswerByAdmin);
 
+var orderdata = require('./controllers/order/order.controller');
+
+router.get('/order/getAllorders/:merchantId/:userType', orderdata.getAllorders);
+router.get('/order/getAllproductorderdetails/:appuserId', orderdata.getAllproductorderdetails);
 
 
 var appusersdetails = require('./controllers/appusers/appusers.controller');
@@ -73,6 +73,14 @@ router.post('/appusers/updateuserdetails', appusersdetails.updateuserdetails);
 
 router.post('/appusers/getCartDetails', appusersdetails.getCartDetails);
 router.post('/appusers/UserLogout', appusersdetails.UserLogout);
+
+
+var tillmanagement = require('./controllers/tillmanagement/tillmanagement.controller');
+
+router.get('/tillmanagement/getalltillType', tillmanagement.getalltillType);
+router.post('/tillmanagement/addtilldetails' ,tillmanagement.addtilldetails);
+router.post('/tillmanagement/getAllsecondarytilltype' , tillmanagement.getAllsecondarytilltype);
+
 
 
 module.exports = router;

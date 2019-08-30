@@ -11,7 +11,6 @@ var faqs = require('../controllers/faq/faq.model');
 var mongoose = require('mongoose');
 
 
-
 var service = {};
 service.getallMerchentsData = getallMerchentsData;
 service.merchantStatusToggle = merchantStatusToggle;
@@ -168,9 +167,10 @@ function getallMerchentsData() {
 function getmerchantDatabyId(merchantDataId) {
     var deferred = Q.defer();
     var merchantDataId = new mongoose.Types.ObjectId(merchantDataId);
-
+  
     users.findOne(merchantDataId, function (err, getdata) {
         if (!err) {
+             
             deferred.resolve(getdata);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -192,7 +192,9 @@ function updatemerchantData(merchantdata) {
             deferred.resolve(data);
 
         } else if (merchantdata.businessname) {
-            var businessname = new RegExp("^" + merchantdata.businessname + "$", "i")
+
+            
+              var businessname = new RegExp("^" + merchantdata.businessname +  "$", "i")
             users.find({ $and: [{ businessname: businessname }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
                 if (datalength.length > 0) {
                     var data = {};
@@ -236,16 +238,21 @@ function updatemerchantData(merchantdata) {
 
 function merchantStatusToggle(merchantdata) {
     var deferred = Q.defer();
+
     users.findById(merchantdata.id, function (err, getdata) {
         if (!err) {
+
             getdata.status = merchantdata.status;
             getdata.datemodified = Date.now();
 
             getdata.save(function (err) {
                 if (!err) {
+
                     deferred.resolve(getdata);
 
                 } else {
+                    console.log('err');
+                    console.log(err);
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
@@ -362,8 +369,6 @@ function getMerchantCategories() {
 function SearchMerchant(merchantdetail) {
 
     var deferred = Q.defer();
-    var startlimit = parseInt(merchantdetail.startLimit);
-    var endlimit = parseInt(merchantdetail.endLimit);
     var countrieId = parseInt(merchantdetail.countrieId)
 
     var merchentcatdetails = {
@@ -390,28 +395,23 @@ function SearchMerchant(merchantdetail) {
                     allmerchant.push(merchantdetails);
                 });
 
-                users.find({ $and: [{ merchantcatid: merchantdetail.merchantCatId }, { countryid: countrieId }] }, function (err, merchantcount) {
-                    if (!err) {
+                var merchentdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data": {
+                        allmerchant
+                    },
+                }
 
-                        var merchentdetails = {
-                            "status": "1",
-                            "message": "Sucess",
-                            "data": {
-                                allmerchant,
-                                totalCounts: merchantcount.length
-                            },
+                deferred.resolve(merchentdetails);
 
-                        }
-                        deferred.resolve(merchentdetails);
-                    }
-                })
             }
         } else {
 
             deferred.resolve(merchentcatdetails);
         }
 
-    }).skip(startlimit).limit(endlimit)
+    })
     return deferred.promise;
 }
 

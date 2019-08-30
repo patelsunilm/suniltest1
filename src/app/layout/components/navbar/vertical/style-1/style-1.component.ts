@@ -67,6 +67,20 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'help'
             },
+            {
+                id: 'order',
+                title: 'Orders',
+                url: '/order',
+                type: 'item',
+                icon: 'inbox'
+            },
+            {
+                id: 'graph',
+                title: 'Graph',
+                url: '/graph',
+                type: 'item',
+                icon: 'timeline'
+            },
         ]
         var custom2 = [
             {
@@ -83,13 +97,35 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'shopping_cart'
             },
-            
+            {
+
+                id: 'tillmanagement',
+                title: 'Till Management',
+                url: '/tillmanagement',
+                type: 'item',
+                icon: 'shopping_cart'
+            },
+
             {
                 id: 'faq',
                 title: 'Feedback',
                 url: '/faq',
                 type: 'item',
                 icon: 'help'
+            },
+            {
+                id: 'order',
+                title: 'Orders',
+                url: '/order',
+                type: 'item',
+                icon: 'inbox'
+            },
+            {
+                id: 'graph',
+                title: 'Graph',
+                url: '/graph',
+                type: 'item',
+                icon: 'timeline'
             },
         ]
         _router.events.subscribe(
@@ -125,6 +161,20 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'help'
                         },
+                        {
+                            id: 'order',
+                            title: 'Orders',
+                            url: '/order',
+                            type: 'item',
+                            icon: 'inbox'
+                        },
+                        {
+                            id: 'graph',
+                            title: 'Graph',
+                            url: '/graph',
+                            type: 'item',
+                            icon: 'timeline'
+                        },
                     ]
                     var custom2 = [
                         {
@@ -142,6 +192,15 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'shopping_cart'
                         },
+                        
+                        {
+
+                            id: 'tillmanagement',
+                            title: 'Till Management',
+                            url: '/tillmanagement',
+                            type: 'item',
+                            icon: 'shopping_cart'
+                        },
 
                         {
                             id: 'faq',
@@ -149,6 +208,20 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             url: '/faq',
                             type: 'item',
                             icon: 'help'
+                        },
+                        {
+                            id: 'order',
+                            title: 'Orders',
+                            url: '/order',
+                            type: 'item',
+                            icon: 'inbox'
+                        },
+                        {
+                            id: 'graph',
+                            title: 'Graph',
+                            url: '/graph',
+                            type: 'item',
+                            icon: 'timeline'
                         },
                     ];
 

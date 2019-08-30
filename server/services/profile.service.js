@@ -211,9 +211,6 @@ function getcountries(catid) {
 
     //             var allcountries = [];
     //             countriesresults.forEach(element => {
-
-
-    //                 console.log(element)
     //                 var productcat = {}
     //                 productcat.countrieName =  element.name == undefined ? '' : element.name;
     //                 productcat.countrieId = element.id == undefined ? '' : element.countryid
@@ -358,7 +355,7 @@ function getuserprofile(profile) {
 
         }
     }
-    appuser.findOne({ _id: profile.userid }, function (err, userdetail) {
+    appuser.findOne({ _id: profile.userId }, function (err, userdetail) {
 
         if (!err) {
 
@@ -370,8 +367,8 @@ function getuserprofile(profile) {
                     "data": {
                         "email": userdetail.email,
                         "phone": userdetail.phone,
-                        "firstname": userdetail.firstname,
-                        "lastname": userdetail.lastname,
+                        "firstName": userdetail.firstname,
+                        "lastName": userdetail.lastname,
                         "image": userdetail.image
                     }
                 }

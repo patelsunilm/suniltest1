@@ -458,7 +458,7 @@ function matchotp(data) {
                         "email": user.email,
                         "phone": user.phone,
                         "firstName": user.firstname,
-                        "lastnName": user.lastname,
+                        "lastName": user.lastname,
                         "image": user.image,
                         "lastMerchantId": user.lastMerchantId == undefined ? '' : user.lastMerchantId
 

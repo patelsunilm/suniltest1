@@ -17,6 +17,9 @@ import { PasswordModule } from 'app/main/password/password.module';
 import { ResetPasswordModule } from 'app/main/resetpassword/resetpassword.module';
 import { MerchantModule } from 'app/main/merchant/merchant.module';
 import { FaqModule } from 'app/main/faq/faq.module';
+import { OrdersModule } from 'app/main/order/order.module';
+import { GraphModule } from 'app/main/graph/graph.module';
+
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -40,8 +43,12 @@ import { ChangePasswordService } from './_services/index';
 import { ProductService } from './_services/index'
 import { MerchantService } from './_services/index';
 import { UsersService } from './_services/index';
+import { tillManagementService } from './_services/index';
 
+
+import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
+import { GraphsService } from './_services/index';
 
 
 //all module
@@ -49,6 +56,7 @@ import { SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
 import { UsersModule } from 'app/main/users/users.module';
+import { TillmanagementModule } from './main/tillmanagement/tillmanagement.module';
 
 
 const appRoutes: Routes = [
@@ -91,7 +99,10 @@ const appRoutes: Routes = [
         MerchantModule,
         ProductsModule,
         FaqModule,
-        UsersModule
+        UsersModule,
+        TillmanagementModule,
+        OrdersModule,
+        GraphModule
 
     ], providers: [
 
@@ -104,11 +115,14 @@ const appRoutes: Routes = [
         ChangePasswordService,
         ForgotPasswordService,
         MerchantService,
+        OrdersService,
         FAQService,
+        GraphsService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
         ProductService,
-        UsersService
+        UsersService,
+        tillManagementService
     ],
     bootstrap: [
         AppComponent

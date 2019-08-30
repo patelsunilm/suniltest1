@@ -88,6 +88,8 @@ export class ProductsComponent implements OnInit {
 
   deleteproduct(id) {
 
+
+    
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
         productid: id

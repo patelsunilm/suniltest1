@@ -1,0 +1,73 @@
+<div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
+
+  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center">
+
+    <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+        inbox
+      </mat-icon>
+      <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+        Orders
+      </span>
+    </div>
+
+  </div>
+  <div class="content p-24">
+
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off" placeholder="Search">
+    </mat-form-field>
+
+
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="cstm-resellers-table">
+
+        <!-- email firstname image lastname phone -->
+
+        <ng-container matColumnDef="firstname">
+          <th mat-header-cell *matHeaderCellDef class="cstm-th"> First Name </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.firstname}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastname">
+          <th mat-header-cell *matHeaderCellDef class="cstm-th"> Last Name </th>
+          <td mat-cell *matCellDef="let element">
+            {{element.lastname}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="cstm-th">Email</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.email}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef class="cstm-th">Phone No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.phone}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="cstm-th">Products</th>
+          <td mat-cell *matCellDef="let entry">
+            <a style="cursor: pointer;" [routerLink]="['/order/productorderdetails/',myid]">
+              Product Details
+            </a>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+  </div>
+</div>

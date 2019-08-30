@@ -56,7 +56,10 @@ export class AddproductComponent implements OnInit {
 
 
   }
+
+
   @ViewChild('mySelect') mySelect;
+
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
@@ -135,6 +138,9 @@ export class AddproductComponent implements OnInit {
 
   deleteRow(indexs: number, urls) {
 
+  // if(indexs == 0) {
+
+  // } else {
 
     this.formArr.removeAt(indexs);
     urls.splice(indexs, 1);
@@ -146,6 +152,7 @@ export class AddproductComponent implements OnInit {
     }
 
     this.filesToUpload = temp;
+  // }
   }
 
 
@@ -260,14 +267,12 @@ export class AddproductComponent implements OnInit {
       
     document.getElementById(i).innerHTML = Categoryhtml;
     //  document.getElementById(i).innerHTML = b;
+  
     this.mySelect.close();
   }
 
 
   addproductcategories(i) {
-    
-    
-   
 
    var merchantId = localStorage.getItem('userId');
    var catname = ($("#cat"+i).val())
@@ -311,15 +316,13 @@ export class AddproductComponent implements OnInit {
           
                     this.catName = data.data;
                    
-                    this.catName.forEach(element => {
-                     if(element.catName  == catname){
-                       console.log(element.productCatId)
-                      this.productForm.controls['productcategories'].value(element.productCatId)
-                      // this.formArr.value[i].productcategories = element.productCatId;
-                      // console.log(this.formArr.value[i]) 
+                    // this.catName.forEach(element => {
+                    //  if(element.catName  == catname){
+                    //    console.log(element.productCatId)
+                    //   this.productForm.controls['productcategories'].value(element.productCatId)
                      
-                    }
-                    });
+                    // }
+                    // });
                       
                   },
                   error => {

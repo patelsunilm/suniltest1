@@ -64,8 +64,8 @@
                 <ng-container matColumnDef="businessname">
                     <th mat-header-cell *matHeaderCellDef class="cstm-th"> Businessname </th>
                     <td mat-cell *matCellDef="let element">
-                        <!-- {{ (element.businessName.length>15)? (element.businessName | slice:0:15)+'...':(element.businessName) }} -->
-                        {{element.businessName}}
+                        {{ (element.businessName.length>15)? (element.businessName | slice:0:15)+'...':(element.businessName) }}
+
                     </td>
                 </ng-container>
 
@@ -73,7 +73,7 @@
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef class="cstm-th"> Status </th>
                     <td mat-cell *matCellDef="let element">
-                        <mat-slide-toggle (change)="merchantStatusToggle($event,element._id)"
+                        <mat-slide-toggle (change)="merchantStatusToggle($event,element.merchantId)"
                             checked="{{element.status}}">
                         </mat-slide-toggle>
                     </td>
