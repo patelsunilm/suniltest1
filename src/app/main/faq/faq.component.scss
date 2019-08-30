@@ -37,12 +37,17 @@ table {
   .cstm-resellers-table tr td:first-child{padding-right: 5px;padding-left: 24px;}
   .cstm-resellers-table tr td:last-child{padding-right: 5px;padding-left: 5px;min-width: 80px;}
   .mat-elevation-z8.cstm-main-bg{background-color: #fff;}
-  .mat-elevation-z8.cstm-main-bg .header-content{padding: 11px;padding-top: 30px;padding-bottom: 0px;}
+  .mat-elevation-z8.cstm-main-bg .header-content{text-align:right;font-weight:bold;padding: 11px;padding-top: 30px;padding-bottom: 0px;}
   mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel{margin-bottom: 30px;}
-  .mat-elevation-z8.cstm-main-bg .mat-raised-button{position: absolute;top: 6px;right: 100px;}
+  //.mat-elevation-z8.cstm-main-bg .mat-raised-button{position: relative;top: 0px;right: 0px;margin-right: 0px;}
   .cstm-expansion-panel-head .mat-expansion-panel-header{position: relative;}
   mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-3.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
   mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel.ng-tns-c31-5.mat-expanded.mat-expansion-panel-spacing{margin-bottom: 30px;}
+<<<<<<< HEAD
+ .cstm-expansion-panel-head{margin-bottom: 30px !important;padding-top: 5px;padding-bottom: 5px;} 
+ .cstm-expansion-panel-head .mat-expansion-panel-header span.mat-content{padding-top: 3px;padding-bottom: 5px;}
+ //.cstm-expansion-panel-head .mat-expansion-panel-header span.mat-content .mat-expansion-panel-header-title{width:70%;max-width:70%;}
+=======
   
   a {
     color: #0254EB
@@ -72,3 +77,4 @@ table {
     top: 6px;
     right: 150px;
 }
+>>>>>>> 4b1689aca09e8391e0131e02f2f5fd7b0284aace
