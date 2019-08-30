@@ -40,6 +40,8 @@ import { ChangePasswordService } from './_services/index';
 import { ProductService } from './_services/index'
 import { MerchantService } from './_services/index';
 import { UsersService } from './_services/index';
+import { tillManagementService } from './_services/index';
+
 
 import { FAQService } from './_services/index';
 
@@ -49,6 +51,7 @@ import { SignupModule } from './main/signup/signup.module';
 import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
 import { UsersModule } from 'app/main/users/users.module';
+import { TillmanagementModule } from './main/tillmanagement/tillmanagement.module';
 
 
 const appRoutes: Routes = [
@@ -91,7 +94,8 @@ const appRoutes: Routes = [
         MerchantModule,
         ProductsModule,
         FaqModule,
-        UsersModule
+        UsersModule,
+        TillmanagementModule
 
     ], providers: [
 
@@ -108,7 +112,8 @@ const appRoutes: Routes = [
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
         ProductService,
-        UsersService
+        UsersService,
+        tillManagementService
     ],
     bootstrap: [
         AppComponent

@@ -168,9 +168,10 @@ function getallMerchentsData() {
 function getmerchantDatabyId(merchantDataId) {
     var deferred = Q.defer();
     var merchantDataId = new mongoose.Types.ObjectId(merchantDataId);
-
+  
     users.findOne(merchantDataId, function (err, getdata) {
         if (!err) {
+             
             deferred.resolve(getdata);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -192,7 +193,9 @@ function updatemerchantData(merchantdata) {
             deferred.resolve(data);
 
         } else if (merchantdata.businessname) {
-            var businessname = new RegExp("^" + merchantdata.businessname + "$", "i")
+
+            
+              var businessname = new RegExp("^" + merchantdata.businessname +  "$", "i")
             users.find({ $and: [{ businessname: businessname }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
                 if (datalength.length > 0) {
                     var data = {};
