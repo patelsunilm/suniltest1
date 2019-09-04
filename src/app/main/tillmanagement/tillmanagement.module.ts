@@ -10,30 +10,43 @@ import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { TillmanagementComponent } from './tillmanagement.component';
+import { deletetillmanagementpopupComponent } from './tillmanagement.component'
 import {AddtillmanagementComponent} from './addtillmanagement/addtillmanagement.component'
 
 import { AuthGuard } from './../../_guards/index';
 import { from } from 'rxjs';
+import { UpdatetillmanagementComponent } from './updatetillmanagement/updatetillmanagement.component';
 
 
 const routes = [
     {
         path: 'tillmanagement',
         component: TillmanagementComponent,
-        //  canActivate: [AuthGuard]
+       
     },
     {
         path: 'addtillmanagement',
         component: AddtillmanagementComponent,
-        //  canActivate: [AuthGuard]
+        
     },
+    {
+        path: 'tillmanagement',
+        component: deletetillmanagementpopupComponent,
+        
+    },
+    {
+        path: 'updatetillmanagement/:id/:flag',
+        component: UpdatetillmanagementComponent,
+        
+    }
 ];
 
 @NgModule({
     declarations: [
         TillmanagementComponent,
-        AddtillmanagementComponent
-      
+        AddtillmanagementComponent,
+        deletetillmanagementpopupComponent,
+        UpdatetillmanagementComponent
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -57,7 +70,9 @@ const routes = [
     ],
     exports: [
         TillmanagementComponent,
-        AddtillmanagementComponent
+        AddtillmanagementComponent,
+        deletetillmanagementpopupComponent,
+        UpdatetillmanagementComponent
     ]
 })
 

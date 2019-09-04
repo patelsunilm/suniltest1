@@ -9,7 +9,7 @@ var ProductsSchema = new Schema({
   productcatid : ObjectId,
   image:String,
   productname: String,
-  costprice: String,
+  costprice: Number,
   markup: Number,
   sellingprice: Number,
   date:Date,

@@ -50,7 +50,7 @@
         <mat-form-field appearance="outline" fxFlex="50" class="pl-4" >
           <mat-label>Select Secondary Till</mat-label>
            
-          <mat-select   formControlName="Secondaryid"   >
+          <mat-select   formControlName="Secondaryid">
               
               <mat-option  *ngFor="let  details of secondarydetails" [value]="details._id" >
                 {{details.name}}

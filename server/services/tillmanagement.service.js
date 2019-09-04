@@ -13,6 +13,11 @@ var service = {};
 service.getalltillType = getalltillType;
 service.addtilldetails = addtilldetails;
 service.getAllsecondarytilltype = getAllsecondarytilltype;
+service.getTillManagementDetails = getTillManagementDetails;
+service.deletetilltypename = deletetilltypename;
+service.getTillnametbyId = getTillnametbyId;
+service.updatetilltypename = updatetilltypename;
+
 
 function getalltillType() {
     var deferred = Q.defer();
@@ -29,9 +34,10 @@ function getalltillType() {
 function addtilldetails(details) {
     var deferred = Q.defer();
 
+
+
     tilldetails.findOne({ merchantId: details.merchantId }, function (err, results) {
         if (!err) {
-
             if (results == null || results == 'null' || results == '') {
 
                 if (details.tilltype == "Primary") {
@@ -69,27 +75,29 @@ function addtilldetails(details) {
                 } else {
 
                     if (details.tilltype == "Tertiary") {
-                         
+
                         merchantId = new mongoose.Types.ObjectId(details.merchantId);
                         secondaryid = new mongoose.Types.ObjectId(details.Secondaryid);
                         var Name = new RegExp("^" + details.tillName + "$", "i")
-                         
-                           
-                  
-                        tilldetails.findOne({ "merchantId": merchantId },
-                        { secondary: { $elemMatch: { _id:  secondaryid }}},
-                        { tertiary:  { $elemMatch: { name: Name } } }
-                       
-                        ,function(req, responce){
-                            
-                            if(responce.secondary[0].tertiary.length  > 0 ) {
-                                console.log('true');
-                            } else {
-                                console.log('false');
-                            }
-                        })
+                    
+                        tilldetails.aggregate([
+                            {'$unwind' : '$secondary'},
+                            {'$unwind' : '$secondary.tertiary'},
+                            {'$match' : {
+                                'merchantId' : merchantId,
+                                'secondary.tertiary.name' : Name}},
+                    
+                            { $sort: { dateadded: -1 } }]).exec(function (err, tilllist) {
+                              
+                                if(tilllist.length > 0) {
+                                    var data = {};
+                                    data.string = 'Name is already exist.';
+                                    deferred.resolve(data);
 
-                        return false
+                               } else {
+
+                             
+                       
                         merchantId = new mongoose.Types.ObjectId(details.merchantId);
                         secondaryid = new mongoose.Types.ObjectId(details.Secondaryid);
                         tilldetails.update(
@@ -116,7 +124,8 @@ function addtilldetails(details) {
 
                                 }
                             })
-
+                        }
+                    })
                     } else {
 
                         var Name = new RegExp("^" + details.tillName + "$", "i")
@@ -188,5 +197,253 @@ function getAllsecondarytilltype(merchantId) {
 
 
 }
+
+
+
+function getTillManagementDetails(merchantId) {
+
+    var deferred = Q.defer();
+    tilldetails.find({ merchantId: merchantId }, function (err, tillResults) {
+        if (!err) {
+
+            deferred.resolve(tillResults);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+}
+
+
+
+
+function deletetilltypename(details) {
+
+
+    if (details.tillsdetails.type == "Primary") {
+
+        var id = details.tillsdetails._id;
+        var deferred = Q.defer();
+
+        tilldetails.deleteOne(
+            { _id: new mongoose.Types.ObjectId(id) },
+            function (err) {
+                if (err) {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+                else {
+
+
+                    var data = {};
+                    data.string = 'Primary type is delete successfully.';
+
+                    deferred.resolve(data);
+                }
+
+            });
+        return deferred.promise;
+    } else if (details.tillsdetails.type == "Secondary") {
+
+        var deferred = Q.defer();
+        var merchantId = details.tillsdetails.merchantId;
+        var secondaryid = details.tillsdetails._id;
+
+        tilldetails.update(
+
+            { merchantId: new mongoose.Types.ObjectId(merchantId) },
+            { $pull: { secondary: { _id: new mongoose.Types.ObjectId(secondaryid) } } },
+
+            function (err) {
+                if (err) {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+                else {
+
+                    var data = {};
+                    data.string = 'Secondary type is delete successfully.';
+
+                    deferred.resolve(data);
+                }
+
+            });
+        return deferred.promise;
+
+    } else if (details.tillsdetails.type == "Tertiary") {
+        var merchantId = details.tillsdetails.merchantId;
+        var secondaryid = details.tillsdetails.parentnameid;
+        var tertiaryid = details.tillsdetails.id;
+
+
+
+
+
+
+
+
+    }
+
+}
+
+
+function getTillnametbyId(till) {
+
+
+    if (till.tilltypeid.flag == 1) {
+
+        var deferred = Q.defer();
+        tilldetails.findOne({ merchantId: till.merchantId }, function (err, tillResults) {
+            if (!err) {
+                var tills = {}
+                tills.results = tillResults
+                tills.flag = 1;
+                deferred.resolve(tills);
+            } else {
+
+
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
+        return deferred.promise;
+
+
+    } else if (till.tilltypeid.flag == 2) {
+
+        var deferred = Q.defer();
+        tilldetails.findOne({ merchantId: till.merchantId }, { secondary: { $elemMatch: { _id: till.tilltypeid.id } } }, function (err, tillResults) {
+            if (!err) {
+
+                var tills = {}
+                tills.results = tillResults
+                tills.flag = 2;
+
+                deferred.resolve(tills);
+            } else {
+
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        });
+        return deferred.promise;
+
+
+
+    } else if (till.tilltypeid.flag == 3) {
+      
+        var deferred = Q.defer();
+        var userId = new mongoose.Types.ObjectId(till.merchantId);
+        var tertiaryid = new mongoose.Types.ObjectId(till.tilltypeid.id);
+
+        
+        tilldetails.aggregate([
+            {'$unwind' : '$secondary'},
+            {'$unwind' : '$secondary.tertiary'},
+            {'$match' : {
+                'merchantId' : userId,
+                'secondary.tertiary._id' : tertiaryid}},
+    
+            { $sort: { dateadded: -1 } }]).exec(function (err, tilllist) {
+    
+                if (!err) {
+    
+                    var tills = {}
+                    tills.results = tilllist
+                    tills.flag = 3;
+                    deferred.resolve(tills);
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+        return deferred.promise;
+
+      
+        // { merchantId: ObjectId("5d47f60de5848018e0162681") },
+        // { secondary: { $elemMatch: { _id:  ObjectId("5d67bade37769423bc34015c")}}}
+
+
+       
+
+    }
+
+
+}
+
+
+function updatetilltypename(tills) {
+
+
+    if (tills.flag.flag == 1) {
+
+        var deferred = Q.defer();
+        tilldetails.findOne({ merchantId: new mongoose.Types.ObjectId(tills.merchantId) }, function (err, results) {
+            if (!err) {
+
+                results.name = tills.name;
+                results.save(function (err) {
+                    if (!err) {
+
+                        var data = {};
+                        data.string = 'Primary type is update successfully.';
+
+                        deferred.resolve(data);
+                    } else {
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                });
+            } else {
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        })
+        return deferred.promise;
+
+    } else if (tills.flag.flag == 2) {
+
+
+        var deferred = Q.defer();
+        tilldetails.update({
+            merchantId: new mongoose.Types.ObjectId(tills.merchantId),
+            "secondary._id": new mongoose.Types.ObjectId(tills.flag.id)
+        }, { "$set": { "secondary.$.name": tills.name } }, function (err, results) {
+            if (!err) {
+
+                var data = {};
+                data.string = 'Secondary type is update successfully.';
+
+                deferred.resolve(data);
+                
+            } else {
+                deferred.reject(err.name + ': ' + err.message);
+            }
+        })
+        return deferred.promise;
+    }
+}
+
+
+
+
+// function getPrimaryname(till) {
+
+
+//     var deferred = Q.defer();
+//     tilldetails.findOne({merchantId:  till.merchantId}, function (err, tillResults) {
+//         if (!err) {
+//             var tills = {}
+//             tills.results = tillResults
+//             tills.flag = 1;
+//             deferred.resolve(tills);
+//         } else {
+
+
+//             deferred.reject(err.name + ': ' + err.message);
+//         }
+//     });
+//     //  return deferred.promise;
+// }
+
+
+
+
 
 module.exports = service;

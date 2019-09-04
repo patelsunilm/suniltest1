@@ -30,4 +30,28 @@ export class tillManagementService {
 
     }
 
+    getTillManagementDetails(merchantId) {
+
+        return this.http.post<any>(appConfig.apiUrl + '/tillmanagement/getTillManagementDetails', { 'merchantId': merchantId } )
+
+    }
+
+
+    deletetilltypename(tillsdetails , id) {
+
+        return this.http.post<any>(appConfig.apiUrl + '/tillmanagement/deletetilltypename', { 'tillsdetails': tillsdetails  ,'id' : id} )
+
+    }
+
+    getTillnametbyId(id , merchantId) {
+
+        return this.http.post<any>(appConfig.apiUrl + '/tillmanagement/getTillnametbyId', { 'tilltypeid': id , 'merchantId' : merchantId})
+
+    }
+
+    updatetilltypename(tillname) {
+
+        return this.http.post<any>(appConfig.apiUrl + '/tillmanagement/updatetilltypename', tillname)
+ 
+    }
 }

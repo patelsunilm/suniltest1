@@ -85,5 +85,12 @@ router.post('/tillmanagement/addtilldetails', tillmanagement.addtilldetails);
 router.post('/tillmanagement/getAllsecondarytilltype', tillmanagement.getAllsecondarytilltype);
 
 
+router.post('/tillmanagement/getTillManagementDetails', tillmanagement.getTillManagementDetails);
+router.post('/tillmanagement/deletetilltypename', tillmanagement.deletetilltypename);
+
+router.post('/tillmanagement/getTillnametbyId', tillmanagement.getTillnametbyId);
+
+
+router.post('/tillmanagement/updatetilltypename', tillmanagement.updatetilltypename);
 
 module.exports = router;
