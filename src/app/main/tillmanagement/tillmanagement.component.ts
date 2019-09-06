@@ -21,6 +21,7 @@ export class TillmanagementComponent implements OnInit {
   form: FormGroup;
   tilltype: any;
   tillDetails: any;
+  showvalue : any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   isTableHasData = true;
   isTableHasDataAgain = true;
@@ -52,7 +53,9 @@ export class TillmanagementComponent implements OnInit {
       .subscribe(
         data => {
 
+          if (data == '' || data == null || data == 'null') {
 
+          } else {
           this.tillDetails = data;
           const alltillmanagement = [];
           this.tillDetails.forEach(element => {
@@ -68,8 +71,6 @@ export class TillmanagementComponent implements OnInit {
 
 
           if (alltillmanagement.length > 0) {
-
-
             this.dataSource = new MatTableDataSource(alltillmanagement);
             this.dataSource.paginator = this.paginator;
             this.isTableHasDataAgain = true;
@@ -78,7 +79,7 @@ export class TillmanagementComponent implements OnInit {
             this.isTableHasDataAgain = false;
 
           }
-
+        }
         },
         error => {
 
@@ -104,9 +105,7 @@ export class TillmanagementComponent implements OnInit {
 
 
   selectTillType(value) {
-  
-   
-   
+    this.showvalue = value
    if(value == "Primary") {
 
     var merchantId = localStorage.getItem('userId');
@@ -114,7 +113,9 @@ export class TillmanagementComponent implements OnInit {
       .subscribe(
         data => {
 
+          if (data == '' || data == null || data == 'null') {
 
+          } else {
           this.tillDetails = data;
           const alltillmanagement = [];
           this.tillDetails.forEach(element => {
@@ -128,10 +129,7 @@ export class TillmanagementComponent implements OnInit {
 
           });
 
-
           if (alltillmanagement.length > 0) {
-
-
             this.dataSource = new MatTableDataSource(alltillmanagement);
             this.dataSource.paginator = this.paginator;
             this.isTableHasDataAgain = true;
@@ -140,7 +138,7 @@ export class TillmanagementComponent implements OnInit {
             this.isTableHasDataAgain = false;
 
           }
-
+        }
         },
         error => {
 
@@ -149,13 +147,13 @@ export class TillmanagementComponent implements OnInit {
         });
    } else if( value == "Secondary") {
  
-
-  
     var merchantId = localStorage.getItem('userId');
     this.tillManagementService.getTillManagementDetails(merchantId)
       .subscribe(
         data => {
-        
+          if (data == '' || data == null || data == 'null') {
+
+          } else {
           var parantname = data[0].name;
           this.tillDetails = data[0].secondary;
           const alltillmanagement = [];
@@ -180,7 +178,7 @@ export class TillmanagementComponent implements OnInit {
             this.isTableHasDataAgain = false;
 
           }
-
+        }
         },
         error => {
 
@@ -193,6 +191,10 @@ export class TillmanagementComponent implements OnInit {
     this.tillManagementService.getTillManagementDetails(merchantId)
       .subscribe(
         data => {
+
+          if (data == '' || data == null || data == 'null') {
+
+          } else {
 
           this.tillDetails = data[0].secondary;
           const alltillmanagement = [];
@@ -220,13 +222,14 @@ export class TillmanagementComponent implements OnInit {
             this.isTableHasDataAgain = false;
 
           }
-
+        }
         },
         error => {
 
           // console.log("error");
 
         });
+      
    }
 
   }
@@ -249,33 +252,116 @@ export class TillmanagementComponent implements OnInit {
     this.tillManagementService.getTillManagementDetails(merchantId)
       .subscribe(
         data => {
+         
+          if(this.showvalue == "primary" || this.showvalue == undefined || this.showvalue == 'undefined' ) {
 
-
-          this.tillDetails = data;
-          const alltillmanagement = [];
-          this.tillDetails.forEach(element => {
-
-            element._id = element._id;
-            element.name = element.name;
-            element.type = "Primary"
-            element.parentname= "-"
-            element.flag = 1
-            alltillmanagement.push(element);
-
-          });
-
-
-          if (alltillmanagement.length > 0) {
-
-
-            this.dataSource = new MatTableDataSource(alltillmanagement);
-            this.dataSource.paginator = this.paginator;
-            this.isTableHasDataAgain = true;
-
-          } else {
-            this.isTableHasDataAgain = false;
-
+           
+            this.tillDetails = data;
+            const alltillmanagement = [];
+            this.tillDetails.forEach(element => {
+  
+              element._id = element._id;
+              element.name = element.name;
+              element.type = "Primary"
+              element.parentname= "-"
+              element.flag = 1
+              alltillmanagement.push(element);
+  
+            });
+  
+            if (alltillmanagement.length > 0) {
+              this.dataSource = new MatTableDataSource(alltillmanagement);
+              this.dataSource.paginator = this.paginator;
+              this.isTableHasDataAgain = true;
+  
+            } else {
+              this.isTableHasDataAgain = false;
+  
+            }
+          } else if(this.showvalue == "Secondary") {
+            var merchantId = localStorage.getItem('userId');
+            this.tillManagementService.getTillManagementDetails(merchantId)
+              .subscribe(
+                data => {
+                  if (data == '' || data == null || data == 'null') {
+        
+                  } else {
+                  var parantname = data[0].name;
+                  this.tillDetails = data[0].secondary;
+                  const alltillmanagement = [];
+                  this.tillDetails.forEach(element => {
+        
+                    element._id = element._id;
+                    element.name = element.name;
+                    element.type = "Secondary";
+                    element.parentname = parantname;
+                    element.flag = 2
+                    alltillmanagement.push(element);
+        
+                  });
+        
+                  if (alltillmanagement.length > 0) {
+                     
+                    this.dataSource = new MatTableDataSource(alltillmanagement);
+                    this.dataSource.paginator = this.paginator;
+                    this.isTableHasDataAgain = true;
+        
+                  } else {
+                    this.isTableHasDataAgain = false;
+        
+                  }
+                }
+                },
+                error => {
+        
+                  // console.log("error");
+        
+                });
+          } else if(this.showvalue == "Tertiary") {
+            var merchantId = localStorage.getItem('userId');
+            this.tillManagementService.getTillManagementDetails(merchantId)
+              .subscribe(
+                data => {
+        
+                  if (data == '' || data == null || data == 'null') {
+        
+                  } else {
+        
+                  this.tillDetails = data[0].secondary;
+                  const alltillmanagement = [];
+                  var a = 0;
+               
+                  this.tillDetails.forEach(element => {
+                       
+                      element.tertiary.forEach( (items , index) => {
+                      
+                        alltillmanagement.push({parentnameid :  element._id   ,parentname : element.name ,id: items._id,name : items.name ,type:"Tertiary",_id: items._id  ,flag : 3
+                      })
+                        a++;
+                      });
+        
+                  });
+        
+                  if (alltillmanagement.length > 0) {
+        
+        
+                    this.dataSource = new MatTableDataSource(alltillmanagement);
+                    this.dataSource.paginator = this.paginator;
+                    this.isTableHasDataAgain = true;
+        
+                  } else {
+                    this.isTableHasDataAgain = false;
+        
+                  }
+                }
+                },
+                error => {
+        
+                  // console.log("error");
+        
+                });
           }
+
 
         },
         error => {

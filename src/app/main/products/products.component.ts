@@ -5,6 +5,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { ProductService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+const PrimaryWhite = '#ffffff';
+const SecondaryGrey = '#ccc';
+const PrimaryRed = '#dd0031';
+const SecondaryBlue = '#006ddd';
+import { OnDestroy, TemplateRef } from '@angular/core';
+import { Subject, from } from 'rxjs';
 
 export interface PeriodicElement {
 
@@ -53,6 +60,34 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
+  @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loading = false;
+  public primaryColour = PrimaryWhite;
+  public secondaryColour = SecondaryGrey;
+  public coloursEnabled = false;
+  public loadingTemplate: TemplateRef<any>;
+  public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
+
+  // Private
+  private _unsubscribeAll: Subject<any>;
+  // Private
+
+  public toggleColours(): void {
+    this.coloursEnabled = !this.coloursEnabled;
+
+    if (this.coloursEnabled) {
+      this.primaryColour = PrimaryRed;
+      this.secondaryColour = SecondaryBlue;
+    } else {
+      this.primaryColour = PrimaryWhite;
+      this.secondaryColour = SecondaryGrey;
+    }
+  }
+
+
+
 
   public showAlert(): void {
     alert('ngx-loading rocks!');
@@ -89,7 +124,7 @@ export class ProductsComponent implements OnInit {
   deleteproduct(id) {
 
 
-    
+
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
         productid: id
@@ -121,9 +156,9 @@ export class ProductsComponent implements OnInit {
   }
 
   fileEvent($event) {
-
-    var regex = new RegExp("(.*?)\.(csv)$");
-
+    this.loading = true;
+    var regex = new RegExp("(.*?)\.(xlsx|xls|csv)$");
+  
     if (!(regex.test($event.target.value.toLowerCase()))) {
 
       $event.target.value = '';
@@ -132,23 +167,23 @@ export class ProductsComponent implements OnInit {
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       });
-
+      this.loading = false;
     } else {
 
-      var userId = localStorage.getItem('userId');
+      var merchantid = localStorage.getItem('userId');
 
-      $event.target.files[0].userId = userId
-
+      $event.target.files[0].userId = merchantid
+      this.loading = true;
       this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
-        if (data.string == "Csv import success fully") {
+        if (data.string == "Csv import success fully")  {
           this.snackBar.open('Csv import success fully', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
           var userId = localStorage.getItem('userId');
-
+          this.loading = false;
 
 
           this.ProductService.getproducts(userId)
@@ -167,6 +202,30 @@ export class ProductsComponent implements OnInit {
               }, error => {
                 console.log(error);
               });
+        } else if(data.string == "Pls add Primary till type"){
+          this.snackBar.open('Pls add primary till type', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+          var userId = localStorage.getItem('userId');
+          this.loading = false;
+
+          this.ProductService.getproducts(userId)
+            .subscribe(
+              data => {
+
+                if (data.length > 0) {
+                  this.dataSource = new MatTableDataSource(data);
+                  this.dataSource.paginator = this.paginator;
+                  this.isTableHasDataAgain = true;
+                } else {
+                  this.isTableHasDataAgain = false;
+                }
+              }, error => {
+                console.log(error);
+              });
+
         } else {
 
           this.snackBar.open('please correct csv file select', '', {
@@ -174,6 +233,7 @@ export class ProductsComponent implements OnInit {
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
+          this.loading = false;
         }
       }, error => {
         console.log(error);

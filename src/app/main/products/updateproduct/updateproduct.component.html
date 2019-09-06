@@ -64,7 +64,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Cost price</mat-label>
-            <input matInput formControlName="costprice" required>
+            <input matInput formControlName="costprice" required (keyup)="netamount(i)" id="costprice">
             <mat-error *ngIf="form.get('costprice').hasError('required')">
               Please enter cost price!
             </mat-error>
@@ -76,7 +76,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Markup</mat-label>
-            <input matInput formControlName="markup" required>
+            <input matInput formControlName="markup" required (keyup)="netamount(i)" id="markup">
             <mat-error *ngIf="form.get('markup').hasError('required')">
               Please enter markup!
             </mat-error>
@@ -86,13 +86,13 @@
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Selling price</mat-label>
-            <input matInput formControlName="sellingprice" required>
-            <mat-error *ngIf="form.get('sellingprice').hasError('required')">
+            <input matInput formControlName="sellingprice" id="selling" required readonly>
+            <!-- <mat-error *ngIf="form.get('sellingprice').hasError('required')">
               Please enter selling price!
             </mat-error>
             <mat-error *ngIf="form.get('sellingprice').hasError('pattern')">
               Please enter valid selling price!
-            </mat-error>
+            </mat-error> -->
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">

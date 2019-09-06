@@ -327,15 +327,12 @@ function getTillnametbyId(till) {
         });
         return deferred.promise;
 
-
-
     } else if (till.tilltypeid.flag == 3) {
       
         var deferred = Q.defer();
         var userId = new mongoose.Types.ObjectId(till.merchantId);
         var tertiaryid = new mongoose.Types.ObjectId(till.tilltypeid.id);
 
-        
         tilldetails.aggregate([
             {'$unwind' : '$secondary'},
             {'$unwind' : '$secondary.tertiary'},
@@ -356,17 +353,7 @@ function getTillnametbyId(till) {
                 }
             });
         return deferred.promise;
-
-      
-        // { merchantId: ObjectId("5d47f60de5848018e0162681") },
-        // { secondary: { $elemMatch: { _id:  ObjectId("5d67bade37769423bc34015c")}}}
-
-
-       
-
     }
-
-
 }
 
 

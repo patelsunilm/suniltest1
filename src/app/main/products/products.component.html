@@ -38,6 +38,11 @@
     </div>
 
     <div class="mat-elevation-z8">
+        <!-- <ngx-loading [show]="loading"
+        [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}"
+        [template]="loadingTemplate">
+      </ngx-loading> -->
+
       <table mat-table [dataSource]="dataSource" [class.isMobile]="isMobile" [hidden]="!isTableHasData"
         [hidden]="!isTableHasDataAgain">
         <ng-container matColumnDef="image">

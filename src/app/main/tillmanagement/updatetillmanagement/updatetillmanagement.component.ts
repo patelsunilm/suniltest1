@@ -38,8 +38,7 @@ export class UpdatetillmanagementComponent implements OnInit {
     var merchantId = localStorage.getItem('userId');
    
     this.tillManagementService.getTillnametbyId(params , merchantId).subscribe(data => {
-      console.log('data');
-      console.log(data);
+     
        if(data.flag == 1) {
 
     

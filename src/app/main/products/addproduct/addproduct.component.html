@@ -75,14 +75,8 @@
                     Please enter valid product!
                   </mat-error>
                 </mat-form-field>
-
-
-
-
               </td>
-           
               <td>
-              
                 <mat-form-field  appearance="outline" id="div_{{i}}"  >
                   <mat-label>Catlist</mat-label>
                  
@@ -106,7 +100,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label>Cost price</mat-label>
 
-                  <input matInput formControlName="costprice" required>
+                  <input matInput formControlName="costprice" (keyup)="netamount(i)" id="costprice{{i}}" required>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
                     Please enter cost price!
                   </mat-error>
@@ -119,7 +113,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label> Markup</mat-label>
 
-                  <input matInput formControlName="Markup" required>
+                  <input matInput formControlName="Markup" required (keyup)="netamount(i)" id="markup{{i}}">
                   <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
                     Please enter Markup!
                   </mat-error>
@@ -131,15 +125,7 @@
               <td>
                 <mat-form-field appearance="outline">
                   <mat-label>Selling price</mat-label>
-
-                  <input matInput formControlName="sellingprice" required>
-
-                  <mat-error *ngIf="itemrow.get('sellingprice').hasError('required')">
-                    Please enter selling price!
-                  </mat-error>
-                  <mat-error *ngIf="itemrow.get('sellingprice').hasError('pattern')">
-                    Please enter valid selling price!
-                  </mat-error>
+                  <input matInput id="selling{{i}}" formControlName="sellingprice"   readonly>          
                 </mat-form-field>
               </td>
               <td>
@@ -154,21 +140,26 @@
                   <mat-error *ngIf="itemrow.get('date').hasError('required')">
                     Please enter date!
                   </mat-error>
-                 
                 </mat-form-field>
-
               </td>
               <td>
+              
                 <mat-form-field appearance="outline">
                   <mat-label>Till type</mat-label>
-
-                  <input matInput formControlName="tilltype" required>
-                  <mat-error *ngIf="itemrow.get('tilltype').hasError('required')"
-                    pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$">
-                    Please enter till type!
-                  </mat-error>
-                  <mat-error *ngIf="itemrow.get('tilltype').hasError('pattern')">
-                    Please enter valid till type!
+                  <mat-select matNativeControl  formControlName="tilltype" required>
+                    <mat-optgroup label="primary">
+                      <mat-option  *ngFor="let typename of Primary" [value]="typename._id +','+'Primary'"> {{typename.name}}
+                    </mat-option>
+                    </mat-optgroup>
+                    <mat-optgroup label="Secondary">
+                      <mat-option  *ngFor="let typename of Secondary" [value]="typename._id+ ','+ 'Secondary'">{{typename.name}}</mat-option>
+                    </mat-optgroup>
+                    <mat-optgroup label="Tertiary">
+                      <mat-option *ngFor="let typename of Tertiary" [value]="typename._id + ',' + 'Tertiary'" >{{typename.name}} ({{typename.parentname}})</mat-option>  
+                    </mat-optgroup>
+                  </mat-select>
+                  <mat-error *ngIf="itemrow.get('tilltype').hasError('required')">
+                    Please select till type!
                   </mat-error>
                 </mat-form-field>
               </td>

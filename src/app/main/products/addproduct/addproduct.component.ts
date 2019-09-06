@@ -9,15 +9,16 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 import { FormControl, FormArray } from '@angular/forms';
 
 import { ProductService } from '../../../_services/index';
-
+import { tillManagementService } from '../../../_services/index';
 import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
 const PrimaryWhite = '#ffffff';
 const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
-import { DomSanitizer ,SafeHtml  } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import $ from "jquery";
 import { template } from '@angular/core/src/render3';
+import { concatAll } from 'rxjs/operators';
 
 
 @Component({
@@ -37,22 +38,21 @@ export class AddproductComponent implements OnInit {
   returnUrl: string;
   urls: Array<File> = [];
   filesToUpload: Array<File> = [];
-  catName : any;
-  test : any;
-  htmlContent : any;
-  htmlContent12 : any;
-   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
-  // private _inputpdf: string = '<input type="text">';
-
-  
-//   public get inputpdf()  {
-//     return this._sanitizer.bypassSecurityTrustHtml(this._inputpdf);
-//  }
-  
+  catName: any;
+  test: any;
+  htmlContent: any;
+  htmlContent12: any;
+  sellingprice: any;
+  tillDetails: any;
+  price: any;
+  Primary: any;
+  Secondary: any;
+  Tertiary: any;
+  private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
 
 
   constructor(private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
-    , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, ) {
+    , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, private tillManagementService: tillManagementService) {
 
 
   }
@@ -95,19 +95,51 @@ export class AddproductComponent implements OnInit {
 
     var merchantId = localStorage.getItem('userId');
     this.ProductService.getAllProductcategories(merchantId)
-    .subscribe(
+      .subscribe(
         data => {
-               this.catName = data.data;
+          this.catName = data.data;
 
-               
-          },
+
+        },
         error => {
-            console.log(error);
+          console.log(error);
 
         });
 
 
+    var merchantId = localStorage.getItem('userId');
+    this.tillManagementService.getTillManagementDetails(merchantId)
+      .subscribe(
+        data => {
+          if (data == '' || data == null || data == 'null') {
+
+          } else {
+            this.Primary = data;
+            this.Secondary = data[0].secondary;
+
+            this.tillDetails = data[0].secondary;
+            const alltillmanagement = [];
+            var a = 0;
+
+            this.tillDetails.forEach(element => {
+            
+              element.tertiary.forEach((items, index) => {
+                alltillmanagement.push({
+                  parentnameid: element._id, parentname: element.name, id: items._id, name: items.name, type: "Tertiary", _id: items._id, flag: 3
+                })
+                a++;
+              });
+
+            });
+
+            this.Tertiary = alltillmanagement;
+          }
+        },
+        error => {
+          // console.log("error");
+        });
   }
+
 
   get formArr() {
     return this.productForm.get('itemRows') as FormArray;
@@ -119,11 +151,11 @@ export class AddproductComponent implements OnInit {
     return this._fb.group({
       image: [''],
       productname: ['', Validators.required],
-      productcategories : ['' ,Validators.required],
-      productcatname : [''],
+      productcategories: ['', Validators.required],
+      productcatname: [''],
       costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-      Markup: ['', Validators.required],
-      sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      Markup: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      sellingprice: [''],
       date: ['', Validators.required],
       tilltype: ['', Validators.required],
       stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
@@ -133,14 +165,14 @@ export class AddproductComponent implements OnInit {
   addNewRow() {
     this.formArr.push(this.initItemRows());
 
-     
+
   }
 
   deleteRow(indexs: number, urls) {
 
-  // if(indexs == 0) {
+    // if(indexs == 0) {
 
-  // } else {
+    // } else {
 
     this.formArr.removeAt(indexs);
     urls.splice(indexs, 1);
@@ -152,7 +184,7 @@ export class AddproductComponent implements OnInit {
     }
 
     this.filesToUpload = temp;
-  // }
+    // }
   }
 
 
@@ -162,29 +194,29 @@ export class AddproductComponent implements OnInit {
 
     var imagefiles = fileInput.target.files;
     if (fileInput.target.files && fileInput.target.files[0]) {
-     
+
       var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
 
       if (!(regex.test(fileInput.target.value.toLowerCase()))) {
-          fileInput.target.value = ''
+        fileInput.target.value = ''
         this.snackBar.open('Please select correct file format', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
-     
-      } else {
-     
-      var filesAmount = fileInput.target.files.length;
 
-      var testreader = new FileReader();
-      testreader.onload = (fileInput: any) => {
-        this.urls[index] = fileInput.target.result;
-        this.filesToUpload.push(imagefiles[0]);
+      } else {
+
+        var filesAmount = fileInput.target.files.length;
+
+        var testreader = new FileReader();
+        testreader.onload = (fileInput: any) => {
+          this.urls[index] = fileInput.target.result;
+          this.filesToUpload.push(imagefiles[0]);
+        }
+        testreader.readAsDataURL(fileInput.target.files[0]);
       }
-      testreader.readAsDataURL(fileInput.target.files[0]);
-    }
-     
+
     }
   }
 
@@ -204,7 +236,7 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
- 
+
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
@@ -230,10 +262,14 @@ export class AddproductComponent implements OnInit {
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
           this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
       
-        }
-
+          //value split till type and till typeId
+          var splitTilltype = this.productForm.value.itemRows[i].tilltype.split(",");
+          this.productForm.value.itemRows[i].tilltype = splitTilltype[1];
+          this.productForm.value.itemRows[i].tilltypeid = splitTilltype[0];
+          this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
         
-
+        }
+              
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
 
           this.snackBar.open('Product added successfully.', '', {
@@ -244,7 +280,7 @@ export class AddproductComponent implements OnInit {
           this.loading = false;
 
           this.router.navigate([this.returnUrl]);
-          
+
         }, error => {
           console.log(error);
 
@@ -257,90 +293,98 @@ export class AddproductComponent implements OnInit {
 
 
   addnewcategory(i) {
-    
-   
-   
-    $("#div_"+i).hide();
-    
-    $("#divshow_"+i).show();
-     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat'+i+'">category name</mat-label><input matInput formControlName="productcatname" id="cat'+i+'"></mat-form-field>'; 
-      
+
+    $("#div_" + i).hide();
+    $("#divshow_" + i).show();
+    var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" id="cat' + i + '"></mat-form-field>';
+
     document.getElementById(i).innerHTML = Categoryhtml;
-    //  document.getElementById(i).innerHTML = b;
-  
     this.mySelect.close();
   }
 
 
   addproductcategories(i) {
 
-   var merchantId = localStorage.getItem('userId');
-   var catname = ($("#cat"+i).val())
+    var merchantId = localStorage.getItem('userId');
+    var catname = ($("#cat" + i).val())
 
-   if(!catname) {
-    this.snackBar.open('Pls Add Product Category.', '', {
-      duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-   } else {
-    
-   
-   this.ProductService.addproductcategories(catname ,merchantId)
-   .subscribe(
-       data => {
+    if (!catname) {
+      this.snackBar.open('Pls Add Product Category.', '', {
+        duration: 3000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    } else {
 
-         if(data.string == "Product Category is already exist.") {
-          this.snackBar.open('Product Category is already exist.', '', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-         } else {
-          this.snackBar.open('Product Category added successfully.', '', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-      
-              $("#divshow_"+i).hide();
-              $("#cat"+ i).hide();
-              $("#matcat"+ i).hide();
-              $("#div_"+i).show();
-            
-              
-            
+
+      this.ProductService.addproductcategories(catname, merchantId)
+        .subscribe(
+          data => {
+
+            if (data.string == "Product Category is already exist.") {
+              this.snackBar.open('Product Category is already exist.', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+            } else {
+              this.snackBar.open('Product Category added successfully.', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+
+              $("#divshow_" + i).hide();
+              $("#cat" + i).hide();
+              $("#matcat" + i).hide();
+              $("#div_" + i).show();
+
+
+
               this.ProductService.getAllProductcategories(merchantId)
-              .subscribe(
+                .subscribe(
                   data => {
-          
+
                     this.catName = data.data;
-                   
+
                     // this.catName.forEach(element => {
                     //  if(element.catName  == catname){
                     //    console.log(element.productCatId)
                     //   this.productForm.controls['productcategories'].value(element.productCatId)
-                     
+
                     // }
                     // });
-                      
+
                   },
                   error => {
-                      console.log(error);
-          
-                  });
-            
-             
-               //  this.test = 'false';
-              
-  
-         }
-            
-       },
-       error => {
-           console.log(error);
+                    console.log(error);
 
-       });
-      }
+                  });
+
+
+              //  this.test = 'false';
+
+
+            }
+
+          },
+          error => {
+            console.log(error);
+
+          });
+    }
+  }
+
+
+  netamount(i) {
+
+    var costprice = ($("#costprice" + i).val()) ? parseFloat($("#costprice" + i).val()) : 0;
+    var markupprice = ($("#markup" + i).val()) ? parseFloat($("#markup" + i).val()) : 0;
+
+    var sellingprice = (costprice + markupprice)
+     $("#selling" + i).val(sellingprice)
+      
+    // this.price = $("#selling" + i).val(sellingprice)
+    this.sellingprice = sellingprice;
   }
 }

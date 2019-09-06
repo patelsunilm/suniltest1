@@ -75,9 +75,6 @@ export class AddtillmanagementComponent implements OnInit {
           console.log(error);
 
         });
-
-
-
   }
 
   addTillManagement() {
@@ -86,8 +83,6 @@ export class AddtillmanagementComponent implements OnInit {
     this.form.value.merchantId = localStorage.getItem('userId');
     this.form.value.tilltype = this.tilltypevalue
     
-
-   
     this.tillManagementService.addtilldetails(this.form.value).subscribe(data => {
 
       if (data.string == "Primary type is add successfully.") {
@@ -160,22 +155,13 @@ export class AddtillmanagementComponent implements OnInit {
 
       this.showSecondary = true;
       this.currentclass = 'showfield';
-     
-      
-      // this.form.valueChanges.subscribe(value => {
-       this.form.get("Secondaryid").setValidators([Validators.required]); 
-      
-      // })
+      this.form.get("Secondaryid").setValidators([Validators.required]); 
+
       } else {
 
-
-       
-       this.showSecondary = false
-       this.currentclass = 'hidefield';
-       this.form.get("Secondaryid").setValidators([]); 
-      //  this.form.controls["Secondaryid"].clearValidators(); 
-     
-      
+       this.showSecondary = false;
+      //  this.currentclass = 'hidefield';
+        this.form.get("Secondaryid").clearAsyncValidators(); 
     }
   }
   

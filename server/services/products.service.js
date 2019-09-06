@@ -37,11 +37,13 @@ function addproduct(addproducts) {
         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
         var productcatid = new mongoose.Types.ObjectId(addproducts[i].productcategories);
 
-        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId, 'productcatid': productcatid })
+
+        
+        ProductsData.push({ image: addproducts[i].image, productname: addproducts[i].productname, 'costprice': addproducts[i].costprice, 'markup': addproducts[i].Markup, 'sellingprice': addproducts[i].sellingprice, 'tilltype': addproducts[i].tilltype, 'stocklevel': addproducts[i].stocklevel, 'date': addproducts[i].date, 'barcode': addproducts[i].barcode, 'merchantid': addproducts[i].merchantId, 'productcatid': productcatid ,'tillTypeId' :addproducts[i].tilltypeid })
     }
 
 
-
+    
     products.insertMany(ProductsData, function (err, product) {
         if (!err) {
 
