@@ -420,6 +420,13 @@ export class deletetillmanagementpopupComponent {
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
+                } else if(data.string == "Tertiary type is delete successfully.") {
+               
+                  this.snackBar.open('Tertiary type is delete successfully.', '', {
+                    duration: 5000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
                 }
                   // this.snackBar.open('Merchant deleted successfully.', '', {
                   //     duration: 5000,

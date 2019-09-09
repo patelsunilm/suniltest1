@@ -57,6 +57,7 @@ import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
 import { UsersModule } from 'app/main/users/users.module';
 import { TillmanagementModule } from './main/tillmanagement/tillmanagement.module';
+import { NotificationModule } from './main/notification/notification.module';
 
 
 const appRoutes: Routes = [
@@ -69,6 +70,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
+       
 
     ],
     imports: [
@@ -102,8 +104,9 @@ const appRoutes: Routes = [
         UsersModule,
         TillmanagementModule,
         OrdersModule,
-        GraphModule
-
+        GraphModule,
+        NotificationModule,
+       
     ], providers: [
 
         AuthGuard,

@@ -81,6 +81,15 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'timeline'
             },
+            {
+                id: 'notification',
+                title: 'Notifications',
+                url: '/notification',
+                type: 'item',
+                icon: 'notifications'
+            },
+
+
         ]
         var custom2 = [
             {
@@ -127,6 +136,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'timeline'
             },
+           
         ]
         _router.events.subscribe(
             (event) => {
@@ -174,6 +184,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             url: '/graph',
                             type: 'item',
                             icon: 'timeline'
+                        },
+                        {
+                            id: 'notification',
+                            title: 'Notifications',
+                            url: '/notification',
+                            type: 'item',
+                            icon: 'notifications'
                         },
                     ]
                     var custom2 = [

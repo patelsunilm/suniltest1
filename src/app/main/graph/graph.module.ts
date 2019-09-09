@@ -10,7 +10,7 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 
 import { GraphComponent } from './graph.component';
 
-import { AuthGuardCommon } from './../../_guards/index';
+ import { AuthGuardCommon } from './../../_guards/index';
 
 
 const routes = [
@@ -26,7 +26,7 @@ const routes = [
     GraphComponent
   ],
   imports: [
-    RouterModule.forChild(routes),
+     RouterModule.forChild(routes),
 
     MatButtonModule,
     MatFormFieldModule,

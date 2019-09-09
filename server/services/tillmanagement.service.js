@@ -275,11 +275,36 @@ function deletetilltypename(details) {
         var merchantId = details.tillsdetails.merchantId;
         var secondaryid = details.tillsdetails.parentnameid;
         var tertiaryid = details.tillsdetails.id;
+     
+      var deferred = Q.defer();
+        tilldetails.update(
 
+            { merchantId: new mongoose.Types.ObjectId(merchantId),
+                'secondary' : { $elemMatch : { '_id': new mongoose.Types.ObjectId(secondaryid)}}
+            },
+            {'$pull' : {
+                'secondary.$.tertiary' : {
+                        '_id' : new mongoose.Types.ObjectId(tertiaryid)
+                    }
+            }
+            },
+        { multi: true },
 
+            function (err) {
+                if (err) {
+                    console.log(err);
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+                else {
 
+                    var data = {};
+                    data.string = 'Tertiary type is delete successfully.';
 
+                    deferred.resolve(data);
+                }
 
+            });
+        return deferred.promise;
 
 
 
