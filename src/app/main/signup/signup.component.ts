@@ -95,7 +95,7 @@ export class SignupComponent implements OnInit {
   addsignupuser() {
 
     this.registerForm.value.ipAddress = this.ipAddress == undefined ? '' :this.ipAddress;
-    this.registerForm.value.status = false;
+    this.registerForm.value.status = true;
     this.registerForm.value.uniqueid = Math.floor(100000000 + Math.random() * 900000000);
     this.registerForm.value.usertype = "Merchant";
      

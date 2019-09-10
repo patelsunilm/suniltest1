@@ -49,7 +49,7 @@ import { tillManagementService } from './_services/index';
 import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
 import { GraphsService } from './_services/index';
-
+import { NotificationService } from './_services/notification.service'
 
 //all module
 import { SignupModule } from './main/signup/signup.module';
@@ -57,6 +57,7 @@ import { ProductsModule } from './main/products/products.module';
 import { from } from 'rxjs';
 import { UsersModule } from 'app/main/users/users.module';
 import { TillmanagementModule } from './main/tillmanagement/tillmanagement.module';
+import { NotificationModule } from './main/notification/notification.module';
 
 
 const appRoutes: Routes = [
@@ -69,6 +70,7 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
+       
 
     ],
     imports: [
@@ -102,8 +104,9 @@ const appRoutes: Routes = [
         UsersModule,
         TillmanagementModule,
         OrdersModule,
-        GraphModule
-
+        GraphModule,
+        NotificationModule,
+       
     ], providers: [
 
         AuthGuard,
@@ -122,7 +125,8 @@ const appRoutes: Routes = [
         ErrorInterceptorProvider,
         ProductService,
         UsersService,
-        tillManagementService
+        tillManagementService,
+        NotificationService
     ],
     bootstrap: [
         AppComponent

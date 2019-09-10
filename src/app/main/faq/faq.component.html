@@ -8,7 +8,7 @@
                 help
             </mat-icon>
             <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                Faq
+                Feedbacks
             </span>
         </div>
         <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
@@ -25,9 +25,9 @@
 
         <div class="mat-elevation-z8 cstm-main-bg">
 
-            
+
             <div *ngIf="readLocalStorageValue('userType') == 'admin'">
-                <div class="header-content">Total number of feedbacks: {{mydatalength}}</div>
+                <div class="header-content">Total feedbacks: {{mydatalength}}</div>
                 <div class="content px-16 py-24 px-sm-24 py-sm-32">
                     <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">
                         <mat-expansion-panel class="cstm-expansion-panel-head">
@@ -57,7 +57,7 @@
 
 
             <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
-                <div class="header-content">Total number of feedbacks: {{mydatalength}}</div>
+                <div class="header-content">Total feedbacks: {{mydatalength}}</div>
                 <div class="content px-16 py-24 px-sm-24 py-sm-32">
 
                     <mat-accordion class="faqs-accordion" *ngFor="let faq of faqsvalue; let value of merchantname">

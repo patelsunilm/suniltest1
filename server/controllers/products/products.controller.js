@@ -30,7 +30,7 @@ exports.addproduct = function(req, res) {
 exports.getAllproducts = function(req, res) {
 
  
-    productservice.getAllproducts(req.body.merchantid)
+    productservice.getAllproducts(req.body)
     .then(function (getproductdata) {
         if (getproductdata) {
 
@@ -205,4 +205,24 @@ exports.RemoveCart = function(req, res) {
     .catch(function (err) {
         res.status(400).send(err);
     });  
+}
+
+
+exports.getCategoriesProducts = function(req , res) {
+   
+    productservice.getCategoriesProducts(req.body)
+    .then(function (getproduct) {
+
+        if (getproduct) {
+
+            res.send(getproduct);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
 }

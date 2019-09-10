@@ -66,3 +66,86 @@ exports.getAllsecondarytilltype = function(req, res) {
     });  
 
 }
+
+
+exports.getTillManagementDetails = function(req, res) {
+
+    tillManagementservice.getTillManagementDetails(req.body.merchantId)
+    .then(function (tillmanagementdetails) {
+
+        if (tillmanagementdetails) {
+
+            res.send(tillmanagementdetails);
+
+        } else {
+           
+          
+            res.send(tillmanagementdetails);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
+}
+
+
+
+exports.deletetilltypename = function(req , res) {
+  
+    tillManagementservice.deletetilltypename(req.body)
+    .then(function (data) {
+           
+      
+
+        res.json(data);
+    })
+    .catch(function (err) {
+
+       
+        res.status(400).send(err);
+    });
+}
+
+
+exports.getTillnametbyId = function(req , res) {
+ 
+ 
+    tillManagementservice.getTillnametbyId(req.body)
+    .then(function (getname) {
+
+        if (getname) {
+
+            res.send(getname);
+
+        } else {
+           
+          
+            res.send(getname);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
+}
+
+exports.updatetilltypename = function(req , res) {
+
+
+    tillManagementservice.updatetilltypename(req.body)
+    .then(function (updatename) {
+
+        if (updatename) {
+
+            res.send(updatename);
+
+        } else {
+           
+          
+            res.send(updatename);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });  
+
+}

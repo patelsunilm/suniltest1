@@ -11,7 +11,8 @@ const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import $ from "jquery";
+import { tillManagementService } from '../../../_services/index';
 import {ProductService} from '../../../_services/index';
 
 @Component({
@@ -29,12 +30,14 @@ export class UpdateproductComponent implements OnInit {
   filesToUpload: Array<File> = [];
   image : any;
   returnUrl: string;
-
+  Primary : any;
+  Secondary: any;
+  Tertiary: any;
   constructor(private ProductService : ProductService,  private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     public snackBar: MatSnackBar,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer ,private tillManagementService : tillManagementService ) { }
 
   ngOnInit() {
  
@@ -46,7 +49,9 @@ export class UpdateproductComponent implements OnInit {
       sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       date: ['', Validators.required],
       tilltype: ['', Validators.required],
-      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
+      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      movestock : [''],
+      movestockinputvalue : ['']
   });
  
   this.route.params.subscribe(params => { 
@@ -58,7 +63,7 @@ export class UpdateproductComponent implements OnInit {
         image: [ this.image],
         productname : [data.productname],
         costprice: [data.costprice,Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-        markup : [data.markup],
+        markup : [data.markup ,Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
         sellingprice : [data.sellingprice,Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
         date : [data.date],
         tilltype : [data.tilltype],
@@ -70,6 +75,30 @@ export class UpdateproductComponent implements OnInit {
 
 
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
+  
+  var merchantId = localStorage.getItem('userId');
+  this.tillManagementService.getTillManagementDetails(merchantId)
+    .subscribe(
+      data => {
+        if (data == '' || data == null || data == 'null') {
+
+        } else {
+        
+          this.Primary = data;  
+          console.log('this primary');
+          console.log(data);
+        
+
+        }
+      },
+      error => {
+        // console.log("error");
+      });
+
+
+
+
+
 
   }
   
@@ -133,7 +162,7 @@ if(this.filesToUpload.length > 0) {
   this.ProductService.updateproductgallery(data).subscribe(data => {
    
  this.form.value.image = data[0].s3url
-
+ this.form.value.sellingprice = ($("#selling").val());
 this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
  
   this.snackBar.open('Product update success fully', '', {
@@ -151,7 +180,7 @@ this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
   })
 } else {
 
-
+  this.form.value.sellingprice = ($("#selling").val());
   this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
  
     this.snackBar.open('Product update success fully', '', {
@@ -169,5 +198,18 @@ this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
 return false
 
+}
+
+
+netamount(i) {
+
+  var costprice = ($("#costprice").val()) ? parseFloat($("#costprice").val()) : 0;
+  var markupprice = ($("#markup").val()) ? parseFloat($("#markup").val()) : 0;
+  
+  var sellingprice = (costprice + markupprice)
+   $("#selling").val(sellingprice)
+    
+  // this.price = $("#selling" + i).val(sellingprice)
+  
 }
 }

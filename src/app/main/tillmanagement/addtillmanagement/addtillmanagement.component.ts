@@ -30,7 +30,8 @@ export class AddtillmanagementComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   requiretiming: boolean = false;
   currentclass: string = 'hidefield';
-  constructor(private _formBuilder: FormBuilder, private tillManagementService: tillManagementService, public snackBar: MatSnackBar, ) { }
+  returnUrl: string;
+  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute,private tillManagementService: tillManagementService, public snackBar: MatSnackBar,  private router: Router ) { }
 
   ngOnInit() {
 
@@ -43,7 +44,7 @@ export class AddtillmanagementComponent implements OnInit {
 
     });
 
-
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tillmanagement';
     this.tillManagementService.getalltillType()
       .subscribe(
         data => {
@@ -74,9 +75,6 @@ export class AddtillmanagementComponent implements OnInit {
           console.log(error);
 
         });
-
-
-
   }
 
   addTillManagement() {
@@ -85,8 +83,6 @@ export class AddtillmanagementComponent implements OnInit {
     this.form.value.merchantId = localStorage.getItem('userId');
     this.form.value.tilltype = this.tilltypevalue
     
-
-   
     this.tillManagementService.addtilldetails(this.form.value).subscribe(data => {
 
       if (data.string == "Primary type is add successfully.") {
@@ -95,7 +91,7 @@ export class AddtillmanagementComponent implements OnInit {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
-
+        this.router.navigate([this.returnUrl]);
       } else if (data.string == "Primary type is already exist.") {
         this.snackBar.open('Primary type is already exist.', '', {
           duration: 3000,
@@ -116,6 +112,7 @@ export class AddtillmanagementComponent implements OnInit {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
+        this.router.navigate([this.returnUrl]);
         var merchantId = localStorage.getItem('userId');
         this.tillManagementService.getAllsecondarytilltype(merchantId)
           .subscribe(
@@ -135,6 +132,7 @@ export class AddtillmanagementComponent implements OnInit {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
+        this.router.navigate([this.returnUrl]);
       } else if(data.string == "Name is already exist.") {
         this.snackBar.open('Name is already exist.', '', {
           duration: 3000,
@@ -152,33 +150,19 @@ export class AddtillmanagementComponent implements OnInit {
 
   openSecondary(valuess) {
 
-   
-  
       this.tilltypevalue = valuess
     if (this.tilltypevalue == "Tertiary") {
 
       this.showSecondary = true;
       this.currentclass = 'showfield';
-      console.log('thisss 12333');
-      
-      // this.form.valueChanges.subscribe(value => {
-       this.form.get("Secondaryid").setValidators([Validators.required]); 
-      
-      // })
+      this.form.get("Secondaryid").setValidators([Validators.required]); 
+
       } else {
 
-
-       this.showSecondary = false
-       this.currentclass = 'hidefield';
-     
-      
-       this.form.controls["Secondaryid"].clearValidators(); 
-     
-      
+       this.showSecondary = false;
+      //  this.currentclass = 'hidefield';
+        this.form.get("Secondaryid").clearAsyncValidators(); 
     }
   }
-  onChange() {
-
-    console.log('te');
-  }
+  
 }

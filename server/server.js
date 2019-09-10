@@ -23,6 +23,7 @@ var products = require('../server/controllers/products/products.model');// get o
 
 var appuser = require('../server/controllers/Users/appusers.model');
 var productcategory = require('../server/controllers/products/productcategories.model');
+var tilldetails = require('../server/controllers/tillmanagement/tilldetails.model');
 
 gm = require('gm');
 
@@ -180,164 +181,189 @@ var upload = multer({ storage: storage });
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 
-  var file = req.files[0];
-  var userid = req.body.uploads
+  var merchantId = req.body.uploads
+  tilldetails.findOne({ merchantId: merchantId }, function (err, results) {
+    if (!err) {
+      if (results == '' || results == null || results == 'null') {
+        var data = {};
+        data.string = 'Pls add Primary till type';
+        res.send(data);
+      } else {
 
-  var originalFileName = file.originalname;
+        var tilltype = "Primary"
+        var tilltypeId = results._id
+        var file = req.files[0];
+        var userid = req.body.uploads
+        var originalFileName = file.originalname;
+        var results = [];
+        var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
+          .pipe(csv())
+          .on('data', (data) =>
+            results.push(data))
+          .on('end', () => {
 
-  var results = [];
+            var arr1 = ['productname', 'productcategory',
+              'costprice',
+              'markup',
+              'sellingprice',
+              'date',
+              'tilltype',
+              'stocklevel'];
+            var arr2 = results[0].headers;
+            if (arr1.length == arr2.length && arr1.every(function (u, i) {
+              return u === arr2[i];
+            })) {
 
+              var allproducts = [];
+              var j = 0;
 
-  var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
-    .pipe(csv())
-    .on('data', (data) =>
-      results.push(data))
-    .on('end', () => {
+              for (let i = 0; i < results.length; i++) {
 
-      var arr1 = ['productname', 'productcategory',
-        'costprice',
-        'markup',
-        'sellingprice',
-        'date',
-        'tilltype',
-        'stocklevel'];
-      var arr2 = results[0].headers;
+                var cost = results[i].costprice == '' ? 0 : results[i].costprice;
+                var markup = results[i].markup == '' ? 0 : results[i].markup;
+                var sellingprice = (parseInt(cost) + parseInt(markup))
+                results[i].sellingprice = sellingprice;
 
-      if (arr1.length == arr2.length && arr1.every(function (u, i) {
-        return u === arr2[i];
-      })) {
+                var datetime = new Date(new Date).valueOf();
+                var randomnumber = Math.floor((Math.random() * 100) + 1);
+                results[i].barcode = datetime + randomnumber;
+                results[i].merchantid = userid;
 
-        var allproducts = [];
-
-        var j = 0;
-        for (let i = 0; i < results.length; i++) {
-
-
-          var datetime = new Date(new Date).valueOf();
-          var randomnumber = Math.floor((Math.random() * 100) + 1);
-
-          results[i].barcode = datetime + randomnumber
-          results[i].merchantid = userid
-
-
-
-          productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
-            if (getcategory) {
-
-              results[i].productcatid = getcategory._id;
-
-
-      
-
-            } else {
-
-              var procat = new productcategory({
-                catName: results[i].productcategory,
-                merchantId: results[i].merchantid
-
-              });
-
-              procat.save(function (err, productcategory) {
-                if (!err) {
+                var deferred = Q.defer();
 
 
-               
-                  results[i].productcatid = productcategory._id;
+                productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
+                  if (getcategory) {
 
-                } else {
+                    results[i].productcatid = getcategory._id;
 
-                }
-              });
+                  } else {
 
-            }
+                    var procat = new productcategory({
+                      catName: results[i].productcategory,
+                      merchantId: results[i].merchantid
 
-         
+                    });
+                    procat.save(function (err, productcategory) {
+                      if (!err) {
 
-            if (results[i].productcatid) {
+                        if (productcategory._id) {
+
+                          results[i].productcatid = productcategory._id;
+                          var allproducts = new products({
+                            productname: results[i].productname,
+                            productcatid: results[i].productcatid,
+                            costprice: results[i].costprice,
+                            markup: results[i].markup,
+                            sellingprice: results[i].sellingprice,
+                            date: results[i].date,
+                            tilltype: results[i].tilltype,
+                            stocklevel: results[i].stocklevel,
+                            barcode: results[i].barcode,
+                            merchantid: results[i].merchantid,
+                            tillTypeId: tilltypeId,
+                            tilltype: tilltype
+                          });
+
+                          allproducts.save(function (err, product) {
+                            if (!err) {
+
+                              if ((i + 1) == results.length) {
+
+                                fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                  if (err) {
+
+                                    deferred.reject(err.name + ': ' + err.message);
+                                  } else {
 
 
-            }
+                                    var data = {};
+                                    data.string = 'Csv import success fully';
+                                    res.send(data);
+                                  }
+                                })
+                              }
 
-            return false
-            var allproducts = new products({
-              productname: results[i].productname,
-              productcatid: results[i].productcatid,
-              costprice: results[i].costprice,
-              markup: results[i].markup,
-              sellingprice: results[i].sellingprice,
-              date: results[i].date,
-              tilltype: results[i].tilltype,
-              stocklevel: results[i].stocklevel,
-              barcode: results[i].barcode,
-              merchantid: results[i].merchantid,
+                            } else {
+                              deferred.reject(err.name + ': ' + err.message);
+                            }
 
-            });
+                          });
+                        }
 
-            allproducts.save(function (err, product) {
-              if (!err) {
+                      } else {
 
-                if ((i + 1) == results.length) {
+                      }
+                    });
+                  }
 
-                  var data = {};
-                  data.string = 'Csv import success fully';
-                  res.send(data);
-                }
+                  if (results[i].productcatid) {
 
 
-              } else {
+                    var allproducts = new products({
+                      productname: results[i].productname,
+                      productcatid: results[i].productcatid,
+                      costprice: results[i].costprice,
+                      markup: results[i].markup,
+                      sellingprice: results[i].sellingprice,
+                      date: results[i].date,
+                      tilltype: results[i].tilltype,
+                      stocklevel: results[i].stocklevel,
+                      barcode: results[i].barcode,
+                      merchantid: results[i].merchantid,
+                      tillTypeId: tilltypeId,
+                      tilltype: tilltype
+                    });
+
+                    allproducts.save(function (err, product) {
+                      if (!err) {
+
+                        if ((i + 1) == results.length) {
+
+                          fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                            if (err) {
+
+                              deferred.reject(err.name + ': ' + err.message);
+                            } else {
+                              var data = {};
+                              data.string = 'Csv import success fully';
+                              res.send(data);
+                            }
+                          })
+                        }
+                      } else {
+                        deferred.reject(err.name + ': ' + err.message);
+                      }
+
+                    });
+                  }
+                })
 
               }
 
-            });
+            } else {
 
-          })
-        }
+              fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                if (err) {
 
+                  console.log(err);
+                } else {
 
-   
-        //  productcategory.find({catName : })
-
-
-
-        // productcategory
-
-
-        // products.insertMany(results, function (err, product) {
-        //   if (!err) {
-
-        //     fs.unlink('uploads/' + originalFileName, function (err, responce) {
-        //       if (err) {
-
-        //         console.log(err);
-        //       } else {
-
-
-        //         var data = {};
-        //         data.string = 'Csv import success fully';
-        //         res.send(data);
-        //       }
-        //     })
-        //   } else {
-        //     console.log(err);
-        //   }
-        // });
-
-
-      } else {
-
-        fs.unlink('uploads/' + originalFileName, function (err, responce) {
-          if (err) {
-
-            console.log(err);
-          } else {
-
-            var data = {};
-            data.string = 'error';
-            res.send(data);
-          }
-        })
+                  var data = {};
+                  data.string = 'error';
+                  res.send(data);
+                }
+              })
+            }
+          });
       }
-    });
+
+    } else {
+      deferred.reject(err.name + ': ' + err.message);
+    }
+  })
+
+
 })
 
 
@@ -400,101 +426,168 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
-  var uploadedfiles = req.files;
-  var s3 = new AWS.S3();
 
-  var sizeOf = require('image-size');
-  var dimensions = sizeOf(uploadedfiles[0].path);
 
-  var logowidth = 100;
-  var logoheight = 100;
-  sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
-    // .flatten(true)
-    // .background('#F6F8FA')
-    // .embed()
-    .resize(logowidth, logoheight).toBuffer(function (err, data) {
-      var datetime = new Date(new Date).valueOf();
-      var randomnumber = Math.floor((Math.random() * 100) + 1);
-      var seperate = uploadedfiles[0].originalname;
-      var sep = seperate.split(".");
+  if (req.files == '') {
 
-      var params = {
-        'Bucket': 'smaf',
-        'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
-        'Body': data,
-        'ContentEncoding': 'base64',
-        ACL: 'public-read',
-        Metadata: {
-          'Content-Type': 'image/' + sep[1]
-        }
-      };
+    appuser.findById(req.body.userId, function (err, getdata) {
 
-      s3.upload(params, function (err, resultdata) {
-        if (err) {
-          console.log(err);
-        }
-        else {
+      if (!err) {
 
-          appuser.findById(req.body.userId, function (err, getdata) {
 
-            if (!err) {
+        getdata.email = req.body.email
+        getdata.firstname = req.body.firstName;
+        getdata.lastname = req.body.lastName;
+        getdata.phone = req.body.phone;
+        getdata.image = "";
 
-              getdata.email = req.body.email
-              getdata.firstname = req.body.firstName;
-              getdata.lastname = req.body.lastName;
-              getdata.phone = req.body.phone;
-              getdata.image = resultdata.Location;
+        getdata.save(function (err, usersResults) {
+          if (!err) {
 
-              getdata.save(function (err , usersResults) {
-                if (!err) {
+            var user = [];
 
-                  var user = [];
-              
-                   var userprofile = {
-                    "status": "1",
-                    "message": "Success",
-                    "data":
-                      {
-                        
-                        email : usersResults.email,
-                        firstName :usersResults.firstname,
-                        lastName : usersResults.lastname,
-                        image : usersResults.image,
-                        phone : usersResults.phone,
-                        userId  : usersResults._id,
-                        lastMerchantId : usersResults.lastMerchantId
-                     
-                      }
-                  }
+            var userprofile = {
+              "status": "1",
+              "message": "Success",
+              "data":
+              {
 
-                  res.send(userprofile);
-               
-                } else {
-               
-                  var userprofile = {
-                    "status": "0",
-                    "message": "No data found",
-                    "data":
-                      {}
-                  }
-                  res.send(userprofile);
-                }
-              });
+                email: usersResults.email == undefined ? '' : usersResults.email,
+                firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
+                lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
+                image: usersResults.image == undefined ? '' : usersResults.image,
+                phone: usersResults.phone == undefined ? '' : usersResults.phone,
+                userId: usersResults._id == undefined ? '' : usersResults._id,
+                lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
 
-            } else {
-
-              var userprofile = {
-                "status": "0",
-                "message": "No data found",
-                "data":
-                  {}
               }
-              res.send(userprofile);
             }
-          });
+
+            res.send(userprofile);
+
+          } else {
+
+            var userprofile = {
+              "status": "0",
+              "message": "No data found",
+              "data":
+                {}
+            }
+            res.send(userprofile);
+          }
+        });
+
+      } else {
+
+        var userprofile = {
+          "status": "0",
+          "message": "No data found",
+          "data":
+            {}
         }
+        res.send(userprofile);
+      }
+    });
+  } else {
+
+
+
+    var uploadedfiles = req.files;
+    var s3 = new AWS.S3();
+
+    var sizeOf = require('image-size');
+    var dimensions = sizeOf(uploadedfiles[0].path);
+
+    var logowidth = 100;
+    var logoheight = 100;
+    sharp(uploadedfiles[0].path).jpeg({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+      // .flatten(true)
+      // .background('#F6F8FA')
+      // .embed()
+      .resize(logowidth, logoheight).toBuffer(function (err, data) {
+        var datetime = new Date(new Date).valueOf();
+        var randomnumber = Math.floor((Math.random() * 100) + 1);
+        var seperate = uploadedfiles[0].originalname;
+        var sep = seperate.split(".");
+
+        var params = {
+          'Bucket': 'smaf',
+          'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
+          'Body': data,
+          'ContentEncoding': 'base64',
+          ACL: 'public-read',
+          Metadata: {
+            'Content-Type': 'image/' + sep[1]
+          }
+        };
+
+        s3.upload(params, function (err, resultdata) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+
+            appuser.findById(req.body.userId, function (err, getdata) {
+
+              if (!err) {
+
+                getdata.email = req.body.email
+                getdata.firstname = req.body.firstName;
+                getdata.lastname = req.body.lastName;
+                getdata.phone = req.body.phone;
+                getdata.image = resultdata.Location;
+
+                getdata.save(function (err, usersResults) {
+                  if (!err) {
+
+                    var user = [];
+
+                    var userprofile = {
+                      "status": "1",
+                      "message": "Success",
+                      "data":
+                      {
+
+                        email: usersResults.email == undefined ? '' : usersResults.email,
+                        firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
+                        lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
+                        image: usersResults.image == undefined ? '' : usersResults.image,
+                        phone: usersResults.phone == undefined ? '' : usersResults.phone,
+                        userId: usersResults._id == undefined ? '' : usersResults._id,
+                        lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
+
+                      }
+                    }
+
+                    res.send(userprofile);
+
+                  } else {
+
+                    var userprofile = {
+                      "status": "0",
+                      "message": "No data found",
+                      "data":
+                        {}
+                    }
+                    res.send(userprofile);
+                  }
+                });
+
+              } else {
+
+                var userprofile = {
+                  "status": "0",
+                  "message": "No data found",
+                  "data":
+                    {}
+                }
+                res.send(userprofile);
+              }
+            });
+          }
+        })
       })
-    })
+  }
 })
 
 
@@ -508,3 +601,22 @@ mongoose.connection.once('open', function callback() {
     console.log('Server listening on port ' + port);
   });
 });
+
+
+
+
+
+
+// var allproducts = new products({
+//   productname: (results[i].productname == undefined || results[i].productname == 'undefined' || results[i].productname == null || results[i].productname == 'null') ? '' : results[i].productname,
+//   productcatid:(results[i].productcatid == undefined ||results[i].productcatid == 'undefined' ||results[i].productcatid == null || results[i].productcatid == 'null') ? '' :  results[i].productcatid,
+//   costprice: (results[i].costprice == undefined ||results[i].costprice == 'undefined' ||results[i].costprice == null || results[i].costprice == 'null') ? '' :results[i].costprice,
+//   markup: (results[i].markup == undefined ||results[i].markup == 'undefined' ||results[i].markup == null || results[i].markup == 'null') ? '' :results[i].markup,
+//   sellingprice:(results[i].sellingprice == undefined ||results[i].sellingprice == 'undefined' ||results[i].sellingprice == null || results[i].sellingprice == 'null') ? '' :results[i].sellingprice,
+//   date:(results[i].date == undefined ||results[i].date == 'undefined' ||results[i].date == null || results[i].date == 'null') ? '' : results[i].date,
+//   tilltype:(results[i].tilltype == undefined ||results[i].tilltype == 'undefined' ||results[i].tilltype == null || results[i].tilltype == 'null') ? '' : results[i].tilltype,
+//   stocklevel:(results[i].stocklevel == undefined ||results[i].stocklevel == 'undefined' ||results[i].stocklevel == null ||results[i].stocklevel == 'null') ? '' : results[i].stocklevel,
+//   barcode:(results[i].barcode == undefined ||results[i].barcode == 'undefined' ||results[i].barcode == null || results[i].barcode == 'null') ? '' :results[i].barcode,
+//   merchantid:(results[i].merchantid == undefined ||results[i].merchantid == 'undefined' ||results[i].merchantid == null || results[i].merchantid == 'null') ? '' : results[i].merchantid,
+
+// });

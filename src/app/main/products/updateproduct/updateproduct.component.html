@@ -64,7 +64,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Cost price</mat-label>
-            <input matInput formControlName="costprice" required>
+            <input matInput formControlName="costprice" required (keyup)="netamount(i)" id="costprice">
             <mat-error *ngIf="form.get('costprice').hasError('required')">
               Please enter cost price!
             </mat-error>
@@ -76,7 +76,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Markup</mat-label>
-            <input matInput formControlName="markup" required>
+            <input matInput formControlName="markup" required (keyup)="netamount(i)" id="markup">
             <mat-error *ngIf="form.get('markup').hasError('required')">
               Please enter markup!
             </mat-error>
@@ -86,13 +86,13 @@
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Selling price</mat-label>
-            <input matInput formControlName="sellingprice" required>
-            <mat-error *ngIf="form.get('sellingprice').hasError('required')">
+            <input matInput formControlName="sellingprice" id="selling" required readonly>
+            <!-- <mat-error *ngIf="form.get('sellingprice').hasError('required')">
               Please enter selling price!
             </mat-error>
             <mat-error *ngIf="form.get('sellingprice').hasError('pattern')">
               Please enter valid selling price!
-            </mat-error>
+            </mat-error> -->
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
@@ -130,7 +130,33 @@
               Please enter valid stock level!
             </mat-error>
           </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Move Stock</mat-label>
+            <input matInput formControlName="movestock" required>
+            <!-- <mat-error *ngIf="form.get('movestock').hasError('required')">
+              Please enter stock level!
+            </mat-error>
+            <mat-error *ngIf="form.get('movestock').hasError('pattern')">
+              Please enter valid stock level!
+            </mat-error> -->
+          </mat-form-field>
         </div>
+       
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Move stock input value</mat-label>
+            <input matInput formControlName="movestockinputvalue" required>
+            <!-- <mat-error *ngIf="form.get('stocklevel').hasError('required')">
+              Please enter stock level!
+            </mat-error>
+            <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
+              Please enter valid stock level!
+            </mat-error> -->
+          </mat-form-field> 
+        
+        </div>
+
+
         <div class="button-row" style="text-align: center;">
           <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
         </div>

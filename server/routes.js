@@ -40,6 +40,9 @@ router.get('/products/addproductcategories/:catname/:merchantId', productsdata.a
 router.post('/products/addtocart', productsdata.addtocart);
 router.post('/products/RemoveCart', productsdata.RemoveCart);
 
+router.post('/products/getCategoriesProducts' , productsdata.getCategoriesProducts)
+
+
 
 var merchentdata = require('./controllers/merchant/merchant.controller');
 router.get('/merchant/getallMerchentsData', merchentdata.getallMerchentsData);
@@ -78,9 +81,22 @@ router.post('/appusers/UserLogout', appusersdetails.UserLogout);
 var tillmanagement = require('./controllers/tillmanagement/tillmanagement.controller');
 
 router.get('/tillmanagement/getalltillType', tillmanagement.getalltillType);
-router.post('/tillmanagement/addtilldetails' ,tillmanagement.addtilldetails);
-router.post('/tillmanagement/getAllsecondarytilltype' , tillmanagement.getAllsecondarytilltype);
+router.post('/tillmanagement/addtilldetails', tillmanagement.addtilldetails);
+router.post('/tillmanagement/getAllsecondarytilltype', tillmanagement.getAllsecondarytilltype);
 
 
+router.post('/tillmanagement/getTillManagementDetails', tillmanagement.getTillManagementDetails);
+router.post('/tillmanagement/deletetilltypename', tillmanagement.deletetilltypename);
+
+router.post('/tillmanagement/getTillnametbyId', tillmanagement.getTillnametbyId);
+
+
+router.post('/tillmanagement/updatetilltypename', tillmanagement.updatetilltypename);
+
+
+
+var notifications = require('./controllers/notifications/notification.controller');
+
+router.post('/notifications/addnotification', notifications.addnotification);
 
 module.exports = router;
