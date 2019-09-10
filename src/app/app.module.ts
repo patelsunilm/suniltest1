@@ -49,7 +49,7 @@ import { tillManagementService } from './_services/index';
 import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
 import { GraphsService } from './_services/index';
-
+import { NotificationService } from './_services/notification.service'
 
 //all module
 import { SignupModule } from './main/signup/signup.module';
@@ -125,7 +125,8 @@ const appRoutes: Routes = [
         ErrorInterceptorProvider,
         ProductService,
         UsersService,
-        tillManagementService
+        tillManagementService,
+        NotificationService
     ],
     bootstrap: [
         AppComponent

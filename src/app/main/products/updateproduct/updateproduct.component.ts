@@ -12,7 +12,7 @@ const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
 import { DomSanitizer } from '@angular/platform-browser';
 import $ from "jquery";
-
+import { tillManagementService } from '../../../_services/index';
 import {ProductService} from '../../../_services/index';
 
 @Component({
@@ -30,12 +30,14 @@ export class UpdateproductComponent implements OnInit {
   filesToUpload: Array<File> = [];
   image : any;
   returnUrl: string;
-
+  Primary : any;
+  Secondary: any;
+  Tertiary: any;
   constructor(private ProductService : ProductService,  private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     public snackBar: MatSnackBar,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer ,private tillManagementService : tillManagementService ) { }
 
   ngOnInit() {
  
@@ -47,7 +49,9 @@ export class UpdateproductComponent implements OnInit {
       sellingprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       date: ['', Validators.required],
       tilltype: ['', Validators.required],
-      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
+      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      movestock : [''],
+      movestockinputvalue : ['']
   });
  
   this.route.params.subscribe(params => { 
@@ -71,6 +75,30 @@ export class UpdateproductComponent implements OnInit {
 
 
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
+  
+  var merchantId = localStorage.getItem('userId');
+  this.tillManagementService.getTillManagementDetails(merchantId)
+    .subscribe(
+      data => {
+        if (data == '' || data == null || data == 'null') {
+
+        } else {
+        
+          this.Primary = data;  
+          console.log('this primary');
+          console.log(data);
+        
+
+        }
+      },
+      error => {
+        // console.log("error");
+      });
+
+
+
+
+
 
   }
   

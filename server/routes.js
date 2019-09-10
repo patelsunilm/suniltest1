@@ -93,4 +93,10 @@ router.post('/tillmanagement/getTillnametbyId', tillmanagement.getTillnametbyId)
 
 router.post('/tillmanagement/updatetilltypename', tillmanagement.updatetilltypename);
 
+
+
+var notifications = require('./controllers/notifications/notification.controller');
+
+router.post('/notifications/addnotification', notifications.addnotification);
+
 module.exports = router;

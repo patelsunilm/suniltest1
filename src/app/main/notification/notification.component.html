@@ -26,13 +26,28 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
           <mat-label>Users</mat-label>
+        
           <mat-select formControlName="users"  multiple>
+              <mat-option>
+                  <ngx-mat-select-search [formControl]="bankMultiFilterCtrl" ></ngx-mat-select-search>
+                </mat-option>
             <mat-option *ngFor="let topping of users" [value]="topping">{{topping.firstname}}</mat-option>
           </mat-select>
         </mat-form-field>
          
-        </div>
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <!-- <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+          <mat-select formControlName="users"  placeholder="Bank" #singleSelect>
+            <mat-option>
+              <ngx-mat-select-search></ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let appusers of users | async"   [value]="appusers">
+              {{appusers.firstname}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>-->
+        </div> 
+
+        <!-- <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
          <mat-label>Merchant</mat-label>
          <mat-select formControlName="merchant"  multiple>
@@ -40,7 +55,7 @@
          </mat-select>
        </mat-form-field>
         
-       </div>
+       </div> -->
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">

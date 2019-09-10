@@ -46,8 +46,7 @@ export class AddproductComponent implements OnInit {
   tillDetails: any;
   price: any;
   Primary: any;
-  Secondary: any;
-  Tertiary: any;
+ 
   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
 
 
@@ -114,25 +113,12 @@ export class AddproductComponent implements OnInit {
           if (data == '' || data == null || data == 'null') {
 
           } else {
+          
+
             this.Primary = data;
-            this.Secondary = data[0].secondary;
 
-            this.tillDetails = data[0].secondary;
-            const alltillmanagement = [];
-            var a = 0;
-
-            this.tillDetails.forEach(element => {
+           
             
-              element.tertiary.forEach((items, index) => {
-                alltillmanagement.push({
-                  parentnameid: element._id, parentname: element.name, id: items._id, name: items.name, type: "Tertiary", _id: items._id, flag: 3
-                })
-                a++;
-              });
-
-            });
-
-            this.Tertiary = alltillmanagement;
           }
         },
         error => {
@@ -157,7 +143,7 @@ export class AddproductComponent implements OnInit {
       Markup: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       sellingprice: [''],
       date: ['', Validators.required],
-      tilltype: ['', Validators.required],
+      // tilltype: ['', Validators.required],
       stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
     });
   }
@@ -236,7 +222,17 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
+    this.loading = true;
+   if(this.Primary == undefined || this.Primary == 'undefined' || this.Primary == null || this.Primary == 'null'){
+    this.loading = false;
+    this.snackBar.open('Please add till type', '', {
+      duration: 3000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+   } else {
 
+  
     this.loading = true;
     if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
       this.loading = false;
@@ -262,16 +258,15 @@ export class AddproductComponent implements OnInit {
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
           this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
       
-          //value split till type and till typeId
-          var splitTilltype = this.productForm.value.itemRows[i].tilltype.split(",");
-          this.productForm.value.itemRows[i].tilltype = splitTilltype[1];
-          this.productForm.value.itemRows[i].tilltypeid = splitTilltype[0];
-          this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
-        
+  
+           this.productForm.value.itemRows[i].tilltype = "Primary"
+           this.productForm.value.itemRows[i].tilltypeid = this.Primary[0]._id
+           this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
+         
         }
-              
+       
+      
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
-
           this.snackBar.open('Product added successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
@@ -289,6 +284,7 @@ export class AddproductComponent implements OnInit {
       })
 
     }
+  }
   }
 
 

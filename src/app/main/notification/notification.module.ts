@@ -11,7 +11,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { NotificationComponent } from './notification.component';
 
-// import { AuthGuard } from './../../_guards/index';
+import { AuthGuard } from './../../_guards/index';
+
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 const routes = [
@@ -50,7 +52,7 @@ const routes = [
         MatSlideToggleModule,
         MatSelectModule,
         MatFormFieldModule,
-       
+        NgxMatSelectSearchModule
     ],
     exports: [
         NotificationComponent
