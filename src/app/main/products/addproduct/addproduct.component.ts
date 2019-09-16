@@ -292,7 +292,7 @@ export class AddproductComponent implements OnInit {
 
     $("#div_" + i).hide();
     $("#divshow_" + i).show();
-    var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" id="cat' + i + '"></mat-form-field>';
+    var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
 
     document.getElementById(i).innerHTML = Categoryhtml;
     this.mySelect.close();

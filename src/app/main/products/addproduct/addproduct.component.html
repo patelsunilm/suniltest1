@@ -31,7 +31,7 @@
         [template]="loadingTemplate">
       </ngx-loading>
       <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
-        <div formArrayName="itemRows">
+        <div formArrayName="itemRows" class="cstm-add-product">
 
           <table class="table table-responsive table-striped cstm-table-store"  [class.isMobile]="isMobile" >
             <tr>
@@ -82,8 +82,10 @@
                  
                   <mat-select #mySelect id="divs1_{{i}}"  formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
-                    <button mat-button (click)="addnewcategory(i)" >add product category</button>
-              
+                    <div class="btn-cstm-catg">
+                    <button mat-button (click)="addnewcategory(i)" class="cstm-mat-button" >add product category</button>
+                  </div>
+                  
                     <mat-option *ngFor="let procatname of catName" [value]="procatname.productCatId">
                         {{procatname.catName}}
                     </mat-option>
@@ -94,7 +96,7 @@
 
 
               <div id="{{i}}"></div>
-              <button style="display:none;"  id="divshow_{{i}}" type="button"  (click)="addproductcategories(i)">submit</button>
+              <button style="display:none;"  id="divshow_{{i}}" type="button"  (click)="addproductcategories(i)" class="submit_btn">submit</button>
               </td>
               <td>
                 <mat-form-field appearance="outline">
