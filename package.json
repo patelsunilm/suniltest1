@@ -46,6 +46,7 @@
     "angular-calendar": "0.26.3",
     "angular-in-memory-web-api": "0.6.1",
     "angularx-social-login": "1.2.7",
+    "array-unique": "0.3.2",
     "aws-sdk": "2.495.0",
     "bcryptjs": "2.4.3",
     "chart.js": "2.7.3",

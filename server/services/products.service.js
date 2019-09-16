@@ -181,9 +181,24 @@ function updateprodcutdetail(data) {
         tilltype: data.tilltype,
         stocklevel: data.stocklevel,
         markup: data.markup,
+        tillTypeId : data.tillTypeId,
+        productcatid : new mongoose.Types.ObjectId(data.catname),
+        tillMovement : [{
+    
+            from : data.form,
+            to : data.to,
+            fromStock : data.fromstock,
+            moveStock : data.movestock,
+            fromId: data.fromId, 
+            toId : data.toId
+            
+          }],
+
     }, function (err, updateproducts) {
 
         if (!err) {
+
+          
             deferred.resolve(updateproducts);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -250,8 +265,6 @@ function getAllProductcategories(details) {
     Productcategories.find({ merchantId: details.merchantId }, function (err, getproductscategories) {
         if (!err) {
             if (getproductscategories == '') {
-
-
                 var productresponcedata = {
                     "status": "0",
                     "message": "no data found",
@@ -266,8 +279,6 @@ function getAllProductcategories(details) {
                     var productcat = {}
                     productcat.productCatId = element._id == undefined ? '' : element._id;
                     productcat.catName = element.catName == undefined ? '' : element.catName;
-
-
                     allproductctegory.push(productcat);
 
                 });
@@ -282,8 +293,6 @@ function getAllProductcategories(details) {
             }
 
             deferred.resolve(productresponcedata);
-
-
         } else {
             deferred.reject(err.name + ': ' + err.message);
 

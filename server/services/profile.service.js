@@ -141,111 +141,66 @@ function updateprofile(getprofiledata) {
     return deferred.promise;
 }
 
-
-
-
-
-
-
-
-function getcountries(catid) {
-
+function getcountries() {
 
     var deferred = Q.defer();
-    var catid = new mongoose.Types.ObjectId(catid.merchantCatId);
-
 
     Users.aggregate([
-        { "$match": { "merchantcatid": catid } },
+        { "$match": { "userType": "Merchant" } },
         {
             $lookup: {
                 from: "countries",
                 localField: "countryid",
                 foreignField: "id",
-                as: "countriesname"
+                as: "countries"
             }
 
         },
-        { $sort: { dateadded: -1 } }]).exec(function (err, countrie) {
-            if (!err) {
+    ]).exec(function (err, results) {
+        if (!err) {
+            if (results == '' || results == null || results == 'null') {
 
-                if (countrie == '' || countrie == null || countrie == 'null') {
-                 
-                    var contriesdetails = {
-                        "status": "0",
-                        "message": "no data found",
-                        "data":
-                            {}
-                    }
-                } else {
-
-                    var allcountries = [];
-                    countrie.forEach(element => {
-
-                        var productcat = {}
-                        productcat.countrieName = element.countriesname[0].name == undefined ? '' : element.countriesname[0].name;
-                        productcat.countrieId = element.countriesname[0].id == undefined ? '' : element.countriesname[0].id
-                        allcountries.push(productcat);
-                    })
-                    var contriesdetails = {
-                        "status": "1",
-                        "message": "Sucess",
-                        "data":
-                            allcountries
-                    }
+                var countriesdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
                 }
-                deferred.resolve(contriesdetails);
+                deferred.resolve(countriesdetails);
+
             } else {
+                var allcountries = [];
+                results.forEach(items => {
+                    items.countries.forEach(element => {
 
-                deferred.reject(err.name + ': ' + err.message);
+                        var contris = {}
+                        contris.countrieName = element.name == undefined ? '' : element.name;
+                        contris.countrieId = element.id == undefined ? '' : element.id;
+                        allcountries.push(contris);
+
+                    });
+                });
+              
+                result = allcountries.filter(function (a) {
+                    return !this[a.countrieName] && (this[a.countrieName] = true);
+                }, Object.create(null));
+         
+                var contriesdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        result
+                }
             }
-        });
+            deferred.resolve(contriesdetails);
+        } else {
+
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+
     return deferred.promise;
-
-
-    // var deferred = Q.defer();
-
-    // Users.find({merchantcatid : catid.merchantCatId}, function (err, countriesresults) {
-    //     if (!err) {
-    //         if (countriesresults) {
-
-    //             var allcountries = [];
-    //             countriesresults.forEach(element => {
-    //                 var productcat = {}
-    //                 productcat.countrieName =  element.name == undefined ? '' : element.name;
-    //                 productcat.countrieId = element.id == undefined ? '' : element.countryid
-    //                 allcountries.push(productcat);
-
-    //             });
-
-    //             var contriesdetails = {
-    //                 "status": "1",
-    //                 "message": "Sucess",
-    //                 "data":
-    //                     allcountries
-    //             }
-
-
-    //         } else {
-
-    //             var contriesdetails = {
-    //                 "status": "0",
-    //                 "message": "no data found",
-    //                 "data":
-    //                     {}
-    //             }
-
-    //         }
-
-    //         deferred.resolve(contriesdetails);
-
-
-    //     } else {
-    //         deferred.reject(err.name + ': ' + err.message);
-    //     }
-    // })
-    // return deferred.promise;
-
 }
 
 
@@ -298,8 +253,6 @@ function getcity(id) {
 
     var deferred = Q.defer();
     var stateid = parseInt(id);
-
-
 
     city.find({ state_id: stateid }, function (err, cityresults) {
 
@@ -399,7 +352,7 @@ function getAllcountries() {
                 countriesresults.forEach(element => {
 
                     var productcat = {}
-                    productcat.countrieName =  element.name == undefined ? '' : element.name;
+                    productcat.countrieName = element.name == undefined ? '' : element.name;
                     productcat.countrieId = element.id == undefined ? '' : element.id
                     allcountries.push(productcat);
 

@@ -126,3 +126,19 @@ exports.SearchMerchant = function (req, res) {
         });
 
 }
+
+
+exports.getMerchantCategoriebyId = function(req, res) {
+
+    merchentService.getMerchantCategoriebyId(req.body)
+       .then(function (getmerchantcategorys) {
+        if (getmerchantcategorys) {
+            res.send(getmerchantcategorys);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });
+}

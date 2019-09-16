@@ -7,6 +7,7 @@ const rgbHex = require('rgb-hex');
 var users = require('../controllers/Users/users.model');
 var merchantcategory = require('../controllers/Users/merchantcategories.model');
 var faqs = require('../controllers/faq/faq.model');
+var unique = require("array-unique").immutable;
 
 var mongoose = require('mongoose');
 
@@ -20,6 +21,8 @@ service.deletemerchantData = deletemerchantData;
 service.getMerchentsbyId = getMerchentsbyId;
 service.getMerchantCategories = getMerchantCategories;
 service.SearchMerchant = SearchMerchant;
+service.getMerchantCategoriebyId = getMerchantCategoriebyId;
+
 
 function getallMerchentsData() {
 
@@ -126,7 +129,6 @@ function getallMerchentsData() {
                 merchantdetails.name = element.name == undefined ? '' : element.name;
                 merchantdetails.email = element.email == undefined ? '' : element.email;
                 merchantdetails.status = element.status == undefined ? '' : element.status;
-
                 merchantdetails.address = element.address == undefined ? '' : element.address;
                 merchantdetails.phone = element.phone == undefined ? '' : element.phone;
                 merchantdetails.businessName = element.businessname == undefined ? '' : element.businessname;
@@ -167,10 +169,10 @@ function getallMerchentsData() {
 function getmerchantDatabyId(merchantDataId) {
     var deferred = Q.defer();
     var merchantDataId = new mongoose.Types.ObjectId(merchantDataId);
-  
+
     users.findOne(merchantDataId, function (err, getdata) {
         if (!err) {
-             
+
             deferred.resolve(getdata);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -193,8 +195,8 @@ function updatemerchantData(merchantdata) {
 
         } else if (merchantdata.businessname) {
 
-            
-              var businessname = new RegExp("^" + merchantdata.businessname +  "$", "i")
+
+            var businessname = new RegExp("^" + merchantdata.businessname + "$", "i")
             users.find({ $and: [{ businessname: businessname }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
                 if (datalength.length > 0) {
                     var data = {};
@@ -227,9 +229,6 @@ function updatemerchantData(merchantdata) {
                 }
             })
         }
-
-
-
     })
 
     return deferred.promise;
@@ -251,8 +250,7 @@ function merchantStatusToggle(merchantdata) {
                     deferred.resolve(getdata);
 
                 } else {
-                    console.log('err');
-                    console.log(err);
+
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
@@ -272,13 +270,13 @@ function deletemerchantData(merchantDataId) {
 
     users.deleteOne({ _id: new mongoose.Types.ObjectId(merchantDataId) }, function (err) {
         if (err) {
-            console.log(err);
+
             deferred.reject(err.name + ': ' + err.message);
         }
         else {
             faqs.deleteMany({ userId: new mongoose.Types.ObjectId(merchantDataId) }, function (err) {
                 if (err) {
-                    console.log(err);
+
                     deferred.reject(err.name + ': ' + err.message);
                 }
                 else {
@@ -415,4 +413,75 @@ function SearchMerchant(merchantdetail) {
     return deferred.promise;
 }
 
+
+
+function getMerchantCategoriebyId(id) {
+
+
+    var deferred = Q.defer();
+    users.aggregate([
+
+        { "$match": { "cityid": id.cityId } },
+
+        {
+            $lookup: {
+                from: "merchantcategories",
+                localField: "merchantcatid",
+                foreignField: "_id",
+                as: "merchant"
+            }
+            
+        } ,
+        
+    ]).exec(function (err, getcategory) {
+
+        if (!err) {
+
+            if (getcategory == '' || getcategory == null || getcategory == 'null') {
+
+                var merchentcatdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+                deferred.resolve(merchentcatdetails);
+
+            } else {
+            
+                var merchantCategory = [];
+                getcategory.forEach(items => {                      
+                 items.merchant.forEach(element => {
+
+                    var merchantdetails = {}
+                        merchantdetails.merchantCatName = element.merchantcatname == undefined ? '' : element.merchantcatname;
+                         merchantdetails.merchantCatId = element._id == undefined ? '' : element._id;
+                        merchantCategory.push(merchantdetails);
+                     });
+                });
+              
+                result = merchantCategory.filter(function (a) {
+                    return !this[a.merchantCatName] && (this[a.merchantCatName] = true);
+                }, Object.create(null));
+
+                var merchentdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data": {
+                        result
+                    },
+                }
+
+                deferred.resolve(merchentdetails);
+            }
+
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+
+
+
+}
 module.exports = service;
