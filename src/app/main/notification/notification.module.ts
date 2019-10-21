@@ -52,7 +52,7 @@ const routes = [
         MatSlideToggleModule,
         MatSelectModule,
         MatFormFieldModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
     ],
     exports: [
         NotificationComponent

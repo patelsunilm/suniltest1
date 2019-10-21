@@ -15,7 +15,14 @@ var UserSchema = new Schema({
   userType: String,
   deviceToken: String,
   deviceType: String,
-  lastMerchantId : ObjectId,
+  countryCode: String,
+  // lastMerchantId : ObjectId,
+  lastMerchant : [{
+    merchantId : ObjectId,
+    dateadded: { type: Date, default: Date.now },
+    datemodified: { type: Date, default: Date.now }
+  }],
+
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }
 })

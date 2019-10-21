@@ -107,8 +107,6 @@ export class UsersComponent implements OnInit {
 
             });
 
-
-
             if (allappusers.length > 0) {
               this.dataSource = new MatTableDataSource(allappusers);
               this.dataSource.paginator = this.paginator;

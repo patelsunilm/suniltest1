@@ -1,0 +1,89 @@
+<div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
+
+  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center">
+
+    <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+        timeline
+      </mat-icon>
+      <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+        Number of customer purchases
+      </span>
+    </div>
+
+  </div>
+  <div class="content p-24">
+
+    <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+
+      <!-- REACTIVE FORM EXAMPLE -->
+      <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto"
+        name="form" [formGroup]="form" (ngSubmit)="getorderdetails()" enctype="multipart/form-data">
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Start date</mat-label>
+
+            <input required matInput formControlName="startdate" [matDatepicker]="picker" placeholder="Choose a date"
+              class="datepicker-add">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker disabled="false"></mat-datepicker>
+            <mat-error *ngIf="form.get('startdate').hasError('required')">
+              Please enter start date!
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>End date</mat-label>
+
+            <input required matInput [max]="maxdate" formControlName="endDate" [matDatepicker]="picker1"
+              placeholder="Choose a date" class="datepicker-add">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 disabled="false"></mat-datepicker>
+            <mat-error *ngIf="form.get('endDate').hasError('required')">
+              Please enter end date!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="button-row" style="text-align: center;">
+          <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
+        </div>
+        <br><br>
+        <div *ngIf="showgraph == '0'">
+          <fusioncharts width="100%" height="400" type="column2d" [dataSource]="dataSource"
+            (initialized)="initialized($event)" (click)="onSelectionChange('pie2d', dataSource ,$event)">
+          </fusioncharts>
+        </div>
+
+        <div *ngIf="showgraph == '1'">
+          <style>
+            .btn {
+              font-family: 'Source Sans Pro';
+            }
+
+            .btn.btn-primary {
+              background: #4a4d8c;
+              transition: all 300ms;
+            }
+
+            .btn.btn-primary:hover {
+              background: #5c62b5;
+            }
+
+            .btn.btn-primary:active {
+              background: #4a4d8c
+            }
+
+            div>a {
+              margin: 0px 10px;
+            }
+          </style>
+
+          <fusioncharts width="1000" height="400" type="stackedcolumn2d" dataFormat="json"
+            [dataSource]="stackedColumnData">
+          </fusioncharts>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

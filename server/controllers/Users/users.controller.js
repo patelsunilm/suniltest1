@@ -9,12 +9,13 @@ router.post('/updateipaddress', updateipaddress)
 router.post('/submitgoogledetails', submitgoogledetails);
 router.post('/submitfacebookdetails', submitfacebookdetails);
 
-router.post('/sendotp', sendotp);
+router.post('/loginwithemail', loginwithemail);
 router.post('/matchotp', matchotp);
 router.get('/getmerchantcategories', getmerchantcategories);
-router.post('/lastvisitMerchant', lastvisitMerchant);
+router.post('/selectMerchant', selectMerchant);
 
-
+router.post('/getlastfivemerchant' , getlastfivemerchant);
+router.post('/loginwithmoblenumber' , loginwithmoblenumber);
 
 module.exports = router;
 
@@ -104,9 +105,9 @@ function submitgoogledetails(req, res) {
 }
 
 
-function sendotp(req, res) {
+function loginwithemail(req, res) {
 
-    userService.sendotp(req.body)
+    userService.loginwithemail(req.body)
         .then(function (data) {
             if (data) {
                 res.send(data);
@@ -120,7 +121,22 @@ function sendotp(req, res) {
         });
 }
 
+function selectMerchant(req, res) {
 
+    userService.selectMerchant(req.body)
+        .then(function (data) {
+            if (data) {
+                res.send(data);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+
+            res.status(400).send(err);
+        });
+
+}
 function matchotp(req, res) {
 
     userService.matchotp(req.body)
@@ -173,24 +189,38 @@ function submitfacebookdetails(req, res) {
 }
 
 
-function lastvisitMerchant(req, res) {
+function getlastfivemerchant(req, res) {
+ 
+    userService.getlastfivemerchant(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
 
-    userService.lastvisitMerchant(req.body)
-        .then(function (data) {
-            if (data) {
-                res.send(data);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-        .catch(function (err) {
-
-            res.status(400).send(err);
-        });
-
+        res.status(400).send(err);
+    });   
 }
 
 
+function loginwithmoblenumber(req, res) {
+  
+    userService.loginwithmoblenumber(req.body)
+    .then(function (data) {
+        if (data) {
+            res.send(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+
+        res.status(400).send(err);
+    });
+}
 
 
 

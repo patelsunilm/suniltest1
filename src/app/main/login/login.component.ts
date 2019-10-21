@@ -122,7 +122,6 @@ export class Login2Component implements OnInit {
                 userType: "Merchant",
             };
 
-
             this.AuthenticationService.submitgoogledetails(GoogleObj)
                 .subscribe(
                     data => {

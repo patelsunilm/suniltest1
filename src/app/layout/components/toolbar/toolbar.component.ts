@@ -53,9 +53,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     ) {
       
       
+
+        
         this.name = localStorage.getItem('name');
         this.myprofilelogoimage = localStorage.getItem('myprofilelogoimage');
         this.usertype = localStorage.getItem('userType');
+      
+      
+      
+      
         // Set the defaults
         this.userStatusOptions = [
             {

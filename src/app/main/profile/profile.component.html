@@ -40,7 +40,7 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" autocomplete="off" autofocus="true"
+                            <input matInput formControlName="name" 
                                 pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
@@ -142,7 +142,7 @@
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
                             <input matInput formControlName="name" autocomplete="off" autofocus="true"
-                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
+                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"  #username required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
                             </mat-error>
@@ -259,7 +259,7 @@
                             <mat-label>State list</mat-label>
                             <mat-select formControlName="states" required (selectionChange)="selectstate($event.value)">
                                 <mat-option value="Selectstatelist">Select state list</mat-option>
-                                <mat-option *ngFor="let state of states" [value]="state.stateId">
+                                <mat-option *ngFor="let state of allstates" [value]="state.stateId">
                                     {{state.stateName}}
                                 </mat-option>
                             </mat-select>
@@ -276,9 +276,9 @@
                                     {{city.cityName}}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="form.get('city').hasError('required')">
+                            <!-- <mat-error *ngIf="form.get('city').hasError('required')">
                                 Please select city list!
-                            </mat-error>
+                            </mat-error> -->
                         </mat-form-field>
                     </div>
                     <div class="button-row" style="text-align: center;">

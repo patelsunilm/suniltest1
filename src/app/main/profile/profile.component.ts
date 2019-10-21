@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
@@ -8,7 +8,10 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 import { ColorPickerService, Cmyk } from 'ngx-color-picker';
 import * as $ from 'jquery';
 import { AuthenticationService } from '../../_services/index';
+
+
 import { id } from '@swimlane/ngx-charts/release/utils';
+import { ElementRef, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-profile',
@@ -28,11 +31,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     // Private
     allcountries: any;
     merchantcategories: any;
-    states: any;
+    allstates: any;
     citys: any;
     a: any;
 
     private _unsubscribeAll: Subject<any>;
+
 
 
     public rgbaText: string = 'rgba(165, 26, 214, 0.2)';
@@ -70,13 +74,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     public cmykColor: Cmyk = new Cmyk(0, 0, 0, 0);
 
-
+    imageprofiles: any;
     /**
      * Constructor
      *
      * @param {FormBuilder} _formBuilder
      */
     constructor(
+
         private _formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
@@ -87,6 +92,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
         // Set the private defaults
 
         this._unsubscribeAll = new Subject();
+
+
     }
 
 
@@ -125,6 +132,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 .subscribe(
 
                     data => {
+
                         this.image = data.image
                         this.form = this._formBuilder.group({
                             name: [data.name],
@@ -143,31 +151,39 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
                         });
 
-
-                        this.ProfileService.getstates(data.countryid)
+                        this.ProfileService.getallstates(data.countryid)
                             .subscribe(
                                 data => {
-
-                                    this.states = data.data;
+                                    this.allstates = data.data;
 
                                 },
                                 error => {
 
-                                    console.log(error);
+                                    // console.log(error);
+
                                 });
-
                         var num = data.stateid;
-                        var n = num.toString();
-                        this.ProfileService.getcity(n)
+                        if (num == undefined || num == "undefined") {
+
+                        } else {
+                            var n = num.toString();
+                        }
+
+                        this.ProfileService.getallcity(n)
                             .subscribe(
                                 data => {
 
-                                    this.citys = data.data;
+
+                                    if (data.message == "no data found") {
+
+                                    } else {
+                                        this.citys = data.data
+                                    }
 
                                 },
                                 error => {
 
-                                    console.log(error);
+                                    // console.log(error);
                                 });
                     },
 
@@ -203,23 +219,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     selectcountries(stateid) {
 
+
         if (stateid == undefined || stateid == 'undefined') {
 
 
         } else {
 
-
             this.form.controls['states'].setValue('')
-            this.ProfileService.getstates(stateid)
+
+
+
+            var id = stateid.toString();
+
+            this.ProfileService.getallstates(id)
                 .subscribe(
                     data => {
 
+                        if (data.message == "no data found") {
 
-                        this.states = data.data
+                        } else {
+
+
+                            this.allstates = data.data;
+
+                        }
+
                     },
                     error => {
 
-                        console.log(error);
+                        // console.log(error);
                     });
         }
 
@@ -233,16 +261,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
             this.form.controls['city'].setValue('')
 
-            this.ProfileService.getcity(cityid)
+            this.ProfileService.getallcity(cityid)
                 .subscribe(
                     data => {
 
-                        this.citys = data.data
+                        if (data.message == "no data found") {
 
+                        } else {
+                            this.citys = data.data
+                        }
                     },
                     error => {
 
-                        console.log(error);
+                        // console.log(error);
                     });
 
         }
@@ -303,7 +334,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(
                                 data => {
-
+                                    console.log('data string');
+                                    console.log(data.string);
                                     if (data.string == "Email is already exist.") {
                                         this.snackBar.open("Email is already exist.", '', {
                                             duration: 3000,
@@ -317,6 +349,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                             verticalPosition: this.verticalPosition,
                                         });
                                     } else {
+
+
                                         this.snackBar.open('Profile updated successfully.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,

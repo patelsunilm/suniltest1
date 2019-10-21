@@ -5,8 +5,9 @@ import { Subject, from } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { FormControl, FormArray } from '@angular/forms';
+import {AbstractControl, FormControl, FormArray } from '@angular/forms';
 
 import { ProductService } from '../../../_services/index';
 import { tillManagementService } from '../../../_services/index';
@@ -46,19 +47,23 @@ export class AddproductComponent implements OnInit {
   tillDetails: any;
   price: any;
   Primary: any;
- 
+  //  value : string = 'facebook.com';
+  //  elementType : 'url' | 'canvas' | 'img' = 'url';
+  // qrdata = 'Initial QR code data string';
+   qrdata: any; 
+   url : any;
   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
 
 
-  constructor(private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
+  constructor(private activatedRoute: ActivatedRoute,private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, private tillManagementService: tillManagementService) {
 
 
   }
 
 
+  @ViewChild('parent') parent;
   @ViewChild('mySelect') mySelect;
-
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
@@ -72,7 +77,7 @@ export class AddproductComponent implements OnInit {
   // Private
   private _unsubscribeAll: Subject<any>;
 
-  public toggleColours(): void {
+  public toggleColours(parent): void {
     this.coloursEnabled = !this.coloursEnabled;
 
     if (this.coloursEnabled) {
@@ -82,13 +87,20 @@ export class AddproductComponent implements OnInit {
       this.primaryColour = PrimaryWhite;
       this.secondaryColour = SecondaryGrey;
     }
+
   }
+  
   ngOnInit() {
+
+    this.url = window.location.origin;
     this.productForm = this._fb.group({
       itemRows: this._fb.array([this.initItemRows(
 
       )])
     });
+
+    this.qrdata = "hii";
+
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
 
@@ -96,9 +108,13 @@ export class AddproductComponent implements OnInit {
     this.ProductService.getAllProductcategories(merchantId)
       .subscribe(
         data => {
+          
+          if (data.message ==  "no data found") {
+
+          } else {
           this.catName = data.data;
 
-
+          }
         },
         error => {
           console.log(error);
@@ -113,11 +129,8 @@ export class AddproductComponent implements OnInit {
           if (data == '' || data == null || data == 'null') {
 
           } else {
-          
 
             this.Primary = data;
-
-           
             
           }
         },
@@ -139,19 +152,21 @@ export class AddproductComponent implements OnInit {
       productname: ['', Validators.required],
       productcategories: ['', Validators.required],
       productcatname: [''],
-      costprice: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-      Markup: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      costprice: ['', Validators.required],
+      Markup: ['', Validators.required],
       sellingprice: [''],
       date: ['', Validators.required],
       // tilltype: ['', Validators.required],
-      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
+      stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+      url : ['']
     });
   }
 
   addNewRow() {
+    // var datetime = new Date(new Date).valueOf();
+    // var randomnumber = Math.floor((Math.random() * 100) + 1);
     this.formArr.push(this.initItemRows());
-
-
+   
   }
 
   deleteRow(indexs: number, urls) {
@@ -222,6 +237,7 @@ export class AddproductComponent implements OnInit {
 
 
   addproduct() {
+
     this.loading = true;
    if(this.Primary == undefined || this.Primary == 'undefined' || this.Primary == null || this.Primary == 'null'){
     this.loading = false;
@@ -257,15 +273,14 @@ export class AddproductComponent implements OnInit {
           this.productForm.value.itemRows[i].image = data[i].s3url;
           this.productForm.value.itemRows[i].barcode = datetime + randomnumber
           this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
-      
-  
            this.productForm.value.itemRows[i].tilltype = "Primary"
-           this.productForm.value.itemRows[i].tilltypeid = this.Primary[0]._id
+           this.productForm.value.itemRows[i].tilltypeid = this.Primary[0]._id;
+           this.productForm.value.itemRows[i].tilltypename = this.Primary[0].name;
            this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
-         
+          this.productForm.value.itemRows[i].url = this.url
+       
         }
        
-      
         this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
           this.snackBar.open('Product added successfully.', '', {
             duration: 3000,
@@ -289,15 +304,22 @@ export class AddproductComponent implements OnInit {
 
 
   addnewcategory(i) {
+  
+    
 
-    $("#div_" + i).hide();
+     $("#div_" + i).hide();
     $("#divshow_" + i).show();
     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
 
     document.getElementById(i).innerHTML = Categoryhtml;
-    this.mySelect.close();
+    
+  //  this.productForm.controls.itemRows.value[i]['productcategories'].setValue('');
+   
+     this.mySelect.close();
+    // this.productForm.setValue("#div_" + i)
   }
 
+  
 
   addproductcategories(i) {
 

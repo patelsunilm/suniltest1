@@ -30,7 +30,7 @@ function addfaqData(faqData) {
             if (!err) {
                 deferred.resolve(saveFaq);
             } else {
-                console.log(err);
+              
                 deferred.reject(err.name + ': ' + err.message);
             }
         });

@@ -28,7 +28,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="name"  autofocus="true"
+            <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"  autofocus="true"
               required>
             <mat-error *ngIf="form.get('name').hasError('required')">
               Please enter till type name!

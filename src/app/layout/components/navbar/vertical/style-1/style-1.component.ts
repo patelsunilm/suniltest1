@@ -75,20 +75,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 icon: 'inbox'
             },
             {
-                id: 'graph',
-                title: 'Graph',
-                url: '/graph',
-                type: 'item',
-                icon: 'timeline'
-            },
-            {
                 id: 'notification',
                 title: 'Notifications',
                 url: '/notification',
                 type: 'item',
                 icon: 'notifications'
             },
-
+          
 
         ]
         var custom2 = [
@@ -130,13 +123,61 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 icon: 'inbox'
             },
             {
-                id: 'graph',
-                title: 'Graph',
-                url: '/graph',
-                type: 'item',
-                icon: 'timeline'
-            },
-           
+                id: 'analysis',
+                title: 'Analysis',
+                type: 'collapsable',
+                icon: 'timeline',
+                children: [
+                    {
+                        id: 'productsalescomparison',
+                        title: 'Product sales comparison',
+                        url: '/analysis/productsalescomparison',
+                        type: 'item',
+                        
+                    },
+                    {
+                        id: 'productstocklevel',
+                        title: 'Product stock level',
+                        url: '/analysis/productstocklevel',
+                        type: 'item',
+                      
+                    },
+                    {
+                        id: 'productratingsreview',
+                        title: 'Product ratings review',
+                        url: '/analysis/productratingsreview',
+                        type: 'item',
+                       
+                    },
+                    {
+                        id: 'numberofcustomerpurchases',
+                        title: 'Number of customer purchases',
+                        url: '/analysis/numberofcustomerpurchases',
+                        type: 'item',
+                       
+                    },
+                    {
+                        id: 'valueofcustomerpurchases',
+                        title: 'Value of customer purchases',
+                        url: '/analysis/valueofcustomerpurchases',
+                        type: 'item',
+                       
+                    },
+                    // {
+                    //     id: 'customerratingsperproduct',
+                    //     title: 'Customer ratings per product',
+                    //     url: '/analysis/customerratingsperproduct',
+                    //     type: 'item',
+                    // },
+                    {
+                        id: 'tillsalesperproduct',
+                        title: 'Till sales per product',
+                        url: '/analysis/tillsalesperproduct',
+                        type: 'item',
+                        
+                    },
+                ]
+            },  
         ]
         _router.events.subscribe(
             (event) => {
@@ -179,19 +220,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             icon: 'inbox'
                         },
                         {
-                            id: 'graph',
-                            title: 'Graph',
-                            url: '/graph',
-                            type: 'item',
-                            icon: 'timeline'
-                        },
-                        {
                             id: 'notification',
                             title: 'Notifications',
                             url: '/notification',
                             type: 'item',
                             icon: 'notifications'
                         },
+                        
                     ]
                     var custom2 = [
                         {
@@ -234,11 +269,61 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             icon: 'inbox'
                         },
                         {
-                            id: 'graph',
-                            title: 'Graph',
-                            url: '/graph',
-                            type: 'item',
-                            icon: 'timeline'
+                            id: 'analysis',
+                            title: 'Analysis',
+                            type: 'collapsable',
+                            icon: 'timeline',
+                            children: [
+                                {
+                                    id: 'productsalescomparison',
+                                    title: 'Product sales comparison',
+                                    url: '/analysis/productsalescomparison',
+                                    type: 'item',
+                                    
+                                },
+                                {
+                                    id: 'productstocklevel',
+                                    title: 'Product stock level',
+                                    url: '/analysis/productstocklevel',
+                                    type: 'item',
+                                  
+                                },
+                                {
+                                    id: 'productratingsreview',
+                                    title: 'Product ratings review',
+                                    url: '/analysis/productratingsreview',
+                                    type: 'item',
+                                   
+                                },
+                                {
+                                    id: 'numberofcustomerpurchases',
+                                    title: 'Number of customer purchases',
+                                    url: '/analysis/numberofcustomerpurchases',
+                                    type: 'item',
+                                   
+                                },
+                                {
+                                    id: 'valueofcustomerpurchases',
+                                    title: 'Value of customer purchases',
+                                    url: '/analysis/valueofcustomerpurchases',
+                                    type: 'item',
+                                   
+                                },
+                                // {
+                                //     id: 'customerratingsperproduct',
+                                //     title: 'Customer ratings per product',
+                                //     url: '/analysis/customerratingsperproduct',
+                                //     type: 'item',
+                                 
+                                // },
+                                {
+                                    id: 'tillsalesperproduct',
+                                    title: 'Till sales per product',
+                                    url: '/analysis/tillsalesperproduct',
+                                    type: 'item',
+                                    
+                                },
+                            ]
                         },
                     ];
 

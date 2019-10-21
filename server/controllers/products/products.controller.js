@@ -226,3 +226,171 @@ exports.getCategoriesProducts = function(req , res) {
         res.status(400).send(err);
     }); 
 }
+
+
+
+exports.getproductdetailsbyid = function(req, res) {
+
+    productservice.getproductdetailsbyid(req.body)
+    .then(function (getproductdetails) {
+
+        if (getproductdetails) {
+
+            res.send(getproductdetails);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+
+}
+
+
+exports.addproductrating = function(req, res) {
+   
+    productservice.addproductrating(req.body)
+    .then(function (productrating) {
+
+        if (productrating) {
+
+            res.send(productrating);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+}
+
+exports.getproductrating = function(req, res) {
+
+    productservice.getproductrating(req.body)
+    .then(function (getproductrating) {
+
+        if (getproductrating) {
+
+            res.send(getproductrating);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+}
+
+
+exports.updateproductrating = function(req, res) {
+  
+    productservice.updateproductrating(req.body)
+    .then(function (updaterating) {
+
+        if (updaterating) {
+
+            res.send(updaterating);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+}
+
+exports.getproductratingbyid = function(req, res) {
+
+    
+    productservice.getproductratingbyid(req.body)
+    .then(function (getproductrating) {
+
+        if (getproductrating) {
+
+            res.send(getproductrating);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+
+}
+
+
+
+exports.getProductsRatingDetails = function(req, res) {
+
+    
+    productservice.getProductsRatingDetails(req.body)
+    .then(function (getproductratingdetails) {
+
+        if (getproductratingdetails) {
+
+            res.send(getproductratingdetails);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+
+}
+
+
+
+exports.getProductsRatingDetailsbyid = function(req, res) {
+
+    
+    productservice.getProductsRatingDetailsbyid(req.body)
+    .then(function (getproductratingdetails) {
+
+        if (getproductratingdetails) {
+
+            res.send(getproductratingdetails);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+
+}
+
+exports.gettilldetails = function(req, res) {
+  
+    productservice.gettilldetails(req.body)
+    .then(function (gettillmovementsdetails) {
+
+        if (gettillmovementsdetails) {
+
+            res.send(gettillmovementsdetails);
+
+        } else {
+
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    });   
+
+}

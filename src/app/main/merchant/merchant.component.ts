@@ -38,19 +38,21 @@ export class MerchantComponent implements OnInit {
 
     applyFilter(filterValue: any) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
-
+    
         if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
+          this.dataSource.paginator.firstPage();
         }
         if (this.dataSource.filteredData.length > 0) {
-
-            this.isTableHasData = true;
+    
+          this.isTableHasData = true;
         } else {
-
-            this.isTableHasData = false;
+    
+          this.isTableHasData = false;
         }
-    }
-
+    
+    
+    
+      }
 
     constructor(public dialog: MatDialog,
         private MerchantService: MerchantService,
@@ -78,6 +80,9 @@ export class MerchantComponent implements OnInit {
                         allmerchantdata.push(element);
 
                     });
+                  
+                    
+
                    if (allmerchantdata.length > 0) {
                         this.dataSource = new MatTableDataSource(allmerchantdata);
                         this.dataSource.paginator = this.paginator;
@@ -127,29 +132,33 @@ export class MerchantComponent implements OnInit {
             width: '450px'
         });
         dialogRef.afterClosed().subscribe(result => {
-            this.MerchantService.getallMerchentsData()
-                .subscribe(
-                    data => {
-                        this.allmerchantdata = data.data;
-                        const merchantdata = data.data;
-                        const allmerchantdata = [];
-                        merchantdata.forEach(element => {
 
+        this.MerchantService.getallMerchentsData()
+            .subscribe(
+                data => {
 
-                            allmerchantdata.push(element);
+                    this.allmerchantdata = data.data;
+                    const merchantdata = data.data;
+                    const allmerchantdata = [];
+                    merchantdata.forEach(element => {
 
-                        });
-                        if (allmerchantdata.length > 0) {
-                            this.dataSource = new MatTableDataSource(allmerchantdata);
-                            this.dataSource.paginator = this.paginator;
-                            this.isTableHasDataAgain = true;
-                        } else {
-                            this.isTableHasDataAgain = false;
-                        }
-                    },
-                    error => {
-                        console.log(error);
+                        allmerchantdata.push(element);
+
                     });
+                  
+                    
+
+                   if (allmerchantdata.length > 0) {
+                        this.dataSource = new MatTableDataSource(allmerchantdata);
+                        this.dataSource.paginator = this.paginator;
+                        this.isTableHasDataAgain = true;
+                    } else {
+                        this.isTableHasDataAgain = false;
+                    }
+                },
+                error => {
+                    console.log(error);
+                });
 
         });
     }
@@ -192,7 +201,9 @@ export class MerchantComponent implements OnInit {
                         const allmerchantdata = [];
                         merchantdata.forEach(element => {
 
-                            element.businessName = element.businessname
+                            element.businessName = element.businessname;
+                            element.merchantId = element._id;
+                           
                             allmerchantdata.push(element);
 
                         });

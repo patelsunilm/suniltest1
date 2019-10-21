@@ -1,0 +1,36 @@
+<div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
+
+  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+
+      <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="logo-icon" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+            timeline
+          </mat-icon>
+          <span class="logo-text h1 p-8" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+            Product ratings review 
+          </span>
+      </div>
+  </div>
+  <div class="content p-24">
+  <div *ngIf="hidediv != 'false'"  class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+    
+    <fusioncharts 
+    width="90%"
+    height="400"
+    type="column2d"
+       
+    [dataSource]="dataSource"
+    (initialized)="initialized($event)" (dataplotRollOver)="update($event)"    (click)="onSelectionChange('pie2d', dataSource ,$event)">
+  </fusioncharts>
+  <div *ngIf="buttonhide != 'false'">
+    <input type="radio" name='options' [value]="'column2d'" [checked]='chart === "column2d"' (change)="onSelectionChange('column2d')" />
+    <label>Back</label>
+  </div>
+  </div>
+  <p *ngIf="hidediv == 'false'">no data available</p>
+</div>
+
+
+
+ 

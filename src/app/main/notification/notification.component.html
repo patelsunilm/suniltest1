@@ -35,17 +35,15 @@
           </mat-select>
         </mat-form-field>
          
-        <!-- <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-          <mat-select formControlName="users"  placeholder="Bank" #singleSelect>
-            <mat-option>
-              <ngx-mat-select-search></ngx-mat-select-search>
-            </mat-option>
-            <mat-option *ngFor="let appusers of users | async"   [value]="appusers">
-              {{appusers.firstname}}
+        <!-- <mat-form-field>
+          <mat-select [formControl]="bankMultiCtrl" placeholder="Banks" [multiple]="true">
+            <mat-select-search [formControl]="bankMultiFilterCtrl"></mat-select-search>
+            <mat-option *ngFor="let bank of filteredBanksMulti | async" [value]="bank">
+              {{bank.name}}
             </mat-option>
           </mat-select>
-        </mat-form-field>-->
-        </div> 
+        </mat-form-field>
+        </div>  -->
 
         <!-- <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
@@ -53,9 +51,9 @@
          <mat-select formControlName="merchant"  multiple>
            <mat-option *ngFor="let topping of merchant" [value]="topping">{{topping.name}}</mat-option>
          </mat-select>
-       </mat-form-field>
+       </mat-form-field> -->
         
-       </div> -->
+       </div>
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">

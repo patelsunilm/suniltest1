@@ -1,9 +1,7 @@
 <div id="forms" class="page-layout simple fullwidth" fxLayout="column">
 
   <!-- HEADER -->
-  <!-- <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="start center">
-          <div class="h1 mt-16">Add Package</div>
-  </div> -->
+
   <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
     fxLayoutAlign.gt-xs="space-between center">
 
@@ -46,10 +44,12 @@
           </mat-form-field>
       </div>
       <!-- class="{{this.currentclass}}" -->
-      <div  *ngIf="showSecondary == true"     fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+      <!-- *ngIf="showSecondary == true" -->
+      <div *ngIf="showSecondary == true"   fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
         <mat-form-field appearance="outline" fxFlex="50" class="pl-4" >
           <mat-label>Select Secondary Till</mat-label>
           <mat-select   formControlName="Secondaryid">
+              <mat-option>Select Secondary Till</mat-option>
               <mat-option  *ngFor="let  details of secondarydetails" [value]="details._id" >
                 {{details.name}}
             </mat-option>
@@ -64,11 +64,15 @@
     <div class="till" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
       <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
           <mat-label>Till Name</mat-label>
-          <input matInput formControlName="tillName"  required>
+          <input matInput formControlName="tillName" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"  required>
           <mat-error *ngIf="form.get('tillName').hasError('required')">
             Please enter till name !
         </mat-error>
+        <mat-error *ngIf="form.get('tillName').hasError('pattern')">
+          Please enter valid name!
+      </mat-error>
       </mat-form-field>
+     
     </div>
         <div class="button-row" style="text-align: center;">
           <button  [disabled]="form.invalid"   mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>

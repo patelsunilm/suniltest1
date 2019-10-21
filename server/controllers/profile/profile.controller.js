@@ -115,3 +115,37 @@ exports.getuserprofile = function (req, res) {
             res.status(400).send(err);
         });
 }
+
+
+
+
+exports.getallstates = function(req, res) {
+
+    profileService.getallstates(req.body.countrieId)
+        .then(function (states) {
+            if (states) {
+                res.send(states);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}
+
+exports.getallcity = function (req, res) {
+
+ 
+    profileService.getallcity(req.body.stateId)
+        .then(function (city) {
+            if (city) {
+                res.send(city);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+        .catch(function (err) {
+            res.status(400).send(err);
+        });
+}

@@ -33,7 +33,7 @@
 
                     <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                         <mat-label>Name </mat-label>
-                        <input matInput formControlName="name" autocomplete="off"
+                        <input matInput formControlName="name" autofocus="true" autocomplete="off"
                             pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
                         <mat-error *ngIf="form.get('name').hasError('required')">
                             Please enter name!

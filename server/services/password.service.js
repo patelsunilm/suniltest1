@@ -41,7 +41,6 @@ function passwordmatch(passworddata) {
                             deferred.resolve(Password);
                         } else {
 
-                            console.log(err);
                             deferred.reject(err.name + ': ' + err.message);
                         }
                     });

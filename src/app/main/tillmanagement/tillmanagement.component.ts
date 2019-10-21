@@ -106,7 +106,8 @@ export class TillmanagementComponent implements OnInit {
 
   selectTillType(value) {
     this.showvalue = value
-   if(value == "Primary") {
+
+   if(value == "Primary" || value == "SelectCategory") {
 
     var merchantId = localStorage.getItem('userId');
     this.tillManagementService.getTillManagementDetails(merchantId)
@@ -230,7 +231,7 @@ export class TillmanagementComponent implements OnInit {
 
         });
       
-   }
+   } 
 
   }
 
@@ -409,30 +410,38 @@ export class deletetillmanagementpopupComponent {
 
                 if(data.string == "Primary type is delete successfully.") {
                   this.snackBar.open('Primary type is delete successfully.', '', {
-                      duration: 5000,
+                      duration: 4000,
                       horizontalPosition: this.horizontalPosition,
                       verticalPosition: this.verticalPosition,
                   });
 
                 } else if(data.string == "Secondary type is delete successfully.") {
                   this.snackBar.open('Secondary type is delete successfully.', '', {
-                    duration: 5000,
+                    duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
                 } else if(data.string == "Tertiary type is delete successfully.") {
-               
                   this.snackBar.open('Tertiary type is delete successfully.', '', {
-                    duration: 5000,
+                    duration: 4000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+                } else if(data.string == "You cannot delete Secondary name as it assigned to product." ) {
+                  this.snackBar.open('You cannot delete Secondary name as it assigned to product.', '', {
+                    duration: 4000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+              
+                } else if(data.string == "You cannot delete Tertiary name as it assigned to product.") {
+                  this.snackBar.open('You cannot delete Tertiary name as it assigned to product.', '', {
+                    duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
                 }
-                  // this.snackBar.open('Merchant deleted successfully.', '', {
-                  //     duration: 5000,
-                  //     horizontalPosition: this.horizontalPosition,
-                  //     verticalPosition: this.verticalPosition,
-                  // });
+                 
                   // this.router.navigate([this.returnUrl]);
 
               },

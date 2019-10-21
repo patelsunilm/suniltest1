@@ -89,7 +89,7 @@ export class ForgotPassword2Component implements OnInit {
                         });
                     } else {
 
-                        this.snackBar.open('Email send successfully.', '', {
+                        this.snackBar.open('Email sent successfully.', '', {
                             duration: 3000,
                             horizontalPosition: this.horizontalPosition,
                             verticalPosition: this.verticalPosition,

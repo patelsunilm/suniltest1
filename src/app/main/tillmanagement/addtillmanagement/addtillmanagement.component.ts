@@ -148,20 +148,19 @@ export class AddtillmanagementComponent implements OnInit {
 
 
 
-  openSecondary(valuess) {
+  openSecondary(details) {
 
-      this.tilltypevalue = valuess
+      this.tilltypevalue = details;
     if (this.tilltypevalue == "Tertiary") {
 
       this.showSecondary = true;
-      this.currentclass = 'showfield';
       this.form.get("Secondaryid").setValidators([Validators.required]); 
 
       } else {
-
-       this.showSecondary = false;
-      //  this.currentclass = 'hidefield';
-        this.form.get("Secondaryid").clearAsyncValidators(); 
+        this.showSecondary = false;
+        this.form.controls["Secondaryid"].clearValidators();
+        this.form.controls["Secondaryid"].updateValueAndValidity();
+        
     }
   }
   

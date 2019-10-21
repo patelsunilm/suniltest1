@@ -30,10 +30,10 @@
         [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}"
         [template]="loadingTemplate">
       </ngx-loading>
-      <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct()">
+      <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct(parent)">
         <div formArrayName="itemRows" class="cstm-add-product">
 
-          <table class="table table-responsive table-striped cstm-table-store"  [class.isMobile]="isMobile" >
+          <table class="table table-responsive table-striped cstm-table-store" [class.isMobile]="isMobile">
             <tr>
               <th>Image</th>
               <th>Products name</th>
@@ -45,8 +45,6 @@
               <!-- <th>Till type</th> -->
               <th>Stock level</th>
               <th></th>
-
-
             </tr>
             <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
               <td>
@@ -66,8 +64,8 @@
               <td>
                 <mat-form-field appearance="outline">
                   <mat-label>Product name</mat-label>
-                  <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
-
+                  <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
+                    autofocus="true" autocomplete="off" required>
                   <mat-error *ngIf="itemrow.get('productname').hasError('required')">
                     Please enter product!
                   </mat-error>
@@ -77,32 +75,29 @@
                 </mat-form-field>
               </td>
               <td>
-                <mat-form-field  appearance="outline" id="div_{{i}}"  >
+                <mat-form-field appearance="outline" id="div_{{i}}">
                   <mat-label>Catlist</mat-label>
-                 
-                  <mat-select #mySelect id="divs1_{{i}}"  formControlName="productcategories" required>
+                  <mat-select #mySelect id="divs_{{i}}" formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
                     <div class="btn-cstm-catg">
-                    <button mat-button (click)="addnewcategory(i)" class="cstm-mat-button" >add product category</button>
-                  </div>
-                  
+                      <button mat-button (click)="addnewcategory(i)" class="cstm-mat-button">add product
+                        category</button>
+                    </div>
                     <mat-option *ngFor="let procatname of catName" [value]="procatname.productCatId">
-                        {{procatname.catName}}
+                      {{procatname.catName}}
                     </mat-option>
-
-                 </mat-select>
-              
+                  </mat-select>
                 </mat-form-field>
-
-
-              <div id="{{i}}"></div>
-              <button style="display:none;"  id="divshow_{{i}}" type="button"  (click)="addproductcategories(i)" class="submit_btn">submit</button>
+                <div id="{{i}}"></div>
+                <button style="display:none;" id="divshow_{{i}}" type="button" (click)="addproductcategories(i)"
+                  class="submit_btn">submit</button>
               </td>
               <td>
                 <mat-form-field appearance="outline">
                   <mat-label>Cost price</mat-label>
 
-                  <input matInput formControlName="costprice" (keyup)="netamount(i)" id="costprice{{i}}" required>
+                  <input matInput formControlName="costprice" pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$"
+                    (keyup)="netamount(i)" id="costprice{{i}}" required>
                   <mat-error *ngIf="itemrow.get('costprice').hasError('required')">
                     Please enter cost price!
                   </mat-error>
@@ -115,7 +110,8 @@
                 <mat-form-field appearance="outline">
                   <mat-label> Markup</mat-label>
 
-                  <input matInput formControlName="Markup" required (keyup)="netamount(i)" id="markup{{i}}">
+                  <input matInput formControlName="Markup" pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" required
+                    (keyup)="netamount(i)" id="markup{{i}}">
                   <mat-error *ngIf="itemrow.get('Markup').hasError('required')">
                     Please enter Markup!
                   </mat-error>
@@ -127,11 +123,10 @@
               <td>
                 <mat-form-field appearance="outline">
                   <mat-label>Selling price</mat-label>
-                  <input matInput id="selling{{i}}" formControlName="sellingprice"   readonly>          
+                  <input matInput id="selling{{i}}" formControlName="sellingprice" readonly>
                 </mat-form-field>
               </td>
               <td>
-
                 <mat-form-field appearance="outline">
                   <mat-label>Date</mat-label>
 
@@ -145,7 +140,10 @@
                 </mat-form-field>
               </td>
               <!-- <td>
-              
+                    <ngx-qrcode [qrc-element-type]="url" [qrc-value] = "value" >
+                      </ngx-qrcode>
+                </td> -->
+              <!-- <td>
                 <mat-form-field appearance="outline">
                   <mat-label>Till type</mat-label>
                   <mat-select matNativeControl  formControlName="tilltype" required>
@@ -185,7 +183,7 @@
           </table>
         </div>
         <div class="button-row" style="text-align: center;">
-          <button (click)="toggleColours()" [disabled]="productForm.invalid" mat-raised-button="" color=""
+          <button (click)="toggleColours(parent)" [disabled]="productForm.invalid" mat-raised-button="" color=""
             style="margin-top: 10px;">Submit
           </button>
         </div>

@@ -24,10 +24,7 @@
   <div class="content p-24">
 
     <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
-
-
       <!-- REACTIVE FORM EXAMPLE -->
-
       <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto"
         name="form" [formGroup]="form" (ngSubmit)="updateproduct()" enctype="multipart/form-data">
 
@@ -53,7 +50,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Products name</mat-label>
-            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true"
+            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true" autocomplete="off"
               required>
             <mat-error *ngIf="form.get('productname').hasError('required')">
               Please enter product!
@@ -62,6 +59,20 @@
               Please enter valid product!
             </mat-error>
           </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+              <mat-label>Select catname</mat-label>
+          <mat-select formControlName="catname" required>
+                  <mat-option>Select catname</mat-option>
+              <mat-option  *ngFor="let cat of catName" [value]="cat.productCatId">
+                  {{cat.catName}}
+              </mat-option>
+          </mat-select>
+
+          <mat-error>Please select catname!</mat-error>
+
+      </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Cost price</mat-label>
             <input matInput formControlName="costprice" required (keyup)="netamount(i)" id="costprice">
@@ -72,8 +83,6 @@
               Please enter valid cost price!
             </mat-error>
           </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Markup</mat-label>
             <input matInput formControlName="markup" required (keyup)="netamount(i)" id="markup">
@@ -84,79 +93,89 @@
               Please enter valid markup!
             </mat-error>
           </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Selling price</mat-label>
             <input matInput formControlName="sellingprice" id="selling" required readonly>
-            <!-- <mat-error *ngIf="form.get('sellingprice').hasError('required')">
-              Please enter selling price!
-            </mat-error>
-            <mat-error *ngIf="form.get('sellingprice').hasError('pattern')">
-              Please enter valid selling price!
-            </mat-error> -->
+
           </mat-form-field>
-        </div>
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Date</mat-label>
 
             <input required matInput formControlName="date" [matDatepicker]="picker" placeholder="Choose a date">
-
-
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="form.get('date').hasError('required')">
               Please enter date!
             </mat-error>
           </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Till type</mat-label>
-            <input matInput formControlName="tilltype" required>
-            <mat-error *ngIf="form.get('tilltype').hasError('required')">
-              Please enter till type!
-            </mat-error>
-            <mat-error *ngIf="form.get('tilltype').hasError('pattern')">
-              Please enter valid till type!
-            </mat-error>
+            <input matInput formControlName="tilltype" readonly required>
+
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Till type name</mat-label>
+            <input matInput formControlName="tilltypename" readonly required>
+
           </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Stock level</mat-label>
-            <input matInput formControlName="stocklevel" required>
-            <mat-error *ngIf="form.get('stocklevel').hasError('required')">
-              Please enter stock level!
-            </mat-error>
-            <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
-              Please enter valid stock level!
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Move Stock</mat-label>
-            <input matInput formControlName="movestock" required>
-            <!-- <mat-error *ngIf="form.get('movestock').hasError('required')">
-              Please enter stock level!
-            </mat-error>
-            <mat-error *ngIf="form.get('movestock').hasError('pattern')">
-              Please enter valid stock level!
-            </mat-error> -->
-          </mat-form-field>
-        </div>
-       
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Move stock input value</mat-label>
-            <input matInput formControlName="movestockinputvalue" required>
-            <!-- <mat-error *ngIf="form.get('stocklevel').hasError('required')">
-              Please enter stock level!
-            </mat-error>
-            <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
-              Please enter valid stock level!
-            </mat-error> -->
-          </mat-form-field> 
         
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Stock level</mat-label>
+                <input matInput formControlName="stocklevel" pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="sto" required>
+                <mat-error *ngIf="form.get('stocklevel').hasError('required')">
+                  Please enter stock level!
+                </mat-error>
+                <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
+                  Please enter valid stock level!
+                </mat-error>
+              </mat-form-field>
+
+          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+            <mat-label>Move stock select till</mat-label>
+            <mat-select matNativeControl formControlName="movestock"  (selectionChange)="onSelectionChanged($event)">
+              <mat-option>Move stock select till </mat-option>
+              <mat-optgroup label="primary" *ngIf="tilltypes == 'Secondary'">
+                <mat-option *ngFor="let typename of Primary"  [value]="typename._id +','+'Primary'  +','+ typename.name"> {{typename.name}}
+                </mat-option>
+              </mat-optgroup>
+              <mat-optgroup label="Secondary"
+                *ngIf="tilltypes == 'Primary' || tilltypes == 'Secondary' || tilltypes == 'Tertiary'">
+                <mat-option *ngFor="let typename of Secondary" [value]="typename._id + ','+ 'Secondary' +','+ typename.name ">
+                  {{typename.name}}</mat-option>
+              </mat-optgroup>
+              <mat-optgroup label="Tertiary" *ngIf="tilltypes == 'Secondary' || tilltypes == 'Tertiary'">
+                <mat-option *ngFor="let typename of Tertiary" [value]="typename._id + ','+ 'Tertiary' + ','+ typename.name ">{{typename.name}}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          
+          </mat-form-field>
+         
         </div>
-
-
+        <div   fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Move stock input value</mat-label>
+                <input matInput formControlName="movestockinputvalue"   pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="ma"  >
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('required')">
+                    Please enter stock level!
+                  </mat-error>
+              
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('pattern')">
+                  Please enter valid move stock input value!
+                </mat-error>
+                
+              </mat-form-field>
+        </div>
         <div class="button-row" style="text-align: center;">
           <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
         </div>
