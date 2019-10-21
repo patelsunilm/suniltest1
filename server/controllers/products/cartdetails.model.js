@@ -16,9 +16,8 @@ var CartdetailsSchema = new Schema({
         markUp : { type : Number} ,
         sellingPrice : {type : Number},
         merchantId : { type :ObjectId },
-        barcode : {type : String}
-      
-        
+        barcode : {type : String},
+        tillTypeId : { type : ObjectId}        
        
     }],
 

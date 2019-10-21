@@ -6,8 +6,10 @@ var users = require('../controllers/Users/users.model');// get our mongoose mode
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
 // var sesTransport = require('nodemailer-ses-transport');
-// var smtpPassword = require('aws-smtp-credentials');
+//var smtpPassword = require('aws-smtp-credentials');
 var config = require('../config.json');
+
+
 
 var service = {};
 
@@ -51,8 +53,9 @@ function sendlink(sendlinkdata, baseurl) {
 
             // });
 
-
+           
             let transporter1 = nodemailer.createTransport({
+              //  host : 'smtp.gmail.com',
                 host: 'mail.finikart.com',
                 port: 465,
                 secure: true, // true for 465, false for other ports
@@ -61,15 +64,15 @@ function sendlink(sendlinkdata, baseurl) {
                     pass: config.mail_pass // generated ethereal password
                 }
             });
-
+            
             // send mail with defined transport object
             let info = transporter1.sendMail({
                 from: config.mail_user, // sender address
                 to: sendlinkdata.email, // list of receivers
                 text: 'This Is Your Link To Reset Password',
                 html: '<a href="' + baseurl + '/#' + '/resetpassword/' + userid + '">Reset Password Link</a>',
+           
             });
-
 
             var data = {};
             data.string = 'Email send successfully.';
@@ -101,7 +104,7 @@ function resetpassword(resetpassworddata) {
                 deferred.resolve(Password);
             } else {
 
-                console.log(err);
+               
                 deferred.reject(err.name + ': ' + err.message);
             }
         });

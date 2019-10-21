@@ -40,6 +40,7 @@ export class AppComponent implements OnInit, OnDestroy
      * @param {Platform} _platform
      * @param {TranslateService} _translateService
      */
+    data: Object;
     constructor(
         @Inject(DOCUMENT) private document: any,
         private _fuseConfigService: FuseConfigService,
@@ -51,6 +52,10 @@ export class AppComponent implements OnInit, OnDestroy
         private _platform: Platform
     )
     {
+
+        
+
+
         // Get default navigation
         this.navigation = navigation;
 

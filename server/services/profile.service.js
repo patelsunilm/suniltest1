@@ -19,6 +19,9 @@ service.getstates = getstates;
 service.getcity = getcity;
 service.getuserprofile = getuserprofile;
 service.getAllcountries = getAllcountries;
+service.getallstates = getallstates;
+service.getallcity =getallcity;
+
 
 function getprofileInfo(userId) {
     var deferred = Q.defer();
@@ -175,7 +178,8 @@ function getcountries() {
 
                         var contris = {}
                         contris.countrieName = element.name == undefined ? '' : element.name;
-                        contris.countrieId = element.id == undefined ? '' : element.id;
+                         var id = element.id.toString();
+                        contris.countrieId = id == undefined ? '' : id;
                         allcountries.push(contris);
 
                     });
@@ -205,46 +209,76 @@ function getcountries() {
 
 
 function getstates(id) {
+  
+
     var deferred = Q.defer();
     var countryid = parseInt(id);
+    Users.aggregate([
+        { "$match": { "countryid":countryid } },
+        {
+            $lookup: {
+                from: "states",
+                localField: "stateid",
+                foreignField: "id",
+                as: "states"
+            }
 
-    states.find({ country_id: countryid }, function (err, stateresults) {
-
+        },
+    ]).exec(function (err, results) {
         if (!err) {
+            if (results == '' || results == null || results == 'null') {
 
-            if (stateresults == '') {
-                var statesdetails = {
+                var countriesdetails = {
                     "status": "0",
                     "message": "no data found",
                     "data":
                         {}
                 }
+                deferred.resolve(countriesdetails);
 
             } else {
+           
+    
                 var allstate = [];
-                stateresults.forEach(element => {
+                results.forEach(items => {
+                    items.states.forEach(element => {
+                        
+                        var state = {}
+                        state.stateName = element.name == undefined ? '' : element.name;
+                        var id = element.id.toString();
+                        state.stateId = id == undefined ? '' : id;
+                        allstate.push(state);
 
-                    var states = {}
-                    states.stateId = element.id == undefined ? '' : element.id;
-                    states.stateName = element.name == undefined ? '' : element.name;
-                    allstate.push(states);
-
+                    });
                 });
-
-                var statesdetails = {
+              
+             
+                result =  allstate.filter(function (a) {
+                    return !this[a.stateName] && (this[a.stateName] = true);
+                }, Object.create(null));
+         
+                var statedetails = {
                     "status": "1",
                     "message": "Sucess",
                     "data":
-                        allstate
+                        result
                 }
-
             }
-            deferred.resolve(statesdetails);
+            deferred.resolve(statedetails);
         } else {
 
-            deferred.reject(err.name + ': ' + err.message);
+
+            var countriesdetails = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+            deferred.resolve(countriesdetails);
+
         }
-    });
+    })
+   
     return deferred.promise;
 }
 
@@ -254,45 +288,69 @@ function getcity(id) {
     var deferred = Q.defer();
     var stateid = parseInt(id);
 
-    city.find({ state_id: stateid }, function (err, cityresults) {
+    Users.aggregate([
+        { "$match": { "stateid":stateid } },
+        {
+            $lookup: {
+                from: "cities",
+                localField: "cityid",
+                foreignField: "id",
+                as: "cities"
+            }
 
+        },
+    ]).exec(function (err, results) {
         if (!err) {
+            if (results == '' || results == null || results == 'null') {
 
-            if (cityresults == '') {
-                var citydetails = {
+                var citiesdetails = {
                     "status": "0",
                     "message": "no data found",
                     "data":
                         {}
                 }
+                deferred.resolve(citiesdetails);
+
             } else {
                 var allcity = [];
-                cityresults.forEach(element => {
+                results.forEach(items => {
+                    items.cities.forEach(element => {
+
                     var citys = {}
                     citys.cityId = element.id == undefined ? '' : element.id;
                     citys.cityName = element.name == undefined ? '' : element.name;
                     allcity.push(citys);
 
+                    });
                 });
-
-                var citydetails = {
+              
+                result = allcity.filter(function (a) {
+                    return !this[a.cityName] && (this[a.cityName] = true);
+                }, Object.create(null));
+                 
+               
+                var contriesdetails = {
                     "status": "1",
                     "message": "Sucess",
                     "data":
-                        allcity
+                        result
                 }
-
+                deferred.resolve(contriesdetails);
             }
-
-            deferred.resolve(citydetails);
-
+            
         } else {
 
-
-            deferred.reject(err.name + ': ' + err.message);
+            var citiesdetails = {
+                "status": "0",
+                "message": "no data found",
+                "data":
+                    {}
+            }
+            deferred.resolve(citiesdetails);
         }
-    });
-    return deferred.promise;
+    })
+
+     return deferred.promise;
 }
 
 
@@ -384,6 +442,99 @@ function getAllcountries() {
             deferred.reject(err.name + ': ' + err.message);
         }
     })
+    return deferred.promise;
+}
+
+
+
+function getallstates(id) {
+    
+    var deferred = Q.defer();
+    var countryid = parseInt(id);
+    states.find({ country_id: countryid }, function (err, stateresults) {
+
+        if (!err) {
+
+            if (stateresults == '') {
+                var statesdetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+
+            } else {
+                var allstate = [];
+                stateresults.forEach(element => {
+
+                    var states = {}
+                    states.stateId = element.id == undefined ? '' : element.id;
+                    states.stateName = element.name == undefined ? '' : element.name;
+                    allstate.push(states);
+
+                });
+
+                var statesdetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allstate
+                }
+
+            }
+            deferred.resolve(statesdetails);
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
+}
+
+function  getallcity (id) {
+
+   
+    var deferred = Q.defer();
+    var stateid = parseInt(id);
+
+        city.find({ state_id: stateid }, function (err, cityresults) {
+
+        if (!err) {
+
+            if (cityresults == '') {
+                var citydetails = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
+                }
+            } else {
+                var allcity = [];
+                cityresults.forEach(element => {
+                    var citys = {}
+                    citys.cityId = element.id == undefined ? '' : element.id;
+                    citys.cityName = element.name == undefined ? '' : element.name;
+                    allcity.push(citys);
+
+                });
+
+                var citydetails = {
+                    "status": "1",
+                    "message": "Sucess",
+                    "data":
+                        allcity
+                }
+
+            }
+
+            deferred.resolve(citydetails);
+
+        } else {
+
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
     return deferred.promise;
 }
 module.exports = service;

@@ -50,7 +50,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Products name</mat-label>
-            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true"
+            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true" autocomplete="off"
               required>
             <mat-error *ngIf="form.get('productname').hasError('required')">
               Please enter product!
@@ -122,48 +122,59 @@
 
           </mat-form-field>
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Stock level</mat-label>
-            <input matInput formControlName="stocklevel" id="sto" required>
-            <mat-error *ngIf="form.get('stocklevel').hasError('required')">
-              Please enter stock level!
-            </mat-error>
-            <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
-              Please enter valid stock level!
-            </mat-error>
-          </mat-form-field>
+            <mat-label>Till type name</mat-label>
+            <input matInput formControlName="tilltypename" readonly required>
 
+          </mat-form-field>
         </div>
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Stock level</mat-label>
+                <input matInput formControlName="stocklevel" pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="sto" required>
+                <mat-error *ngIf="form.get('stocklevel').hasError('required')">
+                  Please enter stock level!
+                </mat-error>
+                <mat-error *ngIf="form.get('stocklevel').hasError('pattern')">
+                  Please enter valid stock level!
+                </mat-error>
+              </mat-form-field>
+
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Move stock select till</mat-label>
-            <mat-select matNativeControl formControlName="movestock"  >
+            <mat-select matNativeControl formControlName="movestock"  (selectionChange)="onSelectionChanged($event)">
               <mat-option>Move stock select till </mat-option>
               <mat-optgroup label="primary" *ngIf="tilltypes == 'Secondary'">
-                <mat-option *ngFor="let typename of Primary" [value]="typename._id +','+'Primary'"> {{typename.name}}
+                <mat-option *ngFor="let typename of Primary"  [value]="typename._id +','+'Primary'  +','+ typename.name"> {{typename.name}}
                 </mat-option>
               </mat-optgroup>
               <mat-optgroup label="Secondary"
                 *ngIf="tilltypes == 'Primary' || tilltypes == 'Secondary' || tilltypes == 'Tertiary'">
-                <mat-option *ngFor="let typename of Secondary" [value]="typename._id + ','+ 'Secondary' ">
+                <mat-option *ngFor="let typename of Secondary" [value]="typename._id + ','+ 'Secondary' +','+ typename.name ">
                   {{typename.name}}</mat-option>
               </mat-optgroup>
               <mat-optgroup label="Tertiary" *ngIf="tilltypes == 'Secondary' || tilltypes == 'Tertiary'">
-                <mat-option *ngFor="let typename of Tertiary" [value]="typename._id + ','+ 'Tertiary'">{{typename.name}}
+                <mat-option *ngFor="let typename of Tertiary" [value]="typename._id + ','+ 'Tertiary' + ','+ typename.name ">{{typename.name}}
                 </mat-option>
               </mat-optgroup>
             </mat-select>
-
+          
           </mat-form-field>
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Move stock input value</mat-label>
-            <input matInput formControlName="movestockinputvalue" id="ma"   >
-            <!-- <mat-error *ngIf="form.get('movestockinputvalue').hasError('required')">
-              Please enter move stock input value!
-            </mat-error> -->
-            <mat-error *ngIf="form.get('movestockinputvalue').hasError('pattern')">
-              Please enter valid move stock input value!
-            </mat-error>
-          </mat-form-field>
+         
+        </div>
+        <div   fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Move stock input value</mat-label>
+                <input matInput formControlName="movestockinputvalue"   pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="ma"  >
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('required')">
+                    Please enter stock level!
+                  </mat-error>
+              
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('pattern')">
+                  Please enter valid move stock input value!
+                </mat-error>
+                
+              </mat-form-field>
         </div>
         <div class="button-row" style="text-align: center;">
           <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>

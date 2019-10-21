@@ -32,10 +32,10 @@ export interface PeriodicElement {
   styleUrls: ['./products.component.scss'],
   animations: fuseAnimations
 })
-
+// ,'qrcodeImage'
 
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype', 'stocklevel', 'action'];
+  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype','tilltypeName', 'stocklevel', 'action'];
   dataSource;
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -122,8 +122,6 @@ export class ProductsComponent implements OnInit {
 
 
   deleteproduct(id) {
-
-
 
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
@@ -268,6 +266,8 @@ export class deleteproductPopupComponent {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/companies';
   }
 
+
+  
   delete(id) {
 
     this.ProductService.deleteoneproduct(id)

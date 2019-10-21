@@ -41,15 +41,16 @@ export class NotificationComponent implements OnInit {
           var user = data
           const allusers = [];
           user.forEach(element => {
-
-            if (element.deviceToken == '') {
+            
+          
+            if (element.deviceToken == '' || element.deviceToken == undefined || element.deviceToken == 'undefined') {
 
             } else {
               allusers.push(element);
             }
           });
 
-          this.users = allusers
+          this.users = allusers;
 
         },
         error => {
@@ -87,9 +88,6 @@ export class NotificationComponent implements OnInit {
 
 
   sendNotification() {
-
-    console.log('testing');
-    console.log(this.form.value);
 
     this.NotificationService.addnotification(this.form.value)
       .subscribe(

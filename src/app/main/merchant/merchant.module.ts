@@ -15,6 +15,7 @@ import { deletemerchantpopupComponent } from './merchant.component';
 
 import { AuthGuard } from './../../_guards/index';
 
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 const routes = [
     {
@@ -60,6 +61,7 @@ const routes = [
         FuseSidebarModule,
         FuseWidgetModule,
         MatSlideToggleModule,
+        AutofocusModule
     ],
     exports: [
         MerchantComponent,

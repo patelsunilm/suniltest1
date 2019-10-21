@@ -106,7 +106,8 @@ export class TillmanagementComponent implements OnInit {
 
   selectTillType(value) {
     this.showvalue = value
-   if(value == "Primary") {
+
+   if(value == "Primary" || value == "SelectCategory") {
 
     var merchantId = localStorage.getItem('userId');
     this.tillManagementService.getTillManagementDetails(merchantId)
@@ -230,7 +231,7 @@ export class TillmanagementComponent implements OnInit {
 
         });
       
-   }
+   } 
 
   }
 

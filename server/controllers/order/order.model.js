@@ -7,8 +7,10 @@ var OrderDetailsSchema = new Schema({
   userId: ObjectId,
   status: String,
   merchantId: ObjectId,
+  transaction_Id : String,
+  message : String,
+  totalAmount : Number,
   productdetails: [{
-
     productId: { type: ObjectId },
     quantity: { type: Number },
     image: { type: String },
@@ -17,7 +19,10 @@ var OrderDetailsSchema = new Schema({
     markUp: { type: Number },
     sellingPrice: { type: Number },
     merchantId: { type: ObjectId },
-    barcode: { type: String }
+    barcode: { type: String },
+    tillTypeId : { type : ObjectId},
+    dateadded: { type: Date, default: Date.now },
+    datemodified: { type: Date, default: Date.now }
   }],
 
   dateadded: { type: Date, default: Date.now },

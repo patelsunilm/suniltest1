@@ -73,11 +73,13 @@ export class UpdatetillmanagementComponent implements OnInit {
        
       this.form.value.flag = params;
       this.form.value.merchantId = localStorage.getItem('userId');
-    this.tillManagementService.updatetilltypename(this.form.value)
+       
+  
+      this.tillManagementService.updatetilltypename(this.form.value)
     .subscribe(
         data => {
          if(data.string == "Primary type is update successfully.") {
-          this.snackBar.open('Primary type is update successfully.', '', {
+          this.snackBar.open('Primary name is update successfully.', '', {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -86,12 +88,20 @@ export class UpdatetillmanagementComponent implements OnInit {
         this.router.navigate([this.returnUrl]);
          } else if(data.string == "Secondary type is update successfully." ) {
 
-          this.snackBar.open('Secondary type is update successfully.', '', {
+          this.snackBar.open('Secondary name is update successfully.', '', {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
         });
         this.router.navigate([this.returnUrl]);
+         } else if(data.string == "tertiary type is update successfully.") {
+          this.snackBar.open('tertiary name is update successfully.', '', {
+            duration: 5000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+        });
+        this.router.navigate([this.returnUrl]);
+
          }
         
         },

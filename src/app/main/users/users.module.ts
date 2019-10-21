@@ -23,6 +23,7 @@ import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { NgxLoadingModule } from 'ngx-loading';
 
 import { AuthGuard } from './../../_guards/index';
+import { AutofocusModule } from 'angular-autofocus-fix';
 
 const routes = [
     {
@@ -36,7 +37,8 @@ const routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'updateuser/:id',
+        // path: 'merchant/updatemerchant/:id',
+        path: 'users/updateuser/:id',
         component: UpdateuserComponent,
         canActivate: [AuthGuard]
     }
@@ -73,7 +75,7 @@ const routes = [
         BrowserAnimationsModule,
         MatTableModule,
         MatDialogModule,
-        MatPaginatorModule, MatDatepickerModule, NgxLoadingModule
+        MatPaginatorModule, MatDatepickerModule, NgxLoadingModule,AutofocusModule
     ]
 })
 export class UsersModule {

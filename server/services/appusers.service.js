@@ -39,7 +39,6 @@ function deleteappuser(userid) {
     appuser.deleteOne({ _id: new mongoose.Types.ObjectId(userid) },
         function (err) {
             if (err) {
-                console.log(err);
                 deferred.reject(err.name + ': ' + err.message);
             }
             else {
@@ -182,10 +181,12 @@ function getCartDetails(cartid) {
                         cart.merchantId = element.merchantId == undefined ? '' : element.merchantId;
                         cart.barCode = element.barcode == undefined ? '' : element.barcode;
                         cart.quantity = element.quantity == undefined ? '' : element.quantity.toString();
+                        // cart.tillTypeId = element.tillTypeId == undefined ? '' : element.tillTypeId;
+                       
                         allproductdetails.push(cart);
 
                     });
-
+               
                     cartdetails.findOne({ userId: cartid.userId }, function (err, productcount) {
 
                         if (!err) {

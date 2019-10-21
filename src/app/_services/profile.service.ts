@@ -4,11 +4,24 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import * as $ from 'jquery';
 import { appConfig } from '../app.config';
+import { Subject } from 'rxjs/Subject';
+
+
 
 @Injectable()
 export class ProfileService {
     constructor(private http: HttpClient) { }
+    private _listners = new Subject<any>();
 
+    // listen(): Observable<any> {
+    //     return this._listners.asObservable();
+    // }
+
+    // filter(filterBy: string) {
+    //     console.log('filtetsb');
+    //     console.log(filterBy);
+    //     this._listners.next(filterBy);
+    // }
 
     uploadLogoImage(Files): Observable<any> {
 
@@ -36,10 +49,17 @@ export class ProfileService {
                 if (user.string == 'BusinessName is already exist.' || user.string == 'Email is already exist.') {
                     return user;
                 } else {
+                   
+
                     localStorage.setItem('name', user.name);
                     localStorage.setItem('myprofilelogoimage', user.image);
-                    $('#CurrencyChnage').fadeOut('slow').load('toolbar.component.ts').fadeIn('slow');
-                    return user;
+                    $('#CurrencyChnage').fadeIn('slow').load('toolbar.component.ts').fadeOut('slow',function(){
+                
+                   
+                    }); 
+        
+                        return user;
+                 
                 }
             });
     }
@@ -51,18 +71,18 @@ export class ProfileService {
     }
 
 
-    getstates(countrieid) {
+    getallstates(countrieid) {
 
-
-
-        return this.http.post<any>(appConfig.apiUrl + '/profile/getstates', { 'countrieId': countrieid })
+           
+        return this.http.post<any>(appConfig.apiUrl + '/profile/getallstates', { 'countrieId': countrieid })
 
     }
 
 
-    getcity(stateid) {
+    getallcity(stateid) {
 
-        return this.http.post<any>(appConfig.apiUrl + '/profile/getcity', { 'stateId': stateid })
+      
+        return this.http.post<any>(appConfig.apiUrl + '/profile/getallcity', { 'stateId': stateid })
 
     }
 }

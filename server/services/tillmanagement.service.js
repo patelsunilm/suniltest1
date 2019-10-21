@@ -198,7 +198,6 @@ function getAllsecondarytilltype(merchantId) {
 }
 
 
-
 function getTillManagementDetails(merchantId) {
 
     var deferred = Q.defer();
@@ -215,10 +214,7 @@ function getTillManagementDetails(merchantId) {
 }
 
 
-
-
 function deletetilltypename(details) {
-
 
     if (details.tillsdetails.type == "Primary") {
 
@@ -505,6 +501,90 @@ function updatetilltypename(tills) {
             }
         })
         return deferred.promise;
+    } else if (tills.flag.flag == 3) {
+
+
+        var deferred = Q.defer();
+        var userId = new mongoose.Types.ObjectId(tills.merchantId);
+        var tertiaryid = new mongoose.Types.ObjectId(tills.flag.id);
+        tilldetails.aggregate([
+            { '$unwind': '$secondary' },
+            { '$unwind': '$secondary.tertiary' },
+            {
+                '$match': {
+                    'merchantId': userId,
+                    'secondary.tertiary._id': tertiaryid
+                }
+            },
+
+            { $sort: { dateadded: -1 } }]).exec(function (err, tilllist) {
+
+                if (!err) {
+
+                    var nameupdate = []
+                    nameupdate._id = tilllist[0].secondary.tertiary._id
+                    nameupdate.name = tills.name;
+                    var merchantId = userId;
+                    var secondaryid = tilllist[0].secondary._id;
+                    var tertiaryid = tilllist[0].secondary.tertiary._id;
+
+                    tilldetails.update(
+                        {
+                            merchantId: new mongoose.Types.ObjectId(merchantId),
+                            'secondary': { $elemMatch: { '_id': new mongoose.Types.ObjectId(secondaryid) } }
+                        },
+                        {
+                            '$pull': {
+                                'secondary.$.tertiary': {
+                                    '_id': new mongoose.Types.ObjectId(tertiaryid)
+                                }
+                            }
+                        },
+                        { multi: true },
+
+                        function (err) {
+                            if (err) {
+
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+                            else {
+
+                                merchantId = new mongoose.Types.ObjectId(merchantId);
+                                secondaryid = new mongoose.Types.ObjectId(secondaryid);
+                                tilldetails.update(
+                                    { "merchantId": merchantId, "secondary._id": secondaryid },
+                                    {
+                                        "$push":
+                                        {
+                                            "secondary.$.tertiary":
+                                            {
+                                                "name": nameupdate.name,
+
+                                            }
+                                        }
+
+                                    }, function (err, responce) {
+                                        if (err) {
+                                            deferred.reject(err.name + ': ' + err.message);
+
+                                        } else {
+
+                                            var data = {};
+                                            data.string = 'tertiary type is update successfully.';
+                                            deferred.resolve(data);
+
+                                        }
+                                    })
+                            }
+                        });
+
+
+                } else {
+                    deferred.reject(err.name + ': ' + err.message);
+                }
+            });
+        return deferred.promise;
+
     }
 }
 

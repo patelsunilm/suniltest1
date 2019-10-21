@@ -92,4 +92,20 @@ export class ProductService {
 
   }
 
+  getProductsRatingDetails(merchantId) {
+  
+    return this.http.post<any>(appConfig.apiUrl + '/products/getProductsRatingDetails', { 'merchantId': merchantId })
+
+  }
+  getProductsRatingDetailsbyid(productid) {
+
+    return this.http.post<any>(appConfig.apiUrl + '/products/getProductsRatingDetailsbyid', { 'productid': productid })
+
+  }
+
+  gettilldetails(tillvalues) {
+    
+    return this.http.post<any>(appConfig.apiUrl + '/products/gettilldetails', tillvalues)
+  }
+
 }

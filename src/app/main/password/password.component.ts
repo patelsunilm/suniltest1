@@ -66,7 +66,7 @@ export class PasswordComponent implements OnInit, OnDestroy {
                             });
                         }
                         else if (data.string == 'Password unmatched.') {
-                            this.snackBar.open('Password unmatched.', '', {
+                            this.snackBar.open('password does not match.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,

@@ -13,9 +13,11 @@ var ProductsSchema = new Schema({
   date:Date,
   tilltype:String,
   tillTypeId: ObjectId,
+  tillTypeName :String,
   stocklevel:Number,
   merchantid : String,
   barcode : String,
+  qrcodeImage : String,
   tillMovement : [{
     
     from :  { type : String},
@@ -28,6 +30,11 @@ var ProductsSchema = new Schema({
     dateadded: { type: Date, default: Date.now },
     datemodified: { type: Date, default: Date.now }
   }],
+ ratings : [{
+    rating : { type : Number},
+    comment :{ type : String },
+    userId : { type : ObjectId},
+ }],
 
   dateadded: { type: Date, default: Date.now },
   datemodified: { type: Date, default: Date.now }

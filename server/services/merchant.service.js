@@ -203,6 +203,7 @@ function updatemerchantData(merchantdata) {
                     data.string = 'Business Name is already exist.';
                     deferred.resolve(data);
                 } else {
+                   
                     users.findById(merchantdata._id, function (err, getdata) {
                         if (!err) {
 
