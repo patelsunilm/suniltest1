@@ -19,7 +19,6 @@ exports.getallMerchentsData = function (req, res) {
 
 }
 
-
 exports.getmerchantDatabyId = function (req, res) {
 
     merchentService.getmerchantDatabyId(req.params.merchantDataId)
@@ -141,4 +140,68 @@ exports.getMerchantCategoriebyId = function(req, res) {
     .catch(function (err) {
         res.status(400).send(err);
     });
+}
+
+exports.addmerchantreview = function(req, res) {
+  
+    merchentService.addmerchantreview(req.body)
+       .then(function (merchantreview) {
+        if (merchantreview) {
+            res.send(merchantreview);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+
+exports.getmerchantreview = function(req, res) {
+  
+    merchentService.getmerchantreview(req.body)
+      
+    .then(function (getmerchantreview) {
+        if (getmerchantreview) {
+            res.send(getmerchantreview);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+
+exports.updatemerchantreview = function(req, res) {
+    
+    merchentService.updatemerchantreview(req.body) 
+    .then(function (updatemerchantreview) {
+        if (updatemerchantreview) {
+            res.send(updatemerchantreview);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+
+exports.getallproductratings = function(req, res) {
+    
+    merchentService.getallproductratings(req.body) 
+    .then(function (allproductratings) {
+        if (allproductratings) {
+            res.send(allproductratings);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
 }

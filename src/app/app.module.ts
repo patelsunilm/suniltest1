@@ -39,6 +39,7 @@ import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
 import { GraphsService } from './_services/index';
 import { NotificationService } from './_services/index';
+import { DiaryService } from './_services/diary.service';
 
 //all module
 import { SignupModule } from './main/signup/signup.module';
@@ -55,6 +56,8 @@ import{ ProductratingsreviewlModule} from './main/analysis/productratingsreview/
 import { NumberofcustomerpurchasesModule } from './main/analysis/numberofcustomerpurchases/numberofcustomerpurchases.module';
 import { ValueofcustomerpurchasesModule} from './main/analysis/valueofcustomerpurchases/valueofcustomerpurchases.module';
 import {TillsalesperproductModule } from './main/analysis/tillsalesperproduct/tillsalesperproduct.module'
+import { CalendarModule} from './main/calendar/calendar.module'
+
 
 import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
@@ -71,7 +74,8 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        
         
 
     ],
@@ -112,7 +116,7 @@ const appRoutes: Routes = [
         FusionChartsModule,
         NumberofcustomerpurchasesModule,
         ValueofcustomerpurchasesModule,
-        TillsalesperproductModule
+        TillsalesperproductModule,CalendarModule
     ], providers: [
 
         AuthGuard,
@@ -132,7 +136,8 @@ const appRoutes: Routes = [
         ProductService,
         UsersService,
         tillManagementService,
-        NotificationService
+        NotificationService,
+        DiaryService
     ],
     bootstrap: [
         AppComponent

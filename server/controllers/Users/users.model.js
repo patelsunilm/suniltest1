@@ -27,7 +27,11 @@ var UserSchema = new Schema({
   stateid: Number,
   cityid: String,    
   idToken: String,
-  
+  userRatings : [{
+    rating : { type : Number},
+    comment :{ type : String },
+    userId : { type : ObjectId},
+ }],
   // otp :String,
   // DeviceToken: String,
   // DeviceType: String,

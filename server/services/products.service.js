@@ -983,6 +983,7 @@ function getproductratingbyid(ratingDetails) {
                 as: "username"
             }
         },
+        // {ratings}
         { $skip: startLimit },
         { $limit: endLimit },
     ]).exec(function (err, getratingdata) {

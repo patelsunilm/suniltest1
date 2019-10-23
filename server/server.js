@@ -426,17 +426,18 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
 
-
+ 
   if (req.files == '') {
 
+
+  
     appuser.findById(req.body.userId, function (err, getdata) {
       if (!err) {
         getdata.email = req.body.email
         getdata.firstname = req.body.firstName;
         getdata.lastname = req.body.lastName;
         getdata.phone = req.body.phone;
-        getdata.image = "";
-
+      
         getdata.save(function (err, usersResults) {
           if (!err) {
 
@@ -478,6 +479,8 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
       }
     });
   } else {
+
+    console.log('test456');
 
     var uploadedfiles = req.files;
     var s3 = new AWS.S3();

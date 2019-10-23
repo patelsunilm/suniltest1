@@ -57,6 +57,12 @@ router.get('/merchant/getMerchantCategories', merchentdata.getMerchantCategories
 router.post('/merchant/getMerchantCategoriebyId', merchentdata.getMerchantCategoriebyId);
 router.post('/merchant/SearchMerchant', merchentdata.SearchMerchant);
 
+router.post('/merchant/addmerchantreview', merchentdata.addmerchantreview);
+router.post('/merchant/getmerchantreview', merchentdata.getmerchantreview);
+router.post('/merchant/updatemerchantreview', merchentdata.updatemerchantreview);
+router.post('/merchant/getallproductratings', merchentdata.getallproductratings);
+
+
 
 var faqdata = require('./controllers/faq/faq.controller');
 router.post('/faq/addfaqData', faqdata.addfaqData);
@@ -75,7 +81,6 @@ router.post('/order/getProductsbydate' , orderdata.getProductsbydate);
 router.post('/order/getProductsbyid' , orderdata.getProductsbyid);
 router.post('/order/getnumberofcustomerpurchases' , orderdata.getnumberofcustomerpurchases);
 router.post('/order/getproductratingcounts' , orderdata.getproductratingcounts);
-
 router.post('/order/getvalueofcustomerpurchases' , orderdata.getvalueofcustomerpurchases);
 
 
@@ -101,6 +106,15 @@ router.post('/tillmanagement/updatetilltypename', tillmanagement.updatetilltypen
 
 var notifications = require('./controllers/notifications/notification.controller');
 router.post('/notifications/addnotification', notifications.addnotification);
+
+
+var diarys = require('./controllers/diary/diary.controller');
+
+router.post('/diary/addEventdetails', diarys.addEventdetails);
+router.get('/diary/getaEventDetails/:merchantId', diarys.getaEventDetails);
+router.delete('/diary/deleteEvents/:eventId', diarys.deleteEvents);
+router.post('/diary/updateEvents', diarys.updateEvents);
+
 
 module.exports = router;
 

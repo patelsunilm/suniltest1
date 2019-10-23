@@ -360,6 +360,8 @@ function loginwithemail(data) {
                                   let info = transporter1.sendMail({
                                       from: config.mail_user, // sender address
                                       to: data.email, // list of receivers
+                                      subject: 'Account verification code', // Subject line
+
                                       text: 'otp',
                                       html: otp,
                                 
@@ -398,6 +400,7 @@ function loginwithemail(data) {
                                   let info = transporter1.sendMail({
                                       from: config.mail_user, // sender address
                                       to: data.email, // list of receivers
+                                      subject: 'Account verification code', // Subject line
                                       text: 'otp',
                                       html: otp,
                                 

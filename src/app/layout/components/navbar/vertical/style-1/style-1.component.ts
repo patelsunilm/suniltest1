@@ -123,6 +123,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 icon: 'inbox'
             },
             {
+                id: 'diary',
+                title: 'Diary',
+                url: '/diary',
+                type: 'item',
+                icon: 'today'
+            },
+            {
                 id: 'analysis',
                 title: 'Analysis',
                 type: 'collapsable',
@@ -268,6 +275,14 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'inbox'
                         },
+                        {
+                            id: 'diary',
+                            title: 'Diary',
+                            url: '/diary',
+                            type: 'item',
+                            icon: 'today'
+                        },
+
                         {
                             id: 'analysis',
                             title: 'Analysis',
