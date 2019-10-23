@@ -304,7 +304,7 @@ export class CalendarComponent implements OnInit {
               }
               const newEvent = response.getRawValue();
               newEvent.actions = this.actions;
-              this.events.push(newEvent);
+            //   this.events.push(newEvent);
 
                var merchantId = localStorage.getItem('userId');
                newEvent.merchantId = merchantId;

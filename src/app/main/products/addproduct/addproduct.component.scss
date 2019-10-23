@@ -285,6 +285,21 @@ button.submit_btn {
   padding: 5px 10px;
   border-radius: 5px;
 }
+.cstm-add-product.cstm-add-product-scroll{position: relative;height: 250px;min-height: 250px;overflow-x: hidden;width: 100%;}
+.cstm-add-product.cstm-add-product-scroll .table.table-responsive.table-striped.cstm-table-store{width:99.9%;max-width: 100%;}
+// #cstm-scroll{overflow-y: scroll;overflow-x: hidden;}
+#style-3::-webkit-scrollbar
+{
+	width: 6px;
+  background-color: #F5F5F5;
+  position: absolute;
+}
+
+#style-3::-webkit-scrollbar-thumb
+{
+  background-color: #000000;
+  
+}
 
 @media(max-width: 1279px) {
   .cstm-add-product{width:100%;min-width: 100%;overflow: overlay;}

@@ -22,6 +22,7 @@
 
 
     <div class="mat-elevation-z8">
+      <div class="cstm-product-table">
       <table mat-table [dataSource]="dataSource" class="cstm-resellers-table">
 
         <!-- email firstname image lastname phone -->
@@ -67,6 +68,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+    </div>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
     </div>
   </div>
