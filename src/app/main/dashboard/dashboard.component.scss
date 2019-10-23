@@ -79,3 +79,11 @@
         }
     }
 }
+
+@media(max-width: 1200px) {
+    .fuse-card.one,.fuse-card.two,.fuse-card.three{max-width: 100%;min-width: 33%;}
+  } 
+  @media(max-width: 400px) {
+    .cstnum.font-size-72{font-size: 40px;}
+    .fuse-card.three .p-16,.fuse-card.one .p-16,.fuse-card.two .p-16{padding: 9px !important;}
+  } 

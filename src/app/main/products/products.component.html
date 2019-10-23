@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth angular-material-elements">
 
-  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+  <div class="header accent p-24 h-60 cstm-product-header" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
     fxLayoutAlign.gt-xs="space-between center">
 
     <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -19,7 +19,7 @@
       </button> -->
     <input hidden type="file" (change)="fileEvent($event)" #fileInput required accept=".csv" />
 
-    <button style="margin-left:650px" mat-raised-button class="add-file-button" (click)="fileInput.click()"
+    <button mat-raised-button class="add-file-button cstm-add-file-button" (click)="fileInput.click()"
       aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
       Csv Import</button>
 
@@ -42,6 +42,8 @@
         [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}"
         [template]="loadingTemplate">
       </ngx-loading> -->
+<div class="cstm-product-table">
+
 
       <table mat-table [dataSource]="dataSource" [class.isMobile]="isMobile" [hidden]="!isTableHasData"
         [hidden]="!isTableHasDataAgain">
@@ -126,6 +128,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+    </div>
+
       <div [hidden]="isTableHasData" class="no-data-av">
         No Record Found
       </div>

@@ -42,14 +42,16 @@ width: 65%;
 }
 .customhalf1
 {
-width: 30%;
+width: 35%;
   float: left;
   padding: 11px;
 }
 
 .no-data-av{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
 .no-re-found{text-align: center;padding: 15px 0;width: 100%;margin: 0 auto;vertical-align: middle;}
-
+mat-icon.secondary-text {
+  cursor: pointer;
+}
 
 @media(max-width: 600px) {
 .mobile-label {

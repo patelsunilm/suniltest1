@@ -140,3 +140,10 @@ table {
 }
 .mat-paginator-page-size-select{width:56px;}
 mat-icon.s-24{cursor: pointer;}
+
+.cstm-product-table{overflow-x: auto;width: 100%;display: block;}
+@media(max-width: 980px) {
+.cstm-product-table table th, .cstm-product-table table  td{padding: 8px !important;}
+.cstm-product-table table th,.cstm-product-table table td{white-space: pre;}
+}
+.cstm-product-table table td img.imgcustom{width: 100% !important;height: 100% !important;}

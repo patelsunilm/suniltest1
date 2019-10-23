@@ -36,6 +36,7 @@
         </div>
 
         <div class="mat-elevation-z8">
+            <div class="cstm-product-table">
             <table [hidden]="!isTableHasData" [hidden]="!isTableHasDataAgain" [class.isMobile]="isMobile" mat-table
                 [dataSource]="dataSource">
 
@@ -97,6 +98,7 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+        </div>
             <div [hidden]="isTableHasData" class="no-data-av">
                 No Record Found
               </div>
