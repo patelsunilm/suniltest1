@@ -28,13 +28,17 @@
           <mat-label>Users</mat-label>
         
           <mat-select formControlName="users"  multiple>
-              <mat-option>
+              <!-- <mat-option>
                   <ngx-mat-select-search [formControl]="bankMultiFilterCtrl" ></ngx-mat-select-search>
-                </mat-option>
+                </mat-option> -->
             <mat-option *ngFor="let topping of users" [value]="topping">{{topping.firstname}}</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+          <mat-label>Message</mat-label>
+          <input matInput formControlName="Message" autocomplete="off" autofocus="true" required>
          
+        </mat-form-field>
         <!-- <mat-form-field>
           <mat-select [formControl]="bankMultiCtrl" placeholder="Banks" [multiple]="true">
             <mat-select-search [formControl]="bankMultiFilterCtrl"></mat-select-search>
@@ -55,14 +59,10 @@
         
        </div>
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Message</mat-label>
-            <input matInput formControlName="Message" autocomplete="off" autofocus="true" required>
-           
-          </mat-form-field>
+        <!-- <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          
          
-        </div>
+        </div> -->
        
         <div class="button-row" style="text-align: center;">
           <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>

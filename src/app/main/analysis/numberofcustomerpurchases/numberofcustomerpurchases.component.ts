@@ -123,8 +123,6 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
     this.OrdersService.getproductratingcounts(this.form.value)
     .subscribe(
       data => {
-
-
        var category = data.data.category;
        var dataSet = data.data.dataSet;
        this.showgraph = 1;

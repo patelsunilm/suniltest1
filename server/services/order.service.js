@@ -165,6 +165,9 @@ function verifyorder(orderDetails) {
           var quantity = getorderdetails[0].totalQty;
           var stock = stocklevel - quantity;
 
+          console.log('sttcok leves');
+          console.log(stocklevel);
+          console.log(orderDetails.productdetails[i].qty);
           if (stock >= orderDetails.productdetails[i].qty) {
             stockdata.push('true')
           } else {
@@ -174,12 +177,15 @@ function verifyorder(orderDetails) {
           if (orderDetails.productdetails.length == stockdata.length) {
 
             var n = stockdata.includes("false");
+           
+            console.log('n');
+            console.log(n);
             if (n == true) {
 
 
               var orders = {
                 "status": "0",
-                "message": "no data found",
+                "message": "Order Not Verified",
                 "data":
                   {}
               }
@@ -370,7 +376,7 @@ function checkorderhistory(user) {
             }
         },{
             '$group' : {
-                 '_id' : '$productdetails.productId',
+                 '_id' : '$_id',
                  'mainDetails' : {
                          '$first' : {
                              "_id" : "$_id",
@@ -427,7 +433,6 @@ function checkorderhistory(user) {
         var orderDetails = []
         getorderdetails.forEach(element => {
          
-         
           var order = {}
           order.orderId = element._id
           order.status = element.status
@@ -443,7 +448,6 @@ function checkorderhistory(user) {
             product.sellingPrice = sellingPrice
             var quantity = items.quantity.toString() == undefined ? '' : items.quantity.toString()
             product.quantity = quantity;
-
             product.image = items.image == undefined ? '' : items.image;
             productdetails.push(product);
 

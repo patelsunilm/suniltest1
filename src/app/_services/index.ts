@@ -11,3 +11,4 @@ export * from './users.services';
 export * from './tillmanagement.service';
 export * from './graph.service';
 export * from './notification.service';
+export * from './diary.service';

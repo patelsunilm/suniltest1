@@ -99,7 +99,10 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
     this.UsersService.GetallUsersDetails()
       .subscribe(
         data => {
+          console.log('dara');
+          console.log(data);
           this.allappusers = data;
+
         },
         error => {
           console.log(error);
@@ -164,11 +167,9 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
                      }
                      e.push([between[i],"quantity" ,0]);
                 }
-                console.log('e')
-                console.log(e);
-
-
-               
+                // console.log('e')
+                // console.log(e);
+                
                 this.showgraph = 0;
                 var dataFetch = [];
                 data.forEach(element => { 
