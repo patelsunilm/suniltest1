@@ -105,29 +105,37 @@ export class CalendarComponent implements OnInit {
            }
        });
 
-    //    this._calendarService.onEventsUpdated.subscribe(events => {
-    //        this.setEvents();
-    //      this.refresh.next();
-    //   });
+      //  this._calendarService.onEventsUpdated.subscribe(events => {
+      //      this.setEvents();
+      //    this.refresh.next();
+      // });
   }
 
-  // setEvents(): void
-  // {
-  //   this.actions = [
-  //     {
-  //         label  : '<i class="material-icons s-16">edit</i>',
-  //         onClick: ({event}: { event: CalendarEvent }): void => {
-  //             this.editEvent('edit', event);
-  //         }  
-  //     },
-  //     {
-  //         label  : '<i class="material-icons s-16">delete</i>',
-  //         onClick: ({event}: { event: CalendarEvent }): void => {
-  //             this.deleteEvent(event);
-  //         }
-  //     }
-  // ];           
-  //}
+  setEvents(): void
+  {
+    var merchantId = localStorage.getItem('userId');
+ 
+    this.DiaryService.getaEventDetails(merchantId)
+    .subscribe(
+      data => {
+      var newevents = []
+        data.forEach(element => {
+            
+            element._id  = element._id;
+            element.start = new Date(element.start);
+            element.title = element.title;
+            element.end = new Date(element.end);
+            newevents.push(element)
+          });
+         
+          
+         this.events = newevents;
+         
+      },
+      error => {
+
+        console.log(error);
+      });  }
 
   beforeMonthViewRender({header, body}): void
   {
@@ -148,6 +156,7 @@ export class CalendarComponent implements OnInit {
       }
 
   }
+ 
   dayClicked(day: CalendarMonthViewDay): void
   {
       const date: Date = day.date;
@@ -309,8 +318,7 @@ export class CalendarComponent implements OnInit {
                       data => {
                       var newevents = []
                         data.forEach(element => {
-                            
-                            
+                             
                             element.start = new Date(element.start);
                             element.title = element.title;
                             element.end = new Date(element.end);
@@ -327,15 +335,11 @@ export class CalendarComponent implements OnInit {
                      horizontalPosition: this.horizontalPosition,
                      verticalPosition: this.verticalPosition,
                  });
-
-
                  },
                  error => {
          
                    console.log(error);
                  });
-
-            
           });
   }
 }
