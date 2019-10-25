@@ -70,3 +70,14 @@ mat-icon.secondary-text {
   padding: 8px 24px;
 }
 }
+@media(max-width: 450px) {
+  .h-60 {
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+}
+
+.tillmanagheader .logo{position: absolute;top:0px;}
+
+.cstm-till-managment-btn{top: 50px;position: absolute;}
+}

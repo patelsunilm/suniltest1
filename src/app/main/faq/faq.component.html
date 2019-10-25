@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth angular-material-elements" fusePerfectScrollbar>
 
-    <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    <div class="header accent p-24 h-60 faqheader" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
         fxLayoutAlign.gt-xs="space-between center">
 
         <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -13,7 +13,7 @@
         </div>
         <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
             <span style="padding-right: 10px">
-                <button mat-raised-button matTooltip="Add faq" (click)="addFaq()" class="cstm-mat-raised-button">
+                <button mat-raised-button matTooltip="Add faq" (click)="addFaq()" class="cstm-mat-raised-button cstm-faq-header-btn">
                     <mat-icon class="mat-icon ng-tns-c63-105 material-icons" role="img" aria-hidden="true">add
                     </mat-icon>Add
                     Question

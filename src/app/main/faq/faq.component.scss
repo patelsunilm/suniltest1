@@ -76,3 +76,15 @@ table {
 .cstm-expansion-panel-head.mat-expansion-panel .mat-expansion-panel-header .mat-expansion-panel-header-title{align-items:flex-start !important;}
 mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel{padding: 10px 10px;}
 .mat-paginator-page-size-select{width:56px;}
+
+@media(max-width: 450px) {
+  .h-60 {
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+}
+
+.faqheader .logo{position: absolute;top:0px;}
+
+.cstm-faq-header-btn{top: 20px;margin-right: -10px;}
+}
