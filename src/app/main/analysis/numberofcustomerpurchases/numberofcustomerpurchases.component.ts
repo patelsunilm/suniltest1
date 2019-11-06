@@ -25,6 +25,9 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
   chartObj : any;
   showgraph : any;
   stackedColumnData: any;
+  newsatrtdate : any;
+  newendDate  : any;
+  chart: any = 'stackedcolumn2d';
   constructor(private OrdersService : OrdersService ,public snackBar: MatSnackBar, private _formBuilder: FormBuilder) {
 
     this.dataSource = {
@@ -82,10 +85,19 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
     this.form.value.endDate = end;
     this.form.value.startdate = start;
     this.form.value.merchantid = this.Merchant;
-   
+
+    this.newsatrtdate = start;
+    this.newendDate  = end
     this.OrdersService.getnumberofcustomerpurchases(this.form.value)
     .subscribe(
       data => {
+        
+       if(data == '' || data == undefined || data == "undefined" || data == null) {
+        
+        console.log('meessage');
+      
+        } else {
+
         var ordercount = data.length;
         this.showgraph = "0";
         this.dataSource = {
@@ -105,6 +117,7 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
             },  
           ]
         }
+      }
       },
       error => {
         console.log(error);
@@ -118,16 +131,65 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
     this.chartObj = $event.chart; // saving chart instance
   }
 
-  onSelectionChange() {
+  onSelectionChange(chart) {
+    
+    if (chart == "stackedcolumn2d") { 
 
+     
+     
+      this.Merchant = localStorage.getItem('userId');
+      this.form.value.endDate = this.newendDate
+      this.form.value.startdate = this.newsatrtdate
+      this.form.value.merchantid = this.Merchant;
+     
+      this.OrdersService.getnumberofcustomerpurchases(this.form.value)
+      .subscribe(
+        data => {
+          
+         if(data == '' || data == undefined || data == "undefined" || data == null) {
+          
+          console.log('meessage');
+        
+          } else {
+  
+          var ordercount = data.length;
+          this.showgraph = "0";
+          this.dataSource = {
+            "chart": {
+              "caption": "Number of customer Purchases",
+              "showValues": "1",
+              "showPercentInTooltip": "0",
+              "numberPrefix": "",
+              "enableMultiSlicing": "1",
+              "theme": "fusion",
+  
+            },
+            "data": [
+              {
+                "label": "order",
+                "value": ordercount,
+              },  
+            ]
+          }
+         
+        this.chart = chart;
+        this.chartObj.chartType(chart);
+        }
+        },
+        error => {
+          console.log(error);
+        });
+
+      
+    } else {
+
+    
     this.OrdersService.getproductratingcounts(this.form.value)
     .subscribe(
       data => {
        var category = data.data.category;
-       var dataSet = data.data.dataSet;
+       var dataSet = data.data.dataSet;        
        this.showgraph = 1;
-
-    
        this.stackedColumnData = {
         chart: {
           caption: "Number of customer purchases",
@@ -135,7 +197,7 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
            numbersuffix: "",
           showSum: "1",
           plotToolText:
-            "$label product quantity",
+            "$label product quantity <b>$dataValue</b>",
           theme: "fusion"
         },
         categories: [
@@ -145,36 +207,13 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
           }
         ],
             dataSet
-          // dataSet: [
-          //   {
-          //     seriesName: "Coal",
-          //     data: [
-          //       {
-          //         value: "400"
-          //       },
-          //       {
-          //         value: "830"
-          //       },
-          //       {
-          //         value: "500"
-          //       },
-          //       {
-          //         value: "420"
-          //       },
-          //       {
-          //         value: "790"
-          //       },
-          //       {
-          //         value: "380"
-          //       }
-          //     ]
-          //   },
-          // ]
         }
-       
+        this.chart = chart;
+        this.chartObj.chartType(chart);
       },
       error => {
         console.log(error);
       });
   }
+}
 }

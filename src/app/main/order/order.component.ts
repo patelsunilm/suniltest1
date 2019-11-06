@@ -15,8 +15,6 @@ export interface PeriodicElement {
   action: string;
 }
 
-
-
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -30,18 +28,34 @@ export class OrderComponent implements OnInit {
   appusersdata: any;
   displayedColumns: string[] = ['firstname', 'lastname', 'email', 'phone', 'action'];
   dataSource;
-
+  isTableHasData = true;
+  isTableHasDataAgain = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  applyFilter(filterValue: any) {
+  // applyFilter(filterValue: any) {
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+
+  // }
+
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
+   
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    if (this.dataSource.filteredData.length > 0) {
 
+      this.isTableHasData = true;
+    } else {
+
+      this.isTableHasData = false;
+    }
   }
-
 
   constructor(public dialog: MatDialog,
     private OrdersService: OrdersService
@@ -56,6 +70,8 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    var merchantid = localStorage.getItem('userId');
     this.OrdersService.getAllorders()
       .subscribe(
         data => {
@@ -72,8 +88,17 @@ export class OrderComponent implements OnInit {
               appusersdata.push(element);
             })
           })
-          this.dataSource = new MatTableDataSource(appusersdata);
-          this.dataSource.paginator = this.paginator;
+
+          if (appusersdata.length > 0) {
+            this.dataSource = new MatTableDataSource(appusersdata);
+            this.dataSource.paginator = this.paginator;
+            this.isTableHasDataAgain = true;
+
+          } else {
+
+            this.isTableHasDataAgain = false;
+          }
+
         },
         error => {
 

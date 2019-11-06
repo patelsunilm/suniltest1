@@ -30,7 +30,9 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
   type: string;
   width: string;
   height: string;
+  
 
+ 
   constructor( private UsersService : UsersService,private OrdersService : OrdersService,public snackBar: MatSnackBar, private _formBuilder: FormBuilder) {
     this.type = 'timeseries';
     this.width = '100%';
@@ -99,14 +101,76 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
     this.UsersService.GetallUsersDetails()
       .subscribe(
         data => {
-          console.log('dara');
-          console.log(data);
-          this.allappusers = data;
+          var user = data
+          const allusers = [];
+          user.forEach(element => {
+            
+          
+            if (element.firstname == '' || element.firstname == undefined || element.firstname == 'undefined') {
+
+            } else {
+              allusers.push(element);
+            }
+          });
+
+          // this.users = allusers;
+          this.allappusers = allusers;
 
         },
         error => {
           console.log(error);
         });
+  }
+
+  config = {
+    type: 'line',
+    data: {
+      labels: [1, 2, 3, 4, 5],
+      datasets: [{
+        label: 'Chart 1',
+        data: [2, 4, 8, 16],
+      }, {
+        label: 'Chart 2',
+        data: [3, 4, 6, 9],
+      }]
+    },
+    options: {
+      spanGaps: true,
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart'
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Labels'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Values'
+          },
+          ticks: {
+            min: 1,
+            max: 10,
+  
+          }
+        }]
+      }
+    }
   }
 
   getcustomervalue() {
@@ -123,8 +187,11 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
       data => {
         if(data == '' || data == undefined || data == "undefined" || data == null) {
  
+
+          console.log('messge');
         } else {
           
+          console.log('testtt');
        
           var start = this.form.value.startdate,
                 end =this.form.value.endDate,
@@ -136,90 +203,56 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
                   var datePipe = new DatePipe("en-US");
                   var newdate = datePipe.transform(currentDate, 'dd-MMM-yy');
                 
-                 //  between.push([newdate ,"quantity",0],[newdate,"value",0]);
-                   between.push(newdate);
+                   between.push([newdate ,"quantity",0],[newdate,"value",0]);
+                   //between.push(newdate);
                 }
-               
                 
-                var e = [];
-                for (let i = 0; i < between.length; i++) {
-                  const element = between[i];
-                  
-                     for (let j = 0; j < data.length; j++) {
-                       const element = data[j];
-                     
-                       var changedate = datePipe.transform( data[j]._id.dayOfYear, 'dd-MMM-yy');
-                      
-                       if(between[i] === changedate) {
-                          
-                        console.log('t')
-                         
-                          e.push([between[i],"quantity" ,data[j].totalQty]);
-
-                          // [between[i],"value" ,data[j].value]
-                        } else {
-                          // console.log('s')
-                          // console.log(between[i]);
-                          //  e.push([between[i],"quantity" ,0]);
-                          // [between[i],"value" ,0]
-                        } 
-                         
-                     }
-                     e.push([between[i],"quantity" ,0]);
-                }
-                // console.log('e')
-                // console.log(e);
                 
                 this.showgraph = 0;
                 var dataFetch = [];
+                
                 data.forEach(element => { 
                    var datePipe = new DatePipe("en-US");
                    var changedate = datePipe.transform(element._id.dayOfYear, 'dd-MMM-yy');
+                   
+                   
+
                    dataFetch.push([changedate,"quantity" ,element.totalQty] ,[changedate,"sellingPrice", element.value]);
-
                 });
-                // console.log('data Fetch beteens');
-                // console.log(dataFetch);
-                //  console.log(between)
-
-                
-                // for (let i = 0; i < between.length; i++) {
-                 
+               
+                console.log('data Fetch');
+                console.log(dataFetch);
+                console.log(between);
+                return false
+                between.forEach(elements => { 
                   
-                //   for (let j = 0; j < dataFetch.length; j++) {
-                //          console.log('ss');
-                //          console.log(between[i]);
-                //          console.log(dataFetch[j]);
-                     
-                //     // if(a[i].)
-                //   }
-                  
-                // }
-          
+                  // if(dataFetch.includes(elements))
+                  // {
+                  //   console.log('swati');
+                  // }
+                  // else
+                  //  {
+                  //   console.log('test ');
 
-        //  this.showgraph = 0;
-        //   var dataFetch = [];
-        //   data.forEach(element => { 
-        //     var datePipe = new DatePipe("en-US");
-        //     var changedate = datePipe.transform(element._id.dayOfYear, 'dd-MMM-yy');
-        //     dataFetch.push([changedate,"quantity" ,element.totalQty] ,[changedate,"sellingPrice", element.value]);
-        //   });
-            
-      
+                  //  }
+                });
+
           var jsonify = res => res.json();
           // var dataFetch = fetch(
           //   'https://s3.eu-central-1.amazonaws.com/fusion.store/ft/data/plotting-multiple-series-on-time-axis-data.json'
           // ).then(jsonify);
+       
+          // console.log('data Fetch 78'); 
+          // console.log(dataFetch);
+       
           var schemaFetch = fetch(
             'https://s3.eu-central-1.amazonaws.com/fusion.store/ft/schema/plotting-multiple-series-on-time-axis-schema.json'
           ).then(jsonify);
       
+         
           Promise.all([dataFetch, schemaFetch]).then(res => {
             const data = res[0];
             const schema = res[1];
-           
-            console.log('schemsFetch');
-            console.log(schemaFetch);
             const fusionDataStore = new FusionCharts.DataStore();
             const fusionTable = fusionDataStore.createDataTable(data, schema);
             this.dataSource.data = fusionTable;
@@ -231,9 +264,5 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
       error => {
         console.log(error);
       });
-
-
   }
-
-  
 }

@@ -207,7 +207,7 @@ function updatemerchantData(merchantdata) {
                     data.string = 'Business Name is already exist.';
                     deferred.resolve(data);
                 } else {
-                   
+
                     users.findById(merchantdata._id, function (err, getdata) {
                         if (!err) {
 
@@ -390,6 +390,7 @@ function SearchMerchant(merchantdetail) {
                 MerchantResults.forEach(element => {
                     var merchantdetails = {}
                     merchantdetails.merchantId = element._id;
+                    merchantdetails.backgroundImage = element.backgroundImage == undefined ? '' :  element.backgroundImage;
                     merchantdetails.name = element.name == undefined ? '' : element.name;
                     merchantdetails.email = element.email == undefined ? '' : element.email;
                     merchantdetails.backgroundTheme = (element.backgroundtheme == undefined || element.backgroundtheme == '' || element.backgroundtheme == null || element.backgroundtheme == 'null' || !element.backgroundtheme) ? '' : rgbHex(element.backgroundtheme);
@@ -435,9 +436,9 @@ function getMerchantCategoriebyId(id) {
                 foreignField: "_id",
                 as: "merchant"
             }
-            
-        } ,
-        
+
+        },
+
     ]).exec(function (err, getcategory) {
 
         if (!err) {
@@ -453,18 +454,18 @@ function getMerchantCategoriebyId(id) {
                 deferred.resolve(merchentcatdetails);
 
             } else {
-            
-                var merchantCategory = [];
-                getcategory.forEach(items => {                      
-                 items.merchant.forEach(element => {
 
-                    var merchantdetails = {}
+                var merchantCategory = [];
+                getcategory.forEach(items => {
+                    items.merchant.forEach(element => {
+
+                        var merchantdetails = {}
                         merchantdetails.merchantCatName = element.merchantcatname == undefined ? '' : element.merchantcatname;
-                         merchantdetails.merchantCatId = element._id == undefined ? '' : element._id;
+                        merchantdetails.merchantCatId = element._id == undefined ? '' : element._id;
                         merchantCategory.push(merchantdetails);
-                     });
+                    });
                 });
-              
+
                 result = merchantCategory.filter(function (a) {
                     return !this[a.merchantCatName] && (this[a.merchantCatName] = true);
                 }, Object.create(null));
@@ -489,33 +490,22 @@ function getMerchantCategoriebyId(id) {
 
 
 
-function addmerchantreview(merchantdetail) {    
+function addmerchantreview(merchantdetail) {
 
-var deferred = Q.defer();
-var ratingdata = [];
-ratingdata.push({ 'rating': parseInt(merchantdetail.rating), 'comment': merchantdetail.comment, 'userId': merchantdetail.userId })
+    var deferred = Q.defer();
+    var ratingdata = [];
+    ratingdata.push({ 'rating': parseInt(merchantdetail.rating), 'comment': merchantdetail.comment, 'userId': merchantdetail.userId })
 
-users.findOneAndUpdate({
-    _id: new mongoose.Types.ObjectId(merchantdetail.merchantId)
-},
-    {
-        $push: {
-            userRatings: ratingdata
-        },
-    }, function (err, reatingresults) {
-        if (err) {
+    users.findOneAndUpdate({
+        _id: new mongoose.Types.ObjectId(merchantdetail.merchantId)
+    },
+        {
+            $push: {
+                userRatings: ratingdata
+            },
+        }, function (err, reatingresults) {
+            if (err) {
 
-            var ratingResponceData = {
-                "status": "0",
-                "message": "no data found",
-                "data":
-                    {}
-            }
-            deferred.resolve(ratingResponceData);
-
-        } else {
-            if(reatingresults == null || reatingresults == "null" ||reatingresults == "undefined") {
-               
                 var ratingResponceData = {
                     "status": "0",
                     "message": "no data found",
@@ -523,25 +513,36 @@ users.findOneAndUpdate({
                         {}
                 }
                 deferred.resolve(ratingResponceData);
-            } else {
 
-            
-            var ratingdata =
-            {
-                "status": "1",
-                "message": "Success.",
-                "data": {}
+            } else {
+                if (reatingresults == null || reatingresults == "null" || reatingresults == "undefined") {
+
+                    var ratingResponceData = {
+                        "status": "0",
+                        "message": "no data found",
+                        "data":
+                            {}
+                    }
+                    deferred.resolve(ratingResponceData);
+                } else {
+
+
+                    var ratingdata =
+                    {
+                        "status": "1",
+                        "message": "Success.",
+                        "data": {}
+                    }
+                    deferred.resolve(ratingdata);
+                }
             }
-            deferred.resolve(ratingdata);
-        }
-    }
-    })
-return deferred.promise;
+        })
+    return deferred.promise;
 }
 
 function getmerchantreview(getreview) {
     var deferred = Q.defer();
- 
+
     users.aggregate([
         {
             '$match': {
@@ -554,7 +555,7 @@ function getmerchantreview(getreview) {
                 "userRatings.userId": new mongoose.Types.ObjectId(getreview.userId)
             }
         },
-        
+
     ]).exec(function (err, getratingdata) {
         if (!err) {
 
@@ -568,12 +569,12 @@ function getmerchantreview(getreview) {
 
                 deferred.resolve(ratingResponceData);
             } else {
-               
+
                 var userRating = []
                 getratingdata.forEach(element => {
                     var objrating = {}
                     ratingId = element.userRatings._id == undefined ? '' : element.userRatings._id,
-                    objrating.ratingId = ratingId.toString();
+                        objrating.ratingId = ratingId.toString();
                     rating = element.userRatings.rating == undefined ? '' : element.userRatings.rating;
                     objrating.rating = rating.toString();
                     objrating.comment = element.userRatings.comment == undefined ? '' : element.userRatings.comment;
@@ -611,7 +612,7 @@ function updatemerchantreview(ratingDetails) {
     var deferred = Q.defer();
     users.update({
         _id: new mongoose.Types.ObjectId(ratingDetails.merchantId), "userRatings._id": new mongoose.Types.ObjectId(ratingDetails.ratingId)
-    }, { "$set": {  "userRatings.$.userId": ratingDetails.userId ,"userRatings.$.comment": ratingDetails.comment, "userRatings.$.rating": ratingDetails.rating } }, function (err, results) {
+    }, { "$set": { "userRatings.$.userId": ratingDetails.userId, "userRatings.$.comment": ratingDetails.comment, "userRatings.$.rating": ratingDetails.rating } }, function (err, results) {
         if (!err) {
 
             var ratingdata =
@@ -638,6 +639,7 @@ function updatemerchantreview(ratingDetails) {
 
 
 function getallproductratings(proDetails) {
+
    
     var deferred = Q.defer();
     products.aggregate([
@@ -645,7 +647,7 @@ function getallproductratings(proDetails) {
             '$match': {
                 "merchantid": proDetails.merchantId
             }
-        },  
+        },
         {
             '$match': {
                 "ratings.userId": new mongoose.Types.ObjectId(proDetails.userId)
@@ -654,55 +656,55 @@ function getallproductratings(proDetails) {
         { $unwind: "$ratings" },
     ]).exec(function (err, getproductdetails) {
         if (!err) {
-           
-          if (getproductdetails == '' || getproductdetails == 'undefined' || getproductdetails == undefined || getproductdetails == null) {
-            var ratingResponceData = {
-                "status": "0",
-                "message": "no data found",
-                "data":
-                    {}
-            }
 
-            deferred.resolve(ratingResponceData);
-           } else {
-         
-            var productsDetails = []
-            getproductdetails.forEach(element => {
-              var pro = {}
-              pro.productname = element.productname == undefined ? '' : element.productname;
-              pro.productId = element._id == undefined ? '' : element._id;
-              ratingId = element.ratings._id == undefined ? '' : element.ratings._id,
-              pro.ratingId = ratingId.toString();
-              rating = element.ratings.rating == undefined ? '' : element.ratings.rating;
-              pro.rating = rating.toString();
-              pro.comment = element.ratings.comment == undefined ? '' : element.ratings.comment;
-              pro.userId = element.ratings.userId == undefined ? '' : element.ratings.userId;
-             
-            //   element.ratings.forEach(items => {
-    
-            //     var objrating = {}
-            //         ratingId = items._id == undefined ? '' : items._id,
-            //         objrating.ratingId = ratingId.toString();
-            //         rating = items.rating == undefined ? '' : items.rating;
-            //         objrating.rating = rating.toString();
-            //         objrating.comment = items.comment == undefined ? '' : items.comment;
-            //         objrating.userId = items.userId == undefined ? '' : items.userId;
-            //         productrating.push(objrating)
-            //   });
-            //   pro.ratingsdetails = productrating;
-            productsDetails.push(pro);
-            });
-    
-            var ratingdata =
-            {
-                "status": "1",
-                "message": "Successful",
-                "data": {
-                    productsDetails
+            if (getproductdetails == '' || getproductdetails == 'undefined' || getproductdetails == undefined || getproductdetails == null) {
+                var ratingResponceData = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                        {}
                 }
+
+                deferred.resolve(ratingResponceData);
+            } else {
+
+                var productdetails = []
+                getproductdetails.forEach(element => {
+                    var pro = {}
+                    pro.productName = element.productname == undefined ? '' : element.productname;
+                    pro.productId = element._id == undefined ? '' : element._id;
+                    ratingId = element.ratings._id == undefined ? '' : element.ratings._id,
+                    pro.ratingId = ratingId.toString();
+                    rating = element.ratings.rating == undefined ? '' : element.ratings.rating;
+                    pro.rating = rating.toString();
+                    pro.comment = element.ratings.comment == undefined ? '' : element.ratings.comment;
+                    pro.userId = element.ratings.userId == undefined ? '' : element.ratings.userId;
+
+                    //   element.ratings.forEach(items => {
+
+                    //     var objrating = {}
+                    //         ratingId = items._id == undefined ? '' : items._id,
+                    //         objrating.ratingId = ratingId.toString();
+                    //         rating = items.rating == undefined ? '' : items.rating;
+                    //         objrating.rating = rating.toString();
+                    //         objrating.comment = items.comment == undefined ? '' : items.comment;
+                    //         objrating.userId = items.userId == undefined ? '' : items.userId;
+                    //         productrating.push(objrating)
+                    //   });
+                    //   pro.ratingsdetails = productrating;
+                    productdetails.push(pro);
+                });
+
+                var ratingdata =
+                {
+                    "status": "1",
+                    "message": "Successful",
+                    "data": {
+                        productdetails
+                    }
+                }
+                deferred.resolve(ratingdata);
             }
-            deferred.resolve(ratingdata);
-           }
 
         } else {
 

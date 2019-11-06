@@ -216,7 +216,6 @@ function submitgoogledetails(googledata) {
             if (getresult.userType == 'Merchant') {
 
                 Users.findOneAndUpdate({ _id: getresult._id }, {
-
                     googleid: googledata.googleid,
                     authToken: googledata.authToken,
                     datemodified: Date.now(),
@@ -255,11 +254,12 @@ function submitgoogledetails(googledata) {
             var saveData = new Users({
                 name: googledata.name,
                 email: googledata.email,
-                status: 'true',
+                status: 'false',
                 uniqueid: googledata.uniqueid,
                 googleid: googledata.googleid,
                 userType: googledata.userType,
                 authToken: googledata.authToken,
+                businessname : '',
                 dateadded: Date.now(),
                 datemodified: Date.now(),
             });
@@ -276,6 +276,7 @@ function submitgoogledetails(googledata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
+
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
@@ -498,11 +499,12 @@ function submitfacebookdetails(facebookdata) {
 
     var deferred = Q.defer();
 
+   
     Users.findOne({ email: facebookdata.email }, function (err, getresult) {
         if (getresult) {
 
             if (getresult.userType == 'Merchant') {
-
+              
                 Users.findOneAndUpdate({ _id: getresult._id }, {
 
                     facebookid: facebookdata.facebookid,
@@ -511,6 +513,7 @@ function submitfacebookdetails(facebookdata) {
 
                 }, function (err, user) {
                     if (err) {
+
                         throw err;
                     }
                     else {
@@ -539,21 +542,24 @@ function submitfacebookdetails(facebookdata) {
 
             }
         } else {
-
+           
             var saveData = new Users({
                 name: facebookdata.name,
                 email: facebookdata.email,
-                status: 'true',
+                status: 'false',
                 uniqueid: facebookdata.uniqueid,
                 facebookid: facebookdata.facebookid,
                 userType: facebookdata.userType,
                 authToken: facebookdata.authToken,
+                businessname : '',
                 dateadded: Date.now(),
                 datemodified: Date.now(),
             });
 
             saveData.save(function (err, user) {
                 if (!err) {
+                  
+                    
                     deferred.resolve({
                         _id: user._id,
                         email: user.email,
@@ -564,6 +570,7 @@ function submitfacebookdetails(facebookdata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
+                    console.log(err);
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });

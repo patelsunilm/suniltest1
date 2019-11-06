@@ -30,16 +30,16 @@
         <div class="till" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
          
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-              <mat-label>Select Till  Type</mat-label>
+              <mat-label>Select Till Type</mat-label>
               <mat-select    required  formControlName="tillTypeId" (change)="onChange()" >
-                  <mat-option  value="SelectTillType">Select Till  Type</mat-option>
+                  <mat-option  value="SelectTillType">Select Till Type</mat-option>
                   
                     <mat-option  *ngFor="let types of tilltype" [value]="types._id" (click)="openSecondary(types.tilltype)">
                       {{types.tilltype}}
                   </mat-option>
               </mat-select>
               <mat-error *ngIf="form.get('tillTypeId').hasError('required')">
-                Please select till  type!
+                Please select till type!
             </mat-error>
           </mat-form-field>
       </div>

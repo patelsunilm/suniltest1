@@ -17,6 +17,7 @@ import { AuthGuard } from './../../_guards/index';
 import { from } from 'rxjs';
 import { UpdatetillmanagementComponent } from './updatetillmanagement/updatetillmanagement.component';
 
+// import { AutoFocusDirective } from '../../auto-focus.directive';
 
 const routes = [
     {
@@ -46,7 +47,8 @@ const routes = [
         TillmanagementComponent,
         AddtillmanagementComponent,
         deletetillmanagementpopupComponent,
-        UpdatetillmanagementComponent
+        UpdatetillmanagementComponent,
+        //  AutoFocusDirective
     ],
     imports: [
         RouterModule.forChild(routes),

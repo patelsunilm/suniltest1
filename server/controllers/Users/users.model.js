@@ -5,12 +5,13 @@ var ObjectId = Schema.ObjectId;
 var UserSchema = new Schema({
 
   image: String,
+  backgroundImage : String,
   name: String,
   address: String,
   userType: String,
   email: String,
   password: String,
-  businessname:  { type : String , unique : true  } ,
+  businessname:  String ,
   secretquestion: String,
   secretanswer: String,
   ipaddress: String,

@@ -11,12 +11,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FuseHighlightModule } from '@fuse/components/index';
 
 import { ValueofcustomerpurchasesComponent } from './valueofcustomerpurchases.component';
+import { ChartsModule } from 'ng2-charts';
 
 import { AuthGuardCommon } from '.././../../_guards/index';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BrowserModule } from '@angular/platform-browser';
-import { FusionChartsModule } from 'angular-fusioncharts';
 
+
+import { FusionChartsModule } from 'angular-fusioncharts'
 // Load FusionCharts
 import * as FusionCharts from 'fusioncharts';
 // Load Charts module
@@ -61,7 +63,7 @@ const routes = [
         MatCheckboxModule,
         FuseHighlightModule,
         MatDatepickerModule,
-        FusionChartsModule,FusionChartsModule
+         FusionChartsModule,FusionChartsModule
     ],
     exports: [
         ValueofcustomerpurchasesComponent

@@ -127,7 +127,7 @@ export class AddtillmanagementComponent implements OnInit {
             });
 
       } else if (data.string == "tertiary name is add successfully.") {
-        this.snackBar.open('tertiary name is add successfully.', '', {
+        this.snackBar.open('Tertiary name is add successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

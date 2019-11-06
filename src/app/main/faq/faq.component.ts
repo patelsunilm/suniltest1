@@ -188,6 +188,7 @@ export class FaqPopupComponent {
             status: false
         });
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/faq';
+   
     }
 
     readLocalStorageValue(key) {

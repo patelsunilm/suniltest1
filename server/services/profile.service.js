@@ -97,7 +97,7 @@ function updateprofile(getprofiledata) {
 
             } else if (getprofiledata.businessname) {
                 var businessname = new RegExp("^" + getprofiledata.businessname + "$", "i")
-                Users.find({ $and: [{ businessname: businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
+                Users.find({ $and: [{ businessname: getprofiledata.businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
                     if (duplicateData.length > 0) {
                         var data = {};
                         data.string = 'BusinessName is already exist.';
@@ -107,7 +107,7 @@ function updateprofile(getprofiledata) {
                         Users.findById(getprofiledata._id, function (err, getdata) {
 
                             if (!err) {
-
+                                getdata.backgroundImage =  getprofiledata.backgroundimage;
                                 getdata.image = getprofiledata.image;
                                 getdata.name = getprofiledata.name;
                                 getdata.email = getprofiledata.email;

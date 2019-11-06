@@ -32,7 +32,7 @@ export class CalendarComponent implements OnInit {
   selectedDay: any;
   view: string;
   viewDate: Date;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   constructor(  public snackBar: MatSnackBar,public dialog: MatDialog, private DiaryService : DiaryService,private _matDialog: MatDialog,
   ) {
@@ -110,6 +110,23 @@ export class CalendarComponent implements OnInit {
       //    this.refresh.next();
       // });
   }
+
+ /**
+     * Event times changed
+     * Event dropped or resized
+     *
+     * @param {CalendarEvent} event
+     * @param {Date} newStart
+     * @param {Date} newEnd
+     */
+    eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void
+    {
+        event.start = newStart;
+        event.end = newEnd;
+        // console.warn('Dropped or resized', event);
+        this.refresh.next(true);
+    }
+
 
   setEvents(): void
   {
@@ -305,41 +322,51 @@ export class CalendarComponent implements OnInit {
               const newEvent = response.getRawValue();
               newEvent.actions = this.actions;
             //   this.events.push(newEvent);
-
                var merchantId = localStorage.getItem('userId');
                newEvent.merchantId = merchantId;
-               this.DiaryService.addEvent(newEvent)
-               .subscribe(
-                 data => {
-                    var merchantId = localStorage.getItem('userId');
- 
-                    this.DiaryService.getaEventDetails(merchantId)
-                    .subscribe(
-                      data => {
-                      var newevents = []
-                        data.forEach(element => {
-                             
-                            element.start = new Date(element.start);
-                            element.title = element.title;
-                            element.end = new Date(element.end);
-                            newevents.push(element)
-                          });
-                         this.events = newevents;
-                      },
-                      error => {
+           
+               if(newEvent.start <= newEvent.end) {
                 
-                        console.log(error);
-                      });
-                   this.snackBar.open('Event add successfully.', '', {
-                     duration: 5000,
-                     horizontalPosition: this.horizontalPosition,
-                     verticalPosition: this.verticalPosition,
-                 });
-                 },
-                 error => {
-         
-                   console.log(error);
-                 });
+                this.DiaryService.addEvent(newEvent)
+                .subscribe(
+                  data => {
+                     var merchantId = localStorage.getItem('userId');
+  
+                     this.DiaryService.getaEventDetails(merchantId)
+                     .subscribe(
+                       data => {
+                       var newevents = []
+                         data.forEach(element => {
+                              
+                             element.start = new Date(element.start);
+                             element.title = element.title;
+                             element.end = new Date(element.end);
+                             newevents.push(element)
+                           });
+                          this.events = newevents;
+                       },
+                       error => {
+                 
+                         console.log(error);
+                       });
+                    this.snackBar.open('Event add successfully.', '', {
+                      duration: 5000,
+                      horizontalPosition: this.horizontalPosition,
+                      verticalPosition: this.verticalPosition,
+                  });
+                  },
+                  error => {
+          
+                    console.log(error);
+                  });
+               } else {
+                this.snackBar.open('Please correct date select .', '', {
+                  duration: 5000,
+                  horizontalPosition: this.horizontalPosition,
+                  verticalPosition: this.verticalPosition,
+              });
+               }
+   
           });
   }
 }

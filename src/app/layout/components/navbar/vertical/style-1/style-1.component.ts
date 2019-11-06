@@ -18,6 +18,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;
     layout;
+    navhide : any
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
     private _unsubscribeAll: Subject<any>;
@@ -31,6 +32,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
      * @param {Router} _router
      */
     constructor(
+
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
@@ -67,13 +69,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                 type: 'item',
                 icon: 'help'
             },
-            {
-                id: 'order',
-                title: 'Orders',
-                url: '/order',
-                type: 'item',
-                icon: 'inbox'
-            },
+            // {
+            //     id: 'order',
+            //     title: 'Orders',
+            //     url: '/order',
+            //     type: 'item',
+            //     icon: 'inbox'
+            // },
             {
                 id: 'notification',
                 title: 'Notifications',
@@ -142,13 +144,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                         type: 'item',
                         
                     },
-                    {
-                        id: 'productstocklevel',
-                        title: 'Product stock level',
-                        url: '/analysis/productstocklevel',
-                        type: 'item',
+                    // {
+                    //     id: 'productstocklevel',
+                    //     title: 'Product stock level',
+                    //     url: '/analysis/productstocklevel',
+                    //     type: 'item',
                       
-                    },
+                    // },
                     {
                         id: 'productratingsreview',
                         title: 'Product ratings review',
@@ -219,13 +221,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                             type: 'item',
                             icon: 'help'
                         },
-                        {
-                            id: 'order',
-                            title: 'Orders',
-                            url: '/order',
-                            type: 'item',
-                            icon: 'inbox'
-                        },
+                        // {
+                        //     id: 'order',
+                        //     title: 'Orders',
+                        //     url: '/order',
+                        //     type: 'item',
+                        //     icon: 'inbox'
+                        // },
                         {
                             id: 'notification',
                             title: 'Notifications',
@@ -296,13 +298,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                                     type: 'item',
                                     
                                 },
-                                {
-                                    id: 'productstocklevel',
-                                    title: 'Product stock level',
-                                    url: '/analysis/productstocklevel',
-                                    type: 'item',
+                                // {
+                                //     id: 'productstocklevel',
+                                //     title: 'Product stock level',
+                                //     url: '/analysis/productstocklevel',
+                                //     type: 'item',
                                   
-                                },
+                                // },
                                 {
                                     id: 'productratingsreview',
                                     title: 'Product ratings review',
@@ -415,6 +417,9 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     /**
      * On init
      */
+
+    
+
     ngOnInit(): void {
 
         this.toggleSidebarOpened('navbar');
@@ -449,6 +454,30 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
         //         this.navigation = this._fuseNavigationService.getCurrentNavigation();
 
         //     });
+
+    
+    if(localStorage.getItem('userType') == null || localStorage.getItem('userType') == "null" || localStorage.getItem('userType') == undefined || localStorage.getItem('userType') == "undefined") {
+       
+        this._fuseConfigService.config = {
+            layout: {
+                navbar: {
+                    hidden: true
+                },
+                toolbar: {
+                    hidden: true
+                },
+                footer: {
+                    hidden: true
+                },
+                sidepanel: {
+                    hidden: true
+                }
+            }
+        };
+
+
+    }
+        
     }
 
     /**

@@ -31,7 +31,7 @@ export class ProductorderdetailsComponent implements OnInit {
 
   productdata: any;
   statusdata: any;
-  displayedColumns: string[] = ['image', 'productName', 'costPrice', 'markUp', 'sellingPrice', 'quantity', 'status'];
+  displayedColumns: string[] = [ 'productName', 'sellingPrice', 'quantity', 'status'];
   dataSource;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

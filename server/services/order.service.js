@@ -152,22 +152,20 @@ function verifyorder(orderDetails) {
 
         if (getorderdetails == '') {
 
-          var orders = {
+          var ordersresults = {
             "status": "0",
             "message": "no data found",
             "data":
               {}
           }
-          deferred.resolve(orders);
+          deferred.resolve(ordersresults);
         } else {
 
           var stocklevel = getorderdetails[0].stocklevel;
           var quantity = getorderdetails[0].totalQty;
           var stock = stocklevel - quantity;
 
-          console.log('sttcok leves');
-          console.log(stocklevel);
-          console.log(orderDetails.productdetails[i].qty);
+
           if (stock >= orderDetails.productdetails[i].qty) {
             stockdata.push('true')
           } else {
@@ -177,22 +175,21 @@ function verifyorder(orderDetails) {
           if (orderDetails.productdetails.length == stockdata.length) {
 
             var n = stockdata.includes("false");
-           
-            console.log('n');
-            console.log(n);
+
+
             if (n == true) {
 
 
-              var orders = {
+              var ordersresults = {
                 "status": "0",
                 "message": "Order Not Verified",
                 "data":
                   {}
               }
 
-              deferred.resolve(orders);
+              deferred.resolve(ordersresults);
             } else {
-              var orders =
+              var ordersresults =
               {
                 "status": "1",
                 "message": "Order Verified",
@@ -200,91 +197,188 @@ function verifyorder(orderDetails) {
 
                 }
               }
-              deferred.resolve(orders);
+              deferred.resolve(ordersresults);
             }
           }
         }
       } else {
 
-        var orders = {
+        var ordersresults = {
           "status": "0",
           "message": "no data found",
           "data":
             {}
         }
-        deferred.resolve(orders);
+        deferred.resolve(ordersresults);
       }
     })
 
   }
+
+
+
   return deferred.promise;
 }
 
 
-function createorder(details) {
-  var deferred = Q.defer();
-  var productdata = [];
-  for (let i = 0; i < details.productdetails.length; i++) {
+function createorder(orderDetails) {
 
-    productdata.push({ "tillTypeId": details.productdetails[i].tillTypeId, "productId": details.productdetails[i].productId, "productName": details.productdetails[i].productName, "sellingPrice": parseInt(details.productdetails[i].sellingPrice), "quantity": parseInt(details.productdetails[i].qty) })
-
-    var userId = details.userId;
-    var productId = details.productdetails[i].productId
+  var merchantId = orderDetails.merchantId;
+  var stockdata = [];
+  var productdetails = [];
+  for (let i = 0; i < orderDetails.productdetails.length; i++) {
     var deferred = Q.defer();
-    cartdetails.updateOne({ userId: userId },
 
-      { $pull: { productdetails: { productId: productId } } },
-      { multi: true },
-      function (err, cartresults) {
-        if (!err) {
-          if (cartresults.nModified == 0) {
+    var merchantId = merchantId;
+    var productId = orderDetails.productdetails[i].productId;
+    products.aggregate([
 
-            // console.log('sucess');
+      {
+        '$match': {
+          merchantid: merchantId,
+          _id: new mongoose.Types.ObjectId(productId)
+        }
+      },
+      {
+        "$project": {
+          "_id": 1,
+          "stocklevel": 1
+        }
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "productdetails.productId",
+          as: "ordersdetails"
+        }
+      },
+      { '$unwind': { 'path': '$ordersdetails', 'preserveNullAndEmptyArrays': true } },
+      { '$unwind': { 'path': '$ordersdetails.productdetails', 'preserveNullAndEmptyArrays': true } },
+      {
+        '$project': {
+          '_id': 1,
+          "stocklevel": 1,
+          'ordersdetails': {
+            $cond: { if: { $eq: ["$ordersdetails.productdetails.productId", new mongoose.Types.ObjectId(productId)] }, then: "$ordersdetails.productdetails", else: [] }
+          }
 
-          } else {
-            // console.log('scuess');
+        }
+      },
+      {
+        '$group': {
+          '_id': null,
+          'stocklevel': { '$first': '$stocklevel' },
+          'totalQty': {
+            '$sum': '$ordersdetails.quantity'
           }
         }
-        else {
-          // console.log('err');
+      },
+    ]).exec(function (err, getorderdetails) {
+      if (!err) {
+
+        if (getorderdetails == '') {
+
+          var ordersresults = {
+            "status": "0",
+            "message": "no data found",
+            "data":
+              {}
+          }
+          deferred.resolve(ordersresults);
+        } else {
+
+          var stocklevel = getorderdetails[0].stocklevel;
+          var quantity = getorderdetails[0].totalQty;
+          var stock = stocklevel - quantity;
+
+          if (stock >= orderDetails.productdetails[i].qty) {
+            stockdata.push('true')
+
+          } else {
+            stockdata.Qty = stock;
+            stockdata.push('false')
+
+          }
+          if (orderDetails.productdetails.length == stockdata.length) {
+
+            var n = stockdata.includes("false");
+            if (n == true) {
+
+              if (stockdata.Qty == 0) {
+                var ordersresults = {
+                  "status": "0",
+                  "message": "" + orderDetails.productdetails[i].productName + " product not available ",
+                  "data":
+                    {}
+                }
+                deferred.resolve(ordersresults);
+
+              } else {
+                var ordersresults = {
+                  "status": "0",
+                  "message": "You can only add " + stockdata.Qty + " qty in " + orderDetails.productdetails[i].productName + ".",
+                  "data":
+                    {}
+                }
+                deferred.resolve(ordersresults);
+              }
+            } else {
+              var productdata = [];
+              for (let i = 0; i < orderDetails.productdetails.length; i++) {
+
+                productdata.push({ "tillTypeId": orderDetails.productdetails[i].tillTypeId, "productId": orderDetails.productdetails[i].productId, "productName": orderDetails.productdetails[i].productName, "sellingPrice": parseInt(orderDetails.productdetails[i].sellingPrice), "quantity": parseInt(orderDetails.productdetails[i].qty) })
+              }
+              var saveData = new orders({
+                userId: new mongoose.Types.ObjectId(orderDetails.userId),
+                status: "pending",
+                merchantId: new mongoose.Types.ObjectId(orderDetails.merchantId),
+                totalAmount: parseInt(orderDetails.totalAmount),
+                productdetails: productdata
+              });
+
+              saveData.save(function (err, orderdata) {
+                if (!err) {
+
+                  var orderDetails =
+                  {
+                    "status": "1",
+                    "message": "Successful",
+                    "data": {
+                      orderId: orderdata._id
+                    }
+                  }
+
+                  deferred.resolve(orderDetails);
+
+                } else {
+
+                  var ordersresults = {
+                    "status": "0",
+                    "message": "no data found",
+                    "data":
+                      {}
+                  }
+                  deferred.resolve(ordersresults);
+                }
+              });
+            }
+          }
         }
-      });
+      } else {
+
+        var ordersresults = {
+          "status": "0",
+          "message": "no data found",
+          "data":
+            {}
+        }
+
+        deferred.resolve(ordersresults);
+      }
+    })
 
   }
-
-  var saveData = new orders({
-    userId: new mongoose.Types.ObjectId(details.userId),
-    status: "pending",
-    merchantId: new mongoose.Types.ObjectId(details.merchantId),
-    totalAmount: parseInt(details.totalAmount),
-    productdetails: productdata
-  });
-
-  saveData.save(function (err, orderdata) {
-    if (!err) {
-
-      var orderDetails =
-      {
-        "status": "1",
-        "message": "Successful",
-        "data": {
-          orderId: orderdata._id
-        }
-      }
-
-      deferred.resolve(orderDetails);
-
-    } else {
-
-      var orders = {
-        "status": "0",
-        "message": "no data found",
-        "data":
-          {}
-      }
-      deferred.resolve(orders);
-    }
-  });
   return deferred.promise;
 }
 
@@ -297,6 +391,25 @@ function payment(paymentdetails) {
 
     status = "Completed"
 
+    var userId = paymentdetails.userId;
+    var deferred = Q.defer();
+
+    cartdetails.deleteOne({ userId: userId },
+      function (err, cartresults) {
+        if (!err) {
+
+        }
+        else {
+          var paymentdetails = {
+            "status": "0",
+            "message": "no data found",
+            "data":
+              {}
+          }
+
+          deferred.resolve(paymentdetails);
+        }
+      });
   } else {
     status = "pending"
   }
@@ -347,92 +460,92 @@ function checkorderhistory(user) {
         "userId": new mongoose.Types.ObjectId(user.userId), "merchantId": new mongoose.Types.ObjectId(user.merchantId)
       }
     },
-  {
-    $unwind: "$productdetails"
-  },
-   {
-        $lookup: {
-          from: "products",
-         localField: "productdetails.productId",
-          foreignField: "_id",
-          as: "ordersdetails"
-        }
+    {
+      $unwind: "$productdetails"
     },
     {
-        '$unwind' : '$ordersdetails'
-        },
+      $lookup: {
+        from: "products",
+        localField: "productdetails.productId",
+        foreignField: "_id",
+        as: "ordersdetails"
+      }
+    },
     {
-        '$project' : {
-             "_id" : 1,
-             "userId" : 1,
-             "status" : 1,
-             "merchantId" : 1,
-             "productdetails" : 1,
-             "totalAmount" : 1,
-             "dateadded" : 1,
-             "datemodified" : 1,
-             "ordersdetails" : '$ordersdetails',
-             "__v" : 1
-            }
-        },{
-            '$group' : {
-                 '_id' : '$_id',
-                 'mainDetails' : {
-                         '$first' : {
-                             "_id" : "$_id",
-                             "userId" : "$userId",
-                             "status" : "$status",
-                             "totalAmount" : "$totalAmount",
-                             "merchantId" : "$merchantId",
-                             "dateadded" : "$dateadded",
-                             "datemodified" : "$datemodified"
-                             }
-                     },
-                 'details' : {
-                         '$push' : {
-                         "_id" : '$productdetails._id',
-                         "tillTypeId" : '$productdetails.tillTypeId',
-                         "productId" : '$productdetails.productId',
-                         "productName" : '$productdetails.productName',
-                         "sellingPrice" : '$productdetails.sellingPrice',
-                         "quantity" : '$productdetails.quantity',
-                         "dateadded" : '$productdetails.dateadded',
-                         "datemodified" : '$productdetails.datemodified',
-                         "image" : "$ordersdetails.image"
-                     }
-                     }
-                }
-            },{
-                '$project' : {
-                     "_id" : "$_id",
-                     "userId" : "$mainDetails.userId",
-                     "status" : "$mainDetails.status",
-                     "totalAmount" : "$mainDetails.totalAmount",
-                     "merchantId" : "$mainDetails.merchantId",
-                     "dateadded" : "$mainDetails.dateadded",
-                     "datemodified" : "$mainDetails.datemodified",
-                    'details' : '$details'
-                    }
-                }
+      '$unwind': '$ordersdetails'
+    },
+    {
+      '$project': {
+        "_id": 1,
+        "userId": 1,
+        "status": 1,
+        "merchantId": 1,
+        "productdetails": 1,
+        "totalAmount": 1,
+        "dateadded": 1,
+        "datemodified": 1,
+        "ordersdetails": '$ordersdetails',
+        "__v": 1
+      }
+    }, {
+      '$group': {
+        '_id': '$_id',
+        'mainDetails': {
+          '$first': {
+            "_id": "$_id",
+            "userId": "$userId",
+            "status": "$status",
+            "totalAmount": "$totalAmount",
+            "merchantId": "$merchantId",
+            "dateadded": "$dateadded",
+            "datemodified": "$datemodified"
+          }
+        },
+        'details': {
+          '$push': {
+            "_id": '$productdetails._id',
+            "tillTypeId": '$productdetails.tillTypeId',
+            "productId": '$productdetails.productId',
+            "productName": '$productdetails.productName',
+            "sellingPrice": '$productdetails.sellingPrice',
+            "quantity": '$productdetails.quantity',
+            "dateadded": '$productdetails.dateadded',
+            "datemodified": '$productdetails.datemodified',
+            "image": "$ordersdetails.image"
+          }
+        }
+      }
+    }, {
+      '$project': {
+        "_id": "$_id",
+        "userId": "$mainDetails.userId",
+        "status": "$mainDetails.status",
+        "totalAmount": "$mainDetails.totalAmount",
+        "merchantId": "$mainDetails.merchantId",
+        "dateadded": "$mainDetails.dateadded",
+        "datemodified": "$mainDetails.datemodified",
+        'details': '$details'
+      }
+    }
   ]).exec(function (err, getorderdetails) {
     if (!err) {
 
       if (getorderdetails == '' || getorderdetails == null || getorderdetails == "null") {
-      
+
         var orderdetailsnodata = {
           "status": "0",
           "message": "no data found",
           "data":
             {}
-        } 
+        }
         deferred.resolve(orderdetailsnodata);
 
       } else {
 
-      
+
         var orderDetails = []
         getorderdetails.forEach(element => {
-         
+
           var order = {}
           order.orderId = element._id
           order.status = element.status
@@ -457,15 +570,15 @@ function checkorderhistory(user) {
           orderDetails.push(order);
         });
 
-            var ordercreate =
-              {
-                "status": "1",
-                "message": "Successful",
+        var ordercreate =
+        {
+          "status": "1",
+          "message": "Successful",
 
-                orderDetails
+          orderDetails
 
-              }
-              deferred.resolve(ordercreate);
+        }
+        deferred.resolve(ordercreate);
 
       }
 
@@ -477,11 +590,11 @@ function checkorderhistory(user) {
         "message": "no data found",
         "data":
           {}
-      } 
+      }
       deferred.resolve(orderdetailsnodata);
     }
   })
-   return deferred.promise;
+  return deferred.promise;
 }
 
 
@@ -660,28 +773,87 @@ function getproductratingcounts(productdetails) {
         "dateadded": { $gte: new Date(startdate), $lt: new Date(enddate) }
       }
     },
+    { $unwind: "$productdetails" },
+    {
+      '$project': {
+        "_id": 1,
+        "userId": 1,
+        "status": 1,
+        "merchantId": 1,
+        "productdetails": 1,
+        "dateadded": 1,
+        "datemodified": 1,
+        "ordersdetails": '$ordersdetails',
+        "__v": 1
+      }
+    },
+    {
+      "$group": {
+        '_id': '$_id',
+        _id: {
+          dayOfYear: "$dateadded"
+        },
+        'mainDetails': {
+          '$first': {
+            "_id": "$_id",
+            "userId": "$userId",
+            "status": "$status",
+            "merchantId": "$merchantId",
+            "dateadded": "$dateadded",
+            "datemodified": "$datemodified"
+          }
+        },
+        'details': {
+          '$push': {
+            "_id": '$productdetails._id',
+            "tillTypeId": '$productdetails.tillTypeId',
+            "productId": '$productdetails.productId',
+            "productName": '$productdetails.productName',
+            "sellingPrice": '$productdetails.sellingPrice',
+            "quantity": '$productdetails.quantity',
+            "dateadded": '$productdetails.dateadded',
+            "datemodified": '$productdetails.datemodified',
+            "image": "$ordersdetails.image"
+          }
+        }
+      }
 
+    }
+    , {
+      '$project': {
+        "_id": "$_id",
+        "userId": "$mainDetails.userId",
+        "status": "$mainDetails.status",
+        "totalAmount": "$mainDetails.totalAmount",
+        "merchantId": "$mainDetails.merchantId",
+        "dateadded": "$mainDetails.dateadded",
+        "datemodified": "$mainDetails.datemodified",
+        'productdetails': '$details'
+      }
+    },
+    { '$sort': { '_id.dayOfYear': 1 } },
   ]).exec(function (err, getorderdetails) {
     if (!err) {
-
       var category = []
       getorderdetails.forEach(element => {
         var cat = {}
         var day = dateFormat(new Date(element.dateadded), "mmm dd");
         cat.label = day
-
+           
         category.push(cat);
       });
-
       var dataarray = [];
       getorderdetails.forEach(element => {
         var test = {}
         var data = []
         var i = 0;
-        var day = dateFormat(new Date(element.dateadded), "mmm dd");
 
+
+        var day = dateFormat(new Date(element.dateadded), "mmm dd");
         element.productdetails.forEach(items => {
           var product = {}
+
+          product.name = items.productName;
           product.value = items.quantity.toString()
           data.push(product);
           i++;
@@ -706,13 +878,15 @@ function getproductratingcounts(productdetails) {
 
         var scoandarray = [];
         for (let index = 0; index < dataarray.length; index++) {
-
+         
+         
           if (dataarray[index].data[a] == undefined || dataarray[index].data[a] == "undefined") {
             dataarray[index].data[a] = 0;
           }
-
+         
           scoandarray.push(dataarray[index].data[a])
         }
+      
         var value = {}
         value.data = scoandarray;
         dataSet.push(value);
@@ -761,8 +935,8 @@ function getvalueofcustomerpurchases(customerdetails) {
     {
       "$group": {
         _id:
-        { dayOfYear: "$dateadded"},
-      
+          { dayOfYear: "$dateadded" },
+
         'totalQty': {
           '$sum': { '$abs': { '$toInt': "$productdetails.quantity" } }
         },
@@ -770,9 +944,9 @@ function getvalueofcustomerpurchases(customerdetails) {
           '$sum': { '$abs': { '$toInt': "$productdetails.sellingPrice" } }
         },
       }
-      
+
     },
-   { '$sort': { '_id.dayOfYear': 1 } },
+    { '$sort': { '_id.dayOfYear': 1 } },
 
   ]).exec(function (err, getorderdetails) {
     if (!err) {

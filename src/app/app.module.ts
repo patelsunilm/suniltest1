@@ -52,13 +52,12 @@ import { QrcodeModule } from './main/qrcode/qrcode.module';
 import { ProductsalescomparisonModule } from './main/analysis/productsalescomparison/productsalescomparison.module';
 import { FusionChartsModule } from 'angular-fusioncharts';
 import{ ProductstocklevelModule} from './main/analysis/productstocklevel/productstocklevel.module';
-import{ ProductratingsreviewlModule} from './main/analysis/productratingsreview/productstocklevel.module';
+import{ ProductratingsreviewlModule} from './main/analysis/productratingsreview/productratingsreview.module';
 import { NumberofcustomerpurchasesModule } from './main/analysis/numberofcustomerpurchases/numberofcustomerpurchases.module';
 import { ValueofcustomerpurchasesModule} from './main/analysis/valueofcustomerpurchases/valueofcustomerpurchases.module';
 import {TillsalesperproductModule } from './main/analysis/tillsalesperproduct/tillsalesperproduct.module'
 import { CalendarModule} from './main/calendar/calendar.module'
-
-
+import {MatFormFieldModule} from '@angular/material/form-field';
 import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
 import * as TimeSeries from 'fusioncharts/fusioncharts.timeseries';
@@ -116,7 +115,7 @@ const appRoutes: Routes = [
         FusionChartsModule,
         NumberofcustomerpurchasesModule,
         ValueofcustomerpurchasesModule,
-        TillsalesperproductModule,CalendarModule
+        TillsalesperproductModule,CalendarModule,MatFormFieldModule
     ], providers: [
 
         AuthGuard,

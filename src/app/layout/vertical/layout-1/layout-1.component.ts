@@ -15,7 +15,7 @@ export class VerticalLayout1Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
-
+    navhide : any;
     // Private
     private _unsubscribeAll: Subject<any>;
 
@@ -50,6 +50,8 @@ export class VerticalLayout1Component implements OnInit, OnDestroy
             .subscribe((config) => {
                 this.fuseConfig = config;
             });
+            this.navhide = localStorage.getItem('userType')
+
     }
 
     /**

@@ -47,15 +47,14 @@ export class AddproductComponent implements OnInit {
   tillDetails: any;
   price: any;
   Primary: any;
-  //  value : string = 'facebook.com';
-  //  elementType : 'url' | 'canvas' | 'img' = 'url';
-  // qrdata = 'Initial QR code data string';
+  f = true;
+ 
    qrdata: any; 
    url : any;
   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
 
 
-  constructor(private activatedRoute: ActivatedRoute,private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
+  constructor( private activatedRoute: ActivatedRoute,private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, private tillManagementService: tillManagementService) {
 
 
@@ -91,6 +90,9 @@ export class AddproductComponent implements OnInit {
   }
   
   ngOnInit() {
+
+    this.f = true;
+
 
     this.url = window.location.origin;
     this.productForm = this._fb.group({
@@ -163,17 +165,12 @@ export class AddproductComponent implements OnInit {
   }
 
   addNewRow() {
-    // var datetime = new Date(new Date).valueOf();
-    // var randomnumber = Math.floor((Math.random() * 100) + 1);
+ 
     this.formArr.push(this.initItemRows());
    
   }
 
   deleteRow(indexs: number, urls) {
-
-    // if(indexs == 0) {
-
-    // } else {
 
     this.formArr.removeAt(indexs);
     urls.splice(indexs, 1);
@@ -187,8 +184,6 @@ export class AddproductComponent implements OnInit {
     this.filesToUpload = temp;
     // }
   }
-
-
 
 
   fileChangeEvent(fileInput: any, index) {
@@ -259,6 +254,7 @@ export class AddproductComponent implements OnInit {
       });
     } else {
 
+     
       this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
         data.sort(function (obj1, obj2) {
@@ -302,9 +298,7 @@ export class AddproductComponent implements OnInit {
   }
   }
 
-
   addnewcategory(i) {
-  
     
 
      $("#div_" + i).hide();
@@ -312,11 +306,9 @@ export class AddproductComponent implements OnInit {
     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
 
     document.getElementById(i).innerHTML = Categoryhtml;
-    
-  //  this.productForm.controls.itemRows.value[i]['productcategories'].setValue('');
    
-     this.mySelect.close();
-    // this.productForm.setValue("#div_" + i)
+    this.mySelect.close();
+    
   }
 
   
@@ -325,7 +317,6 @@ export class AddproductComponent implements OnInit {
 
     var merchantId = localStorage.getItem('userId');
     var catname = ($("#cat" + i).val())
-
     if (!catname) {
       this.snackBar.open('Pls Add Product Category.', '', {
         duration: 3000,
@@ -357,21 +348,12 @@ export class AddproductComponent implements OnInit {
               $("#matcat" + i).hide();
               $("#div_" + i).show();
 
-
-
               this.ProductService.getAllProductcategories(merchantId)
                 .subscribe(
                   data => {
 
                     this.catName = data.data;
 
-                    // this.catName.forEach(element => {
-                    //  if(element.catName  == catname){
-                    //    console.log(element.productCatId)
-                    //   this.productForm.controls['productcategories'].value(element.productCatId)
-
-                    // }
-                    // });
 
                   },
                   error => {
@@ -401,8 +383,6 @@ export class AddproductComponent implements OnInit {
 
     var sellingprice = (costprice + markupprice)
      $("#selling" + i).val(sellingprice)
-      
-    // this.price = $("#selling" + i).val(sellingprice)
     this.sellingprice = sellingprice;
   }
 }

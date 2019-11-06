@@ -37,7 +37,7 @@ export class UpdateproductComponent implements OnInit {
   tillTypeId: any;
   catName: any;
   disableTextbox =  false;
-
+  f = true;
   constructor(private ProductService: ProductService, private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -45,7 +45,8 @@ export class UpdateproductComponent implements OnInit {
     private sanitizer: DomSanitizer, private tillManagementService: tillManagementService) { }
 
   ngOnInit() {
-    
+    this.f = true
+   
     this.form = this._formBuilder.group({
       image: [''],
       productname: ['', Validators.required],

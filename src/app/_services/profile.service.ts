@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,Input,Output,EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs/Subject';
 export class ProfileService {
     constructor(private http: HttpClient) { }
     private _listners = new Subject<any>();
+    public stringSubject = new Subject<string>();
 
     // listen(): Observable<any> {
     //     return this._listners.asObservable();
@@ -22,16 +23,26 @@ export class ProfileService {
     //     console.log(filterBy);
     //     this._listners.next(filterBy);
     // }
+    @Input('childToMaster') masterName: string;
 
+    @Output() childToParent = new EventEmitter<any>();
+  
     uploadLogoImage(Files): Observable<any> {
 
         const formData: any = new FormData();
         const files: Array<File> = Files;
         for (let i = 0; i < Files.length; i++) {
 
-            formData.append("uploads[]", files[i], files[i]['name']);
+           
+            if(Files[i] == '') {
+
+            } else {
+                formData.append("uploads[]", files[i], files[i]['name']);
+            }
+            
 
         }
+
         return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
     }
 
@@ -41,6 +52,7 @@ export class ProfileService {
         return this.http.get<any>(appConfig.apiUrl + '/profile/getprofileInfo/' + userId)
     }
 
+    
     updateprofile(profiledata) {
 
         return this.http.post<any>(appConfig.apiUrl + '/profile/updateprofile', profiledata)
@@ -50,13 +62,17 @@ export class ProfileService {
                     return user;
                 } else {
                    
+                    
+                    this.stringSubject.next(user);
+                    // this.stringSubject.next(user.image);
+
 
                     localStorage.setItem('name', user.name);
                     localStorage.setItem('myprofilelogoimage', user.image);
-                    $('#CurrencyChnage').fadeIn('slow').load('toolbar.component.ts').fadeOut('slow',function(){
+                    // $('#CurrencyChnage').fadeIn('slow').load('toolbar.component.ts').fadeOut('slow',function(){
                 
                    
-                    }); 
+                    // }); 
         
                         return user;
                  

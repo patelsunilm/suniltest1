@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,6 +9,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
 
+import { ProfileService } from '../../../_services/index';
 
 import { AuthenticationService } from '../../../_services/index';
 import { NavigationEnd, NavigationStart, Router, ActivatedRoute } from '@angular/router';
@@ -32,10 +33,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     myprofilelogoimage: string;
     usertype: string;
     returnUrl: string;
-
+    navhide: any;
+    master: any;
     // Private
     private _unsubscribeAll: Subject<any>;
-
+    mySubjectVal: any;
+    @Input('myInputVal') myInputVal: string;
+    @Output('myOutputVal') myOutputVal = new EventEmitter();
     /**
      * Constructor
      *
@@ -43,6 +47,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      * @param {FuseSidebarService} _fuseSidebarService
      * @param {TranslateService} _translateService
      */
+    image : any;
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
@@ -50,18 +55,27 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router,
+        private ProfileService: ProfileService
     ) {
-      
-      
 
-        
+
+
+      
         this.name = localStorage.getItem('name');
-        this.myprofilelogoimage = localStorage.getItem('myprofilelogoimage');
+      
+        this.image =  localStorage.getItem('myprofilelogoimage');
+      
+        if(this.image == undefined || this.image == "undefined") {
+            this.image = "" 
+        } else {
+            this.image == localStorage.getItem('myprofilelogoimage');
+        }
+       
+        this.myprofilelogoimage =this.image
+      
+       
         this.usertype = localStorage.getItem('userType');
-      
-      
-      
-      
+
         // Set the defaults
         this.userStatusOptions = [
             {
@@ -117,6 +131,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     /**
      * On init
      */
+
+
+
     ngOnInit(): void {
 
         // Subscribe to the config changes
@@ -130,6 +147,17 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
         // Set the selected language from default languages
         this.selectedLanguage = _.find(this.languages, { 'id': this._translateService.currentLang });
+
+        this.navhide = localStorage.getItem('userType')
+
+
+        this.ProfileService.stringSubject.subscribe(
+            data => {
+                this.mySubjectVal = data;
+                this.name = this.mySubjectVal.name;
+                this.myprofilelogoimage = this.mySubjectVal.image
+               
+            })
     }
 
     /**

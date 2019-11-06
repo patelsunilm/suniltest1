@@ -13,14 +13,13 @@ import { AutofocusModule } from 'angular-autofocus-fix';
 
 import { FusionChartsModule } from 'angular-fusioncharts';
 
-
-
 // Load FusionCharts
 import * as FusionCharts from 'fusioncharts';
 // Load Charts module
 import * as Charts from 'fusioncharts/fusioncharts.charts';
 // Load themes
 import * as FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+
 import { NgxLoadingModule } from 'ngx-loading';
 
 
@@ -34,6 +33,12 @@ const routes = [
 
 ];
 
+// Add dependencies to FusionChartsModule
+FusionChartsModule.fcRoot(
+    FusionCharts,
+    Charts,
+    FusionTheme
+  )
 @NgModule({
     declarations: [
         ProductratingsreviewComponent,

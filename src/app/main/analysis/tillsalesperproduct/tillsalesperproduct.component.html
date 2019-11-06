@@ -47,12 +47,12 @@
               <mat-option *ngFor="let proname of productname" [value]="proname._id">
                 {{proname.productname}}
               </mat-option>
-              <mat-error *ngIf="form.get('productname').hasError('required')">
-                Please enter productname date!
-              </mat-error>
             </mat-select>
-
-            <mat-error>Select product!</mat-error>
+           
+            <!-- <mat-error *ngIf="form.get('productname').hasError('required')">
+              Please enter productname date!
+            </mat-error> -->
+            <mat-error>Please Select product!</mat-error>
 
           </mat-form-field>
         </div>

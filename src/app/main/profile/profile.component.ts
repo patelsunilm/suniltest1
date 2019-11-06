@@ -34,11 +34,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     allstates: any;
     citys: any;
     a: any;
-
+    backgroundfilesToUpload: Array<File> = [];
+    urls1 = new Array<string>();
     private _unsubscribeAll: Subject<any>;
-
-
-
+    backgroundimage: any;
+    newfileuplodes: Array<File> = [];
+    newfileuplodes1: Array<File> = [];
     public rgbaText: string = 'rgba(165, 26, 214, 0.2)';
 
     public arrayColors: any = {
@@ -134,6 +135,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     data => {
 
                         this.image = data.image
+                        this.backgroundimage = data.backgroundImage
                         this.form = this._formBuilder.group({
                             name: [data.name],
                             email: [data.email, [Validators.required, Validators.email]],
@@ -147,20 +149,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
                             merchantcatname: [data.merchantcatid],
                             countries: [data.countryid],
                             states: [data.stateid],
-                            city: [parseInt(data.cityid)]
-
+                            city: [parseInt(data.cityid)],
+                            backgroundimage: [this.backgroundimage]
                         });
 
                         this.ProfileService.getallstates(data.countryid)
                             .subscribe(
                                 data => {
+
                                     this.allstates = data.data;
 
                                 },
                                 error => {
 
                                     // console.log(error);
-
                                 });
                         var num = data.stateid;
                         if (num == undefined || num == "undefined") {
@@ -280,7 +282,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     fileChangeEvent(fileInput: any, index) {
+
         var imagefiles = fileInput.target.files;
+
         if (fileInput.target.files && fileInput.target.files[0]) {
             var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
 
@@ -298,11 +302,44 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 testreader.onload = (fileInput: any) => {
                     this.urls[index] = fileInput.target.result;
                     this.filesToUpload.push(imagefiles[0]);
+                    this.newfileuplodes.push(imagefiles[0]);
+
+
                 }
                 testreader.readAsDataURL(fileInput.target.files[0]);
             }
         }
     }
+
+
+    fileChangeEvent1(fileInput: any, index) {
+
+        var imagefiles = fileInput.target.files;
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
+
+            if (!(regex.test(fileInput.target.value.toLowerCase()))) {
+                fileInput.target.value = ''
+                this.snackBar.open('Please select correct file format', '', {
+                    duration: 3000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+
+            } else {
+
+                var testreader1 = new FileReader();
+                testreader1.onload = (fileInput: any) => {
+                    this.urls1[index] = fileInput.target.result;
+
+                    this.backgroundfilesToUpload.push(imagefiles[0]);
+                    this.newfileuplodes1.push(imagefiles[0])
+                }
+                testreader1.readAsDataURL(fileInput.target.files[0]);
+            }
+        }
+    }
+
 
     readLocalStorageValue(key) {
         return localStorage.getItem(key);
@@ -313,29 +350,64 @@ export class ProfileComponent implements OnInit, OnDestroy {
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
 
-            if (this.filesToUpload.length > 0) {
+            if (this.filesToUpload.length > 0 || this.backgroundfilesToUpload.length > 0) {
 
+                var background = [];
                 var data = this.filesToUpload.slice(-1);
-                this.ProfileService.uploadLogoImage(data)
+                var data1 = this.backgroundfilesToUpload.slice(-1);
+                var image;
+                if (data[0] == undefined) {
+
+
+                    image = ""
+                } else {
+                    image = data[0]
+                }
+
+                var backgroundimage;
+
+                if (data1[0] == undefined) {
+
+                    backgroundimage = ""
+                } else {
+                    backgroundimage = data1[0]
+                }
+
+                background.push(image, backgroundimage);
+
+                this.ProfileService.uploadLogoImage(background)
                     .subscribe(data => {
 
-                        this.form.value.image = data[0].s3url.toString();
+                        data.sort(function (obj1, obj2) {
+                            return obj1.index - obj2.index;
+
+                        });
+
+                        if (image) {
+                            this.form.value.image = data[0].s3url.toString();
+
+                        }
+                        if (backgroundimage) {
+
+                            if (image) {
+                                this.form.value.backgroundimage = data[1].s3url.toString();
+
+                            } else {
+                                this.form.value.backgroundimage = data[0].s3url.toString();
+                            }
+
+                        }
+
                         this.form.value._id = user._id;
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
                         this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
-                        // this.form.value.backgroundtheme = $('#backgroundthemecolor').val().replace(/rgb/g, "rgba");
 
-                        //    console.log('this form value forntcolor');
-                        //     console.log(this.form.value.fontcolor);
-                        //     console.log( this.form.value.backgroundtheme)
 
-                        // return false
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(
                                 data => {
-                                    console.log('data string');
-                                    console.log(data.string);
+
                                     if (data.string == "Email is already exist.") {
                                         this.snackBar.open("Email is already exist.", '', {
                                             duration: 3000,
@@ -349,8 +421,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                             verticalPosition: this.verticalPosition,
                                         });
                                     } else {
-
-
                                         this.snackBar.open('Profile updated successfully.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
@@ -362,7 +432,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                 },
                                 error => {
 
-                                    console.log(error);
                                     this.snackBar.open('Please try again!', '', {
                                         duration: 3000,
                                         horizontalPosition: this.horizontalPosition,
@@ -374,6 +443,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     });
 
             } else {
+
 
                 this.form.value._id = user._id;
                 this.form.value.userType = user.userType;
@@ -408,8 +478,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
                         },
                         error => {
-
-                            console.log(error);
                             this.snackBar.open('Please try again!', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,

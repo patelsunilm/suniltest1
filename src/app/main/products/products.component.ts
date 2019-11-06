@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Renderer2,OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBarVerticalPosition, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -92,7 +92,7 @@ export class ProductsComponent implements OnInit {
   public showAlert(): void {
     alert('ngx-loading rocks!');
   }
-  constructor(public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
+  constructor( private renderer: Renderer2,public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
   openDialog() {
 
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
@@ -172,10 +172,14 @@ export class ProductsComponent implements OnInit {
 
       $event.target.files[0].userId = merchantid
       this.loading = true;
+
+      console.log('this new terget');
+      console.log($event.target.files[0])
+
       this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully")  {
-          this.snackBar.open('Csv import success fully', '', {
+          this.snackBar.open('Csv import sucessfull', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

@@ -24,6 +24,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { AutofocusModule } from 'angular-autofocus-fix';
 import { QRCodeModule } from 'angularx-qrcode';
+import { HttpClientModule } from '@angular/common/http';
+
+
+ import { AutoFocusDirective } from '../../auto-focus.directive';
+
 
 
 const routes = [
@@ -55,7 +60,9 @@ const routes = [
         ProductsComponent,
         AddproductComponent,
         deleteproductPopupComponent,
-        UpdateproductComponent
+        UpdateproductComponent,
+         AutoFocusDirective
+
     ],
     imports: [
         RouterModule.forChild(routes),
@@ -84,7 +91,7 @@ const routes = [
         MatDialogModule,
         NgxLoadingModule,
         MatSelectModule,
-        QRCodeModule,
+        QRCodeModule,HttpClientModule,
         MatPaginatorModule, MatDatepickerModule, NgxBarcodeModule,NgxQRCodeModule,AutofocusModule
     ]
 })

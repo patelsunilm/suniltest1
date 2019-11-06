@@ -56,20 +56,20 @@ export class TillsalesperproductComponent implements OnInit {
     .subscribe(
       data => {
          
-        console.log('data');
-        console.log(data);
+       if(data == '' || data == undefined || data == "undefined" || data == null) {
+ 
+        
+       } else {
 
         this.showgraph = "0";
         var tilldetails  = data;
        var till = [];
        tilldetails.forEach(element => {
-      
         element.value = element.totalQty.toString();
         element.label = element._id.day.toString();
         till.push(element)
       });
-     
-
+    
       this.dataSource = {
         "chart": {
           "caption": "Till sales per product",
@@ -82,9 +82,11 @@ export class TillsalesperproductComponent implements OnInit {
        "data": till
      
       };
+    }
     }, error => {
         console.log(error);
       });
+    
   }
 
 }

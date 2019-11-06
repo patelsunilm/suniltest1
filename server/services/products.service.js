@@ -410,6 +410,7 @@ function addproductcategories(catname, merchantId) {
                 catName: catname,
                 merchantId: id
             });
+
             procat.save(function (err, productcategory) {
                 if (!err) {
                     deferred.resolve(productcategory);
@@ -983,7 +984,7 @@ function getproductratingbyid(ratingDetails) {
                 as: "username"
             }
         },
-        // {ratings}
+        { '$sort': { 'ratings': -1 } },
         { $skip: startLimit },
         { $limit: endLimit },
     ]).exec(function (err, getratingdata) {
@@ -1012,7 +1013,9 @@ function getproductratingbyid(ratingDetails) {
                             objrating.rating = rating.toString();
                             objrating.comment = element.ratings.comment == undefined ? '' : element.ratings.comment;
                             objrating.userId = element.ratings.userId == undefined ? '' : element.ratings.userId;
-                            objrating.userName = (element.username[0].firstname == undefined || element.username[0].firstname == "undefined" || element.username[0].firstname == '' || element.username[0].firstname == null) ? '' : element.username[0].firstname;
+                          
+                            
+                            objrating.userName = (element.username[0] == undefined ||element.username[0].firstname == undefined || element.username[0].firstname == "undefined" || element.username[0].firstname == '' || element.username[0].firstname == null) ? '' : element.username[0].firstname;
                             productrating.push(objrating)
 
                         });
@@ -1130,6 +1133,7 @@ function getProductsRatingDetailsbyid(productdetails) {
 
 
 function gettilldetails(deatils) {
+  
     var deferred = Q.defer();
     var startdate = new Date(deatils.startdate);
     var enddate = new Date(deatils.endDate);
@@ -1157,7 +1161,7 @@ function gettilldetails(deatils) {
                     year: { $year: "$tillMovement.dateadded" },
                     month: { $month: "$tillMovement.dateadded" },
                     day: { $dayOfMonth: "$tillMovement.dateadded" },
-
+                    //  dayOfYear: "$tillMovement.dateadded" ,
                 },
                 'totalQty': {
                     '$sum': { '$abs': { '$toInt': "$tillMovement.moveStock" } }
@@ -1167,6 +1171,9 @@ function gettilldetails(deatils) {
     ]).exec(function (err, tillresults) {
         if (!err) {
            
+
+
+
             deferred.resolve(tillresults);
         } else {
             

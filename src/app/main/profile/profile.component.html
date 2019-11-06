@@ -6,8 +6,6 @@
     }
 </style>
 <div id="forms" class="page-layout simple fullwidth" fxLayout="column">
-
-
     <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
         fxLayoutAlign.gt-xs="space-between center">
 
@@ -25,11 +23,8 @@
 
     <!-- CONTENT -->
     <div class="content p-24">
-
         <!-- THIS IS LOCALSTORAGE OF ADMIN -->
-
         <div *ngIf="readLocalStorageValue('userType') == 'admin'">
-
 
             <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
 
@@ -134,6 +129,22 @@
                             </div>
                         </div>
 
+                        <div id="one" checked class="customslidediv" fxLayout="row" fxLayoutAlign="start center"
+                            fxFlex="1 0 auto">
+                            <a mat-button color="warn" class="add-file-button" (click)="fileInput.click()"
+                                aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+                                Background image 
+                            </a>
+                            <input id="cin" hidden name="cin" #fileInput type="file"
+                                accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent1($event,i)" />
+                            <div class="remember-me" class="img-wrap" *ngIf="backgroundimage">
+                                <img *ngIf="!urls1[i];" [src]="backgroundimage" style="width: 100px;height: 100px;padding: 5px;">
+                            </div>
+                            <div class="remember-me" class="img-wrap">
+                                <img *ngIf="urls1[i]" [src]="urls1[i]" style="width: 100px;height: 100px;padding: 5px;">
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -170,8 +181,6 @@
 
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-
-
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Address</mat-label>
                             <input matInput formControlName="address" autocomplete="off" pattern="(?!^ +$)^.+$"
@@ -202,17 +211,16 @@
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4 color-pick-date">
                             <mat-label>Select background color</mat-label>
                             <input matInput id="backgroundthemecolor" formControlName="backgroundtheme"
-                                [(colorPicker)]="color2" [value]="color2" readonly="true">
+                             [(colorPicker)]="color2" [cpPosition]='left' [value]="color2" readonly="true">
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Select font color</mat-label>
-                            <input matInput id="fontcolor" formControlName="fontcolor" readonly="true" [value]="color1"
-                                [(colorPicker)]="color1">
+                            <input matInput id="fontcolor" formControlName="fontcolor" [(colorPicker)]="color1" [cpPosition]='left' [value]="color2" readonly="true">
 
                         </mat-form-field>
                     </div>
-
+                   
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Secret question</mat-label>

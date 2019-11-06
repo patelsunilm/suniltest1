@@ -46,7 +46,16 @@ export class NotificationComponent implements OnInit {
             if (element.deviceToken == '' || element.deviceToken == undefined || element.deviceToken == 'undefined') {
 
             } else {
-              allusers.push(element);
+              
+            
+              if(element.firstname == "" || element.firstname == undefined || element.firstname == "undefined" || element.firstname == null) {
+
+              } else {
+                element.username = element.firstname;
+                allusers.push(element);
+              } 
+              
+              
             }
           });
 

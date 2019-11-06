@@ -4,6 +4,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { ProductService } from '../../../_services/index';
 import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
 import { Subject } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 const PrimaryWhite = '#ffffff';
 const SecondaryGrey = '#ccc';
@@ -16,9 +17,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrls: ['./productratingsreview.component.scss'],
   animations: fuseAnimations
 })
-
-
-
 export class ProductratingsreviewComponent implements OnInit {
   dataSource: any;
   chartObj: any;
@@ -28,7 +26,7 @@ export class ProductratingsreviewComponent implements OnInit {
   ratingdetils: any;
   productid: any;
   hidediv: any;
-
+  form: FormGroup;
   @ViewChild('parent') parent;
   @ViewChild('mySelect') mySelect;
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
@@ -59,95 +57,30 @@ export class ProductratingsreviewComponent implements OnInit {
 
 
 
-  constructor(private zone: NgZone, private ProductService: ProductService) {
-   
-    this.dataSource = {
-      "chart": {
-        "caption": "Recommended Portfolio Split",
-        "subCaption": "For a net-worth of $1M",
-        "showValues": "1",
-        "showPercentInTooltip": "0",
-        "numberPrefix": "$",
-        "enableMultiSlicing": "1",
-        "theme": "fusion"
-      },
-    };
-  }
-
-
-
-  ngOnInit() {
-
+  constructor(private zone: NgZone, private ProductService: ProductService ,private _formBuilder: FormBuilder) {
+    
     this.Merchant = localStorage.getItem('userId');
     this.ProductService.getProductsRatingDetails(this.Merchant)
       .subscribe(
         data => {
-  
-     if(data == '' || data == undefined || data == 'undefined' || data == null) {
-     
-      this.hidediv = "false"
+          if (data == '' || data == undefined || data == 'undefined' || data == null) {
 
-     } else {
+            this.hidediv = "false"
 
-          this.ratingdetils = data;
-          data = [];
+          } else {
 
-          this.ratingdetils.forEach(element => {
-
-            element.label = element.productname;
-            element.value = element.qty.toString();
-            element.id = element._id;
-
-            data.push(element);
-          });
-
-
-          this.dataSource = {
-            "chart": {
-              "caption": "Product Rating review",
-              "showValues": "1",
-              "showPercentInTooltip": "0",
-              "numberPrefix": "",
-              "enableMultiSlicing": "1",
-              "theme": "fusion",
-
-            },
-            data
-          }
-        }
-        }, error => {
-          console.log(error);
-        });
-      
-  }
-  initialized($event) {
-
-    this.chartObj = $event.chart; // saving chart instance
-  }
-
-
-  onSelectionChange(chart, cart, $event) {
-    
-
-    if (chart == "column2d") {
-     
-      this.Merchant = localStorage.getItem('userId');
-      this.ProductService.getProductsRatingDetails(this.Merchant)
-        .subscribe(
-          data => {
             this.ratingdetils = data;
             data = [];
-  
+
             this.ratingdetils.forEach(element => {
-  
+
               element.label = element.productname;
               element.value = element.qty.toString();
               element.id = element._id;
-  
+
               data.push(element);
             });
-  
-  
+
             this.dataSource = {
               "chart": {
                 "caption": "Product Rating review",
@@ -156,20 +89,109 @@ export class ProductratingsreviewComponent implements OnInit {
                 "numberPrefix": "",
                 "enableMultiSlicing": "1",
                 "theme": "fusion",
-  
+
+              },
+              data
+            }
+          }
+        }, error => {
+          console.log(error);
+        });      
+  }
+
+ 
+
+
+  ngOnInit() {
+
+    this.form = new FormGroup({
+     
+    });
+    
+    this.Merchant = localStorage.getItem('userId');
+    this.ProductService.getProductsRatingDetails(this.Merchant)
+      .subscribe(
+        data => {
+
+          if (data == '' || data == undefined || data == 'undefined' || data == null) {
+
+            console.log('testing aaa');
+            this.hidediv = "false"
+
+          } else {
+
+            this.ratingdetils = data;
+            data = [];
+
+            this.ratingdetils.forEach(element => {
+
+              element.label = element.productname;
+              element.value = element.qty.toString();
+              element.id = element._id;
+
+              data.push(element);
+            });
+
+
+            // this.dataSource = {
+            //   "chart": {
+            //     "caption": "Product Rating review",
+            //     "showValues": "1",
+            //     "showPercentInTooltip": "0",
+            //     "numberPrefix": "",
+            //     "enableMultiSlicing": "1",
+            //     "theme": "fusion",
+
+            //   },
+            //   data
+            // }
+          }
+        }, error => {
+          console.log(error);
+        });
+
+  }
+  initialized($event) {
+
+    this.chartObj = $event.chart; // saving chart instance
+  }
+
+
+  onSelectionChange(chart, cart, $event) {
+
+    if (chart == "column2d") {
+      this.Merchant = localStorage.getItem('userId');
+      this.ProductService.getProductsRatingDetails(this.Merchant)
+        .subscribe(
+          data => {
+            this.ratingdetils = data;
+            data = [];
+
+            this.ratingdetils.forEach(element => {
+              element.label = element.productname;
+              element.value = element.qty.toString();
+              element.id = element._id;
+              data.push(element);
+            });
+
+            this.dataSource = {
+              "chart": {
+                "caption": "Product Rating review",
+                "showValues": "1",
+                "showPercentInTooltip": "0",
+                "numberPrefix": "",
+                "enableMultiSlicing": "1",
+                "theme": "fusion",
+
               },
               data
             }
             this.chart = chart;
             this.chartObj.chartType(chart);
           });
-         
+
     } else {
 
-      console.log('this pro');
-      console.log(this.productvalue);
-
-      
       var pro = this.productvalue.split(',');
       this.ratingdetils.forEach(element => {
         if (element.productname == pro[0] && element.qty == pro[1]) {
@@ -182,14 +204,19 @@ export class ProductratingsreviewComponent implements OnInit {
           data => {
             var ratingdetils = data;
             data = [];
-
             ratingdetils.forEach(element => {
-              element.label = element.username[0].firstname;
+             
+              var firstname;
+              if(element.username == '' || element.username == undefined || element.username == "undefined") {
+                firstname = "";
+              } else {
+               
+                firstname = element.username[0].firstname
+              }
+              element.label = firstname;
               element.value = element.ratings.rating.toString();
               data.push(element);
             });
-
-
             this.dataSource = {
               "chart": {
                 "caption": "Product Rating review",
@@ -202,13 +229,12 @@ export class ProductratingsreviewComponent implements OnInit {
               },
               data
             }
-            
             this.chart = chart;
             this.chartObj.chartType(chart); // Changing chart type using chart instance
           }, error => {
             console.log(error);
           });
-         
+
     }
   }
 

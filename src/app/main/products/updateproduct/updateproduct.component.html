@@ -50,7 +50,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Products name</mat-label>
-            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" autofocus="true" autocomplete="off"
+            <input matInput formControlName="productname" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" [datoAutoFocus]="f" autocomplete="off"
               required>
             <mat-error *ngIf="form.get('productname').hasError('required')">
               Please enter product!

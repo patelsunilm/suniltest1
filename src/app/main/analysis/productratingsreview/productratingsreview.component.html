@@ -12,25 +12,38 @@
           </span>
       </div>
   </div>
+  
   <div class="content p-24">
   <div *ngIf="hidediv != 'false'"  class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
-    
+    <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto"
+    name="form" [formGroup]="form"  enctype="multipart/form-data">
+  
     <fusioncharts 
-    width="90%"
+    width="100%"
     height="400"
     type="column2d"
-       
     [dataSource]="dataSource"
-    (initialized)="initialized($event)" (dataplotRollOver)="update($event)"    (click)="onSelectionChange('pie2d', dataSource ,$event)">
+    (initialized)="initialized($event)" (dataplotRollOver)="update($event)" (click)="onSelectionChange('pie2d', dataSource ,$event)">
   </fusioncharts>
-  <div *ngIf="buttonhide != 'false'">
-    <input type="radio" name='options' [value]="'column2d'" [checked]='chart === "column2d"' (change)="onSelectionChange('column2d')" />
-    <label>Back</label>
-  </div>
-  </div>
-  <p *ngIf="hidediv == 'false'">no data available</p>
-</div>
 
+  <div *ngIf="buttonhide != 'false'" class="back">
+      <div style='display: flex; justify-content: center'>
+          <span id="select-text">Select:</span><br><br>
+          <div class="change-type">
+          <div>
+        <input type="radio" name='options' [value]="'column2d'" [checked]='chart === "column2d"' (change)="onSelectionChange('column2d')" />
+        <label>Back</label>
+              </div>
+            </div>
+            </div>
+  </div>
+  
+  </form>
+  
+</div>
+<p class="nodata" *ngIf="hidediv == 'false'">no data available</p>
+</div>
+</div>
 
 
  

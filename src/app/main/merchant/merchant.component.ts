@@ -109,9 +109,7 @@ export class MerchantComponent implements OnInit {
 
     }
 
-
     merchantStatusToggle(status, id) {
-
         this.MerchantService.merchantStatusToggle(status.checked, id)
             .subscribe(
                 data => {
@@ -146,8 +144,6 @@ export class MerchantComponent implements OnInit {
 
                     });
                   
-                    
-
                    if (allmerchantdata.length > 0) {
                         this.dataSource = new MatTableDataSource(allmerchantdata);
                         this.dataSource.paginator = this.paginator;

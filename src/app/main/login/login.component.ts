@@ -179,7 +179,7 @@ export class Login2Component implements OnInit {
            
             this.AuthenticationService.submitfacebookdetails(FacebookObj)
             .subscribe(data => {
-
+        
             
               if (data.string == 'Admin could not access any social login.') {
                 this.snackBar.open('Admin could not access any social login.', '', {

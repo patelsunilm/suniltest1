@@ -185,14 +185,17 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
   var merchantId = req.body.uploads
   tilldetails.findOne({ merchantId: merchantId }, function (err, results) {
     if (!err) {
+   
       if (results == '' || results == null || results == 'null') {
         var data = {};
         data.string = 'Pls add Primary till type';
         res.send(data);
+     
       } else {
 
         var tilltype = "Primary"
-        var tilltypeId = results._id
+        var tilltypeId = results._id;
+        var tilltypename = results.name
         var file = req.files[0];
         var userid = req.body.uploads
         var originalFileName = file.originalname;
@@ -206,11 +209,13 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
             var arr1 = ['productname', 'productcategory',
               'costprice',
               'markup',
-              'sellingprice',
               'date',
               'tilltype',
               'stocklevel'];
+
+
             var arr2 = results[0].headers;
+        
             if (arr1.length == arr2.length && arr1.every(function (u, i) {
               return u === arr2[i];
             })) {
@@ -263,7 +268,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                             barcode: results[i].barcode,
                             merchantid: results[i].merchantid,
                             tillTypeId: tilltypeId,
-                            tilltype: tilltype
+                            tilltype: tilltype,
+                            tillTypeName : tilltypename
                           });
 
                           allproducts.save(function (err, product) {
@@ -313,7 +319,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                       barcode: results[i].barcode,
                       merchantid: results[i].merchantid,
                       tillTypeId: tilltypeId,
-                      tilltype: tilltype
+                      tilltype: tilltype,
+                      tillTypeName : tilltypename
                     });
 
                     allproducts.save(function (err, product) {
