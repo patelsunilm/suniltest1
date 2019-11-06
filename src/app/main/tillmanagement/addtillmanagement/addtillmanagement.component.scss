@@ -160,3 +160,17 @@
   // .till {
   //   margin-left: 320px
   // }
+
+  @media(max-width: 450px) {
+    .h-60 {
+      height: 100px !important;
+      min-height: 100px !important;
+      max-height: 100px !important;
+  }
+  .cstm-addtillmanagment-header {
+    place-content: center !important;
+  }
+  .cstm-addtillmanagment-header .logo{position: absolute;top:0px;}
+  
+  .tillmanagment-back-btn{top: 20px;margin-top: 0px !important;}
+  }

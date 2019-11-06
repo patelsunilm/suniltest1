@@ -190,3 +190,16 @@ table {
   .add-file-button.cstm-add-file-button{position: absolute;right:190px;}
   .cstm-product-header{place-content:space-between !important;}
 }
+@media(max-width: 450px) {
+  .h-60 {
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+}
+.cstm-product-header {
+  place-content: center !important;
+}
+.cstm-product-header .logo{position: absolute;top:0px;}
+.cstm-add-file-new-btn{position: absolute;left: 30px;top: 50px;}
+.add-file-button.cstm-add-file-button{right:30px;top: 50px;}
+}

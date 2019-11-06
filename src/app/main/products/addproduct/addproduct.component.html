@@ -5,7 +5,7 @@
           <div class="h1 mt-16">Add Package</div>
   </div> -->
 
-  <div class="header accent p-24 h-60" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+  <div class="header accent p-24 h-60 cstm-addproduct-header" fxLayout="row" fxLayoutAlign="center center" fxLayout.gt-xs="row"
     fxLayoutAlign.gt-xs="space-between center">
 
     <div class="logo mb-18 mb-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -16,7 +16,7 @@
         Add Product
       </span>
     </div>
-    <button mat-raised-button="" color="" style="margin-top: 10px;" matTooltip="Back"
+    <button mat-raised-button="" color="" class="add-product-back-btn" style="margin-top: 10px;" matTooltip="Back"
       [routerLink]="['/products']">Back</button>
   </div>
   <!-- / HEADER -->
@@ -31,7 +31,7 @@
         [template]="loadingTemplate">
       </ngx-loading>
       <form [formGroup]="productForm" name="productForm" (ngSubmit)="addproduct(parent)">
-        <div formArrayName="itemRows" class="cstm-add-product cstm-add-product-scroll" id="style-3">
+        <div formArrayName="itemRows" class="cstm-add-product cstm-add-product-scroll cstm-product-table" id="style-3">
 
           <table class="table table-responsive table-striped cstm-table-store" [class.isMobile]="isMobile">
             <tr>
