@@ -19,7 +19,7 @@ exports.getAllcountfaqs = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
+           
             res.status(400).send(err);
         });
 
@@ -40,7 +40,7 @@ exports.getAllcountproducts = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
+           
             res.status(400).send(err);
         });
 
@@ -60,7 +60,7 @@ exports.getAllusercount = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
+           
             res.status(400).send(err);
         });
 
@@ -80,7 +80,7 @@ exports.getAllcountfeedback = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
+           
             res.status(400).send(err);
         });
 
@@ -99,7 +99,7 @@ exports.getAllmerchantcounts = function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
+           
             res.status(400).send(err);
         });
 

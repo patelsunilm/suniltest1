@@ -37,7 +37,9 @@ var UserSchema = new Schema({
   // DeviceToken: String,
   // DeviceType: String,
   dateadded: { type: Date, default: Date.now },
-  datemodified: { type: Date, default: Date.now }
+  datemodified: { type: Date, default: Date.now },
+  flag:Number,
+  flagTime: { type: Date}
 })
 // set up a mongoose model
 

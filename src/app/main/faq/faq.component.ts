@@ -69,34 +69,34 @@ export class FaqComponent implements OnInit, OnDestroy {
                         var ellipsestext = "...";
                         var moretext = "more";
                         var lesstext = "less";
-                        $('.more').each(function () {
+                        // $('.more').each(function () {
 
-                            data = $(this).html();
+                        //     data = $(this).html();
 
-                            if (data.length > showChar) {
+                        //     if (data.length > showChar) {
 
-                                var c = data.substr(0, showChar);
-                                var h = data.substr(showChar - 1, data.length - showChar);
+                        //         var c = data.substr(0, showChar);
+                        //         var h = data.substr(showChar - 1, data.length - showChar);
 
-                                var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+                        //         var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
 
-                                $(this).html(html);
-                            }
+                        //         $(this).html(html);
+                        //     }
 
-                        });
+                        // });
 
-                        $(".morelink").click(function () {
-                            if ($(this).hasClass("less")) {
-                                $(this).removeClass("less");
-                                $(this).html(moretext);
-                            } else {
-                                $(this).addClass("less");
-                                $(this).html(lesstext);
-                            }
-                            $(this).parent().prev().toggle();
-                            $(this).prev().toggle();
-                            return false;
-                        });
+                        // $(".morelink").click(function () {
+                        //     if ($(this).hasClass("less")) {
+                        //         $(this).removeClass("less");
+                        //         $(this).html(moretext);
+                        //     } else {
+                        //         $(this).addClass("less");
+                        //         $(this).html(lesstext);
+                        //     }
+                        //     $(this).parent().prev().toggle();
+                        //     $(this).prev().toggle();
+                        //     return false;
+                        // });
                     });
 
                     this.faqsvalue = data

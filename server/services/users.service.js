@@ -570,7 +570,7 @@ function submitfacebookdetails(facebookdata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
-                    console.log(err);
+                  
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });

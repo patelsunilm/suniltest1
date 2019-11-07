@@ -88,16 +88,12 @@ function updateEvents(eventDetails) {
     }, function (err, updatevents) {
 
         if (!err) {
-
-            
-            deferred.resolve(updatevents);
+           deferred.resolve(updatevents);
         } else {
-
             deferred.reject(err.name + ': ' + err.message);
         }
     })
     return deferred.promise;
-
 }
 
 
@@ -108,15 +104,12 @@ function deleteEvents(eventsid) {
         { _id: new mongoose.Types.ObjectId(id) },
         function (err) {
             if (err) {
-                console.log(err);
-                deferred.reject(err.name + ': ' + err.message);
+               deferred.reject(err.name + ': ' + err.message);
             }
             else {
                 var data = {};
-               
                 deferred.resolve(data);
             }
-
         });
     return deferred.promise;
 }

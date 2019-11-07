@@ -78,7 +78,7 @@
               <td>
                 <mat-form-field appearance="outline" id="div_{{i}}">
                   <mat-label>Catlist</mat-label>
-                  <mat-select #mySelect id="divs_{{i}}" formControlName="productcategories" required>
+                  <mat-select #mySelect_{{i}} id="divs_{{i}}" formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
                     <div class="btn-cstm-catg">
                       <button mat-button (click)="addnewcategory(i)" class="cstm-mat-button">add product

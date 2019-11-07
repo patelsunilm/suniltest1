@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {AbstractControl, FormControl, FormArray } from '@angular/forms';
+import { AbstractControl, FormControl, FormArray } from '@angular/forms';
 
 import { ProductService } from '../../../_services/index';
 import { tillManagementService } from '../../../_services/index';
@@ -48,23 +48,25 @@ export class AddproductComponent implements OnInit {
   price: any;
   Primary: any;
   f = true;
- 
-   qrdata: any; 
-   url : any;
+  
+  qrdata: any;
+  url: any;
+  
   private _inputpdf: string = '<mat-form-field appearance="outline"><mat-label>cat 11name</mat-label><input matInput formControlName="productcatname"></mat-form-field>';
 
 
-  constructor( private activatedRoute: ActivatedRoute,private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
+  constructor(private activatedRoute: ActivatedRoute, private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router
     , private _fb: FormBuilder, private ProductService: ProductService, public snackBar: MatSnackBar, private tillManagementService: tillManagementService) {
 
-
+    
   }
-
+ 
 
   @ViewChild('parent') parent;
-  @ViewChild('mySelect') mySelect;
+  @ViewChild('mySelect_1') mySelect_1;
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
+  
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
   public loading = false;
   public primaryColour = PrimaryWhite;
@@ -72,7 +74,7 @@ export class AddproductComponent implements OnInit {
   public coloursEnabled = false;
   public loadingTemplate: TemplateRef<any>;
   public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
-
+ 
   // Private
   private _unsubscribeAll: Subject<any>;
 
@@ -88,7 +90,7 @@ export class AddproductComponent implements OnInit {
     }
 
   }
-  
+
   ngOnInit() {
 
     this.f = true;
@@ -110,11 +112,11 @@ export class AddproductComponent implements OnInit {
     this.ProductService.getAllProductcategories(merchantId)
       .subscribe(
         data => {
-          
-          if (data.message ==  "no data found") {
+
+          if (data.message == "no data found") {
 
           } else {
-          this.catName = data.data;
+            this.catName = data.data;
 
           }
         },
@@ -133,7 +135,7 @@ export class AddproductComponent implements OnInit {
           } else {
 
             this.Primary = data;
-            
+
           }
         },
         error => {
@@ -160,14 +162,14 @@ export class AddproductComponent implements OnInit {
       date: ['', Validators.required],
       // tilltype: ['', Validators.required],
       stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
-      url : ['']
+      url: ['']
     });
   }
 
   addNewRow() {
- 
+
     this.formArr.push(this.initItemRows());
-   
+
   }
 
   deleteRow(indexs: number, urls) {
@@ -234,84 +236,87 @@ export class AddproductComponent implements OnInit {
   addproduct() {
 
     this.loading = true;
-   if(this.Primary == undefined || this.Primary == 'undefined' || this.Primary == null || this.Primary == 'null'){
-    this.loading = false;
-    this.snackBar.open('Please add till type', '', {
-      duration: 3000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-   } else {
-
-  
-    this.loading = true;
-    if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
+    if (this.Primary == undefined || this.Primary == 'undefined' || this.Primary == null || this.Primary == 'null') {
       this.loading = false;
-      this.snackBar.open('Please select image.', '', {
+      this.snackBar.open('Please add till type', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       });
     } else {
 
-     
-      this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
-        data.sort(function (obj1, obj2) {
-          return obj1.index - obj2.index;
-
+      this.loading = true;
+      if (this.filesToUpload.length == 0 || this.filesToUpload.length !== this.productForm.value.itemRows.length) {
+        this.loading = false;
+        this.snackBar.open('Please select image.', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
         });
+      } else {
 
-        for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
-          var datetime = new Date(new Date).valueOf();
-          var randomnumber = Math.floor((Math.random() * 100) + 1);
 
-          this.productForm.value.itemRows[i].image = data[i].s3url;
-          this.productForm.value.itemRows[i].barcode = datetime + randomnumber
-          this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
-           this.productForm.value.itemRows[i].tilltype = "Primary"
-           this.productForm.value.itemRows[i].tilltypeid = this.Primary[0]._id;
-           this.productForm.value.itemRows[i].tilltypename = this.Primary[0].name;
-           this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
-          this.productForm.value.itemRows[i].url = this.url
-       
-        }
-       
-        this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
-          this.snackBar.open('Product added successfully.', '', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
+        this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
+
+          data.sort(function (obj1, obj2) {
+            return obj1.index - obj2.index;
+
           });
-          this.loading = false;
 
-          this.router.navigate([this.returnUrl]);
+          for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
+            var datetime = new Date(new Date).valueOf();
+            var randomnumber = Math.floor((Math.random() * 100) + 1);
 
-        }, error => {
-          console.log(error);
+            this.productForm.value.itemRows[i].image = data[i].s3url;
+            this.productForm.value.itemRows[i].barcode = datetime + randomnumber
+            this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
+            this.productForm.value.itemRows[i].tilltype = "Primary"
+            this.productForm.value.itemRows[i].tilltypeid = this.Primary[0]._id;
+            this.productForm.value.itemRows[i].tilltypename = this.Primary[0].name;
+            this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
+            this.productForm.value.itemRows[i].url = this.url
+
+          }
+
+          this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
+            this.snackBar.open('Product added successfully.', '', {
+              duration: 3000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            });
+            this.loading = false;
+
+            this.router.navigate([this.returnUrl]);
+
+          }, error => {
+            console.log(error);
+
+          })
 
         })
 
-      })
-
+      }
     }
-  }
   }
 
   addnewcategory(i) {
-    
 
-     $("#div_" + i).hide();
+    $(".cdk-overlay-pane").show()
+    $("#div_" + i).hide();
     $("#divshow_" + i).show();
     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
 
     document.getElementById(i).innerHTML = Categoryhtml;
-   
-    this.mySelect.close();
-    
+  
+   // this.mySelect.close();
+     // this.mySelect.select(i).close();
+    //$("#mySelect_" + i).close();
+    $(".cdk-overlay-pane").hide()
+
   }
 
-  
+
 
   addproductcategories(i) {
 
@@ -382,7 +387,7 @@ export class AddproductComponent implements OnInit {
     var markupprice = ($("#markup" + i).val()) ? parseFloat($("#markup" + i).val()) : 0;
 
     var sellingprice = (costprice + markupprice)
-     $("#selling" + i).val(sellingprice)
+    $("#selling" + i).val(sellingprice)
     this.sellingprice = sellingprice;
   }
 }
