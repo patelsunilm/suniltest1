@@ -35,8 +35,8 @@
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
-                            <input matInput formControlName="name" 
-                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
+                            <input matInput formControlName="name" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
+                                required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
                             </mat-error>
@@ -130,12 +130,13 @@
                             fxFlex="1 0 auto">
                             <a mat-button color="warn" class="add-file-button" (click)="fileInput.click()"
                                 aria-label="Add file" [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
-                                Background image 
+                                Background image
                             </a>
-                            <input id="cin" hidden name="cin" #fileInput type="file"
-                                accept=".jpg,.jpeg,.png,.raw,.tiff" (change)="fileChangeEvent1($event,i)" />
+                            <input id="cin" hidden name="cin" #fileInput type="file" accept=".jpg,.jpeg,.png,.raw,.tiff"
+                                (change)="fileChangeEvent1($event,i)" />
                             <div class="remember-me" class="img-wrap" *ngIf="backgroundimage">
-                                <img *ngIf="!urls1[i];" [src]="backgroundimage" style="width: 100px;height: 100px;padding: 5px;">
+                                <img *ngIf="!urls1[i];" [src]="backgroundimage"
+                                    style="width: 100px;height: 100px;padding: 5px;">
                             </div>
                             <div class="remember-me" class="img-wrap">
                                 <img *ngIf="urls1[i]" [src]="urls1[i]" style="width: 100px;height: 100px;padding: 5px;">
@@ -150,7 +151,7 @@
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Name</mat-label>
                             <input matInput formControlName="name" autocomplete="off" autofocus="true"
-                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"  #username required>
+                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" #username required>
                             <mat-error *ngIf="form.get('name').hasError('required')">
                                 Please enter name!
                             </mat-error>
@@ -203,21 +204,23 @@
 
                     </div>
 
-                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <div fxLayout="" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4 color-pick-date">
                             <mat-label>Select background color</mat-label>
                             <input matInput id="backgroundthemecolor" formControlName="backgroundtheme"
-                             [(colorPicker)]="color2" [cpPosition]='left' [value]="color2" readonly="true">
+                                [(colorPicker)]="color2" [cpPosition]='left' [value]="color2" readonly="true">
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                        <mat-form-field appearance="outline" fxFlex="50" class="pr-1">
                             <mat-label>Select font color</mat-label>
-                            <input matInput id="fontcolor" formControlName="fontcolor" [(colorPicker)]="color1" [cpPosition]='left' [value]="color2" readonly="true">
+                            <input [cpPosition]="'bottom'" [cpPositionOffset]="'30%'" 
+                                matInput id="fontcolor" formControlName="fontcolor" [(colorPicker)]="color1"
+                                [cpPosition]='left' [value]="color1" readonly="true">
 
                         </mat-form-field>
                     </div>
-                   
+
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Secret question</mat-label>

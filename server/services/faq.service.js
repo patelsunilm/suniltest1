@@ -13,7 +13,6 @@ service.addFaqAnswerByAdmin = addFaqAnswerByAdmin;
 
 
 function addfaqData(faqData) {
-
     var deferred = Q.defer();
     var userId = new mongoose.Types.ObjectId(faqData.userId)
     if (faqData.faqquestion == '') {
@@ -34,10 +33,7 @@ function addfaqData(faqData) {
                 deferred.reject(err.name + ': ' + err.message);
             }
         });
-
-
     }
-
     return deferred.promise;
 }
 
@@ -45,7 +41,6 @@ function getAllfaqs(userId, userType) {
     var deferred = Q.defer();
     var userId = new mongoose.Types.ObjectId(userId);
     if (userType == 'admin') {
-
         faq.aggregate([
             {
                 $lookup: {
@@ -89,23 +84,13 @@ function getAllfaqs(userId, userType) {
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
-
-
     }
-
-
-
     return deferred.promise;
 }
 
 
-
-
-
 function addFaqAnswerByAdmin(answerdata) {
-
     var deferred = Q.defer();
-
     if (answerdata.faqanswer == '') {
         var data = {};
         data.string = 'Please enter answer you can not submit an empty field.';
@@ -116,7 +101,6 @@ function addFaqAnswerByAdmin(answerdata) {
                 getdata.faqanswer = answerdata.faqanswer
                 getdata.status = 'true';
                 getdata.datemodified = Date.now();
-
                 getdata.save(function (err) {
                     if (!err) {
                         deferred.resolve(getdata);
@@ -132,8 +116,5 @@ function addFaqAnswerByAdmin(answerdata) {
     }
     return deferred.promise;
 }
-
-
-
 
 module.exports = service;

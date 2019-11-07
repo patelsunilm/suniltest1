@@ -71,7 +71,7 @@ export class ResetPasswordComponent implements OnInit {
             newPassword: ['', { validators: [Validators.minLength(6)] }],
             confirmPassword: ['', { validators: [Validators.minLength(6)] }],
         });
-        // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/resellers';
+
     }
 
     resetpassword() {
@@ -83,14 +83,18 @@ export class ResetPasswordComponent implements OnInit {
                 this.ForgotPasswordService.resetpassword(this.loginForm.value)
                     .subscribe(
                         data => {
-                            this.snackBar.open('Password changed successfully.', '', {
+
+                            var msg = data.msg ? data.msg : 'Password changed successfully.';
+                            this.snackBar.open(msg, '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
-                            //this.router.navigate([this.returnUrl]);
+                            if (!data.msg) {
+                                this.router.navigate(['/login']);
+                            }
                         }, error => {
-                            console.log(error);
+
                             this.snackBar.open('Please Try Again!', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,

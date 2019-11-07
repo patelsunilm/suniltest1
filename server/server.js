@@ -441,7 +441,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               fs.unlink('uploads/' + originalFileName, function (err, responce) {
                 if (err) {
 
-                  console.log(err);
+                 
                 } else {
 
                   var data = {};
@@ -502,7 +502,7 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
         s3.upload(params, function (err, resultdata) {
           if (err) {
-            console.log(err);
+           
           }
           else {
 
@@ -576,8 +576,6 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
     });
   } else {
 
-    console.log('test456');
-
     var uploadedfiles = req.files;
     var s3 = new AWS.S3();
     var sizeOf = require('image-size');
@@ -607,7 +605,7 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
 
         s3.upload(params, function (err, resultdata) {
           if (err) {
-            console.log(err);
+           
           }
           else {
 

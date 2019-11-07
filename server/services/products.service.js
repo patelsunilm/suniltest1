@@ -181,7 +181,7 @@ function deleteproduct(productid) {
         { _id: new mongoose.Types.ObjectId(id) },
         function (err) {
             if (err) {
-                console.log(err);
+          
                 deferred.reject(err.name + ': ' + err.message);
             }
             else {
