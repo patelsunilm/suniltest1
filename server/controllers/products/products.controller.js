@@ -62,7 +62,8 @@ exports.deleteproduct = function(req, res) {
 
 exports.getallproductbyId = function(req, res) {
 
-    productservice.getallproductbyId(req.params.productid)
+   
+    productservice.getallproductbyId(req.params.productid ,req.params.merchantId)
     .then(function (getproduct) {
         if (getproduct) {
             res.send(getproduct);

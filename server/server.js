@@ -9,11 +9,19 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var fs = require('fs');
 const multer = require('multer');
-
 var AWS = require('aws-sdk');
 var sharp = require('sharp');
+var Q = require('q');
+var qr = require('qr-image');
 
 var Q = require('q');
+const bwipjs = require('bwip-js');
+var Barc = require('barcode-generator')
+    , barc = new Barc()
+    , fs = require('fs');
+var dateFormat = require('dateformat');
+
+
 
 uploads = require("express-fileupload")
 var path = require('path');
@@ -275,6 +283,25 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                           allproducts.save(function (err, product) {
                             if (!err) {
 
+                              var qr_svg = qr.image(results[i].url + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                              var datetime = new Date(new Date).valueOf();
+                              var randomnumber = Math.floor((Math.random() * 100) + 1);
+                              var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
+                              var sep = filename.split("/");
+                              var id = new mongoose.Types.ObjectId(product._id);
+              
+                              products.findOneAndUpdate({ _id: id }, {
+                                  qrcodeImage: sep[1],
+              
+                              }, function (err, updateproducts) {
+                                  if (!err) {
+                                      // updatepro++
+                                      // if (addproducts.length == updatepro) {
+              
+                                      //     deferred.resolve(updateproducts);
+                                      // } else {
+                                      //     deferred.reject(err.name + ': ' + err.message);
+                                      // }
                               if ((i + 1) == results.length) {
 
                                 fs.unlink('uploads/' + originalFileName, function (err, responce) {
@@ -290,6 +317,29 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                                   }
                                 })
                               }
+                                      
+                                  } else {
+              
+                                      deferred.reject(err.name + ': ' + err.message);
+                                  }
+                              })
+
+
+                              // if ((i + 1) == results.length) {
+
+                              //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                              //     if (err) {
+
+                              //       deferred.reject(err.name + ': ' + err.message);
+                              //     } else {
+
+
+                              //       var data = {};
+                              //       data.string = 'Csv import success fully';
+                              //       res.send(data);
+                              //     }
+                              //   })
+                              // }
 
                             } else {
                               deferred.reject(err.name + ': ' + err.message);
@@ -326,6 +376,26 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                     allproducts.save(function (err, product) {
                       if (!err) {
 
+
+                        var qr_svg = qr.image(results[i].url + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                        var datetime = new Date(new Date).valueOf();
+                        var randomnumber = Math.floor((Math.random() * 100) + 1);
+                        var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
+                        var sep = filename.split("/");
+                        var id = new mongoose.Types.ObjectId(product._id);
+        
+                        products.findOneAndUpdate({ _id: id }, {
+                            qrcodeImage: sep[1],
+        
+                        }, function (err, updateproducts) {
+                            if (!err) {
+                                // updatepro++
+                                // if (addproducts.length == updatepro) {
+        
+                                //     deferred.resolve(updateproducts);
+                                // } else {
+                                //     deferred.reject(err.name + ': ' + err.message);
+                                // }
                         if ((i + 1) == results.length) {
 
                           fs.unlink('uploads/' + originalFileName, function (err, responce) {
@@ -339,6 +409,25 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                             }
                           })
                         }
+                            } else {
+        
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+                        })
+
+                        // if ((i + 1) == results.length) {
+
+                        //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                        //     if (err) {
+
+                        //       deferred.reject(err.name + ': ' + err.message);
+                        //     } else {
+                        //       var data = {};
+                        //       data.string = 'Csv import success fully';
+                        //       res.send(data);
+                        //     }
+                        //   })
+                        // }
                       } else {
                         deferred.reject(err.name + ': ' + err.message);
                       }

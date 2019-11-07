@@ -311,10 +311,7 @@ function loginwithemail(data) {
     var string = data.email;
     var isEmail = string.includes("@");
     var email = '';
-
-    // if (isEmail) {
-
-        var deferred = Q.defer();
+      
         var userType = 'user';
         var random = Math.floor(100 + Math.random() * 900);
         var random1 = Math.floor(100 + Math.random() * 900);
@@ -348,7 +345,7 @@ function loginwithemail(data) {
                             if (!err) {
 
                                 let transporter1 = nodemailer.createTransport({
-                                    //  host : 'smtp.gmail.com',
+                                      //host : 'smtp.gmail.com',
                                       host: 'mail.finikart.com',
                                       port: 465,
                                       secure: true, // true for 465, false for other ports
@@ -367,6 +364,7 @@ function loginwithemail(data) {
                                       html: otp,
                                 
                                   });
+                                  
                                   deferred.resolve(userdata);
                             } else {
 

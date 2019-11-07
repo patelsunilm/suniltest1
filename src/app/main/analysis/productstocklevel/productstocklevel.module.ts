@@ -8,7 +8,7 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProductstocklevelComponent } from './../productstocklevel/productstocklevel.component';
-import { AuthGuardCommon } from '.././../../_guards/index';
+import { AuthGuardCo } from '.././../../_guards/index';
 import { AutofocusModule } from 'angular-autofocus-fix';
 
 import { FusionChartsModule } from 'angular-fusioncharts';
@@ -30,7 +30,7 @@ const routes = [
     {
         path: 'analysis/productstocklevel',
         component: ProductstocklevelComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuardCo]
     },
     
 

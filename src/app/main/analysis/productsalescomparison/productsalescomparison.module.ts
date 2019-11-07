@@ -12,7 +12,7 @@ import { FuseHighlightModule } from '@fuse/components/index';
 
 import { ProductsalescomparisonComponent } from './productsalescomparison.component';
 
-import { AuthGuardCommon } from '.././../../_guards/index';
+import { AuthGuardCo } from '.././../../_guards/index';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BrowserModule } from '@angular/platform-browser';
 import { FusionChartsModule } from 'angular-fusioncharts';
@@ -35,7 +35,7 @@ const routes = [
     {
         path: 'analysis/productsalescomparison',
         component: ProductsalescomparisonComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuardCo]
     }
 ];
 

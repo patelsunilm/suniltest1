@@ -8,7 +8,7 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NumberofcustomerpurchasesComponent } from './../numberofcustomerpurchases/numberofcustomerpurchases.component';
-import { AuthGuardCommon } from '.././../../_guards/index';
+import { AuthGuardCo } from '.././../../_guards/index';
 import { AutofocusModule } from 'angular-autofocus-fix';
 
 import { FusionChartsModule } from 'angular-fusioncharts';
@@ -25,7 +25,6 @@ import * as FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 FusionChartsModule.fcRoot(FusionCharts, Charts, FusionTheme);
 
 
-
 import { NgxLoadingModule } from 'ngx-loading';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
@@ -34,7 +33,7 @@ const routes = [
     {
         path: 'analysis/numberofcustomerpurchases',
         component: NumberofcustomerpurchasesComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuardCo]
     },
     
 

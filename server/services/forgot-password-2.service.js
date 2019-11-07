@@ -69,7 +69,7 @@ function sendlink(sendlinkdata, baseurl) {
             let info = transporter1.sendMail({
                 from: config.mail_user, // sender address
                 to: sendlinkdata.email, // list of receivers
-                text: 'This Is Your Link To Reset Password',
+                subject: 'This Is Your Link To Reset Password',
                 html: '<a href="' + baseurl + '/#' + '/resetpassword/' + userid + '">Reset Password Link</a>',
            
             });

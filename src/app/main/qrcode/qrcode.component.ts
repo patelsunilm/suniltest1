@@ -74,13 +74,11 @@ export class QrcodeComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       
-      this.ProductService.getallproductbyId(params.id).subscribe(data => {   
+      this.ProductService.getallproductbyId(params.id , merchantId).subscribe(data => {   
        
+      
         this.image = data.image;
-       
-        
         this.productid = data.productcatid;
-       
         this.form = this._formBuilder.group({
           id: [data._id],
           image: [this.image],
@@ -109,7 +107,7 @@ export class QrcodeComponent implements OnInit {
             });
           },
           error => {
-            console.log(error);
+            // console.log(error);
   
           });
     })

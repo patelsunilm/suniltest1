@@ -195,14 +195,21 @@ function deleteproduct(productid) {
 }
 
 
-function getallproductbyId(productid) {
+function getallproductbyId(productid , merchantId) {
+   
+    console.log('pro ids');
+    console.log(productid);
+    console.log(merchantId);
 
+    // var merchantids = "5d80860b1570a00a782852c2";
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
 
-    products.findOne({ _id: id }, function (err, getproducts) {
+    products.findOne({ $or:[{ _id: id },{merchantid :  merchantids} ]}, function (err, getproducts) {
         if (!err) {
-
+            
+            console.log('get all products');
+            console.log(getproducts);
             deferred.resolve(getproducts);
         } else {
 
@@ -347,11 +354,10 @@ function getAllProductcategories(details) {
                     "data":
                         {}
                 }
-
             } else {
+
                 var allproductctegory = [];
                 getproductscategories.forEach(element => {
-
                     var productcat = {}
                     productcat.productCatId = element._id == undefined ? '' : element._id;
                     productcat.catName = element.catName == undefined ? '' : element.catName;
@@ -381,10 +387,7 @@ function getAllProductcategories(details) {
 
 
 function getproducts(merchantId) {
-
-
     var deferred = Q.defer();
-
     products.find({ merchantid: merchantId }, function (err, getproductscategories) {
         if (!err) {
             deferred.resolve(getproductscategories);

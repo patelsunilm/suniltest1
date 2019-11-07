@@ -37,7 +37,6 @@ import { UsersService } from './_services/index';
 import { tillManagementService } from './_services/index';
 import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
-import { GraphsService } from './_services/index';
 import { NotificationService } from './_services/index';
 import { DiaryService } from './_services/diary.service';
 
@@ -129,7 +128,6 @@ const appRoutes: Routes = [
         MerchantService,
         OrdersService,
         FAQService,
-        GraphsService,
         JwtInterceptorProvider,
         ErrorInterceptorProvider,
         ProductService,

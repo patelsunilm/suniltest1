@@ -13,19 +13,19 @@ import { OrderComponent } from './order.component';
 
 import { ProductorderdetailsComponent } from './productorderdetails/productorderdetails.component';
 
-import { AuthGuardCommon } from './../../_guards/index';
+import { AuthGuardCo } from './../../_guards/index';
 
 
 const routes = [
   {
     path: 'order',
     component: OrderComponent,
-    canActivate: [AuthGuardCommon]
+    canActivate: [AuthGuardCo]
   },
   {
     path: 'order/productorderdetails/:id',
     component: ProductorderdetailsComponent,
-    canActivate: [AuthGuardCommon]
+    canActivate: [AuthGuardCo]
   }
 ];
 

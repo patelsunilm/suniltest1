@@ -86,14 +86,14 @@ export class AddtillmanagementComponent implements OnInit {
     this.tillManagementService.addtilldetails(this.form.value).subscribe(data => {
 
       if (data.string == "Primary type is add successfully.") {
-        this.snackBar.open('Primary type is add successfully.', '', {
+        this.snackBar.open('Primary type is added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
         this.router.navigate([this.returnUrl]);
       } else if (data.string == "Primary type is already exist.") {
-        this.snackBar.open('Primary type is already exist.', '', {
+        this.snackBar.open('Primary type is already exists.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
@@ -107,7 +107,7 @@ export class AddtillmanagementComponent implements OnInit {
         });
       } else if (data.string == "Secondary type is add successfully.") {
 
-        this.snackBar.open('Secondary type is add successfully.', '', {
+        this.snackBar.open('Secondary type is added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
@@ -127,14 +127,14 @@ export class AddtillmanagementComponent implements OnInit {
             });
 
       } else if (data.string == "tertiary name is add successfully.") {
-        this.snackBar.open('Tertiary name is add successfully.', '', {
+        this.snackBar.open('Tertiary name is added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
         this.router.navigate([this.returnUrl]);
       } else if(data.string == "Name is already exist.") {
-        this.snackBar.open('Name is already exist.', '', {
+        this.snackBar.open('Name is already exists.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

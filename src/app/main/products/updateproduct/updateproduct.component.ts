@@ -65,9 +65,9 @@ export class UpdateproductComponent implements OnInit {
     this.form.controls['movestockinputvalue'].disable();
     this.route.params.subscribe(params => {
 
-      
+      var merchantId = localStorage.getItem('userId');
 
-      this.ProductService.getallproductbyId(params.id).subscribe(data => {        
+      this.ProductService.getallproductbyId(params.id ,merchantId).subscribe(data => {        
         this.tilltypes = data.tilltype;
         //  this.tilltypes = "Tertiary";
         this.tillTypeId = data.tillTypeId;

@@ -13,7 +13,8 @@ import { fuseAnimations } from '@fuse/animations';
 export class ProductstocklevelComponent implements OnInit {
   form: FormGroup;
   dataSource: Object;
-    chartConfig: Object;
+  chartConfig: Object;
+
   constructor() {
     this.chartConfig = {
       width: '700',
@@ -60,9 +61,6 @@ export class ProductstocklevelComponent implements OnInit {
     };
    }
   
-  
-
-
 
   ngOnInit() {
  

@@ -60,6 +60,10 @@ export class UpdateMerchantComponent implements OnInit, OnDestroy {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/merchant';
 
         this.route.params.subscribe(params => {
+
+
+
+            
             this.MerchantService.getmerchantDatabyId(params.id)
                 .subscribe(
                     data => {
@@ -93,7 +97,7 @@ export class UpdateMerchantComponent implements OnInit, OnDestroy {
                     data => {
 
                         if (data.string == 'Email is already exist.') {
-                            this.snackBar.open('Email is already exist.', '', {
+                            this.snackBar.open('Email is already exists.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,

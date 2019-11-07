@@ -96,7 +96,19 @@ export class ProductratingsreviewComponent implements OnInit {
           }
         }, error => {
           console.log(error);
-        });      
+        });   
+        // this.dataSource = {
+        //   "chart": {
+        //     "caption": "Product Rating review",
+        //     "showValues": "1",
+        //     "showPercentInTooltip": "0",
+        //     "numberPrefix": "",
+        //     "enableMultiSlicing": "1",
+        //     "theme": "fusion",
+
+        //   },
+          
+        // }   
   }
 
  
@@ -133,18 +145,18 @@ export class ProductratingsreviewComponent implements OnInit {
             });
 
 
-            // this.dataSource = {
-            //   "chart": {
-            //     "caption": "Product Rating review",
-            //     "showValues": "1",
-            //     "showPercentInTooltip": "0",
-            //     "numberPrefix": "",
-            //     "enableMultiSlicing": "1",
-            //     "theme": "fusion",
+            this.dataSource = {
+              "chart": {
+                "caption": "Product Rating review",
+                "showValues": "1",
+                "showPercentInTooltip": "0",
+                "numberPrefix": "",
+                "enableMultiSlicing": "1",
+                "theme": "fusion",
 
-            //   },
-            //   data
-            // }
+              },
+              data
+            }
           }
         }, error => {
           console.log(error);

@@ -8,7 +8,7 @@ import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 import { MatInputModule } from '@angular/material';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TillsalesperproductComponent } from './../tillsalesperproduct/tillsalesperproduct.component';
-import { AuthGuardCommon } from '.././../../_guards/index';
+import { AuthGuardCo } from '.././../../_guards/index';
 import { AutofocusModule } from 'angular-autofocus-fix';
 import { FusionChartsModule } from 'angular-fusioncharts';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -30,7 +30,7 @@ const routes = [
     {
         path: 'analysis/tillsalesperproduct',
         component: TillsalesperproductComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuardCo]
     },
     
 

@@ -52,7 +52,7 @@
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
           <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" autocomplete="off" autofocus="true" required>
+            <input matInput formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" autocomplete="off" autofocus="true" required>
             <mat-error *ngIf="form.get('email').hasError('required')">
               Please enter email!
             </mat-error>

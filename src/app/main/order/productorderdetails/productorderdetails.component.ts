@@ -75,6 +75,7 @@ export class ProductorderdetailsComponent implements OnInit {
             myproductdata.forEach(element => {
               productdata.push(element);
             });
+            
             this.dataSource = new MatTableDataSource(productdata);
             this.dataSource.paginator = this.paginator;
           },

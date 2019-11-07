@@ -67,8 +67,8 @@ export class ProductService {
     return this.http.post<any>(appConfig.apiUrl + '/uploadproductfiles', formData);
   }
 
-  getallproductbyId(productid) {
-    return this.http.get<any>(appConfig.apiUrl + '/products/getallproductbyId/' + productid)
+  getallproductbyId(productid , merchantId) {
+    return this.http.get<any>(appConfig.apiUrl + '/products/getallproductbyId/' + productid +'/' + merchantId)
   }
 
   updateprodcutdetail(productdata) {

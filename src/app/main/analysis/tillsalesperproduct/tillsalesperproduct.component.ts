@@ -5,8 +5,7 @@ import { DatePipe } from '@angular/common';
 import {MatSnackBar} from '@angular/material';
 import { ProductService } from '../../../_services/index';
 import { validateBasis } from '@angular/flex-layout';
-
-
+import { MatDialog, MAT_DIALOG_DATA, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 
 @Component({
   selector: 'app-tillsalesperproduct',
@@ -19,7 +18,8 @@ export class TillsalesperproductComponent implements OnInit {
   productname : any;
   dataSource : any;
   showgraph : any;
-
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   constructor(private ProductService : ProductService ,public snackBar: MatSnackBar, private _formBuilder: FormBuilder) {
     
    
@@ -57,7 +57,13 @@ export class TillsalesperproductComponent implements OnInit {
       data => {
          
        if(data == '' || data == undefined || data == "undefined" || data == null) {
- 
+      
+        this.snackBar.open('No record found.', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+  
         
        } else {
 

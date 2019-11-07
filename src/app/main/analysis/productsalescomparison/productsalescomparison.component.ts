@@ -4,7 +4,6 @@ import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { tillManagementService } from '../../../_services/index';
-import { GraphsService } from '../../../_services/index';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 
 import { OrdersService } from '../../../_services/index';
@@ -47,7 +46,7 @@ export class ProductsalescomparisonComponent implements OnInit {
   height: string;
   //test
   // minDate = moment(new Date()).format('YYYY-MM-DD')
-  constructor( public snackBar: MatSnackBar,private OrdersService: OrdersService, private GraphsService: GraphsService, private _formBuilder: FormBuilder, private tillManagementService: tillManagementService) {
+  constructor( public snackBar: MatSnackBar,private OrdersService: OrdersService, private _formBuilder: FormBuilder, private tillManagementService: tillManagementService) {
 
     this.type = 'timeseries';
     this.width = '100%';
@@ -116,20 +115,17 @@ export class ProductsalescomparisonComponent implements OnInit {
 
         })
 
-    this.widgets = this.GraphsService.widgets;
-    this.projects = this.GraphsService.projects;
+    // this.widgets = this.GraphsService.widgets;
+    // this.projects = this.GraphsService.projects;
 
   }
 
   getorderdetails() {
-
+   
     if (this.form.value.tilltype == undefined || this.form.value == "undefined" || this.form.value == '') {
 
-      // this.snackBar.open('Product added successfully.', '', {
-      //   duration: 3000,
-      //   horizontalPosition: this.horizontalPosition,
-      //   verticalPosition: this.verticalPosition,
-      // });
+      
+     
 
     } else {
 
@@ -144,7 +140,11 @@ export class ProductsalescomparisonComponent implements OnInit {
       this.OrdersService.getProductsbydate(this.form.value).subscribe(data => {
 
       if(data == '' || data == undefined || data == "undefined") {
-
+        this.snackBar.open('No record found.', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       } else {
         var arr = [];
         for (var i = 0; i < data.length; i++) {

@@ -13,7 +13,7 @@ import { FuseHighlightModule } from '@fuse/components/index';
 import { ValueofcustomerpurchasesComponent } from './valueofcustomerpurchases.component';
 import { ChartsModule } from 'ng2-charts';
 
-import { AuthGuardCommon } from '.././../../_guards/index';
+import { AuthGuardCo } from '.././../../_guards/index';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -35,7 +35,7 @@ const routes = [
     {
         path: 'analysis/valueofcustomerpurchases',
         component: ValueofcustomerpurchasesComponent,
-        canActivate: [AuthGuardCommon]
+        canActivate: [AuthGuardCo]
     }
 ];
 

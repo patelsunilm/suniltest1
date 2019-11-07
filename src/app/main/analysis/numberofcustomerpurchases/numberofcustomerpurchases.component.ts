@@ -18,6 +18,8 @@ import * as FusionCharts from 'fusioncharts';
 
 })
 export class NumberofcustomerpurchasesComponent implements OnInit {
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   form: FormGroup;
   Merchant: any;
   maxdate : any;
@@ -28,6 +30,8 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
   newsatrtdate : any;
   newendDate  : any;
   chart: any = 'stackedcolumn2d';
+
+
   constructor(private OrdersService : OrdersService ,public snackBar: MatSnackBar, private _formBuilder: FormBuilder) {
 
     this.dataSource = {
@@ -40,34 +44,12 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
         "enableMultiSlicing": "1",
         "theme": "fusion"
       },
-      "data": [
-        {
-          "label": "Equity",
-          "value": "300000",
-
-        }, {
-          "label": "Debt",
-          "value": "230000",
-
-        }, {
-          "label": "Bullion",
-          "value": "180000",
-
-        }, {
-          "label": "Real-estate",
-          "value": "270000",
-
-        }, {
-          "label": "Insurance",
-          "value": "20000",
-
-        }
-      ]
+     
     };
    }
 
   ngOnInit() {
- 
+  
     this.maxdate = new Date();
   
     this.form = this._formBuilder.group({
@@ -94,7 +76,11 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
         
        if(data == '' || data == undefined || data == "undefined" || data == null) {
         
-        console.log('meessage');
+        this.snackBar.open('No record found.', '', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       
         } else {
 
@@ -135,8 +121,6 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
     
     if (chart == "stackedcolumn2d") { 
 
-     
-     
       this.Merchant = localStorage.getItem('userId');
       this.form.value.endDate = this.newendDate
       this.form.value.startdate = this.newsatrtdate
@@ -148,7 +132,11 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
           
          if(data == '' || data == undefined || data == "undefined" || data == null) {
           
-          console.log('meessage');
+          this.snackBar.open('No record found.', '', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
         
           } else {
   
@@ -162,7 +150,7 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
               "numberPrefix": "",
               "enableMultiSlicing": "1",
               "theme": "fusion",
-  
+             
             },
             "data": [
               {
@@ -193,12 +181,14 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
        this.stackedColumnData = {
         chart: {
           caption: "Number of customer purchases",
-          // subCaption: " Top 5 Developed Countries",
+        
            numbersuffix: "",
           showSum: "1",
           plotToolText:
             "$label product quantity <b>$dataValue</b>",
-          theme: "fusion"
+          theme: "fusion",
+          opacity: 0
+
         },
         categories: [
           {
@@ -208,6 +198,57 @@ export class NumberofcustomerpurchasesComponent implements OnInit {
         ],
             dataSet
         }
+      // this.dataSource1 = {
+      //   "chart": {
+      //     "caption": "Expense Analysis",
+      //     "subCaption": "ACME Inc.",
+      //     "xAxisname": "Region",
+      //     "yAxisName": "Amount (In USD)",
+      //     "numberPrefix": "$",
+      //     "exportenabled": "1",
+      //     "theme": "fusion"
+      //   },
+      //   "categories": [{
+      //     category
+      //   }],
+      //   "dataset": [{
+      //     "seriesName": "Actual Expenses",
+      //     "data": [{
+      //       "value": "1441290"
+      //     }, {
+      //       "value": "855912"
+      //     }, {
+      //       "value": "911404"
+      //     }, {
+      //       "value": "648136"
+      //     }]
+      //   }, {
+      //     "seriesName": "Budgeted Expenses",
+      //     "renderAs": "line",
+      //     "data": [{
+      //       "value": "1297430"
+      //     }, {
+      //       "value": "776485"
+      //     }, {
+      //       "value": "685352"
+      //     }, {
+      //       "value": "726791"
+      //     }]
+      //   }, {
+      //     "seriesName": "Unknown liabilities",
+      //     "renderAs": "area",
+      //     "showAnchors" : "0",
+      //     "data": [{
+      //       "value": "143860"
+      //     }, {
+      //       "value": "79427"
+      //     }, {
+      //       "value": "226052"
+      //     }, {
+      //       "value": "78655"
+      //     }]
+      //   }]
+      // };
         this.chart = chart;
         this.chartObj.chartType(chart);
       },

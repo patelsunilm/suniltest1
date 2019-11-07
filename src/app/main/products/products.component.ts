@@ -25,6 +25,7 @@ export interface PeriodicElement {
   tilltype: boolean;
   stocklevel: boolean;
   action: string;
+  
 }
 @Component({
   selector: 'app-products',
@@ -43,7 +44,7 @@ export class ProductsComponent implements OnInit {
   isTableHasData = true;
   isTableHasDataAgain = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  url : any;
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -86,9 +87,6 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-
-
-
   public showAlert(): void {
     alert('ngx-loading rocks!');
   }
@@ -103,6 +101,8 @@ export class ProductsComponent implements OnInit {
   }
   ngOnInit() {
     var userId = localStorage.getItem('userId');
+   
+
     this.ProductService.getproducts(userId)
       .subscribe(
         data => {
@@ -169,13 +169,13 @@ export class ProductsComponent implements OnInit {
     } else {
 
       var merchantid = localStorage.getItem('userId');
+      this.url = window.location.origin;
 
       $event.target.files[0].userId = merchantid
+      $event.target.files[0].url = this.url
       this.loading = true;
 
-      console.log('this new terget');
-      console.log($event.target.files[0])
-
+      
       this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully")  {
@@ -230,7 +230,7 @@ export class ProductsComponent implements OnInit {
 
         } else {
 
-          this.snackBar.open('please correct csv file select', '', {
+          this.snackBar.open('please select correct csv file ', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

@@ -16,6 +16,7 @@ import {AddtillmanagementComponent} from './addtillmanagement/addtillmanagement.
 import { AuthGuard } from './../../_guards/index';
 import { from } from 'rxjs';
 import { UpdatetillmanagementComponent } from './updatetillmanagement/updatetillmanagement.component';
+import { AuthGuardCo } from './../../_guards/index';
 
 // import { AutoFocusDirective } from '../../auto-focus.directive';
 
@@ -23,21 +24,24 @@ const routes = [
     {
         path: 'tillmanagement',
         component: TillmanagementComponent,
-       
+        canActivate: [AuthGuardCo]
     },
     {
         path: 'addtillmanagement',
         component: AddtillmanagementComponent,
+        canActivate: [AuthGuardCo]
         
     },
     {
         path: 'tillmanagement',
         component: deletetillmanagementpopupComponent,
+        canActivate: [AuthGuardCo]
         
     },
     {
         path: 'updatetillmanagement/:id/:flag',
         component: UpdatetillmanagementComponent,
+        canActivate: [AuthGuardCo]
         
     }
 ];

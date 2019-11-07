@@ -22,7 +22,6 @@ export class AuthGuard implements CanActivate {
         // if ((localStorage.getItem('currentUser')) && (localStorage.getItem('userType')=='Super Admin')) {
         if (localStorage.getItem('currentUser')) {
             // logged in so return true
-
             if (localStorage.getItem('userType') == 'admin') {
                 {
                     setTimeout(function(){

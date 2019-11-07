@@ -28,7 +28,7 @@ var productsdata = require('./controllers/products/products.controller');
 router.post('/products/addproduct', productsdata.addproduct);
 router.get('/products/getproducts/:userid', productsdata.getproducts);
 router.delete('/products/deleteproduct/:productid', productsdata.deleteproduct);
-router.get('/products/getallproductbyId/:productid', productsdata.getallproductbyId);
+router.get('/products/getallproductbyId/:productid/:merchantId', productsdata.getallproductbyId);
 router.post('/products/updateprodcutdetail', productsdata.updateprodcutdetail);
 router.post('/products/getAllproducts', productsdata.getAllproducts);
 router.post('/products/getbarcodedetail', productsdata.getbarcodedetail);

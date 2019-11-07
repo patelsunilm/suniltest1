@@ -15,7 +15,7 @@ import { CalendarComponent } from 'app/main/calendar/calendar.component';
 //  import { EventFormComponent } from 'app/main/calendar/event-form/event-form.component';
 
 // 
-import { AuthGuard } from './../../_guards/index';
+import { AuthGuardCo } from './../../_guards/index';
 import { EventFormComponent } from './event-form/event-form.component';
 
 
@@ -23,7 +23,7 @@ const routes = [
     {
         path: 'diary',
         component: CalendarComponent,
-        // canActivate: [AuthGuard]
+         canActivate: [AuthGuardCo]
 
     }
 ];
