@@ -64,7 +64,7 @@ export class AddproductComponent implements OnInit {
  
 
   @ViewChild('parent') parent;
-  @ViewChild('mySelect_1') mySelect_1;
+  @ViewChild('mySelect') mySelect;
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   
@@ -327,10 +327,10 @@ export class AddproductComponent implements OnInit {
 
     document.getElementById(i).innerHTML = Categoryhtml;
   
-   // this.mySelect.close();
+    this.mySelect.close();
      // this.mySelect.select(i).close();
     //$("#mySelect_" + i).close();
-    $(".cdk-overlay-pane").hide()
+   // $(".cdk-overlay-pane").hide()
 
   }
 

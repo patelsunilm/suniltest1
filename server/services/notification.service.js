@@ -23,7 +23,7 @@ service.addnotification = addnotification;
 function addnotification(notificationsdetails) {
 
   var deferred = Q.defer();
-  
+
   var tokens = []
   for (let i = 0; i < notificationsdetails.users.length; i++) {
 
@@ -31,7 +31,7 @@ function addnotification(notificationsdetails) {
   }
 
   var payload = {
-    data: {   
+    data: {
       title: "sub",
       body: "msg",
     },
@@ -45,35 +45,33 @@ function addnotification(notificationsdetails) {
     priority: "high",
     timeToLive: 60 * 60 * 24
   };
+  var userid = []
+  for (let i = 0; i < notificationsdetails.users.length; i++) {
+    userid.push({ 'userId': notificationsdetails.users[i]._id })
+  }
 
+  var saveusers = new notifications({
+    users: userid,
+    message: notificationsdetails.Message,
 
-   var userid = []
-    for (let i = 0; i < notificationsdetails.users.length; i++) {
+  });
+  saveusers.save(
+    function (err, savequerys) {
+      if (!err) {
 
-      userid.push({ 'userId': notificationsdetails.users[i]._id })
-    }  
-  
-          var saveusers = new notifications({
-              users : userid,
-              message: notificationsdetails.Message,
-
-          });
-          saveusers.save(
-               function (err, savequerys) {
-              if (!err) {
-
-                admin.messaging().sendToDevice(tokens, payload, options)
-                  .then(function (response) {
-                    // console.log("Successfully sent message:");
-                    deferred.resolve(savequerys);
-                  })
-                  .catch(function (error) {
-                    // console.log("Error sending message:", error);
-                 });
-              } else {
-                  deferred.reject(err.name + ': ' + err.message);
-              }
+        admin.messaging().sendToDevice(tokens, payload, options)
+          .then(function (response) {
+            // console.log("Successfully sent message:");
+            deferred.resolve(savequerys);
           })
+          .catch(function (error) {
+            deferred.reject(error);
+            //  console.log("Error sending message:", error);
+          });
+      } else {
+        deferred.reject(err.name + ': ' + err.message);
+      }
+    })
 
   return deferred.promise;
 

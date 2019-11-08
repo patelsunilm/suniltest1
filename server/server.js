@@ -227,12 +227,9 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
             if (arr1.length == arr2.length && arr1.every(function (u, i) {
               return u === arr2[i];
             })) {
-
               var allproducts = [];
               var j = 0;
-
               for (let i = 0; i < results.length; i++) {
-
                 var cost = results[i].costprice == '' ? 0 : results[i].costprice;
                 var markup = results[i].markup == '' ? 0 : results[i].markup;
                 var sellingprice = (parseInt(cost) + parseInt(markup))
@@ -244,8 +241,6 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                 results[i].merchantid = userid;
 
                 var deferred = Q.defer();
-
-
                 productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
                   if (getcategory) {
 
