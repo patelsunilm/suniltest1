@@ -108,7 +108,7 @@
             <mat-label>Date</mat-label>
 
             <input autocomplete="off" required matInput formControlName="date" [matDatepicker]="picker"
-              placeholder="Choose a date">
+              placeholder="Choose a date" (click)="picker.open()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="form.get('date').hasError('required')">
