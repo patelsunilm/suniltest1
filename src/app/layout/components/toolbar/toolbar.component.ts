@@ -58,18 +58,26 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         private ProfileService: ProfileService
     ) {
 
+        this.ProfileService.stringSubject.subscribe(
+            data => {
+                this.mySubjectVal = data;
+                this.name = this.mySubjectVal.name;
+                this.myprofilelogoimage = this.mySubjectVal.image
+               
+            })
 
-
+           
       
         this.name = localStorage.getItem('name');
       
-        this.image =  localStorage.getItem('myprofilelogoimage');
-      
-        if(this.image == undefined || this.image == "undefined") {
-            this.image = "" 
-        } else {
-            this.image == localStorage.getItem('myprofilelogoimage');
-        }
+         this.image =  localStorage.getItem('myprofilelogoimage');
+        // console.log('this images')
+        // console.log(this.image)
+        // if(this.image == undefined || this.image == "undefined") {
+        //     this.image = "" 
+        // } else {
+        //     this.image == localStorage.getItem('myprofilelogoimage');
+        // }
        
         this.myprofilelogoimage =this.image
       
