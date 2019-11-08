@@ -390,14 +390,24 @@ function getTillnametbyId(till) {
 
 
     if (till.tilltypeid.flag == 1) {
-
         var deferred = Q.defer();
-        tilldetails.findOne({ merchantId: till.merchantId }, function (err, tillResults) {
+        tilldetails.findOne({ $and:[{ _id: till.tilltypeid.id },{merchantid :  till.merchantId} ]}, function (err, tillResults) {
             if (!err) {
+                
+                if(tillResults == null || tillResults == "null" ) {
+                    var getpro = {}    
+                    getpro.error = "error"
+                    getpro.flag = 1;
+                   
+                   deferred.resolve(getpro); 
+              } else {
                 var tills = {}
                 tills.results = tillResults
                 tills.flag = 1;
                 deferred.resolve(tills);
+              }
+
+               
             } else {
 
                 deferred.reject(err.name + ': ' + err.message);
@@ -411,12 +421,20 @@ function getTillnametbyId(till) {
         var deferred = Q.defer();
         tilldetails.findOne({ merchantId: till.merchantId }, { secondary: { $elemMatch: { _id: till.tilltypeid.id } } }, function (err, tillResults) {
             if (!err) {
-
+                
+                if(tillResults == null || tillResults == "null" ) {
+                    var getpro = {}    
+                    getpro.error = "error"
+                    getpro.flag = 2;
+                   deferred.resolve(getpro); 
+              } else {
                 var tills = {}
                 tills.results = tillResults
                 tills.flag = 2;
 
                 deferred.resolve(tills);
+              }
+               
             } else {
 
                 deferred.reject(err.name + ': ' + err.message);
@@ -443,11 +461,18 @@ function getTillnametbyId(till) {
             { $sort: { dateadded: -1 } }]).exec(function (err, tilllist) {
 
                 if (!err) {
-
+                    if(tilllist == null || tilllist == "null" ) {
+                        var getpro = {}    
+                        getpro.error = "error"
+                        getpro.flag = 3;
+                       deferred.resolve(getpro); 
+                  } else {
                     var tills = {}
                     tills.results = tilllist
                     tills.flag = 3;
                     deferred.resolve(tills);
+                  }
+                   
                 } else {
                     deferred.reject(err.name + ': ' + err.message);
                 }

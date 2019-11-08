@@ -147,9 +147,27 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
                    dataFetch.push([changedate,"quantity" ,element.totalQty] ,[changedate,"sellingPrice", element.value]);
                 });
                
-               
-               
+               console.log('bettweens');
+               console.log(between);
+               console.log(dataFetch)
 
+               var dataFetchNew = [];
+
+               dataFetch.forEach(element => { 
+                 console.log('array');
+                 console.log(element[0]);
+                dataFetchNew[element[0]][0] =element[0];
+             });
+
+                // for(let k=0; k<dataFetch.length;k++)
+                // {
+                //   dataFetchNew[dataFetch[k]][0] = dataFetch[k];
+                // }
+
+                console.log('dataFetchNew');
+                console.log(dataFetchNew)
+
+          return false      
           var jsonify = res => res.json();
           
           var schemaFetch = fetch(

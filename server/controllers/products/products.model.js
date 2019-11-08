@@ -15,6 +15,7 @@ var ProductsSchema = new Schema({
   tillTypeId: ObjectId,
   tillTypeName :String,
   stocklevel:Number,
+  reorderlevel : Number,
   merchantid : String,
   barcode : String,
   qrcodeImage : String,

@@ -44,6 +44,7 @@
               <th>Date</th>
               <!-- <th>Till type</th> -->
               <th>Stock level</th>
+              <th>Reorder level</th>
               <th></th>
             </tr>
             <tr *ngFor="let itemrow of productForm.controls.itemRows.controls; let i=index" [formGroupName]="i">
@@ -67,10 +68,10 @@
                   <input matInput formControlName="productname" autocomplete="off"  pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"
                       autocomplete="off" required>
                   <mat-error *ngIf="itemrow.get('productname').hasError('required')">
-                    Please enter product!
+                    Please enter product name!
                   </mat-error>
                   <mat-error *ngIf="itemrow.get('productname').hasError('pattern')">
-                    Please enter valid product!
+                    Please enter valid product name!
                   </mat-error>
                 </mat-form-field>
                 
@@ -171,8 +172,21 @@
                   <mat-error *ngIf="itemrow.get('stocklevel').hasError('required')">
                     Please enter stock level!
                   </mat-error>
-                  <mat-error *ngIf="itemrow.get('costprice').hasError('pattern')">
+                  <mat-error *ngIf="itemrow.get('stocklevel').hasError('pattern')">
                     Please enter valid stock level!
+                  </mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline">
+                  <mat-label>Reorder level</mat-label>
+
+                  <input matInput formControlName="reorderlevel" required>
+                  <mat-error *ngIf="itemrow.get('reorderlevel').hasError('required')">
+                    Please enter reorder level!
+                  </mat-error>
+                  <mat-error *ngIf="itemrow.get('reorderlevel').hasError('pattern')">
+                    Please enter valid reorder level!
                   </mat-error>
                 </mat-form-field>
               </td>

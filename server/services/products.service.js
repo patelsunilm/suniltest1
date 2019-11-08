@@ -63,7 +63,8 @@ function addproduct(addproducts) {
             barcode: addproducts[i].barcode,
             merchantid: addproducts[i].merchantId,
             productcatid: productcatid,
-            tillTypeId: addproducts[i].tilltypeid
+            tillTypeId: addproducts[i].tilltypeid,
+            reorderlevel : addproducts[i].reorderlevel
         });
 
         saveallproducts.save(function (err, productsresults) {
@@ -197,20 +198,21 @@ function deleteproduct(productid) {
 
 function getallproductbyId(productid , merchantId) {
    
-    console.log('pro ids');
-    console.log(productid);
-    console.log(merchantId);
+    
 
-    // var merchantids = "5d80860b1570a00a782852c2";
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
 
-    products.findOne({ $or:[{ _id: id },{merchantid :  merchantids} ]}, function (err, getproducts) {
+    products.findOne({ $and:[{ _id: id },{merchantid :  merchantId} ]}, function (err, getproducts) {
         if (!err) {
+            if(getproducts == null || getproducts == "null" ) {
+                  var getpro = {}    
+                  getpro.error = "error"
+                 deferred.resolve(getpro); 
+            } else {
+                deferred.resolve(getproducts);
+            }
             
-            console.log('get all products');
-            console.log(getproducts);
-            deferred.resolve(getproducts);
         } else {
 
             deferred.reject(err.name + ': ' + err.message);
@@ -238,6 +240,7 @@ function updateprodcutdetail(data) {
             markup: data.markup,
             tillTypeId: data.tillTypeId,
             tillTypeName: data.tilltypename,
+            reorderlevel : data.reorderlevel,
             productcatid: new mongoose.Types.ObjectId(data.catname),
 
         }, function (err, updateproducts) {
@@ -265,6 +268,8 @@ function updateprodcutdetail(data) {
             date: data.date,
             tilltype: data.tilltype,
             stocklevel: data.stocklevel,
+            reorderlevel : data.reorderlevel,
+
             markup: data.markup,
             tillTypeId: data.tillTypeId,
             tillTypeName: data.tilltypename,

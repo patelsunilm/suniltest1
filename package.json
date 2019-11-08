@@ -89,7 +89,6 @@
     "ngx-mat-select-search": "1.8.0",
     "ngx-qrcode2": "0.0.9",
     "nodemailer": "6.2.1",
-    "nodemailer-smtp-transport": "^2.7.4",
     "path": "0.12.7",
     "perfect-scrollbar": "1.4.0",
     "prismjs": "1.15.0",

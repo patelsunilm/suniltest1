@@ -37,30 +37,47 @@ export class UpdatetillmanagementComponent implements OnInit {
 
   this.route.params.subscribe(params => {
    
-    var merchantId = localStorage.getItem('userId');
-   
+     var merchantId = localStorage.getItem('userId');
+    
+    
     this.tillManagementService.getTillnametbyId(params , merchantId).subscribe(data => {
      
        if(data.flag == 1) {
-
+        console.log('data');
+        console.log(data);
+        if(data.error == "error") {
+          console.log('data 1');
+         
+        } else {
     
         this.form = this._formBuilder.group({
           name: [data.results.name, Validators.required],
       });
-      } else if(data.flag == 2) {
+        }
+    } else if(data.flag == 2) {
         
+      if(data.error == "error") {
+        console.log('data 2');
+       
+      } else {
         this.form = this._formBuilder.group({
           
           name: [data.results.secondary[0].name, Validators.required],
          
       });
-      }  else if(data.flag == 3) { 
+    }
+    }  else if(data.flag == 3) { 
 
+      if(data.error == "error") {
+        console.log('data 3');
+       
+      } else {
         this.form = this._formBuilder.group({
           
           name: [data.results[0].secondary.tertiary.name, Validators.required],
          
       });
+    }
       }
      
     })

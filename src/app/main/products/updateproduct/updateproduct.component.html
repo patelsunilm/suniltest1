@@ -164,24 +164,33 @@
                 </mat-option>
               </mat-optgroup>
             </mat-select>
-
           </mat-form-field>
-
         </div>
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-            <mat-label>Move stock input value</mat-label>
-            <input autocomplete="off" matInput formControlName="movestockinputvalue"
-              pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="ma">
-            <mat-error *ngIf="form.get('movestockinputvalue').hasError('required')">
-              Please enter stock level!
-            </mat-error>
-
-            <mat-error *ngIf="form.get('movestockinputvalue').hasError('pattern')">
-              Please enter valid move stock input value!
-            </mat-error>
-
-          </mat-form-field>
+        <div   fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Move stock input value</mat-label>
+                <input matInput formControlName="movestockinputvalue"   pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="ma"  >
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('required')">
+                    Please enter stock level!
+                  </mat-error>
+              
+                <mat-error *ngIf="form.get('movestockinputvalue').hasError('pattern')">
+                  Please enter valid move stock input value!
+                </mat-error>
+                
+              </mat-form-field>
+              <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Reorder level</mat-label>
+                <input matInput formControlName="reorderlevel"   pattern="^(?=.*[1-9])(?:[1-9]\d*\.?|0?\.)\d*$" id="ma"  >
+                <mat-error *ngIf="form.get('reorderlevel').hasError('required')">
+                    Please enter reorder level!
+                  </mat-error>
+              
+                <mat-error *ngIf="form.get('reorderlevel').hasError('pattern')">
+                  Please enter valid reorder level!
+                </mat-error>
+                
+              </mat-form-field>
         </div>
         <div class="button-row" style="text-align: center;">
           <button [disabled]="form.invalid" mat-raised-button="" color="" style="margin-top: 10px;">Submit</button>
