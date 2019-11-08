@@ -11,7 +11,8 @@ const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
 import { DomSanitizer } from '@angular/platform-browser';
-import $ from "jquery";
+// import $ from "jquery";
+import * as $ from 'jquery';
 import { tillManagementService } from '../../../_services/index';
 import { ProductService } from '../../../_services/index';
 

@@ -81,6 +81,7 @@
     "nexmo": "2.4.1",
     "ng2-charts": "2.2.4",
     "ngrx-store-freeze": "0.2.4",
+    "ngx-autofocus-fix": "1.0.4",
     "ngx-barcode": "0.2.4",
     "ngx-color-picker": "6.7.0",
     "ngx-cookie-service": "1.0.10",

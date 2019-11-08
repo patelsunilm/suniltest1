@@ -27,7 +27,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { HttpClientModule } from '@angular/common/http';
 
 
- import { AutoFocusDirective } from '../../auto-focus.directive';
+//  import { AutoFocusDirective } from '../../auto-focus.directive';
 
 
 
@@ -61,7 +61,7 @@ const routes = [
         AddproductComponent,
         deleteproductPopupComponent,
         UpdateproductComponent,
-         AutoFocusDirective
+       //  AutoFocusDirective
 
     ],
     imports: [

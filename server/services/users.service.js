@@ -95,7 +95,7 @@ function addsignupuser(signupdata) {
 
     var deferred = Q.defer();
     var hashUserPassword = bcrypt.hashSync(signupdata.password, 10);
-    
+
     Users.find({ email: signupdata.email }, function (err, result) {
 
         if (result.length > 0) {
@@ -126,22 +126,22 @@ function addsignupuser(signupdata) {
                 fontcolor: signupdata.fontcolor,
                 backgroundtheme: signupdata.backgroundtheme,
                 image: signupdata.image,
-        
+
             });
             saveallsignup.save(function (err, saveallsignup) {
                 if (!err) {
 
-                  
+
                     var data = {};
                     data.string = 'SignUp successful.';
                     deferred.resolve(data);
                 } else {
-                  
+
                     deferred.reject(err.name + ': ' + err.message);
                 }
             })
         }
-  })
+    })
 
     return deferred.promise;
 
@@ -259,7 +259,7 @@ function submitgoogledetails(googledata) {
                 googleid: googledata.googleid,
                 userType: googledata.userType,
                 authToken: googledata.authToken,
-                businessname : '',
+                businessname: '',
                 dateadded: Date.now(),
                 datemodified: Date.now(),
             });
@@ -311,107 +311,92 @@ function loginwithemail(data) {
     var string = data.email;
     var isEmail = string.includes("@");
     var email = '';
-      
-        var userType = 'user';
-        var random = Math.floor(100 + Math.random() * 900);
-        var random1 = Math.floor(100 + Math.random() * 900);
-        var otp = random.toString() + random1.toString();
 
-        var userdata =
-        {
-            "status": "1",
-            "message": "OTP sent on Email Address",
-            "data": {
+    var userType = 'user';
+    var random = Math.floor(100 + Math.random() * 900);
+    var random1 = Math.floor(100 + Math.random() * 900);
+    var otp = random.toString() + random1.toString();
 
-            }
+    var userdata =
+    {
+        "status": "1",
+        "message": "OTP sent on Email Address",
+        "data": {
+
         }
-        appusers.find({ $and: [{ email: data.email }] }
-            , function (err, user) {
-                if (err) {
+    }
+    appusers.find({ $and: [{ email: data.email }] }
+        , function (err, user) {
+            if (err) {
 
-                    deferred.reject(err.name + ': ' + err.message);
-                } else {
-                    if (user == '') {
-                        var saveuser = new appusers({
-                            email: data.email,
-                            otp: otp,
-                            firstname: '',
-                            lastname: '',
-                            image: '',
-                            phone: ''
-
-                        });
-                        saveuser.save(function (err, saveanewuser) {
-                            if (!err) {
-
-                                let transporter1 = nodemailer.createTransport({
-                                      //host : 'smtp.gmail.com',
-                                      host: 'mail.finikart.com',
-                                      port: 465,
-                                      secure: true, // true for 465, false for other ports
-                                      auth: {
-                                          user: config.mail_user, // generated ethereal user
-                                          pass: config.mail_pass // generated ethereal password
-                                      }
-                                  });
-                                  // send mail with defined transport object
-                                  let info = transporter1.sendMail({
-                                      from: config.mail_user, // sender address
-                                      to: data.email, // list of receivers
-                                      subject: 'Account verification code', // Subject line
-
-                                      text: 'otp',
-                                      html: otp,
-                                
-                                  });
-                                  
-                                  deferred.resolve(userdata);
-                            } else {
-
-
-                                deferred.reject(err.name + ': ' + err.message);
-                            }
-                        })
-
-                    } else {
-
-                        var email = user[0].email;
-                        var id = user[0]._id
-
-                        appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
-                            if (err) {
-
-
-                                deferred.reject(err);
-
-                            } else {
-                                let transporter1 = nodemailer.createTransport({
-                                    //  host : 'smtp.gmail.com',
-                                      host: 'mail.finikart.com',
-                                      port: 465,
-                                      secure: true, // true for 465, false for other ports
-                                      auth: {
-                                          user: config.mail_user, // generated ethereal user
-                                          pass: config.mail_pass // generated ethereal password
-                                      }
-                                  });
-                                  // send mail with defined transport object
-                                  let info = transporter1.sendMail({
-                                      from: config.mail_user, // sender address
-                                      to: data.email, // list of receivers
-                                      subject: 'Account verification code', // Subject line
-                                      text: 'otp',
-                                      html: otp,
-                                
-                                  });
-                                   deferred.resolve(userdata);
-
-                            }
-                            return deferred.promise;
-                        })
+                deferred.reject(err.name + ': ' + err.message);
+            } else {
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    host: 'smtp.gmail.com',
+                    port: 25,
+                    secure: false,
+                    tls: {
+                        rejectUnauthorized: false
+                    },
+                    pool: true,
+                    auth: {
+                        user: config.mail_user,
+                        pass: config.mail_pass
                     }
+                });
+
+                var mailOptions = {
+                    from: config.mail_user,
+                    to: data.email, // list of receivers
+                    subject: 'Account verification code', // Subject line
+                    text: 'otp',
+                    html: otp + ' is your verification code',
+                };
+                if (user == '') {
+                    var saveuser = new appusers({
+                        email: data.email,
+                        otp: otp,
+                        firstname: '',
+                        lastname: '',
+                        image: '',
+                        phone: ''
+                    });
+                    saveuser.save(function (err, saveanewuser) {
+                        if (!err) {
+
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    deferred.reject(err.name + ': ' + err.message);
+                                } else {
+                                    deferred.resolve(userdata);
+                                }
+                            });
+                        }
+                    })
+
+                } else {
+
+                    var email = user[0].email;
+                    var id = user[0]._id
+
+                    appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
+                        if (err) {
+                            deferred.reject(err);
+                        } else {
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    deferred.reject(err.name + ': ' + err.message);
+                                } else {
+                                    deferred.resolve(userdata);
+                                }
+                            });
+                        }
+                        return deferred.promise;
+                    })
                 }
-            });
+            }
+        });
     // } else {
 
     //         send mobile phone text messages
@@ -437,15 +422,10 @@ function loginwithemail(data) {
 
 
 function matchotp(data) {
-
-   
     var deferred = Q.defer();
-
     appusers.findOne({ $and: [{ otp: data.otp }, { email: data.email }] }, function (err, user) {
         if (err) {
-
             deferred.reject(err.name + ': ' + err.message);
-
         } else {
             if (user == null || user == 'user' || user == '') {
                 var userdata = {
@@ -454,10 +434,7 @@ function matchotp(data) {
                     "data":
                         {}
                 }
-
             } else {
-
-
                 var userdata =
                 {
                     "status": "1",
@@ -493,25 +470,17 @@ function matchotp(data) {
 }
 
 function submitfacebookdetails(facebookdata) {
-
-
     var deferred = Q.defer();
-
-   
     Users.findOne({ email: facebookdata.email }, function (err, getresult) {
         if (getresult) {
-
             if (getresult.userType == 'Merchant') {
-              
                 Users.findOneAndUpdate({ _id: getresult._id }, {
-
                     facebookid: facebookdata.facebookid,
                     authToken: facebookdata.authToken,
                     datemodified: Date.now(),
 
                 }, function (err, user) {
                     if (err) {
-
                         throw err;
                     }
                     else {
@@ -530,17 +499,12 @@ function submitfacebookdetails(facebookdata) {
                         });
                     }
                 })
-
-
             } else {
-
                 var data = {};
                 data.string = 'Admin could not access any social login.';
                 deferred.resolve(data);
-
             }
         } else {
-           
             var saveData = new Users({
                 name: facebookdata.name,
                 email: facebookdata.email,
@@ -549,15 +513,12 @@ function submitfacebookdetails(facebookdata) {
                 facebookid: facebookdata.facebookid,
                 userType: facebookdata.userType,
                 authToken: facebookdata.authToken,
-                businessname : '',
+                businessname: '',
                 dateadded: Date.now(),
                 datemodified: Date.now(),
             });
-
             saveData.save(function (err, user) {
                 if (!err) {
-                  
-                    
                     deferred.resolve({
                         _id: user._id,
                         email: user.email,
@@ -568,14 +529,12 @@ function submitfacebookdetails(facebookdata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
-                  
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
         }
 
     })
-
     return deferred.promise;
 }
 
@@ -739,8 +698,8 @@ function getlastfivemerchant(data) {
                     var merchantdetails = {}
 
                     merchantdetails.merchantId = element._id == undefined ? '' : element._id;
-                    merchantdetails.name =   element.name == undefined ? '' : element.name;
-                 
+                    merchantdetails.name = element.name == undefined ? '' : element.name;
+
                     merchant.push(merchantdetails);
 
 
@@ -772,71 +731,71 @@ function getlastfivemerchant(data) {
 
 
 function loginwithmoblenumber(userdetails) {
-   
-        var deferred = Q.defer();
-        var userType = 'user';
-        var random = Math.floor(100 + Math.random() * 900);
-        var random1 = Math.floor(100 + Math.random() * 900);
-        var otp = random.toString() + random1.toString();
 
-        var userdata =
-        {
-            "status": "1",
-            "message": "OTP sent on Mobile Number",
-            "data": {
+    var deferred = Q.defer();
+    var userType = 'user';
+    var random = Math.floor(100 + Math.random() * 900);
+    var random1 = Math.floor(100 + Math.random() * 900);
+    var otp = random.toString() + random1.toString();
 
-            }
+    var userdata =
+    {
+        "status": "1",
+        "message": "OTP sent on Mobile Number",
+        "data": {
+
         }
-        var mobilenumber = parseInt(userdetails.mobileNumber);
+    }
+    var mobilenumber = parseInt(userdetails.mobileNumber);
 
-        appusers.find({ $and: [{ phone: mobilenumber }] }
-            , function (err, user) {
-                if (err) {
+    appusers.find({ $and: [{ phone: mobilenumber }] }
+        , function (err, user) {
+            if (err) {
 
-                    deferred.reject(err.name + ': ' + err.message);
+                deferred.reject(err.name + ': ' + err.message);
+            } else {
+
+                if (user == '') {
+                    var saveuser = new appusers({
+                        email: '',
+                        otp: otp,
+                        firstname: '',
+                        lastname: '',
+                        image: '',
+                        phone: mobilenumber,
+                        countryCode: userdetails.countryCode
+                    });
+                    saveuser.save(function (err, saveanewuser) {
+                        if (!err) {
+
+
+                            deferred.resolve(userdata);
+                        } else {
+
+
+                            deferred.reject(err.name + ': ' + err.message);
+                        }
+                    })
+
                 } else {
-                 
-                    if (user == '') {
-                        var saveuser = new appusers({
-                            email:'',
-                            otp: otp,
-                            firstname: '',
-                            lastname: '',
-                            image: '',
-                            phone: mobilenumber,
-                            countryCode : userdetails.countryCode
-                        });
-                        saveuser.save(function (err, saveanewuser) {
-                            if (!err) {
 
-                                
-                                  deferred.resolve(userdata);
-                            } else {
+                    var id = user[0]._id
 
+                    appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
+                        if (err) {
 
-                                deferred.reject(err.name + ': ' + err.message);
-                            }
-                        })
+                            deferred.reject(err);
 
-                    } else {
+                        } else {
 
-                        var id = user[0]._id
+                            deferred.resolve(userdata);
 
-                        appusers.findOneAndUpdate({ _id: id }, { otp: otp }, function (err, data) {
-                            if (err) {
-
-                                deferred.reject(err);
-
-                            } else {
-                               
-                                   deferred.resolve(userdata);
-
-                            }
-                            return deferred.promise;
-                        })
-                    }
+                        }
+                        return deferred.promise;
+                    })
                 }
-            });
-            return deferred.promise; 
+            }
+        });
+    return deferred.promise;
 }
 module.exports = service;
