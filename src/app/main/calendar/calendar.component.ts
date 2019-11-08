@@ -266,14 +266,17 @@ export class CalendarComponent implements OnInit {
                 const formData: FormGroup = response[1];
                 if(actionType == "save") {
                     
-                    console.log('from data values');
-                    console.log(formData);
+                   
                     
                     this.DiaryService.updateEvents(formData.value)
                     .subscribe(
                       data => {
             
-                        console.log('sucess');
+                        this.snackBar.open('Event update successfully.', '', {
+                          duration: 5000,
+                          horizontalPosition: this.horizontalPosition,
+                          verticalPosition: this.verticalPosition,
+                      });
             
                       }, error => {
                         console.log(error);
@@ -349,7 +352,7 @@ export class CalendarComponent implements OnInit {
                  
                          console.log(error);
                        });
-                    this.snackBar.open('Event add successfully.', '', {
+                    this.snackBar.open('Event added successfully.', '', {
                       duration: 5000,
                       horizontalPosition: this.horizontalPosition,
                       verticalPosition: this.verticalPosition,
@@ -360,7 +363,7 @@ export class CalendarComponent implements OnInit {
                     console.log(error);
                   });
                } else {
-                this.snackBar.open('Please correct date select .', '', {
+                this.snackBar.open('Please select correct date.', '', {
                   duration: 5000,
                   horizontalPosition: this.horizontalPosition,
                   verticalPosition: this.verticalPosition,

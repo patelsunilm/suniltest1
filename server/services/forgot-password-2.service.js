@@ -5,7 +5,6 @@ var Q = require('q');
 var users = require('../controllers/Users/users.model');// get our mongoose model
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
-let smtpTransport = require('nodemailer-smtp-transport');
 
 var config = require('../config.json');
 

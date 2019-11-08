@@ -59,7 +59,8 @@ export class UpdateproductComponent implements OnInit {
       stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       movestock: [''],
       movestockinputvalue: [''],
-      catname: ['']
+      catname: [''],
+      reorderlevel : ['' , Validators.pattern(/^-?(0|[1-9]\d*)?$/)]
     });
 
     this.form.controls['movestockinputvalue'].disable();
@@ -68,6 +69,11 @@ export class UpdateproductComponent implements OnInit {
       var merchantId = localStorage.getItem('userId');
 
       this.ProductService.getallproductbyId(params.id ,merchantId).subscribe(data => {        
+ 
+        if(data.error == "error") {
+          console.log('data 1');
+         
+        } else {
         this.tilltypes = data.tilltype;
         //  this.tilltypes = "Tertiary";
         this.tillTypeId = data.tillTypeId;
@@ -84,18 +90,19 @@ export class UpdateproductComponent implements OnInit {
           tilltype: [data.tilltype ],
           tilltypename: [data.tillTypeName, Validators.required],
           stocklevel: [data.stocklevel, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
+          reorderlevel : [data.reorderlevel ,Validators.pattern(/^-?(0|[1-9]\d*)?$/) ],
           movestock: [''],
-
           movestockinputvalue: new FormControl({ value: "", disabled: true }, [
             Validators.required
           ]),
           // movestockinputvalue: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
           catname: [data.productcatid]
         });
+      }
       })
-
+  
     })
-
+  
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
     var merchantId = localStorage.getItem('userId');

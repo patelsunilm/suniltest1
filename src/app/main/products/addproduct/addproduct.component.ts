@@ -159,6 +159,7 @@ export class AddproductComponent implements OnInit {
       costprice: ['', Validators.required],
       Markup: ['', Validators.required],
       sellingprice: [''],
+      reorderlevel : ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
       date: ['', Validators.required],
       // tilltype: ['', Validators.required],
       stocklevel: ['', Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
@@ -267,7 +268,6 @@ export class AddproductComponent implements OnInit {
           for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
             var datetime = new Date(new Date).valueOf();
             var randomnumber = Math.floor((Math.random() * 100) + 1);
-
             this.productForm.value.itemRows[i].image = data[i].s3url;
             this.productForm.value.itemRows[i].barcode = datetime + randomnumber
             this.productForm.value.itemRows[i].merchantId = localStorage.getItem('userId');
@@ -277,8 +277,25 @@ export class AddproductComponent implements OnInit {
             this.productForm.value.itemRows[i].sellingprice = ($("#selling" + i).val())
             this.productForm.value.itemRows[i].url = this.url
 
+            // console.log('this products stacok levels');
+            // if(this.productForm.value.itemRows[i].stocklevel > this.productForm.value.itemRows[i].reorderlevel) {
+            //    console.log('staock false ');
+            // } else {
+            
+            //   this.snackBar.open('Stocklevel added successfully.', '', {
+            //     duration: 3000,
+            //     horizontalPosition: this.horizontalPosition,
+            //     verticalPosition: this.verticalPosition,
+            //   });
+            
+            // }
           }
+           
+          
 
+          
+
+          return false  
           this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
             this.snackBar.open('Product added successfully.', '', {
               duration: 3000,
@@ -305,7 +322,7 @@ export class AddproductComponent implements OnInit {
     $(".cdk-overlay-pane").show()
     $("#div_" + i).hide();
     $("#divshow_" + i).show();
-    var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
+    var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">Category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
 
     document.getElementById(i).innerHTML = Categoryhtml;
   

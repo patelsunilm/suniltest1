@@ -56,7 +56,7 @@ export class TillmanagementComponent implements OnInit {
           if (data == '' || data == null || data == 'null') {
             this.isTableHasDataAgain = false;
 
-            console.log('test');
+            
           } else {
           this.tillDetails = data;
           const alltillmanagement = [];
