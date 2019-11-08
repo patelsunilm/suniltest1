@@ -22,9 +22,7 @@
         </div>
     </div>
     <div class="content p-24">
-
         <div class="mat-elevation-z8 cstm-main-bg">
-
             <div *ngIf="readLocalStorageValue('userType') == 'admin'">
                 <div class="header-content">Total feedback(s): {{mydatalength}}</div>
                 <div class="content px-16 py-24 px-sm-24 py-sm-32">
@@ -34,7 +32,7 @@
                                 <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
 
                                     <mat-icon class="mr-12 s-20 secondary-text ">help_outline</mat-icon>
-                                    <div class="comment more">
+                                    <div class=" more">
                                         {{faq.faqquestion}}
                                     </div>
                                 </mat-panel-title>
@@ -44,6 +42,7 @@
                                         aria-hidden="true">add</mat-icon>Give Answer
                                 </button>
                                 <span style="padding-right: 6px">{{value.userdata[0].name}}</span>
+                            
                             </mat-expansion-panel-header>
                             {{faq.faqanswer}}
                         </mat-expansion-panel>

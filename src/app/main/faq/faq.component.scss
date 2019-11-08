@@ -57,6 +57,7 @@ table {
   .morecontent span {
     display: none;
   }
+
   .comment {
     width: 500px;
     //background-color: #f0f0f0;
@@ -72,7 +73,7 @@ table {
     top: 6px;
     right: 150px;
 }
-.cstm-expansion-panel-head.mat-expansion-panel .mat-expansion-panel-header{align-items:flex-start;overflow: overlay;}
+.cstm-expansion-panel-head.mat-expansion-panel .mat-expansion-panel-header{height:auto !important;align-items:flex-start;overflow: overlay;}
 .cstm-expansion-panel-head.mat-expansion-panel .mat-expansion-panel-header .mat-expansion-panel-header-title{align-items:flex-start !important;}
 mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel{padding: 10px 10px;}
 .mat-paginator-page-size-select{width:56px;}
@@ -87,4 +88,7 @@ mat-expansion-panel.cstm-expansion-panel-head.mat-expansion-panel{padding: 10px 
 .faqheader .logo{position: absolute;top:0px;}
 
 .cstm-faq-header-btn{top: 20px;margin-right: -10px;}
+}
+.mat-expansion-panel-body {
+  padding: 20px 24px 16px !important;
 }
