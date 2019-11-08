@@ -17,7 +17,8 @@ const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import $ from "jquery";
+//import $ from "jquery";
+import * as $ from 'jquery';
 import { template } from '@angular/core/src/render3';
 import { concatAll } from 'rxjs/operators';
 
