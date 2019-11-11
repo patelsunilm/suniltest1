@@ -82,7 +82,7 @@ function updateuserdetails(userdata) {
         if (getappuserdata.length > 0) {
 
             var data = {};
-            data.string = 'Email is already exist.';
+            data.string = 'Email already exist.';
             deferred.resolve(data);
 
         } else {
@@ -131,7 +131,7 @@ function UserLogout(user) {
 
             var userlogoutresponce = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -150,7 +150,7 @@ function getCartDetails(cartid) {
     var deferred = Q.defer();
     var usercartresponce = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
             {}
     }

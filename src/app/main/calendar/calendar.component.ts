@@ -272,7 +272,7 @@ export class CalendarComponent implements OnInit {
                     .subscribe(
                       data => {
             
-                        this.snackBar.open('Event update successfully.', '', {
+                        this.snackBar.open('Event updated successfully.', '', {
                           duration: 5000,
                           horizontalPosition: this.horizontalPosition,
                           verticalPosition: this.verticalPosition,

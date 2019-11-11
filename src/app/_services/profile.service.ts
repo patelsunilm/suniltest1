@@ -58,7 +58,7 @@ export class ProfileService {
         return this.http.post<any>(appConfig.apiUrl + '/profile/updateprofile', profiledata)
             .map(user => {
 
-                if (user.string == 'BusinessName is already exist.' || user.string == 'Email is already exist.') {
+                if (user.string == 'Business name already exists.' || user.string == 'Email already exist.') {
                     return user;
                 } else {
                    

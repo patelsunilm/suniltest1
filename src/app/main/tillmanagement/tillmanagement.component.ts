@@ -7,8 +7,6 @@ import { ProductService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { tillManagementService } from '../../_services/index';
 
-
-
 @Component({
   selector: 'app-tillmanagement',
   templateUrl: './tillmanagement.component.html',
@@ -41,10 +39,7 @@ export class TillmanagementComponent implements OnInit {
     }
   }
 
-
   constructor(private tillManagementService: tillManagementService ,public dialog: MatDialog) { }
-
-
 
   ngOnInit() {
 
@@ -115,9 +110,7 @@ export class TillmanagementComponent implements OnInit {
     this.tillManagementService.getTillManagementDetails(merchantId)
       .subscribe(
         data => {
-
           if (data == '' || data == null || data == 'null') {
-
           } else {
           this.tillDetails = data;
           const alltillmanagement = [];
@@ -257,8 +250,6 @@ export class TillmanagementComponent implements OnInit {
         data => {
          
           if(this.showvalue == "primary" || this.showvalue == undefined || this.showvalue == 'undefined' ) {
-
-           
             this.tillDetails = data;
             const alltillmanagement = [];
             this.tillDetails.forEach(element => {
@@ -293,7 +284,6 @@ export class TillmanagementComponent implements OnInit {
                   this.tillDetails = data[0].secondary;
                   const alltillmanagement = [];
                   this.tillDetails.forEach(element => {
-        
                     element._id = element._id;
                     element.name = element.name;
                     element.type = "Secondary";
@@ -410,21 +400,21 @@ export class deletetillmanagementpopupComponent {
           .subscribe(
               data => {
 
-                if(data.string == "Primary type is delete successfully.") {
-                  this.snackBar.open('Primary type is delete successfully.', '', {
+                if(data.string == "Primary type deleted successfully.") {
+                  this.snackBar.open('Primary type deleted successfully.', '', {
                       duration: 4000,
                       horizontalPosition: this.horizontalPosition,
                       verticalPosition: this.verticalPosition,
                   });
 
-                } else if(data.string == "Secondary type is delete successfully.") {
-                  this.snackBar.open('Secondary type is delete successfully.', '', {
+                } else if(data.string == "Secondary type deleted successfully.") {
+                  this.snackBar.open('Secondary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
-                } else if(data.string == "Tertiary type is delete successfully.") {
-                  this.snackBar.open('Tertiary type is delete successfully.', '', {
+                } else if(data.string == "Tertiary type deleted successfully.") {
+                  this.snackBar.open('Tertiary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,

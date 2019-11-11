@@ -154,7 +154,7 @@ function getallMerchentsData() {
 
             var merchentdata = {
                 "status": "1",
-                "message": "Sucess",
+                "message": "Success",
                 "data":
                     allmerchant
             }
@@ -194,7 +194,7 @@ function updatemerchantData(merchantdata) {
     users.find({ $and: [{ email: email }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
         if (datalength.length > 0) {
             var data = {};
-            data.string = 'Email is already exist.';
+            data.string = 'Email already exist.';
             deferred.resolve(data);
 
         } else if (merchantdata.businessname) {
@@ -204,7 +204,7 @@ function updatemerchantData(merchantdata) {
             users.find({ $and: [{ businessname: businessname }, { _id: { $ne: merchantdata._id } }] }, function (err, datalength) {
                 if (datalength.length > 0) {
                     var data = {};
-                    data.string = 'Business Name is already exist.';
+                    data.string = 'Business name already exists.';
                     deferred.resolve(data);
                 } else {
 
@@ -343,7 +343,7 @@ function getMerchantCategories() {
 
                 var merchentcatdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         allcategories
                 }
@@ -352,7 +352,7 @@ function getMerchantCategories() {
             } else {
                 var merchentcatdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -376,7 +376,7 @@ function SearchMerchant(merchantdetail) {
 
     var merchentcatdetails = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
             {}
     }
@@ -401,7 +401,7 @@ function SearchMerchant(merchantdetail) {
 
                 var merchentdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data": {
                         allmerchant
                     },
@@ -447,7 +447,7 @@ function getMerchantCategoriebyId(id) {
 
                 var merchentcatdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -472,7 +472,7 @@ function getMerchantCategoriebyId(id) {
 
                 var merchentdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data": {
                         result
                     },
@@ -508,7 +508,7 @@ function addmerchantreview(merchantdetail) {
 
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -519,7 +519,7 @@ function addmerchantreview(merchantdetail) {
 
                     var ratingResponceData = {
                         "status": "0",
-                        "message": "no data found",
+                        "message": "No records found",
                         "data":
                             {}
                     }
@@ -562,7 +562,7 @@ function getmerchantreview(getreview) {
             if (getratingdata == '' || getratingdata == 'undefined' || getratingdata == undefined || getratingdata == null) {
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -597,7 +597,7 @@ function getmerchantreview(getreview) {
 
             var ratingResponceData = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -625,7 +625,7 @@ function updatemerchantreview(ratingDetails) {
         } else {
             var ratingResponceData = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -660,7 +660,7 @@ function getallproductratings(proDetails) {
             if (getproductdetails == '' || getproductdetails == 'undefined' || getproductdetails == undefined || getproductdetails == null) {
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }

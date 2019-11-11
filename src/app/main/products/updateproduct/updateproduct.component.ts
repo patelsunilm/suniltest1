@@ -281,7 +281,7 @@ export class UpdateproductComponent implements OnInit {
           this.form.value.fromId = tillTypeId;
    
           this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
-            this.snackBar.open('Product update success fully', '', {
+            this.snackBar.open('Product update successfully', '', {
               duration: 3000,
               horizontalPosition: this.horizontalPosition,
               verticalPosition: this.verticalPosition,
@@ -295,8 +295,6 @@ export class UpdateproductComponent implements OnInit {
 
         })
       } else {
-
-
         this.form.value.sellingprice = ($("#selling").val());
         var stocklevelvalue = this.form.value.movestockinputvalue == undefined ? 0 :  this.form.value.movestockinputvalue;
         var stock = (this.form.value.stocklevel - stocklevelvalue);
@@ -326,7 +324,7 @@ export class UpdateproductComponent implements OnInit {
       
         this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
-          this.snackBar.open('Product update success fully', '', {
+          this.snackBar.open('Product update successfully', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

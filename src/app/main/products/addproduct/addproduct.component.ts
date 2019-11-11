@@ -114,7 +114,7 @@ export class AddproductComponent implements OnInit {
       .subscribe(
         data => {
 
-          if (data.message == "no data found") {
+          if (data.message == "No records found") {
 
           } else {
             this.catName = data.data;
@@ -341,7 +341,7 @@ export class AddproductComponent implements OnInit {
     var merchantId = localStorage.getItem('userId');
     var catname = ($("#cat" + i).val())
     if (!catname) {
-      this.snackBar.open('Pls Add Product Category.', '', {
+      this.snackBar.open('Please Add Product Category.', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
@@ -353,8 +353,8 @@ export class AddproductComponent implements OnInit {
         .subscribe(
           data => {
 
-            if (data.string == "Product Category is already exist.") {
-              this.snackBar.open('Product Category is already exist.', '', {
+            if (data.string == "Product Category already exist.") {
+              this.snackBar.open('Product Category already exist.', '', {
                 duration: 3000,
                 horizontalPosition: this.horizontalPosition,
                 verticalPosition: this.verticalPosition,

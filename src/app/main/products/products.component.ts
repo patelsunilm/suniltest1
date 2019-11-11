@@ -178,8 +178,8 @@ export class ProductsComponent implements OnInit {
       
       this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
-        if (data.string == "Csv import success fully")  {
-          this.snackBar.open('Csv import sucessfull', '', {
+        if (data.string == "Csv imported successfully")  {
+          this.snackBar.open('Csv imported successfully', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -204,8 +204,8 @@ export class ProductsComponent implements OnInit {
               }, error => {
                 console.log(error);
               });
-        } else if(data.string == "Pls add Primary till type"){
-          this.snackBar.open('Pls add primary till type', '', {
+        } else if(data.string == "Please add Primary till type"){
+          this.snackBar.open('Please add primary till type', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

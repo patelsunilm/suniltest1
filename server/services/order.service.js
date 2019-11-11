@@ -154,7 +154,7 @@ function verifyorder(orderDetails) {
 
           var ordersresults = {
             "status": "0",
-            "message": "no data found",
+            "message": "No records found",
             "data":
               {}
           }
@@ -205,7 +205,7 @@ function verifyorder(orderDetails) {
 
         var ordersresults = {
           "status": "0",
-          "message": "no data found",
+          "message": "No records found",
           "data":
             {}
         }
@@ -281,7 +281,7 @@ function createorder(orderDetails) {
 
           var ordersresults = {
             "status": "0",
-            "message": "no data found",
+            "message": "No records found",
             "data":
               {}
           }
@@ -355,7 +355,7 @@ function createorder(orderDetails) {
 
                   var ordersresults = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                       {}
                   }
@@ -369,7 +369,7 @@ function createorder(orderDetails) {
 
         var ordersresults = {
           "status": "0",
-          "message": "no data found",
+          "message": "No records found",
           "data":
             {}
         }
@@ -402,7 +402,7 @@ function payment(paymentdetails) {
         else {
           var paymentdetails = {
             "status": "0",
-            "message": "no data found",
+            "message": "No records found",
             "data":
               {}
           }
@@ -424,7 +424,7 @@ function payment(paymentdetails) {
 
       var paymentdetails = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
           {}
       }
@@ -534,7 +534,7 @@ function checkorderhistory(user) {
 
         var orderdetailsnodata = {
           "status": "0",
-          "message": "no data found",
+          "message": "No records found",
           "data":
             {}
         }
@@ -587,7 +587,7 @@ function checkorderhistory(user) {
 
       var orderdetailsnodata = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
           {}
       }
@@ -643,7 +643,7 @@ function getqrcodedetails(product) {
 
       var productdetails = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
           {}
       }

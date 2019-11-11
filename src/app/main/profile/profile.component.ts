@@ -42,35 +42,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     newfileuplodes1: Array<File> = [];
     public rgbaText: string = 'rgba(165, 26, 214, 0.2)';
 
-    // public arrayColors: any = {
-    //     color1: '#2883e9',
-    //     color2: '#e920e9',
-    //     color3: 'rgb(255,245,0)',
-    //     color4: 'rgb(236,64,64)',
-    //     color5: 'rgba(45,208,45,1)'
-    // };
-
-    // public selectedColor: string = 'color1';
-
-    // public color1: string = '#2889e9';
-    // public color2: string = '#e920e9';
-    // public color3: string = '#fff500';
-    // public color4: string = 'rgb(236,64,64)';
-    // public color5: string = 'rgba(45,208,45,1)';
-    // public color6: string = '#1973c0';
-    // public color7: string = '#f200bd';
-    // public color8: string = '#a8ff00';
-    // public color9: string = '#278ce2';
-    // public color10: string = '#0a6211';
-    // public color11: string = '#f2ff00';
-    // public color12: string = '#f200bd';
-    // public color13: string = 'rgba(0,255,0,0.5)';
-    // public color14: string = 'rgb(0,255,255)';
-    // public color15: string = 'rgb(255,0,0)';
-    // public color16: string = '#a51ad633';
-    // public color17: string = '#666666';
-    // public color18: string = '#ff0000';
-
     public cmykValue: string = '';
 
     public cmykColor: Cmyk = new Cmyk(0, 0, 0, 0);
@@ -156,32 +127,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
                         this.ProfileService.getallstates(data.countryid)
                             .subscribe(
                                 data => {
-
                                     this.allstates = data.data;
-
                                 },
                                 error => {
-
                                     // console.log(error);
                                 });
                         var num = data.stateid;
                         if (num == undefined || num == "undefined") {
-
                         } else {
                             var n = num.toString();
                         }
-
                         this.ProfileService.getallcity(n)
                             .subscribe(
                                 data => {
-
-
-                                    if (data.message == "no data found") {
-
+                                    if (data.message == "No records found") {
                                     } else {
                                         this.citys = data.data
                                     }
-
                                 },
                                 error => {
 
@@ -197,51 +159,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         this.AuthenticationService.getmerchantcategories()
             .subscribe(data => {
-
                 this.merchantcategories = data;
-
             },
                 error => {
                     console.log(error);
-
                 });
 
 
         this.ProfileService.getAllcountries()
             .subscribe(data => {
-
                 this.allcountries = data.data;
-
             },
                 error => {
                     console.log(error);
-
                 });
     }
 
     selectcountries(stateid) {
-
-
         if (stateid == undefined || stateid == 'undefined') {
-
-
         } else {
-
             this.form.controls['states'].setValue('')
-
-
-
             var id = stateid.toString();
-
             this.ProfileService.getallstates(id)
                 .subscribe(
                     data => {
-
-                        if (data.message == "no data found") {
-
+                        if (data.message == "No records found") {
                         } else {
-
-
                             this.allstates = data.data;
 
                         }
@@ -260,14 +203,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (cityid == undefined || cityid == 'undefined') {
 
         } else {
-
             this.form.controls['city'].setValue('')
-
             this.ProfileService.getallcity(cityid)
                 .subscribe(
                     data => {
-
-                        if (data.message == "no data found") {
+                        if (data.message == "No records found") {
 
                         } else {
                             this.citys = data.data
@@ -303,8 +243,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     this.urls[index] = fileInput.target.result;
                     this.filesToUpload.push(imagefiles[0]);
                     this.newfileuplodes.push(imagefiles[0]);
-
-
                 }
                 testreader.readAsDataURL(fileInput.target.files[0]);
             }
@@ -317,7 +255,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         var imagefiles = fileInput.target.files;
         if (fileInput.target.files && fileInput.target.files[0]) {
             var regex = new RegExp("(.*?)\.(jpg|jpeg|png|raw|tiff)$");
-
             if (!(regex.test(fileInput.target.value.toLowerCase()))) {
                 fileInput.target.value = ''
                 this.snackBar.open('Please select correct file format', '', {
@@ -325,9 +262,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
-
             } else {
-
                 var testreader1 = new FileReader();
                 testreader1.onload = (fileInput: any) => {
                     this.urls1[index] = fileInput.target.result;
@@ -346,19 +281,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     updatemyprofile() {
-
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
-
             if (this.filesToUpload.length > 0 || this.backgroundfilesToUpload.length > 0) {
-
                 var background = [];
                 var data = this.filesToUpload.slice(-1);
                 var data1 = this.backgroundfilesToUpload.slice(-1);
                 var image;
                 if (data[0] == undefined) {
-
-
                     image = ""
                 } else {
                     image = data[0]
@@ -374,48 +304,38 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 }
 
                 background.push(image, backgroundimage);
-
                 this.ProfileService.uploadLogoImage(background)
                     .subscribe(data => {
-
                         data.sort(function (obj1, obj2) {
                             return obj1.index - obj2.index;
 
                         });
-
                         if (image) {
                             this.form.value.image = data[0].s3url.toString();
-
                         }
                         if (backgroundimage) {
-
                             if (image) {
                                 this.form.value.backgroundimage = data[1].s3url.toString();
-
                             } else {
                                 this.form.value.backgroundimage = data[0].s3url.toString();
                             }
-
                         }
-
                         this.form.value._id = user._id;
                         this.form.value.userType = user.userType;
                         this.form.value.fontcolor = $("#fontcolor").val()
                         this.form.value.backgroundtheme = $("#backgroundthemecolor").val()
-
-
                         this.ProfileService.updateprofile(this.form.value)
                             .subscribe(
                                 data => {
 
-                                    if (data.string == "Email is already exist.") {
-                                        this.snackBar.open("Email is already exist.", '', {
+                                    if (data.string == "Email already exist.") {
+                                        this.snackBar.open("Email already exist.", '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
                                         });
-                                    } else if (data.string == "BusinessName is already exist.") {
-                                        this.snackBar.open('BusinessName is already exist.', '', {
+                                    } else if (data.string == "Business name already exists.") {
+                                        this.snackBar.open('Business name already exists.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
@@ -431,7 +351,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
                                 },
                                 error => {
-
                                     this.snackBar.open('Please try again!', '', {
                                         duration: 3000,
                                         horizontalPosition: this.horizontalPosition,
@@ -443,8 +362,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     });
 
             } else {
-
-
                 this.form.value._id = user._id;
                 this.form.value.userType = user.userType;
                 this.form.value.fontcolor = $("#fontcolor").val()
@@ -453,16 +370,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.ProfileService.updateprofile(this.form.value)
                     .subscribe(
                         data => {
-
-
-                            if (data.string == "Email is already exist.") {
-                                this.snackBar.open('Email is already exist.', '', {
+                            if (data.string == "Email already exist.") {
+                                this.snackBar.open('Email already exist.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
                                 });
-                            } else if (data.string == "BusinessName is already exist.") {
-                                this.snackBar.open('BusinessName is already exist.', '', {
+                            } else if (data.string == "Business name already exists.") {
+                                this.snackBar.open('Business name already exists.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
@@ -484,7 +399,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                 verticalPosition: this.verticalPosition,
                             });
                             this.router.navigate([this.returnUrl]);
-
                         });
             }
 

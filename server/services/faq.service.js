@@ -17,7 +17,7 @@ function addfaqData(faqData) {
     var userId = new mongoose.Types.ObjectId(faqData.userId)
     if (faqData.faqquestion == '') {
         var data = {};
-        data.string = 'Please enter question you can not submit an empty field.';
+        data.string = 'Please enter question.';
         deferred.resolve(data);
     } else {
         var saveFaq = new faq({
@@ -93,7 +93,7 @@ function addFaqAnswerByAdmin(answerdata) {
     var deferred = Q.defer();
     if (answerdata.faqanswer == '') {
         var data = {};
-        data.string = 'Please enter answer you can not submit an empty field.';
+        data.string = 'Please enter answer.';
         deferred.resolve(data);
     } else {
         faq.findById(answerdata.faqId, function (err, getdata) {

@@ -196,7 +196,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
    
       if (results == '' || results == null || results == 'null') {
         var data = {};
-        data.string = 'Pls add Primary till type';
+        data.string = 'Please add Primary till type';
         res.send(data);
      
       } else {
@@ -307,7 +307,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 
                                     var data = {};
-                                    data.string = 'Csv import success fully';
+                                    data.string = 'Csv imported successfully';
                                     res.send(data);
                                   }
                                 })
@@ -330,7 +330,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
 
                               //       var data = {};
-                              //       data.string = 'Csv import success fully';
+                              //       data.string = 'Csv imported successfully';
                               //       res.send(data);
                               //     }
                               //   })
@@ -399,7 +399,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                               deferred.reject(err.name + ': ' + err.message);
                             } else {
                               var data = {};
-                              data.string = 'Csv import success fully';
+                              data.string = 'Csv imported successfully';
                               res.send(data);
                             }
                           })
@@ -418,7 +418,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                         //       deferred.reject(err.name + ': ' + err.message);
                         //     } else {
                         //       var data = {};
-                        //       data.string = 'Csv import success fully';
+                        //       data.string = 'Csv imported successfully';
                         //       res.send(data);
                         //     }
                         //   })
