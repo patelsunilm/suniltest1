@@ -156,8 +156,8 @@ export class UpdateuserComponent implements OnInit {
         this.UsersService.updateuserdetails(this.form.value).subscribe(data => {
 
 
-          if (data.string == "Email is already exist.") {
-            this.snackBar.open('Email is already exist.', '', {
+          if (data.string == "Email already exist.") {
+            this.snackBar.open('Email already exist.', '', {
               duration: 3000,
               horizontalPosition: this.horizontalPosition,
               verticalPosition: this.verticalPosition,
@@ -184,8 +184,8 @@ export class UpdateuserComponent implements OnInit {
     } else {
       this.loading = true;
       this.UsersService.updateuserdetails(this.form.value).subscribe(data => {
-        if (data.string == "Email is already exist.") {
-          this.snackBar.open('Email is already exist.', '', {
+        if (data.string == "Email already exist.") {
+          this.snackBar.open('Email already exist.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,

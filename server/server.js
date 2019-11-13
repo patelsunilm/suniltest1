@@ -195,7 +195,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
 
       if (results == '' || results == null || results == 'null') {
         var data = {};
-        data.string = 'Pls add Primary till type';
+        data.string = 'Please add Primary till type';
         res.send(data);
 
       } else {
@@ -227,29 +227,25 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
             if (arr1.length == arr2.length && arr1.every(function (u, i) {
               return u === arr2[i];
             })) {
-
               var allproducts = [];
               var j = 0;
-              var s= 1;
-              var test = []
-              var protest = 0
-              // results.splice(1, 1);
-             
+              for (let i = 0; i < results.length; i++) {
+                var cost = results[i].costprice == '' ? 0 : results[i].costprice;
+                var markup = results[i].markup == '' ? 0 : results[i].markup;
+                var sellingprice = (parseInt(cost) + parseInt(markup))
+                results[i].sellingprice = sellingprice;
 
-              var myarray=[];
-               for (let i = 0; i < results.length; i++) {
-                
+                var datetime = new Date(new Date).valueOf();
+                var randomnumber = Math.floor((Math.random() * 100) + 1);
+                results[i].barcode = datetime + randomnumber;
+                results[i].merchantid = userid;
 
-                var productname = new RegExp("^" + results[i].productname + "$", "i")
-                var result =  products.find({ $and: [{ productname: productname }, { merchantid:    userid }] }, function (err, duplicateData) {
-                  if (duplicateData.length > 0) {
-    
-                    var cv = s++;
-                    if(cv == results.length){
-                      var data = {};
-                      data.string = 'error';
-                      res.send(data);
-                    } 
+                var deferred = Q.defer();
+                productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
+                  if (getcategory) {
+
+                    results[i].productcatid = getcategory._id;
+
                   } else {
 
                    

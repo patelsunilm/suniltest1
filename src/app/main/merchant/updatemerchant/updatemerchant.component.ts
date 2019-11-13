@@ -63,7 +63,7 @@ export class UpdateMerchantComponent implements OnInit, OnDestroy {
 
 
 
-            
+
             this.MerchantService.getmerchantDatabyId(params.id)
                 .subscribe(
                     data => {
@@ -96,14 +96,14 @@ export class UpdateMerchantComponent implements OnInit, OnDestroy {
                 .subscribe(
                     data => {
 
-                        if (data.string == 'Email is already exist.') {
-                            this.snackBar.open('Email is already exists.', '', {
+                        if (data.string == 'Email already exist.') {
+                            this.snackBar.open('Email already exists.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
-                        } else if (data.string == 'Business Name is already exist.') {
-                            this.snackBar.open('Business Name is already exist.', '', {
+                        } else if (data.string == 'Business name already exists.') {
+                            this.snackBar.open('Business name already exists.', '', {
                                 duration: 3000,
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,

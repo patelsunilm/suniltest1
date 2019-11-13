@@ -45,41 +45,33 @@ function addnotification(notificationsdetails) {
     priority: "high",
     timeToLive: 60 * 60 * 24
   };
-
-
   var userid = []
   for (let i = 0; i < notificationsdetails.users.length; i++) {
-
     userid.push({ 'userId': notificationsdetails.users[i]._id })
-
-
-
   }
 
-  admin.messaging().sendToDevice(tokens, payload, options)
-    .then(function (response) {
-      
-      console.log("Successfully sent message:");
-      var saveusers = new notifications({
-        users: userid,
-        message: notificationsdetails.Message,
+  var saveusers = new notifications({
+    users: userid,
+    message: notificationsdetails.Message,
 
-      });
-      saveusers.save(
-        function (err, savequerys) {
-          if (!err) {
+  });
+  saveusers.save(
+    function (err, savequerys) {
+      if (!err) {
+
+        admin.messaging().sendToDevice(tokens, payload, options)
+          .then(function (response) {
+            // console.log("Successfully sent message:");
             deferred.resolve(savequerys);
-
-          } else {
-            deferred.reject(err.name + ': ' + err.message);
-          }
-        })
+          })
+          .catch(function (error) {
+            deferred.reject(error);
+            //  console.log("Error sending message:", error);
+          });
+      } else {
+        deferred.reject(err.name + ': ' + err.message);
+      }
     })
-    .catch(function (error) {
-      console.log("Error sending message:", error);
-    });
-
-
 
   return deferred.promise;
 

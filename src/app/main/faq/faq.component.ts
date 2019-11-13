@@ -201,8 +201,8 @@ export class FaqPopupComponent {
 
             .subscribe(
                 data => {
-                    if (data.string == 'Please enter question you can not submit an empty field.') {
-                        this.snackBar.open('Please enter question you can not submit an empty field.', '', {
+                    if (data.string == 'Please enter question.') {
+                        this.snackBar.open('Please enter question.', '', {
                             duration: 3000,
                             horizontalPosition: this.horizontalPosition,
                             verticalPosition: this.verticalPosition,
@@ -230,8 +230,8 @@ export class FaqPopupComponent {
         this.FAQService.addFaqAnswerByAdmin(this.Form.value)
             .subscribe(
                 data => {
-                    if (data.string == 'Please enter answer you can not submit an empty field.') {
-                        this.snackBar.open('Please enter answer you can not submit an empty field.', '', {
+                    if (data.string == 'Please enter answer.') {
+                        this.snackBar.open('Please enter answer.', '', {
                             duration: 3000,
                             horizontalPosition: this.horizontalPosition,
                             verticalPosition: this.verticalPosition,

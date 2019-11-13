@@ -155,7 +155,7 @@ function getAllproducts(details) {
             if (getallproducts == '' || getallproducts == null || getallproducts == 'null') {
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -197,7 +197,7 @@ function getAllproducts(details) {
         } else {
             var productresponcedata = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -402,7 +402,7 @@ function getbarcodedetail(id) {
 
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -429,7 +429,7 @@ function getAllProductcategories(details) {
             if (getproductscategories == '') {
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -484,7 +484,7 @@ function addproductcategories(catname, merchantId) {
     Productcategories.find({ $and: [{ catName: catname }, { merchantId: id }] }, function (err, getcategory) {
         if (getcategory.length > 0) {
             var data = {};
-            data.string = 'Product Category is already exist.';
+            data.string = 'Product Category already exist.';
             deferred.resolve(data);
         } else {
 
@@ -516,7 +516,7 @@ function addtocart(cart) {
     var count = cart.count
     var productresponcedata = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
             {}
     }
@@ -563,13 +563,13 @@ function addtocart(cart) {
 
                                     cart.save(function (err, cartdetails) {
                                         if (!err) {
-                                            var cartsucessresponce = {
+                                            var cartSuccessresponce = {
                                                 "status": "1",
                                                 "message": "Success",
                                                 "data":
                                                     {}
                                             }
-                                            deferred.resolve(cartsucessresponce);
+                                            deferred.resolve(cartSuccessresponce);
                                         } else {
 
                                             deferred.resolve(productresponcedata);
@@ -610,13 +610,13 @@ function addtocart(cart) {
 
                                                         } else {
 
-                                                            var cartsucessresponce = {
+                                                            var cartSuccessresponce = {
                                                                 "status": "1",
                                                                 "message": "Success",
                                                                 "data":
                                                                     {}
                                                             }
-                                                            deferred.resolve(cartsucessresponce);
+                                                            deferred.resolve(cartSuccessresponce);
                                                         }
                                                     })
 
@@ -637,13 +637,13 @@ function addtocart(cart) {
                                                             deferred.resolve(productresponcedata);
 
                                                         } else {
-                                                            var cartsucessresponce = {
+                                                            var cartSuccessresponce = {
                                                                 "status": "1",
                                                                 "message": "Success",
                                                                 "data":
                                                                     {}
                                                             }
-                                                            deferred.resolve(cartsucessresponce);
+                                                            deferred.resolve(cartSuccessresponce);
                                                         }
 
                                                     });
@@ -679,7 +679,7 @@ function RemoveCart(cart) {
     var deferred = Q.defer();
     var cartresponcedata = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
             {}
     }
@@ -697,7 +697,7 @@ function RemoveCart(cart) {
                         deferred.resolve(cartresponcedata);
 
                     } else {
-                        var cartsucessresponce = {
+                        var cartSuccessresponce = {
                             "status": "1",
                             "message": "Success",
                             "data":
@@ -727,7 +727,7 @@ function RemoveCart(cart) {
                             }
                         });
 
-                        deferred.resolve(cartsucessresponce);
+                        deferred.resolve(cartSuccessresponce);
                     }
                 }
                 else {
@@ -742,19 +742,19 @@ function RemoveCart(cart) {
             "productdetails.productId": new mongoose.Types.ObjectId(cart.productId)
         }, { "$set": { "productdetails.$.quantity": cart.count } }, function (err, results) {
             if (!err) {
-                var cartsucessresponce = {
+                var cartSuccessresponce = {
                     "status": "1",
                     "message": "Success",
                     "data":
                         {}
                 }
-                deferred.resolve(cartsucessresponce);
+                deferred.resolve(cartSuccessresponce);
 
             } else {
 
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -779,7 +779,7 @@ function getCategoriesProducts(product) {
             if (getproducts == '' || getproducts == null || getproducts == 'null') {
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -823,7 +823,7 @@ function getCategoriesProducts(product) {
 
             var productresponcedata = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -844,7 +844,7 @@ function getproductdetailsbyid(data) {
             if (responce == '' || responce == null || responce == 'null') {
                 var productresponcedata = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -878,7 +878,7 @@ function getproductdetailsbyid(data) {
 
             var productresponcedata = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -909,7 +909,7 @@ function addproductrating(ratingDetails) {
 
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -961,7 +961,7 @@ function getproductrating(getproduct) {
             if (getratingdata == '' || getratingdata == 'undefined' || getratingdata == undefined || getratingdata == null) {
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -997,7 +997,7 @@ function getproductrating(getproduct) {
 
             var ratingResponceData = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -1031,7 +1031,7 @@ function updateproductrating(ratingDetails) {
 
             var ratingResponceData = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -1075,7 +1075,7 @@ function getproductratingbyid(ratingDetails) {
             if (getratingdata == '' || getratingdata == 'undefined' || getratingdata == undefined || getratingdata == null) {
                 var ratingResponceData = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -1115,7 +1115,7 @@ function getproductratingbyid(ratingDetails) {
                     } else {
                         var ratingResponceData = {
                             "status": "0",
-                            "message": "no data found",
+                            "message": "No records found",
                             "data":
                                 {}
                         }
@@ -1128,7 +1128,7 @@ function getproductratingbyid(ratingDetails) {
 
             var ratingResponceData = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }

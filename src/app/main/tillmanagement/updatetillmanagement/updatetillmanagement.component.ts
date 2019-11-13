@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -17,119 +17,119 @@ import { tillManagementService } from '../../../_services/index'
 })
 export class UpdatetillmanagementComponent implements OnInit {
   form: FormGroup;
-  constructor(private _formBuilder: FormBuilder ,  private route: ActivatedRoute, private tillManagementService :tillManagementService, public snackBar: MatSnackBar,
+  constructor(private _formBuilder: FormBuilder, private route: ActivatedRoute, private tillManagementService: tillManagementService, public snackBar: MatSnackBar,
     private router: Router) { }
-    secondaryid : any;
-    horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-    verticalPosition: MatSnackBarVerticalPosition = 'top';
-    returnUrl: string;
-    f = true;
-   
-    ngOnInit() {
-   this.f = true;
+  secondaryid: any;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  returnUrl: string;
+  f = true;
+
+  ngOnInit() {
+    this.f = true;
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tillmanagement';
     this.form = this._formBuilder.group({
-     
+
       name: ['', Validators.required],
-     
-  });
+
+    });
 
 
-  this.route.params.subscribe(params => {
-   
-     var merchantId = localStorage.getItem('userId');
-    
-    
-    this.tillManagementService.getTillnametbyId(params , merchantId).subscribe(data => {
-     
-       if(data.flag == 1) {
-        console.log('data');
-        console.log(data);
-        if(data.error == "error") {
-          console.log('data 1');
-         
-        } else {
-    
-        this.form = this._formBuilder.group({
-          name: [data.results.name, Validators.required],
-      });
+    this.route.params.subscribe(params => {
+
+      var merchantId = localStorage.getItem('userId');
+
+
+      this.tillManagementService.getTillnametbyId(params, merchantId).subscribe(data => {
+
+        if (data.flag == 1) {
+          console.log('data');
+          console.log(data);
+          if (data.error == "error") {
+            console.log('data 1');
+
+          } else {
+
+            this.form = this._formBuilder.group({
+              name: [data.results.name, Validators.required],
+            });
+          }
+        } else if (data.flag == 2) {
+
+          if (data.error == "error") {
+            console.log('data 2');
+
+          } else {
+            this.form = this._formBuilder.group({
+
+              name: [data.results.secondary[0].name, Validators.required],
+
+            });
+          }
+        } else if (data.flag == 3) {
+
+          if (data.error == "error") {
+            console.log('data 3');
+
+          } else {
+            this.form = this._formBuilder.group({
+
+              name: [data.results[0].secondary.tertiary.name, Validators.required],
+
+            });
+          }
         }
-    } else if(data.flag == 2) {
-        
-      if(data.error == "error") {
-        console.log('data 2');
-       
-      } else {
-        this.form = this._formBuilder.group({
-          
-          name: [data.results.secondary[0].name, Validators.required],
-         
-      });
-    }
-    }  else if(data.flag == 3) { 
 
-      if(data.error == "error") {
-        console.log('data 3');
-       
-      } else {
-        this.form = this._formBuilder.group({
-          
-          name: [data.results[0].secondary.tertiary.name, Validators.required],
-         
-      });
-    }
-      }
-     
+      })
     })
-  })
   }
 
 
   updatetilltype() {
-   
+
     this.route.params.subscribe(params => {
-    
-       
+
+
       this.form.value.flag = params;
       this.form.value.merchantId = localStorage.getItem('userId');
-       
-  
+
+
       this.tillManagementService.updatetilltypename(this.form.value)
-    .subscribe(
-        data => {
-         if(data.string == "Primary type is update successfully.") {
-          this.snackBar.open('Primary name is updated successfully.', '', {
-            duration: 5000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-            
-        });
-        this.router.navigate([this.returnUrl]);
-         } else if(data.string == "Secondary type is update successfully." ) {
+        .subscribe(
+          data => {
+            if (data.string == "Primary type updated successfully.") {
+              this.snackBar.open('Primary name updated successfully.', '', {
+                duration: 5000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
 
-          this.snackBar.open('Secondary name is updated successfully.', '', {
-            duration: 5000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-        });
-        this.router.navigate([this.returnUrl]);
-         } else if(data.string == "tertiary type is update successfully.") {
-          this.snackBar.open('tertiary name is updated successfully.', '', {
-            duration: 5000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-        });
-        this.router.navigate([this.returnUrl]);
+              });
+              this.router.navigate([this.returnUrl]);
+            } else if (data.string == "Secondary type updated successfully.") {
 
-         }
-        
-        },
-        error => {
+              this.snackBar.open('Secondary name updated successfully.', '', {
+                duration: 5000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+              this.router.navigate([this.returnUrl]);
+            } else if (data.string == "Tertiary type updated successfully.") {
+              this.snackBar.open('Tertiary name updated successfully.', '', {
+                duration: 5000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+              this.router.navigate([this.returnUrl]);
+
+            }
+
+          },
+          error => {
 
             console.log(error);
-        });
-      })
-
-      }
+          });
+    })
 
   }
+
+}

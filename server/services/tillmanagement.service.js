@@ -50,7 +50,7 @@ function addtilldetails(details) {
                         if (!err) {
 
                             var data = {};
-                            data.string = 'Primary type is add successfully.';
+                            data.string = 'Primary type added successfully.';
                             deferred.resolve(data);
                         } else {
 
@@ -60,7 +60,7 @@ function addtilldetails(details) {
                 } else {
 
                     var data = {};
-                    data.string = 'Pls Primary type select.';
+                    data.string = 'Please select primary type .';
                     deferred.resolve(data);
                 }
 
@@ -68,7 +68,7 @@ function addtilldetails(details) {
                 if (details.tilltype == 'Primary') {
 
                     var data = {};
-                    data.string = 'Primary type is already exist.';
+                    data.string = 'Primary type already exist.';
                     deferred.resolve(data);
                 } else {
 
@@ -92,7 +92,7 @@ function addtilldetails(details) {
 
                                 if (tilllist.length > 0) {
                                     var data = {};
-                                    data.string = 'Name is already exist.';
+                                    data.string = 'Name already exist.';
                                     deferred.resolve(data);
 
                                 } else {
@@ -118,7 +118,7 @@ function addtilldetails(details) {
                                             } else {
 
                                                 var data = {};
-                                                data.string = 'tertiary name is add successfully.';
+                                                data.string = 'Tertiary name added successfully.';
                                                 deferred.resolve(data);
 
                                             }
@@ -133,7 +133,7 @@ function addtilldetails(details) {
 
                                 if (test.secondary.length > 0) {
                                     var data = {};
-                                    data.string = 'Name is already exist.';
+                                    data.string = 'Name already exist.';
                                     deferred.resolve(data);
 
                                 } else {
@@ -156,7 +156,7 @@ function addtilldetails(details) {
                                             } else {
 
                                                 var data = {};
-                                                data.string = 'Secondary type is add successfully.';
+                                                data.string = 'Secondary type added successfully.';
                                                 deferred.resolve(data);
 
                                             }
@@ -230,7 +230,7 @@ function deletetilltypename(details) {
                 else {
 
                     var data = {};
-                    data.string = 'Primary type is delete successfully.';
+                    data.string = 'Primary type deleted successfully.';
                     deferred.resolve(data);
                 }
 
@@ -290,7 +290,7 @@ function deletetilltypename(details) {
                                 }
                                 else {
                                     var data = {};
-                                    data.string = 'Secondary type is delete successfully.';
+                                    data.string = 'Secondary type deleted successfully.';
                                     deferred.resolve(data);
                                 }
                             });
@@ -317,7 +317,7 @@ function deletetilltypename(details) {
                                     }
                                     else {
                                         var data = {};
-                                        data.string = 'Secondary type is delete successfully.';
+                                        data.string = 'Secondary type deleted successfully.';
                                         deferred.resolve(data);
                                     }
                                 });
@@ -375,7 +375,7 @@ function deletetilltypename(details) {
                         else {
 
                             var data = {};
-                            data.string = 'Tertiary type is delete successfully.';
+                            data.string = 'Tertiary type deleted successfully.';
                             deferred.resolve(data);
                         }
                     });
@@ -494,7 +494,7 @@ function updatetilltypename(tills) {
                     if (!err) {
 
                         var data = {};
-                        data.string = 'Primary type is update successfully.';
+                        data.string = 'Primary type updated successfully.';
 
                         deferred.resolve(data);
                     } else {
@@ -517,7 +517,7 @@ function updatetilltypename(tills) {
             if (!err) {
 
                 var data = {};
-                data.string = 'Secondary type is update successfully.';
+                data.string = 'Secondary type updated successfully.';
 
                 deferred.resolve(data);
 
@@ -595,7 +595,7 @@ function updatetilltypename(tills) {
                                         } else {
 
                                             var data = {};
-                                            data.string = 'tertiary type is update successfully.';
+                                            data.string = 'Tertiary type updated successfully.';
                                             deferred.resolve(data);
 
                                         }

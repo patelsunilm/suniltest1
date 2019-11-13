@@ -52,7 +52,7 @@ function updateprofile(getprofiledata) {
 
             if (duplicateData.length > 0) {
                 var data = {};
-                data.string = 'Email is already exist.';
+                data.string = 'Email already exist.';
                 deferred.resolve(data);
 
             } else {
@@ -92,7 +92,7 @@ function updateprofile(getprofiledata) {
 
             if (duplicateData.length > 0) {
                 var data = {};
-                data.string = 'Email is already exist.';
+                data.string = 'Email already exist.';
                 deferred.resolve(data);
 
             } else if (getprofiledata.businessname) {
@@ -100,7 +100,7 @@ function updateprofile(getprofiledata) {
                 Users.find({ $and: [{ businessname: getprofiledata.businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
                     if (duplicateData.length > 0) {
                         var data = {};
-                        data.string = 'BusinessName is already exist.';
+                        data.string = 'Business name already exists.';
                         deferred.resolve(data);
 
                     } else {
@@ -165,7 +165,7 @@ function getcountries() {
 
                 var countriesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -191,7 +191,7 @@ function getcountries() {
          
                 var contriesdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         result
                 }
@@ -230,7 +230,7 @@ function getstates(id) {
 
                 var countriesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -259,7 +259,7 @@ function getstates(id) {
          
                 var statedetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         result
                 }
@@ -270,7 +270,7 @@ function getstates(id) {
 
             var countriesdetails = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -305,7 +305,7 @@ function getcity(id) {
 
                 var citiesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -331,7 +331,7 @@ function getcity(id) {
                
                 var contriesdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         result
                 }
@@ -342,7 +342,7 @@ function getcity(id) {
 
             var citiesdetails = {
                 "status": "0",
-                "message": "no data found",
+                "message": "No records found",
                 "data":
                     {}
             }
@@ -361,7 +361,7 @@ function getuserprofile(profile) {
     var appusersnodatafound =
     {
         "status": "0",
-        "message": "No data found.",
+        "message": "No records found.",
         "data": {
 
         }
@@ -418,7 +418,7 @@ function getAllcountries() {
 
                 var contriesdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         allcountries
                 }
@@ -428,7 +428,7 @@ function getAllcountries() {
 
                 var contriesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -458,7 +458,7 @@ function getallstates(id) {
             if (stateresults == '') {
                 var statesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -476,7 +476,7 @@ function getallstates(id) {
 
                 var statesdetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         allstate
                 }
@@ -504,7 +504,7 @@ function  getallcity (id) {
             if (cityresults == '') {
                 var citydetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }
@@ -520,7 +520,7 @@ function  getallcity (id) {
 
                 var citydetails = {
                     "status": "1",
-                    "message": "Sucess",
+                    "message": "Success",
                     "data":
                         allcity
                 }

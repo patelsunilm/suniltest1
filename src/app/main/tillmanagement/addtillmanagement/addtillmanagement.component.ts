@@ -85,27 +85,27 @@ export class AddtillmanagementComponent implements OnInit {
     
     this.tillManagementService.addtilldetails(this.form.value).subscribe(data => {
 
-      if (data.string == "Primary type is add successfully.") {
+      if (data.string == "Primary type added successfully.") {
         this.snackBar.open('Primary type is added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
         this.router.navigate([this.returnUrl]);
-      } else if (data.string == "Primary type is already exist.") {
-        this.snackBar.open('Primary type is already exists.', '', {
+      } else if (data.string == "Primary type already exist.") {
+        this.snackBar.open('Primary type already exists.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
 
-      } else if (data.string == "Pls Primary type select.") {
-        this.snackBar.open('Pls primary type select.', '', {
+      } else if (data.string == "Please select primary type .") {
+        this.snackBar.open('Please select primary type .', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
-      } else if (data.string == "Secondary type is add successfully.") {
+      } else if (data.string == "Secondary type added successfully.") {
 
         this.snackBar.open('Secondary type added successfully.', '', {
           duration: 3000,
@@ -126,15 +126,15 @@ export class AddtillmanagementComponent implements OnInit {
 
             });
 
-      } else if (data.string == "tertiary name is add successfully.") {
-        this.snackBar.open('Tertiary name is added successfully.', '', {
+      } else if (data.string == "Tertiary name added successfully.") {
+        this.snackBar.open('Tertiary name added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });
         this.router.navigate([this.returnUrl]);
-      } else if(data.string == "Name is already exist.") {
-        this.snackBar.open('Name is already exists.', '', {
+      } else if(data.string == "Name already exist.") {
+        this.snackBar.open('Name already exists.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

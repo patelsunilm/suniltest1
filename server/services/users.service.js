@@ -102,7 +102,7 @@ function addsignupuser(signupdata) {
 
         if (result.length > 0) {
             var data = {};
-            data.string = 'Email is already exist.';
+            data.string = 'Email already exist.';
             deferred.resolve(data);
 
         } else if (signupdata.BusinessName) {
@@ -145,7 +145,7 @@ function addsignupuser(signupdata) {
 
 
                     var data = {};
-                    data.string = 'SignUp successful.';
+                    data.string = 'You have signed up successfully.';
                     deferred.resolve(data);
                 } else {
 
@@ -558,7 +558,7 @@ function selectMerchant(data) {
 
     var userdara1 = {
         "status": "0",
-        "message": "no data found",
+        "message": "No records found",
         "data":
             {}
     }
@@ -697,7 +697,7 @@ function getlastfivemerchant(data) {
 
                 var countriesdetails = {
                     "status": "0",
-                    "message": "no data found",
+                    "message": "No records found",
                     "data":
                         {}
                 }

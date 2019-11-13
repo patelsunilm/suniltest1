@@ -79,7 +79,7 @@
               <td>
                 <mat-form-field appearance="outline" id="div_{{i}}">
                   <mat-label>Catlist</mat-label>
-                  <mat-select #mySelect_{{i}} id="divs_{{i}}" formControlName="productcategories" required>
+                  <mat-select #mySelect id="divs_{{i}}" formControlName="productcategories" required>
                     <mat-option>Select product new category list</mat-option>
                     <div class="btn-cstm-catg">
                       <button mat-button (click)="addnewcategory(i)" class="cstm-mat-button">add product
@@ -190,8 +190,9 @@
                   </mat-error>
                 </mat-form-field>
               </td>
+              
               <td>
-                <button (click)="deleteRow(i ,urls)" class="btn btn-danger delete-btn-add">Delete</button>
+                 <button *ngIf="i !=0" (click)="deleteRow(i ,urls)" class="btn btn-danger delete-btn-add">Delete</button>
               </td>
             </tr>
           </table>
@@ -204,7 +205,7 @@
       </form>
     </div>
     <div class="add-row-btn">
-
+{{i}}
       <button type="button" (click)="addNewRow()" class="btn btn-primary">Add new product</button><br>
     </div>
   </div>
