@@ -96,6 +96,8 @@ function addsignupuser(signupdata) {
     var deferred = Q.defer();
     var hashUserPassword = bcrypt.hashSync(signupdata.password, 10);
 
+
+
     Users.find({ email: signupdata.email }, function (err, result) {
 
         if (result.length > 0) {
@@ -103,7 +105,17 @@ function addsignupuser(signupdata) {
             data.string = 'Email is already exist.';
             deferred.resolve(data);
 
-        } else {
+        } else if (signupdata.BusinessName) {
+
+           
+            Users.find({ businessname: signupdata.BusinessName }, function (err, newresult) {
+                if (newresult.length > 0) {
+
+                    var data = {};
+                    data.string = 'Business name is already exist.';
+                    deferred.resolve(data);
+
+                } else {
 
             var saveallsignup = new Users({
 
@@ -141,6 +153,9 @@ function addsignupuser(signupdata) {
                 }
             })
         }
+    
+    })
+}
     })
 
     return deferred.promise;

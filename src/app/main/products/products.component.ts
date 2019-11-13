@@ -1,4 +1,4 @@
-import { Component, Renderer2,OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component,ElementRef, Renderer2,OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MAT_DIALOG_DATA, MatSnackBarVerticalPosition, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,6 +12,7 @@ const PrimaryRed = '#dd0031';
 const SecondaryBlue = '#006ddd';
 import { OnDestroy, TemplateRef } from '@angular/core';
 import { Subject, from } from 'rxjs';
+import * as $ from 'jquery';
 
 export interface PeriodicElement {
 
@@ -36,7 +37,7 @@ export interface PeriodicElement {
 // ,'qrcodeImage'
 
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype','tilltypeName', 'stocklevel', 'action'];
+  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype','tilltypeName', 'stocklevel','qrcodeImage', 'action'];
   dataSource;
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -60,10 +61,11 @@ export class ProductsComponent implements OnInit {
       this.isTableHasData = false;
     }
   }
-
+  @ViewChild('fileInput')
   @ViewChild('ngxLoading') ngxLoadingComponent: NgxLoadingComponent;
   @ViewChild('customLoadingTemplate') customLoadingTemplate: TemplateRef<any>;
   public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  myInputVariable: ElementRef;
   public loading = false;
   public primaryColour = PrimaryWhite;
   public secondaryColour = SecondaryGrey;
@@ -99,6 +101,7 @@ export class ProductsComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+  oneimages : any;
   ngOnInit() {
     var userId = localStorage.getItem('userId');
    
@@ -106,11 +109,34 @@ export class ProductsComponent implements OnInit {
     this.ProductService.getproducts(userId)
       .subscribe(
         data => {
-
+         
           if (data.length > 0) {
-            this.dataSource = new MatTableDataSource(data);
-            this.dataSource.paginator = this.paginator;
-            this.isTableHasDataAgain = true;
+          
+            // this.image = "./assets/uploads/157355285282819qr.png"
+            // this.dataSource = new MatTableDataSource(data);
+            // this.dataSource.paginator = this.paginator;
+            // this.isTableHasDataAgain = true;
+          
+            const allproducts = [];
+             data.forEach(element => {
+              
+              this.oneimages = "assets/uploads/" +element.qrcodeImage
+              element.qrcodeImage  = "assets/uploads/" +element.qrcodeImage;
+               allproducts.push(element);
+  
+            });
+  
+  
+            if (allproducts.length > 0) {
+              this.dataSource = new MatTableDataSource(allproducts);
+              this.dataSource.paginator = this.paginator;
+              this.isTableHasDataAgain = true;
+  
+            } else {
+              this.isTableHasDataAgain = false;
+  
+            }
+
           } else {
             this.isTableHasDataAgain = false;
           }
@@ -121,11 +147,12 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  deleteproduct(id) {
+  deleteproduct(id ) {
 
     let dialogRef = this.dialog.open(deleteproductPopupComponent, {
       data: {
-        productid: id
+        productid: id,
+        
       },
       width: '450px'
     });
@@ -153,12 +180,15 @@ export class ProductsComponent implements OnInit {
     })
   }
 
+  
+
   fileEvent($event) {
-    this.loading = true;
+     this.loading = true;
     var regex = new RegExp("(.*?)\.(xlsx|xls|csv)$");
   
     if (!(regex.test($event.target.value.toLowerCase()))) {
 
+    
       $event.target.value = '';
       this.snackBar.open('Please select correct file format', '', {
         duration: 3000,
@@ -167,23 +197,22 @@ export class ProductsComponent implements OnInit {
       });
       this.loading = false;
     } else {
-
+      this.loading = true;
       var merchantid = localStorage.getItem('userId');
       this.url = window.location.origin;
 
       $event.target.files[0].userId = merchantid
       $event.target.files[0].url = this.url
-      this.loading = true;
-
-      
+  
       this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
         if (data.string == "Csv import success fully")  {
-          this.snackBar.open('Csv import sucessfull', '', {
+          this.snackBar.open('CSV imported sucessfull', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
+          $event.target.value = '';  
           var userId = localStorage.getItem('userId');
           this.loading = false;
 
@@ -236,6 +265,7 @@ export class ProductsComponent implements OnInit {
             verticalPosition: this.verticalPosition,
           });
           this.loading = false;
+          $event.target.value = '';
         }
       }, error => {
         console.log(error);
@@ -272,8 +302,9 @@ export class deleteproductPopupComponent {
 
 
   
-  delete(id) {
+  delete(id ) {
 
+    
     this.ProductService.deleteoneproduct(id)
       .subscribe(
         data => {

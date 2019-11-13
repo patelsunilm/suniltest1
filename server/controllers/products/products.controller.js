@@ -49,7 +49,6 @@ exports.getAllproducts = function(req, res) {
 
 exports.deleteproduct = function(req, res) {
     
-    
     productservice.deleteproduct(req.params.productid)
     .then(function (data) {
            

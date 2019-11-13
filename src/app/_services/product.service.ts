@@ -22,9 +22,9 @@ export class ProductService {
 
   }
 
-  deleteoneproduct(productid) {
-
-    return this.http.delete<any>(appConfig.apiUrl + '/products/deleteproduct/' + productid)
+  deleteoneproduct(productid ) {
+   
+    return this.http.delete<any>(appConfig.apiUrl + '/products/deleteproduct/' + productid )
 
   }
 
@@ -34,12 +34,11 @@ export class ProductService {
 
     const formData: any = new FormData();
     const files: Array<File> = Files;
-
-
+   
     formData.append("uploads", files);
     formData.append("uploads", userId);
-
-    return this.http.post<any>(appConfig.apiUrl + '/addcsvfile', formData)
+    
+    return this.http.post<any>(appConfig.apiUrl + '/addcsvfile', formData )
 
   }
 

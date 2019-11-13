@@ -281,7 +281,7 @@ export class UpdateproductComponent implements OnInit {
           this.form.value.fromId = tillTypeId;
    
           this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
-            this.snackBar.open('Product update success fully', '', {
+            this.snackBar.open('Product updated success fully', '', {
               duration: 3000,
               horizontalPosition: this.horizontalPosition,
               verticalPosition: this.verticalPosition,
@@ -326,7 +326,7 @@ export class UpdateproductComponent implements OnInit {
       
         this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
 
-          this.snackBar.open('Product update success fully', '', {
+          this.snackBar.open('Product updated successfully', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -341,7 +341,7 @@ export class UpdateproductComponent implements OnInit {
 
     } else {
 
-      this.snackBar.open('Move stock should be smaller then Stock level', '', {
+      this.snackBar.open('Move stock should be smaller then a Stock level', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,

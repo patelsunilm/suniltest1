@@ -260,7 +260,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (cityid == undefined || cityid == 'undefined') {
 
         } else {
-
+                
             this.form.controls['city'].setValue('')
 
             this.ProfileService.getallcity(cityid)

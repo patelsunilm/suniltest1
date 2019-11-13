@@ -107,7 +107,7 @@ export class AddtillmanagementComponent implements OnInit {
         });
       } else if (data.string == "Secondary type is add successfully.") {
 
-        this.snackBar.open('Secondary type is added successfully.', '', {
+        this.snackBar.open('Secondary type added successfully.', '', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,

@@ -2,6 +2,7 @@ var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var qr = require('qr-image');
+var AWS = require('aws-sdk');
 
 var Q = require('q');
 const bwipjs = require('bwip-js');
@@ -40,13 +41,44 @@ service.getProductsRatingDetails = getProductsRatingDetails;
 service.getProductsRatingDetailsbyid = getProductsRatingDetailsbyid;
 service.gettilldetails = gettilldetails;
 
+//aws credentials
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = "AKIAJRCOCZM7YVPHCJRA";
+AWS.config.secretAccessKey = "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";
+AWS.config.region = "us-east-1";
+AWS.config.apiVersions = {
+    "s3": "2012-10-17"
+}
 
 function addproduct(addproducts) {
 
     var deferred = Q.defer();
     a = 0;
     let updatepro = 0;
-    for (let i = 0; i < addproducts.length; i++) {
+//     for (let i = 0; i < addproducts.length; i++) {
+
+//         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
+//         console.log(addproducts[i].productname);
+//         products.find({ $and: [{ productname: addproducts[i].productname  }, { merchantid:  addproducts[i].merchantId  }] }, function (err, products)  {
+//         }, function (err, products) {
+//             if (products.length > 0) {
+//                 console.log('aa');
+//                 var data = {};
+//                 data.string = 'Product name is already exist.';
+//                 deferred.resolve(data);
+//             } else {
+
+
+
+//                 deferred.reject(err.name + ': ' + err.message);
+//             }
+//         })
+
+//     }
+
+
+// return false
+
 
         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
         var productcatid = new mongoose.Types.ObjectId(addproducts[i].productcategories);
@@ -64,17 +96,19 @@ function addproduct(addproducts) {
             merchantid: addproducts[i].merchantId,
             productcatid: productcatid,
             tillTypeId: addproducts[i].tilltypeid,
-            reorderlevel : addproducts[i].reorderlevel
+            reorderlevel: addproducts[i].reorderlevel
         });
 
         saveallproducts.save(function (err, productsresults) {
             if (!err) {
 
+
                 var qr_svg = qr.image(addproducts[i].url + '/#/product/' + productsresults._id, { type: 'png', parse_url: true });
                 var datetime = new Date(new Date).valueOf();
                 var randomnumber = Math.floor((Math.random() * 100) + 1);
-                var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
-                var sep = filename.split("/");
+                var filename = qr_svg.pipe(require('fs').createWriteStream('../src/assets/uploads/' + datetime + randomnumber + 'qr.png')).path
+
+                var sep = filename.split("../src/assets/uploads/");
                 var id = new mongoose.Types.ObjectId(productsresults._id);
 
                 products.findOneAndUpdate({ _id: id }, {
@@ -101,7 +135,7 @@ function addproduct(addproducts) {
             }
         })
 
-    }
+    // }
 
     return deferred.promise;
 
@@ -178,41 +212,81 @@ function deleteproduct(productid) {
 
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
-    products.deleteOne(
-        { _id: new mongoose.Types.ObjectId(id) },
-        function (err) {
-            if (err) {
-          
-                deferred.reject(err.name + ': ' + err.message);
-            }
-            else {
-                var data = {};
-                data.string = 'Product deleted successfully.';
-                deferred.resolve(data);
-            }
 
-        });
+
+
+    products.findOne({ _id: id }, function (err, getproducts) {
+        if (!err) {
+
+          
+            
+           
+            products.deleteOne(
+                { _id: new mongoose.Types.ObjectId(id) },
+                function (err) {
+                    if (err) {
+
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                    else {
+                            var pro = getproducts.image;
+                          
+                            if(pro == "undefined" ||pro == undefined){
+                                var data = {};
+                                data.string = 'Product deleted successfully.';
+                                deferred.resolve(data);
+                            } else {
+                                var sep = pro.split("https://smaf.s3.us-east-2.amazonaws.com/smaf/uploads/");
+                
+                           
+                                var s3 = new AWS.S3({ accessKeyId: "AKIAJRCOCZM7YVPHCJRA", secretAccessKey: "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" });
+                                s3.deleteObject({
+                                    Bucket: 'smaf',
+                                    Key: 'smaf/uploads/' + sep[1]
+                                }, function (err, data) {
+                                    if (!err) {
+                                        var data = {};
+                                        data.string = 'Product deleted successfully.';
+                                        deferred.resolve(data);
+                                    } else {
+                                        console.log('err');
+                                    }
+                                })
+                            }
+                            
+
+                    }
+
+                });
+
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+
+
     return deferred.promise;
 }
 
 
-function getallproductbyId(productid , merchantId) {
-   
-    
+function getallproductbyId(productid, merchantId) {
+
+
 
     var deferred = Q.defer();
     var id = new mongoose.Types.ObjectId(productid);
 
-    products.findOne({ $and:[{ _id: id },{merchantid :  merchantId} ]}, function (err, getproducts) {
+    products.findOne({ $and: [{ _id: id }, { merchantid: merchantId }] }, function (err, getproducts) {
         if (!err) {
-            if(getproducts == null || getproducts == "null" ) {
-                  var getpro = {}    
-                  getpro.error = "error"
-                 deferred.resolve(getpro); 
+            if (getproducts == null || getproducts == "null") {
+                var getpro = {}
+                getpro.error = "error"
+                deferred.resolve(getpro);
             } else {
                 deferred.resolve(getproducts);
             }
-            
+
         } else {
 
             deferred.reject(err.name + ': ' + err.message);
@@ -240,7 +314,7 @@ function updateprodcutdetail(data) {
             markup: data.markup,
             tillTypeId: data.tillTypeId,
             tillTypeName: data.tilltypename,
-            reorderlevel : data.reorderlevel,
+            reorderlevel: data.reorderlevel,
             productcatid: new mongoose.Types.ObjectId(data.catname),
 
         }, function (err, updateproducts) {
@@ -268,7 +342,7 @@ function updateprodcutdetail(data) {
             date: data.date,
             tilltype: data.tilltype,
             stocklevel: data.stocklevel,
-            reorderlevel : data.reorderlevel,
+            reorderlevel: data.reorderlevel,
 
             markup: data.markup,
             tillTypeId: data.tillTypeId,
@@ -1016,14 +1090,14 @@ function getproductratingbyid(ratingDetails) {
                         getratingdata.forEach(element => {
                             var objrating = {}
                             ratingId = element.ratings._id == undefined ? '' : element.ratings._id,
-                            objrating.ratingId = ratingId.toString();
+                                objrating.ratingId = ratingId.toString();
                             rating = element.ratings.rating == undefined ? '' : element.ratings.rating;
                             objrating.rating = rating.toString();
                             objrating.comment = element.ratings.comment == undefined ? '' : element.ratings.comment;
                             objrating.userId = element.ratings.userId == undefined ? '' : element.ratings.userId;
-                          
-                            
-                            objrating.userName = (element.username[0] == undefined ||element.username[0].firstname == undefined || element.username[0].firstname == "undefined" || element.username[0].firstname == '' || element.username[0].firstname == null) ? '' : element.username[0].firstname;
+
+
+                            objrating.userName = (element.username[0] == undefined || element.username[0].firstname == undefined || element.username[0].firstname == "undefined" || element.username[0].firstname == '' || element.username[0].firstname == null) ? '' : element.username[0].firstname;
                             productrating.push(objrating)
 
                         });
@@ -1141,7 +1215,7 @@ function getProductsRatingDetailsbyid(productdetails) {
 
 
 function gettilldetails(deatils) {
-  
+
     var deferred = Q.defer();
     var startdate = new Date(deatils.startdate);
     var enddate = new Date(deatils.endDate);
@@ -1154,14 +1228,14 @@ function gettilldetails(deatils) {
         {
             '$match': {
                 _id: new mongoose.Types.ObjectId(deatils.productname)
-               }
+            }
         },
         { $unwind: "$tillMovement" },
         {
             '$match': {
-              "tillMovement.dateadded": { $gte: new Date(startdate), $lt: new Date(enddate) }
+                "tillMovement.dateadded": { $gte: new Date(startdate), $lt: new Date(enddate) }
             }
-          },
+        },
         {
             "$group": {
                 _id:
@@ -1178,13 +1252,13 @@ function gettilldetails(deatils) {
         }
     ]).exec(function (err, tillresults) {
         if (!err) {
-           
+
 
 
 
             deferred.resolve(tillresults);
         } else {
-            
+
             deferred.reject(err.name + ': ' + err.message);
         }
     })

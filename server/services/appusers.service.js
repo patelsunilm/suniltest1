@@ -2,7 +2,7 @@ var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var Q = require('q');
-
+var AWS = require('aws-sdk');
 var mongoose = require('mongoose');
 var appuser = require('../controllers/Users/appusers.model');
 var cartdetails = require('../controllers/products/cartdetails.model');
@@ -14,6 +14,16 @@ service.getuserbyId = getuserbyId;
 service.updateuserdetails = updateuserdetails;
 service.UserLogout = UserLogout;
 service.getCartDetails = getCartDetails;
+
+
+//aws credentials
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = "AKIAJRCOCZM7YVPHCJRA";
+AWS.config.secretAccessKey = "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";
+AWS.config.region = "us-east-1";
+AWS.config.apiVersions = {
+    "s3": "2012-10-17"
+}
 
 
 function GetallUsersDetails() {
@@ -35,6 +45,51 @@ function GetallUsersDetails() {
 
 
 function deleteappuser(userid) {
+    
+    var deferred = Q.defer();
+    appuser.findOne({_id: new mongoose.Types.ObjectId(userid) }, function (err, getuser) {
+        if (!err) {
+
+            var pro = getuser.image;
+            var sep = pro.split("https://smaf.s3.us-east-2.amazonaws.com/smaf/uploads/");
+            appuser.deleteOne({ _id: new mongoose.Types.ObjectId(userid) },
+                function (err) {
+                    if (err) {
+
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                    else {
+
+                        console.log(sep[1])
+                        var s3 = new AWS.S3({ accessKeyId: "AKIAJRCOCZM7YVPHCJRA", secretAccessKey: "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" });
+                        s3.deleteObject({
+                            Bucket: 'smaf',
+                            Key: 'smaf/uploads/' + sep[1]
+                        }, function (err, datanew) {
+                            if (!err) {
+                                var data = {};
+                                data.string = 'Product deleted successfully.';
+                                deferred.resolve(data);
+                            } else {
+                                console.log('err');
+                            }
+                        })
+
+                    }
+
+                });
+
+        } else {
+
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    })
+
+
+    return deferred.promise;
+
+return false
+
 
     var deferred = Q.defer();
     appuser.deleteOne({ _id: new mongoose.Types.ObjectId(userid) },

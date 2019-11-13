@@ -17,8 +17,8 @@ var qr = require('qr-image');
 var Q = require('q');
 const bwipjs = require('bwip-js');
 var Barc = require('barcode-generator')
-    , barc = new Barc()
-    , fs = require('fs');
+  , barc = new Barc()
+  , fs = require('fs');
 var dateFormat = require('dateformat');
 
 
@@ -118,7 +118,7 @@ app.use(expressJwt({
   secret: config.secret,
   getToken: function (req) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-         
+
       return req.headers.authorization.split(' ')[1];
     } else if (req.query && req.query.token) {
       return req.query.token;
@@ -139,8 +139,8 @@ app.use(expressJwt({
     '/users/matchotp',
     '/users/selectMerchant',
     '/users/getlastfivemerchant',
-    '/users/loginwithmoblenumber' 
-    
+    '/users/loginwithmoblenumber'
+
   ]
 }));
 
@@ -188,18 +188,18 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
-
-
+  
   var merchantId = req.body.uploads
   tilldetails.findOne({ merchantId: merchantId }, function (err, results) {
     if (!err) {
-   
+
       if (results == '' || results == null || results == 'null') {
         var data = {};
         data.string = 'Pls add Primary till type';
         res.send(data);
-     
+
       } else {
+        
 
         var tilltype = "Primary"
         var tilltypeId = results._id;
@@ -208,6 +208,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         var userid = req.body.uploads
         var originalFileName = file.originalname;
         var results = [];
+
+       
         var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
           .pipe(csv())
           .on('data', (data) =>
@@ -220,228 +222,261 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
               'date',
               'tilltype',
               'stocklevel'];
-
-
             var arr2 = results[0].headers;
-        
+
             if (arr1.length == arr2.length && arr1.every(function (u, i) {
               return u === arr2[i];
             })) {
 
               var allproducts = [];
               var j = 0;
+              var s= 1;
+              var test = []
+              var protest = 0
+              // results.splice(1, 1);
+             
 
-              for (let i = 0; i < results.length; i++) {
+              var myarray=[];
+               for (let i = 0; i < results.length; i++) {
+                
 
-                var cost = results[i].costprice == '' ? 0 : results[i].costprice;
-                var markup = results[i].markup == '' ? 0 : results[i].markup;
-                var sellingprice = (parseInt(cost) + parseInt(markup))
-                results[i].sellingprice = sellingprice;
-
-                var datetime = new Date(new Date).valueOf();
-                var randomnumber = Math.floor((Math.random() * 100) + 1);
-                results[i].barcode = datetime + randomnumber;
-                results[i].merchantid = userid;
-
-                var deferred = Q.defer();
-
-
-                productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
-                  if (getcategory) {
-
-                    results[i].productcatid = getcategory._id;
-
+                var productname = new RegExp("^" + results[i].productname + "$", "i")
+                var result =  products.find({ $and: [{ productname: productname }, { merchantid:    userid }] }, function (err, duplicateData) {
+                  if (duplicateData.length > 0) {
+    
+                    var cv = s++;
+                    if(cv == results.length){
+                      var data = {};
+                      data.string = 'error';
+                      res.send(data);
+                    } 
                   } else {
 
-                    var procat = new productcategory({
-                      catName: results[i].productcategory,
-                      merchantId: results[i].merchantid
-
-                    });
-                    procat.save(function (err, productcategory) {
-                      if (!err) {
-
-                        if (productcategory._id) {
-
-                          results[i].productcatid = productcategory._id;
+                   
+                    myarray.push(results[i])
+                    
+                  }
+                  if ((i + 1) == results.length) {
+                    
+                    for (let index = 0; index < myarray.length; index++) {
+                     
+                     
+                     
+                      var cost = myarray[index].costprice == '' ? 0 : myarray[index].costprice;
+                      var markup = myarray[index].markup == '' ? 0 : myarray[index].markup;
+                      var sellingprice = (parseInt(cost) + parseInt(markup))
+                      myarray[index].sellingprice = sellingprice;
+                      var datetime = new Date(new Date).valueOf();
+                      var randomnumber = Math.floor((Math.random() * 100) + 1);
+                      myarray[index].barcode = datetime + randomnumber;
+                      myarray[index].merchantid = userid;
+                      var deferred = Q.defer();
+                     
+                      productcategory.findOne({ $and: [{ catName: myarray[index].productcategory }, { merchantId: myarray[index].merchantid }] }, function (err, getcategory) {
+                        if (getcategory) {
+      
+                          myarray[index].productcatid = getcategory._id;
+                        
+                          
+                        } else {
+      
+                          var procat = new productcategory({
+                            catName: myarray[index].productcategory,
+                            merchantId: myarray[index].merchantid
+      
+                          });
+                          procat.save(function (err, productcategory) {
+                            if (!err) {
+                             
+                              if (productcategory._id) {
+      
+                                myarray[index].productcatid = productcategory._id;
+                                var allproducts = new products({
+                                  productname: myarray[index].productname,
+                                  productcatid: myarray[index].productcatid,
+                                  costprice: myarray[index].costprice,
+                                  markup: myarray[index].markup,
+                                  sellingprice: myarray[index].sellingprice,
+                                  date: myarray[index].date,
+                                  tilltype: myarray[index].tilltype,
+                                  stocklevel: myarray[index].stocklevel,
+                                  barcode: myarray[index].barcode,
+                                  merchantid: myarray[index].merchantid,
+                                  tillTypeId: tilltypeId,
+                                  tilltype: tilltype,
+                                  tillTypeName: tilltypename
+                                });
+      
+                                allproducts.save(function (err, newproduct) {
+                                  if (!err) {
+                                    // console.log('sucess nbv');
+                                    // console.log((index + 1));
+                                    // console.log(myarray.length); 
+                                   
+                                    // if ((index + 1) == myarray.length) {
+      
+                                    //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                    //     if (err) {
+      
+                                    //       deferred.reject(err.name + ': ' + err.message);
+                                    //     } else {
+      
+                                    //       // console.log('complated1')
+      
+                                    //       var data = {};
+                                    //       data.string = 'Csv import success fully';
+                                    //       res.send(data);
+                                    //     }
+                                    //   })
+                                    // }
+        
+                                
+                                    // http://localhost:4200/#/products
+                                    // http://ec2-34-245-11-228.eu-west-1.compute.amazonaws.com:4200/#/products
+                                    var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                                    var datetime = new Date(new Date).valueOf();
+                                    var randomnumber = Math.floor((Math.random() * 100) + 1);
+                                    var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
+                                    var sep = filename.split("/");
+                                    var id = new mongoose.Types.ObjectId(product._id);
+      
+                                    products.findOneAndUpdate({ _id: id }, {
+                                      qrcodeImage: sep[1],
+      
+                                    }, function (err, updateproducts) {
+                                      if (!err) {
+      
+                                        if ((index + 1) == myarray.length) {
+      
+                                          fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                            if (err) {
+      
+                                              deferred.reject(err.name + ': ' + err.message);
+                                            } else {
+      
+                                             
+                                              var data = {};
+                                              data.string = 'Csv import success fully';
+                                              res.send(data);
+                                            }
+                                          })
+                                        }
+      
+                                      } else {
+      
+                                        deferred.reject(err.name + ': ' + err.message);
+                                      }
+                                    })
+      
+                                  } else {
+                                    deferred.reject(err.name + ': ' + err.message);
+                                  }
+      
+                                });
+                              }
+      
+                            } else {
+      
+                            }
+                          });
+                        }
+      
+                        if (myarray[index].productcatid) {
+      
+                          // console.log('swati');
                           var allproducts = new products({
-                            productname: results[i].productname,
-                            productcatid: results[i].productcatid,
-                            costprice: results[i].costprice,
-                            markup: results[i].markup,
-                            sellingprice: results[i].sellingprice,
-                            date: results[i].date,
-                            tilltype: results[i].tilltype,
-                            stocklevel: results[i].stocklevel,
-                            barcode: results[i].barcode,
-                            merchantid: results[i].merchantid,
+                            productname: myarray[index].productname,
+                            productcatid: myarray[index].productcatid,
+                            costprice: myarray[index].costprice,
+                            markup: myarray[index].markup,
+                            sellingprice: myarray[index].sellingprice,
+                            date: myarray[index].date,
+                            tilltype: myarray[index].tilltype,
+                            stocklevel: myarray[index].stocklevel,
+                            barcode: myarray[index].barcode,
+                            merchantid: myarray[index].merchantid,
                             tillTypeId: tilltypeId,
                             tilltype: tilltype,
-                            tillTypeName : tilltypename
+                            tillTypeName: tilltypename
                           });
-
+      
                           allproducts.save(function (err, product) {
                             if (!err) {
+      
+                          // console.log('sucess');
+                          // console.log((i + 1));
+                          // console.log(myarray.length);
+                         // if ((index + 1) == myarray.length) {
+      
+                          // fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                          //   if (err) {
+      
+                          //     deferred.reject(err.name + ': ' + err.message);
+                          //   } else {
+      
+                          //     console.log('complated')
+                          //     var data = {};
+                          //     data.string = 'Csv import success fully';
+                          //     res.send(data);
+                          //   }
+                          //  })
+                          // }
 
-                              var qr_svg = qr.image(results[i].url + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                                // http://localhost:4200/#/products
+                                // http://ec2-34-245-11-228.eu-west-1.compute.amazonaws.com:4200/#/products
+                              var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
                               var datetime = new Date(new Date).valueOf();
                               var randomnumber = Math.floor((Math.random() * 100) + 1);
                               var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
                               var sep = filename.split("/");
                               var id = new mongoose.Types.ObjectId(product._id);
-              
                               products.findOneAndUpdate({ _id: id }, {
-                                  qrcodeImage: sep[1],
-              
+                                qrcodeImage: sep[1],
+      
                               }, function (err, updateproducts) {
-                                  if (!err) {
-                                      // updatepro++
-                                      // if (addproducts.length == updatepro) {
-              
-                                      //     deferred.resolve(updateproducts);
-                                      // } else {
-                                      //     deferred.reject(err.name + ': ' + err.message);
-                                      // }
-                              if ((i + 1) == results.length) {
-
-                                fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                                  if (err) {
-
-                                    deferred.reject(err.name + ': ' + err.message);
+                                if (!err) {
+                                 
+                                  
+                                  
+                                  if ((index + 1) == myarray.length) {
+      
+                                    fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                      if (err) {
+      
+                                        deferred.reject(err.name + ': ' + err.message);
+                                      } else {
+                                        var data = {};
+                                        data.string = 'Csv import success fully';
+                                        res.send(data);
+                                      }
+                                    })
                                   } else {
-
-
-                                    var data = {};
-                                    data.string = 'Csv import success fully';
-                                    res.send(data);
+                                   
                                   }
-                                })
-                              }
-                                      
-                                  } else {
-              
-                                      deferred.reject(err.name + ': ' + err.message);
-                                  }
+                                } else {
+      
+                                  deferred.reject(err.name + ': ' + err.message);
+                                }
                               })
-
-
-                              // if ((i + 1) == results.length) {
-
-                              //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                              //     if (err) {
-
-                              //       deferred.reject(err.name + ': ' + err.message);
-                              //     } else {
-
-
-                              //       var data = {};
-                              //       data.string = 'Csv import success fully';
-                              //       res.send(data);
-                              //     }
-                              //   })
-                              // }
-
+      
                             } else {
                               deferred.reject(err.name + ': ' + err.message);
                             }
-
                           });
                         }
-
-                      } else {
-
-                      }
-                    });
+                      })
+                    }
+                  } 
+                  })
                   }
+                  
 
-                  if (results[i].productcatid) {
-
-
-                    var allproducts = new products({
-                      productname: results[i].productname,
-                      productcatid: results[i].productcatid,
-                      costprice: results[i].costprice,
-                      markup: results[i].markup,
-                      sellingprice: results[i].sellingprice,
-                      date: results[i].date,
-                      tilltype: results[i].tilltype,
-                      stocklevel: results[i].stocklevel,
-                      barcode: results[i].barcode,
-                      merchantid: results[i].merchantid,
-                      tillTypeId: tilltypeId,
-                      tilltype: tilltype,
-                      tillTypeName : tilltypename
-                    });
-
-                    allproducts.save(function (err, product) {
-                      if (!err) {
-
-
-                        var qr_svg = qr.image(results[i].url + '/#/product/' + product._id, { type: 'png', parse_url: true });
-                        var datetime = new Date(new Date).valueOf();
-                        var randomnumber = Math.floor((Math.random() * 100) + 1);
-                        var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
-                        var sep = filename.split("/");
-                        var id = new mongoose.Types.ObjectId(product._id);
-        
-                        products.findOneAndUpdate({ _id: id }, {
-                            qrcodeImage: sep[1],
-        
-                        }, function (err, updateproducts) {
-                            if (!err) {
-                                // updatepro++
-                                // if (addproducts.length == updatepro) {
-        
-                                //     deferred.resolve(updateproducts);
-                                // } else {
-                                //     deferred.reject(err.name + ': ' + err.message);
-                                // }
-                        if ((i + 1) == results.length) {
-
-                          fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                            if (err) {
-
-                              deferred.reject(err.name + ': ' + err.message);
-                            } else {
-                              var data = {};
-                              data.string = 'Csv import success fully';
-                              res.send(data);
-                            }
-                          })
-                        }
-                            } else {
-        
-                                deferred.reject(err.name + ': ' + err.message);
-                            }
-                        })
-
-                        // if ((i + 1) == results.length) {
-
-                        //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                        //     if (err) {
-
-                        //       deferred.reject(err.name + ': ' + err.message);
-                        //     } else {
-                        //       var data = {};
-                        //       data.string = 'Csv import success fully';
-                        //       res.send(data);
-                        //     }
-                        //   })
-                        // }
-                      } else {
-                        deferred.reject(err.name + ': ' + err.message);
-                      }
-                    });
-                  }
-                })
-              }
-
-            } else {
+      } else {
 
               fs.unlink('uploads/' + originalFileName, function (err, responce) {
                 if (err) {
 
-                 
+
                 } else {
 
                   var data = {};
@@ -456,6 +491,8 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
     } else {
       deferred.reject(err.name + ': ' + err.message);
     }
+
+
   })
 
 
@@ -502,7 +539,7 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 
         s3.upload(params, function (err, resultdata) {
           if (err) {
-           
+
           }
           else {
 
@@ -513,6 +550,7 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
               res.send(s3data);
             }
           }
+
         })
       })
   }
@@ -522,18 +560,18 @@ app.post('/uploadproductfiles', upload.any('uploads[]'), function (req, res) {
 app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
   var s3data = [];
 
- 
+
   if (req.files == '') {
 
 
-  
+
     appuser.findById(req.body.userId, function (err, getdata) {
       if (!err) {
         getdata.email = req.body.email
         getdata.firstname = req.body.firstName;
         getdata.lastname = req.body.lastName;
         getdata.phone = req.body.phone;
-      
+
         getdata.save(function (err, usersResults) {
           if (!err) {
 
@@ -594,7 +632,7 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
 
         var params = {
           'Bucket': 'smaf',
-          'Key': 'smaf/users/' + datetime + randomnumber + '.' + sep[1],
+          'Key': 'smaf/uploads/' + datetime + randomnumber + '.' + sep[1],
           'Body': data,
           'ContentEncoding': 'base64',
           ACL: 'public-read',
@@ -605,7 +643,7 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
 
         s3.upload(params, function (err, resultdata) {
           if (err) {
-           
+
           }
           else {
 
@@ -687,16 +725,3 @@ mongoose.connection.once('open', function callback() {
 
 
 
-// var allproducts = new products({
-//   productname: (results[i].productname == undefined || results[i].productname == 'undefined' || results[i].productname == null || results[i].productname == 'null') ? '' : results[i].productname,
-//   productcatid:(results[i].productcatid == undefined ||results[i].productcatid == 'undefined' ||results[i].productcatid == null || results[i].productcatid == 'null') ? '' :  results[i].productcatid,
-//   costprice: (results[i].costprice == undefined ||results[i].costprice == 'undefined' ||results[i].costprice == null || results[i].costprice == 'null') ? '' :results[i].costprice,
-//   markup: (results[i].markup == undefined ||results[i].markup == 'undefined' ||results[i].markup == null || results[i].markup == 'null') ? '' :results[i].markup,
-//   sellingprice:(results[i].sellingprice == undefined ||results[i].sellingprice == 'undefined' ||results[i].sellingprice == null || results[i].sellingprice == 'null') ? '' :results[i].sellingprice,
-//   date:(results[i].date == undefined ||results[i].date == 'undefined' ||results[i].date == null || results[i].date == 'null') ? '' : results[i].date,
-//   tilltype:(results[i].tilltype == undefined ||results[i].tilltype == 'undefined' ||results[i].tilltype == null || results[i].tilltype == 'null') ? '' : results[i].tilltype,
-//   stocklevel:(results[i].stocklevel == undefined ||results[i].stocklevel == 'undefined' ||results[i].stocklevel == null ||results[i].stocklevel == 'null') ? '' : results[i].stocklevel,
-//   barcode:(results[i].barcode == undefined ||results[i].barcode == 'undefined' ||results[i].barcode == null || results[i].barcode == 'null') ? '' :results[i].barcode,
-//   merchantid:(results[i].merchantid == undefined ||results[i].merchantid == 'undefined' ||results[i].merchantid == null || results[i].merchantid == 'null') ? '' : results[i].merchantid,
-
-// });

@@ -23,7 +23,6 @@ router.post('/profile/getallcity', profiledata.getallcity);
 var passworddata = require('./controllers/password/password.controller');
 router.post('/password/passwordmatch', passworddata.passwordmatch);
 
-
 var productsdata = require('./controllers/products/products.controller');
 router.post('/products/addproduct', productsdata.addproduct);
 router.get('/products/getproducts/:userid', productsdata.getproducts);

@@ -69,8 +69,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
            
       
         this.name = localStorage.getItem('name');
+        this.image =  localStorage.getItem('myprofilelogoimage');
       
-         this.image =  localStorage.getItem('myprofilelogoimage');
+      
         // console.log('this images')
         // console.log(this.image)
         // if(this.image == undefined || this.image == "undefined") {
@@ -79,9 +80,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         //     this.image == localStorage.getItem('myprofilelogoimage');
         // }
        
-        this.myprofilelogoimage =this.image
-      
-       
+        this.myprofilelogoimage =this.image;
+        
         this.usertype = localStorage.getItem('userType');
 
         // Set the defaults
@@ -164,7 +164,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
                 this.mySubjectVal = data;
                 this.name = this.mySubjectVal.name;
                 this.myprofilelogoimage = this.mySubjectVal.image
-               
+                
             })
     }
 

@@ -293,10 +293,6 @@ export class AddproductComponent implements OnInit {
           }
            
           
-
-          
-
-          return false  
           this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
             this.snackBar.open('Product added successfully.', '', {
               duration: 3000,
@@ -329,8 +325,8 @@ export class AddproductComponent implements OnInit {
   
    // this.mySelect.close();
      // this.mySelect.select(i).close();
-    //$("#mySelect_" + i).close();
-    $(".cdk-overlay-pane").hide()
+    // $("#mySelect_" + i).close();
+     $(".cdk-overlay-pane").hide()
 
   }
 
@@ -365,15 +361,15 @@ export class AddproductComponent implements OnInit {
                 horizontalPosition: this.horizontalPosition,
                 verticalPosition: this.verticalPosition,
               });
-
               $("#divshow_" + i).hide();
               $("#cat" + i).hide();
               $("#matcat" + i).hide();
               $("#div_" + i).show();
-
+              $(".cdk-overlay-pane").show()
               this.ProductService.getAllProductcategories(merchantId)
                 .subscribe(
                   data => {
+             
 
                     this.catName = data.data;
 

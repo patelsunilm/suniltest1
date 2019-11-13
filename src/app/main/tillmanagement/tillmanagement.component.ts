@@ -411,20 +411,20 @@ export class deletetillmanagementpopupComponent {
               data => {
 
                 if(data.string == "Primary type is delete successfully.") {
-                  this.snackBar.open('Primary type is delete successfully.', '', {
+                  this.snackBar.open('Primary type deleted successfully.', '', {
                       duration: 4000,
                       horizontalPosition: this.horizontalPosition,
                       verticalPosition: this.verticalPosition,
                   });
 
                 } else if(data.string == "Secondary type is delete successfully.") {
-                  this.snackBar.open('Secondary type is delete successfully.', '', {
+                  this.snackBar.open('Secondary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
                 } else if(data.string == "Tertiary type is delete successfully.") {
-                  this.snackBar.open('Tertiary type is delete successfully.', '', {
+                  this.snackBar.open('Tertiary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,

@@ -112,24 +112,28 @@ export class SignupComponent implements OnInit {
     this.AuthenticationService.addsignupuser(this.registerForm.value).subscribe(
       data => {
           
-        console.log('data string ');
-        console.log(data.string);
         
         if(data.string == "Email is already exist.") {
-          this.snackBar.open('Email is already exist."', '', {
+          this.snackBar.open('Email is already exists."', '', {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
         
         } else if(data.string == "SignUp successful."){
-          this.snackBar.open('Signup successful.', '', {
+          this.snackBar.open('You have signed up successfully.', '', {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
           
           this.router.navigate(['login']);
+        } else if(data.string == "Business name is already exist."){
+          this.snackBar.open('Business name is already exists.', '', {
+            duration: 5000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
         }
       
       },

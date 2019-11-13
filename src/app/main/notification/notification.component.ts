@@ -42,20 +42,19 @@ export class NotificationComponent implements OnInit {
           const allusers = [];
           user.forEach(element => {
             
-          
+             
             if (element.deviceToken == '' || element.deviceToken == undefined || element.deviceToken == 'undefined') {
 
             } else {
-              
             
-              if(element.firstname == "" || element.firstname == undefined || element.firstname == "undefined" || element.firstname == null) {
-
+              if(element.firstname) {
+                   element.username = element.firstname;
+                
               } else {
-                element.username = element.firstname;
-                allusers.push(element);
-              } 
-              
-              
+                    element.username = element.email;
+              }
+                 allusers.push(element);
+            
             }
           });
 
