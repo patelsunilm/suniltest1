@@ -13,7 +13,10 @@ var admin = require("firebase-admin");
 var path = require('../firebase/smaf-16fe3-firebase-adminsdk-yd062-0419020f3f.json')
 var FCM = new fcm(path);
 
-
+// var fcm = require('fcm-notification');
+// var admin = require("firebase-admin");
+// var path = require('../../public/pushkey.json')
+// var FCM = new fcm(path);
 
 var mongoose = require('mongoose');
 var service = {};
@@ -30,21 +33,19 @@ function addnotification(notificationsdetails) {
     tokens.push(notificationsdetails.users[i].deviceToken)
   }
 
-  var payload = {
-    data: {
-      title: "sub",
-      body: "msg",
+  
+  var message = {
+    data: {    //This is only optional, you can send any data
+      //     score: '850',
+      //     time: '2:45'
     },
     notification: {
-      title: "sub",
-      body: notificationsdetails.Message,
-      sound: 'enabled',
+      title: "smfa",
+      body: notificationsdetails.Message
     },
+    //   token: token
   };
-  var options = {
-    priority: "high",
-    timeToLive: 60 * 60 * 24
-  };
+
   var userid = []
   for (let i = 0; i < notificationsdetails.users.length; i++) {
     userid.push({ 'userId': notificationsdetails.users[i]._id })
@@ -55,19 +56,22 @@ function addnotification(notificationsdetails) {
     message: notificationsdetails.Message,
 
   });
+
   saveusers.save(
     function (err, savequerys) {
       if (!err) {
 
-        admin.messaging().sendToDevice(tokens, payload, options)
-          .then(function (response) {
-            // console.log("Successfully sent message:");
-            deferred.resolve(savequerys);
-          })
-          .catch(function (error) {
+        FCM.sendToMultipleToken(message, tokens, function (err, response) {
+          if (err) {
+            
             deferred.reject(error);
-            //  console.log("Error sending message:", error);
-          });
+          } else {
+            
+            deferred.resolve(savequerys);
+          }
+        })
+
+
       } else {
         deferred.reject(err.name + ': ' + err.message);
       }

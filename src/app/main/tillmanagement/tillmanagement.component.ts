@@ -40,7 +40,13 @@ export class TillmanagementComponent implements OnInit {
   }
 
   constructor(private tillManagementService: tillManagementService ,public dialog: MatDialog) { }
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
   ngOnInit() {
 
     var merchantId = localStorage.getItem('userId');
@@ -399,33 +405,22 @@ export class deletetillmanagementpopupComponent {
       this.tillManagementService.deletetilltypename(tilldetails ,id)
           .subscribe(
               data => {
-
-<<<<<<< HEAD
-                if(data.string == "Primary type is delete successfully.") {
-=======
+                 console.log('data');
+                console.log(data);
                 if(data.string == "Primary type deleted successfully.") {
->>>>>>> 47a03f8f61215e2496f4741242afbca3ab245d96
                   this.snackBar.open('Primary type deleted successfully.', '', {
                       duration: 4000,
                       horizontalPosition: this.horizontalPosition,
                       verticalPosition: this.verticalPosition,
                   });
 
-<<<<<<< HEAD
-                } else if(data.string == "Secondary type is delete successfully.") {
-=======
                 } else if(data.string == "Secondary type deleted successfully.") {
->>>>>>> 47a03f8f61215e2496f4741242afbca3ab245d96
                   this.snackBar.open('Secondary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,
                     verticalPosition: this.verticalPosition,
                 });
-<<<<<<< HEAD
-                } else if(data.string == "Tertiary type is delete successfully.") {
-=======
                 } else if(data.string == "Tertiary type deleted successfully.") {
->>>>>>> 47a03f8f61215e2496f4741242afbca3ab245d96
                   this.snackBar.open('Tertiary type deleted successfully.', '', {
                     duration: 4000,
                     horizontalPosition: this.horizontalPosition,

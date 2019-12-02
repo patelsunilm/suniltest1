@@ -44,4 +44,11 @@ export class MerchantService {
 
 
     }
+
+
+
+    getchatallMerchentsData() {
+        return this.http.get<any>(appConfig.apiUrl + '/merchant/getchatallMerchentsData')
+
+    }
 }

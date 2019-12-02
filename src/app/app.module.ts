@@ -39,6 +39,7 @@ import { OrdersService } from './_services/index';
 import { FAQService } from './_services/index';
 import { NotificationService } from './_services/index';
 import { DiaryService } from './_services/diary.service';
+import { ChatService } from './_services/chat.service';
 
 //all module
 import { SignupModule } from './main/signup/signup.module';
@@ -60,6 +61,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
 import * as TimeSeries from 'fusioncharts/fusioncharts.timeseries';
+import { ChatModule } from './main/chat/chat.module';
+
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+
 FusionChartsModule.fcRoot(FusionCharts, Charts ,TimeSeries)
 
 
@@ -73,9 +78,6 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        
-        
-
     ],
     imports: [
         BrowserModule,
@@ -114,7 +116,8 @@ const appRoutes: Routes = [
         FusionChartsModule,
         NumberofcustomerpurchasesModule,
         ValueofcustomerpurchasesModule,
-        TillsalesperproductModule,CalendarModule,MatFormFieldModule
+        TillsalesperproductModule,CalendarModule,MatFormFieldModule,ChatModule,
+       
     ], providers: [
 
         AuthGuard,
@@ -134,7 +137,8 @@ const appRoutes: Routes = [
         UsersService,
         tillManagementService,
         NotificationService,
-        DiaryService
+        DiaryService,
+         ChatService
     ],
     bootstrap: [
         AppComponent

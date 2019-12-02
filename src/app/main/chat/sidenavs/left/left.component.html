@@ -1,0 +1,13 @@
+
+<div [ngSwitch]="view" class="views">
+  <app-chats class="view"
+                      *ngSwitchCase="'chats'"
+                      [@slideInRight]>
+  </app-chats>
+
+  <app-user class="view"
+                     *ngSwitchCase="'user[0]'"
+                     [@slideInLeft]
+                     fusePerfectScrollbar>
+  </app-user>
+</div>

@@ -1,0 +1,40 @@
+<div id="chat" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <mat-sidenav-container>
+                <!-- LEFT SIDENAV -->
+                <mat-sidenav class="sidenav" position="start" opened="true" mode="side"
+                             fuseMatSidenavHelper="app-left" matIsLockedOpen="gt-md">
+                    <app-left></app-left>
+                </mat-sidenav>
+                <!-- / LEFT SIDENAV -->
+                <!-- CONTENT -->
+                <!-- app-chats -->
+                <app-chat-start *ngIf="!selectedChat"></app-chat-start>
+
+                <app-chat-view *ngIf="selectedChat"></app-chat-view>
+                <!-- / CONTENT -->
+
+                <!-- RIGHT SIDENAV -->
+                <mat-sidenav class="sidenav" position="end" opened="false" mode="over"
+                             fuseMatSidenavHelper="app-right">
+                    <app-right></app-right>
+                </mat-sidenav>
+                <!-- / RIGHT SIDENAV -->
+
+            </mat-sidenav-container>
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

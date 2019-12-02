@@ -68,6 +68,8 @@ export class MerchantComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        
         this.MerchantService.getallMerchentsData()
             .subscribe(
                 data => {

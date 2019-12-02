@@ -205,3 +205,19 @@ exports.getallproductratings = function(req, res) {
         res.status(400).send(err);
     }); 
 }
+
+
+exports.getchatallMerchentsData = function(req, res) {
+    
+    merchentService.getchatallMerchentsData() 
+    .then(function (allproductratings) {
+        if (allproductratings) {
+            res.send(allproductratings);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}

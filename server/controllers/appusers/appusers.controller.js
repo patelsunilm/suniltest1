@@ -103,3 +103,23 @@ exports.UserLogout = function(req, res) {
         res.status(400).send(err);
     }); 
 }
+
+
+exports.getAllUser = function(req, res) {
+
+    appusersService.getAllUser(req.body)
+   
+    .then(function (appuserslogout) {
+        if (appuserslogout) {
+            res.send(appuserslogout);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    .catch(function (err) {
+        res.status(400).send(err);
+    }); 
+}
+
+
+

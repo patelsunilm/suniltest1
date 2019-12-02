@@ -7,6 +7,10 @@ var mongoose = require('mongoose');
 var appuser = require('../controllers/Users/appusers.model');
 var cartdetails = require('../controllers/products/cartdetails.model');
 
+
+
+
+
 var service = {};
 service.GetallUsersDetails = GetallUsersDetails;
 service.deleteappuser = deleteappuser;
@@ -14,6 +18,14 @@ service.getuserbyId = getuserbyId;
 service.updateuserdetails = updateuserdetails;
 service.UserLogout = UserLogout;
 service.getCartDetails = getCartDetails;
+service.getAllUser = getAllUser;
+service.chatuser = chatuser;
+
+
+
+
+
+
 
 
 //aws credentials
@@ -38,7 +50,7 @@ function GetallUsersDetails() {
         } else {
             deferred.reject(err.name + ': ' + err.message);
         }
-    });
+    }).sort({ dateadded: -1 });
     return deferred.promise;
 
 }
@@ -88,24 +100,24 @@ function deleteappuser(userid) {
 
     return deferred.promise;
 
-return false
+// return false
 
 
-    var deferred = Q.defer();
-    appuser.deleteOne({ _id: new mongoose.Types.ObjectId(userid) },
-        function (err) {
-            if (err) {
-                deferred.reject(err.name + ': ' + err.message);
-            }
-            else {
+//     var deferred = Q.defer();
+//     appuser.deleteOne({ _id: new mongoose.Types.ObjectId(userid) },
+//         function (err) {
+//             if (err) {
+//                 deferred.reject(err.name + ': ' + err.message);
+//             }
+//             else {
 
-                var data = {};
-                data.string = 'Product deleted successfully.';
-                deferred.resolve(data);
-            }
+//                 var data = {};
+//                 data.string = 'Product deleted successfully.';
+//                 deferred.resolve(data);
+//             }
 
-        });
-    return deferred.promise;
+//         });
+//     return deferred.promise;
 }
 
 
@@ -114,7 +126,7 @@ function getuserbyId(userid) {
 
     appuser.findOne({ _id: userid }, function (err, getuser) {
         if (!err) {
-
+           
             deferred.resolve(getuser);
         } else {
             deferred.reject(err.name + ': ' + err.message);
@@ -267,5 +279,75 @@ function getCartDetails(cartid) {
     })
     return deferred.promise;
 }
+
+
+function getAllUser(userDetails) {
+
+    
+    var deferred = Q.defer();
+    var startlimit = parseInt(userDetails.startLimit);
+    var endlimit = parseInt(userDetails.endLimit);
+    var id = new mongoose.Types.ObjectId(userDetails.userId);
+
+    var username = new RegExp("^" + userDetails.searchTerm + "$", "i")
+    appuser.find({$and : [{ _id: { $ne:  id }},{'$or' : [{firstname : username},{lastname : username}]} ]  }, function (err, responce) {
+        if (!err) {
+       
+            if (responce == null || responce == 'null' || responce == '') {
+                var userresponce = {
+                    "status": "0",
+                    "message": "No records found",
+                    "data":
+                        {}
+                }
+                deferred.resolve(userresponce);
+            } else {
+
+                var alluserdetails = [];
+
+                responce.forEach(element => {
+                    var user = {}
+                  
+                    user.email = element.email
+                    user.firstName = element.firstname
+                    user.lastName = element.lastname
+                    user.phone = element.phone
+                    user.countryCode = element.countryCode
+                    user.image = element.image
+                    user.userId = element._id
+                    
+                    alluserdetails.push(user);
+
+                });
+                var usersuccesresponce = {
+                    "status": "1",
+                    "message": "Success",
+                    "data":
+                    {
+                      
+                        alluserdetails
+                    }
+                }
+                deferred.resolve(usersuccesresponce);
+
+               
+            }
+        } else {
+
+            var userresponce = {
+                "status": "0",
+                "message": "No records found",
+                "data":
+                    {}
+            }
+            deferred.resolve(userresponce);
+        }
+    }).skip(startlimit).limit(endlimit)
+    return deferred.promise;
+}
+
+
+
+
 
 module.exports = service;

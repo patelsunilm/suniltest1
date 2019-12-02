@@ -72,8 +72,7 @@ export class UpdateproductComponent implements OnInit {
       this.ProductService.getallproductbyId(params.id ,merchantId).subscribe(data => {        
  
         if(data.error == "error") {
-          console.log('data 1');
-         
+          this.router.navigate(['login']);
         } else {
         this.tilltypes = data.tilltype;
         //  this.tilltypes = "Tertiary";
@@ -253,7 +252,6 @@ export class UpdateproductComponent implements OnInit {
         this.ProductService.updateproductgallery(data).subscribe(data => {
 
           this.form.value.image = data[0].s3url
-         
           this.form.value.sellingprice = ($("#selling").val());
           var stocklevelvalue = this.form.value.movestockinputvalue == undefined ? 0 :  this.form.value.movestockinputvalue;
           var stock = (this.form.value.stocklevel - stocklevelvalue);
@@ -279,20 +277,28 @@ export class UpdateproductComponent implements OnInit {
           this.form.value.stocklevel = stock;
           this.form.value.toId = this.tillTypeId;
           this.form.value.fromId = tillTypeId;
-   
+          var merchantId = localStorage.getItem('userId');
+          this.form.value.merchantId = merchantId;
+         
           this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
-            this.snackBar.open('Product updated successfully', '', {
-              duration: 3000,
-              horizontalPosition: this.horizontalPosition,
-              verticalPosition: this.verticalPosition,
-            });
-            this.router.navigate([this.returnUrl]);
-
+           
+            if(data.string == "Product updated successfully"){
+              this.snackBar.open('Product updated successfully', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+              this.router.navigate([this.returnUrl]);
+            } else if(data.string == "Product name is already exists.") {
+              this.snackBar.open('Product name is already exists.', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+            }
           }, error => {
             // console.log(error);
-
           })
-
         })
       } else {
         this.form.value.sellingprice = ($("#selling").val());
@@ -302,7 +308,8 @@ export class UpdateproductComponent implements OnInit {
         var valuesplit = movestockdetails.split(',');
         this.form.value.form = this.form.value.tilltype;
         this.form.value.to = (valuesplit[1] == undefined ? '' : valuesplit[1]);
-      
+        var merchantId = localStorage.getItem('userId');
+        this.form.value.merchantId = merchantId;
         var tillTypeId;
         if(valuesplit[0] == '' || valuesplit[0] == undefined) {
            
@@ -323,17 +330,23 @@ export class UpdateproductComponent implements OnInit {
  
       
         this.ProductService.updateprodcutdetail(this.form.value).subscribe(data => {
-
-          this.snackBar.open('Product updated successfully', '', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-
-          this.router.navigate([this.returnUrl]);
+           
+          if(data.string == "Product updated successfully"){
+            this.snackBar.open('Product updated successfully', '', {
+              duration: 3000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            });
+            this.router.navigate([this.returnUrl]);
+          } else if(data.string == "Product name is already exists.") {
+            this.snackBar.open('Product name is already exists.', '', {
+              duration: 3000,
+              horizontalPosition: this.horizontalPosition,
+              verticalPosition: this.verticalPosition,
+            });
+          }
         }, error => {
           // console.log(error);
-
         })
       }
 

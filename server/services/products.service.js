@@ -54,91 +54,90 @@ function addproduct(addproducts) {
 
     var deferred = Q.defer();
     a = 0;
-    let updatepro = 0;
-//     for (let i = 0; i < addproducts.length; i++) {
+    var pro = 0;
+    myarray = [];
+    for (let i = 0; i < addproducts.length; i++) {
 
-//         var id = new mongoose.Types.ObjectId(addproducts[i].userId);
-//         console.log(addproducts[i].productname);
-//         products.find({ $and: [{ productname: addproducts[i].productname  }, { merchantid:  addproducts[i].merchantId  }] }, function (err, products)  {
-//         }, function (err, products) {
-//             if (products.length > 0) {
-//                 console.log('aa');
-//                 var data = {};
-//                 data.string = 'Product name is already exist.';
-//                 deferred.resolve(data);
-//             } else {
+        var id = new mongoose.Types.ObjectId(addproducts[i].merchantId);
 
-
-
-//                 deferred.reject(err.name + ': ' + err.message);
-//             }
-//         })
-
-//     }
-
-
-// return false
-
-
-        var id = new mongoose.Types.ObjectId(addproducts[i].userId);
-        var productcatid = new mongoose.Types.ObjectId(addproducts[i].productcategories);
-        var saveallproducts = new products({
-            tillTypeName: addproducts[i].tilltypename,
-            image: addproducts[i].image,
-            productname: addproducts[i].productname,
-            costprice: addproducts[i].costprice,
-            markup: addproducts[i].Markup,
-            sellingprice: addproducts[i].sellingprice,
-            tilltype: addproducts[i].tilltype,
-            stocklevel: addproducts[i].stocklevel,
-            date: addproducts[i].date,
-            barcode: addproducts[i].barcode,
-            merchantid: addproducts[i].merchantId,
-            productcatid: productcatid,
-            tillTypeId: addproducts[i].tilltypeid,
-            reorderlevel: addproducts[i].reorderlevel
-        });
-
-        saveallproducts.save(function (err, productsresults) {
-            if (!err) {
-
-
-                var qr_svg = qr.image(addproducts[i].url + '/#/product/' + productsresults._id, { type: 'png', parse_url: true });
-                var datetime = new Date(new Date).valueOf();
-                var randomnumber = Math.floor((Math.random() * 100) + 1);
-                var filename = qr_svg.pipe(require('fs').createWriteStream('../src/assets/uploads/' + datetime + randomnumber + 'qr.png')).path
-
-                var sep = filename.split("../src/assets/uploads/");
-                var id = new mongoose.Types.ObjectId(productsresults._id);
-
-                products.findOneAndUpdate({ _id: id }, {
-                    qrcodeImage: sep[1],
-
-                }, function (err, updateproducts) {
-                    if (!err) {
-                        updatepro++
-                        if (addproducts.length == updatepro) {
-
-                            deferred.resolve(updateproducts);
-                        } else {
-                            deferred.reject(err.name + ': ' + err.message);
-                        }
-
-                    } else {
-
-                        deferred.reject(err.name + ': ' + err.message);
-                    }
-                })
+        var proName = new RegExp("^" + addproducts[i].productname + "$", "i")
+        products.find({ $and: [{ productname: proName }, { merchantid: addproducts[i].merchantId }] }, function (err, productsresults) {
+            if (productsresults.length > 0) {
+                var data = {};
+                data.string = 'Product name is already exists.';
+                deferred.resolve(data);
 
             } else {
-                deferred.reject(err.name + ': ' + err.message);
+                pro++;
+                myarray.push(addproducts[i])
+                if (addproducts.length == pro) {
+
+                    let updatepro = 0;
+                    for (let index = 0; index < myarray.length; index++) {
+
+                        //    var id = new mongoose.Types.ObjectId(myarray[index].userId);
+                        var productcatid = new mongoose.Types.ObjectId(myarray[index].productcategories);
+                        var saveallproducts = new products({
+                            tillTypeName: myarray[index].tilltypename,
+                            image: myarray[index].image,
+                            productname: myarray[index].productname,
+                            costprice: myarray[index].costprice,
+                            markup: myarray[index].Markup,
+                            sellingprice: myarray[index].sellingprice,
+                            tilltype: myarray[index].tilltype,
+                            stocklevel: myarray[index].stocklevel,
+                            date: myarray[index].date,
+                            barcode: myarray[index].barcode,
+                            merchantid: myarray[index].merchantId,
+                            productcatid: productcatid,
+                            tillTypeId: myarray[index].tilltypeid,
+                            reorderlevel: myarray[index].reorderlevel
+                        });
+
+                        saveallproducts.save(function (err, productsresults) {
+                            if (!err) {
+                                var qr_svg = qr.image(myarray[index].url + '/#/product/' + productsresults._id, { type: 'png', parse_url: true });
+                                var datetime = new Date(new Date).valueOf();
+                                var randomnumber = Math.floor((Math.random() * 100) + 1);
+                                var filename = qr_svg.pipe(require('fs').createWriteStream('../src/assets/uploads/' + datetime + randomnumber + 'qr.png')).path
+                                //    assets/images/qrcode/
+                                var sep = filename.split("../src/assets/uploads/");
+                                var id = new mongoose.Types.ObjectId(productsresults._id);
+
+
+                                products.findOneAndUpdate({ _id: id }, {
+                                    qrcodeImage: sep[1],
+
+                                }, function (err, updateproducts) {
+                                    if (!err) {
+
+                                        updatepro++;
+                                        if (myarray.length == updatepro) {
+                                            var data = {};
+                                            data.string = 'Product added successfully.';
+                                            deferred.resolve(data);
+                                        }
+
+                                    } else {
+
+                                        deferred.reject(err.name + ': ' + err.message);
+                                    }
+                                })
+
+                            } else {
+                                deferred.reject(err.name + ': ' + err.message);
+                            }
+                        })
+
+                    }
+                }
+                //    deferred.reject(err.name + ': ' + err.message);
             }
         })
 
-    // }
+    }
 
     return deferred.promise;
-
 }
 
 
@@ -218,9 +217,6 @@ function deleteproduct(productid) {
     products.findOne({ _id: id }, function (err, getproducts) {
         if (!err) {
 
-          
-            
-           
             products.deleteOne(
                 { _id: new mongoose.Types.ObjectId(id) },
                 function (err) {
@@ -229,31 +225,32 @@ function deleteproduct(productid) {
                         deferred.reject(err.name + ': ' + err.message);
                     }
                     else {
-                            var pro = getproducts.image;
-                          
-                            if(pro == "undefined" ||pro == undefined){
-                                var data = {};
-                                data.string = 'Product deleted successfully.';
-                                deferred.resolve(data);
-                            } else {
-                                var sep = pro.split("https://smaf.s3.us-east-2.amazonaws.com/smaf/uploads/");
-                
-                           
-                                var s3 = new AWS.S3({ accessKeyId: "AKIAJRCOCZM7YVPHCJRA", secretAccessKey: "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" });
-                                s3.deleteObject({
-                                    Bucket: 'smaf',
-                                    Key: 'smaf/uploads/' + sep[1]
-                                }, function (err, data) {
-                                    if (!err) {
-                                        var data = {};
-                                        data.string = 'Product deleted successfully.';
-                                        deferred.resolve(data);
-                                    } else {
-                                        console.log('err');
-                                    }
-                                })
-                            }
-                            
+                        var pro = getproducts.image;
+
+                        if (pro == "undefined" || pro == undefined || pro == null || pro == "null") {
+                            var data = {};
+                            data.string = 'Product deleted successfully.';
+                            deferred.resolve(data);
+                        } else {
+
+                            var sep = pro.split("https://smaf.s3.us-east-2.amazonaws.com/smaf/uploads/");
+
+
+                            var s3 = new AWS.S3({ accessKeyId: "AKIAJRCOCZM7YVPHCJRA", secretAccessKey: "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" });
+                            s3.deleteObject({
+                                Bucket: 'smaf',
+                                Key: 'smaf/uploads/' + sep[1]
+                            }, function (err, data) {
+                                if (!err) {
+                                    var data = {};
+                                    data.string = 'Product deleted successfully.';
+                                    deferred.resolve(data);
+                                } else {
+                                    console.log('err');
+                                }
+                            })
+                        }
+
 
                     }
 
@@ -298,71 +295,98 @@ function getallproductbyId(productid, merchantId) {
 
 
 
-function updateprodcutdetail(data) {
+function updateprodcutdetail(prodata) {
     var deferred = Q.defer();
 
-    if (data.to == '' || data.to == null || data.to == undefined) {
-        var id = new mongoose.Types.ObjectId(data.id);
-        products.findOneAndUpdate({ _id: id }, {
-            image: data.image,
-            productname: data.productname,
-            costprice: data.costprice,
-            sellingprice: data.sellingprice,
-            date: data.date,
-            tilltype: data.tilltype,
-            stocklevel: data.stocklevel,
-            markup: data.markup,
-            tillTypeId: data.tillTypeId,
-            tillTypeName: data.tilltypename,
-            reorderlevel: data.reorderlevel,
-            productcatid: new mongoose.Types.ObjectId(data.catname),
+    if (prodata.to == '' || prodata.to == null || prodata.to == undefined) {
 
-        }, function (err, updateproducts) {
 
-            if (!err) {
+        var proName = new RegExp("^" + prodata.productname + "$", "i")
 
-                deferred.resolve(updateproducts);
+        products.find({ $and: [{ productname: proName },{ _id: { $ne: prodata.id }}] }, function (err, productsresults) {
+            if (productsresults.length > 0) {
+                var data = {};
+                data.string = 'Product name is already exists.';
+                deferred.resolve(data);
+
             } else {
+             
+                var id = new mongoose.Types.ObjectId(prodata.id);
+                products.findOneAndUpdate({ _id: id }, {
+                    image: prodata.image,
+                    productname: prodata.productname,
+                    costprice: prodata.costprice,
+                    sellingprice: prodata.sellingprice,
+                    date: prodata.date,
+                    tilltype: prodata.tilltype,
+                    stocklevel: prodata.stocklevel,
+                    markup: prodata.markup,
+                    tillTypeId: prodata.tillTypeId,
+                    tillTypeName: prodata.tilltypename,
+                    reorderlevel: prodata.reorderlevel,
+                    productcatid: new mongoose.Types.ObjectId(prodata.catname),
 
-                deferred.reject(err.name + ': ' + err.message);
+                }, function (err, updateproducts) {
+
+                    if (!err) {
+
+                        var data = {};
+                        data.string = 'Product updated successfully';
+                        deferred.resolve(data);
+        
+                    } else {
+
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                })
             }
         })
     } else {
 
-        var tillMovementdata = [];
-        tillMovementdata.push({ "from": data.form, "to": data.to, "fromStock": data.fromstock, "moveStock": data.movestock, "fromId": data.fromId, "toId": data.toId })
+        var proName = new RegExp("^" + prodata.productname + "$", "i")
+        products.find({ $and: [{ productname: proName },{ _id: { $ne: prodata.id }}] }, function (err, productsresults) {
+            if (productsresults.length > 0) {
+                var data = {};
+                data.string = 'Product name is already exists.';
+                deferred.resolve(data);
 
-
-        var id = new mongoose.Types.ObjectId(data.id);
-        products.findOneAndUpdate({ _id: id }, {
-            image: data.image,
-            productname: data.productname,
-            costprice: data.costprice,
-            sellingprice: data.sellingprice,
-            date: data.date,
-            tilltype: data.tilltype,
-            stocklevel: data.stocklevel,
-            reorderlevel: data.reorderlevel,
-
-            markup: data.markup,
-            tillTypeId: data.tillTypeId,
-            tillTypeName: data.tilltypename,
-            productcatid: new mongoose.Types.ObjectId(data.catname),
-            // tillMovement:tillMovementdata
-            $push: {
-                tillMovement: tillMovementdata
-            }
-        }, function (err, updateproducts) {
-
-            if (!err) {
-
-                deferred.resolve(updateproducts);
             } else {
+              
+                var tillMovementdata = [];
+                tillMovementdata.push({ "from": prodata.form, "to": prodata.to, "fromStock": prodata.fromstock, "moveStock": prodata.movestock, "fromId": prodata.fromId, "toId": prodata.toId })
+                var id = new mongoose.Types.ObjectId(prodata.id);
+                products.findOneAndUpdate({ _id: id }, {
+                    image: prodata.image,
+                    productname: prodata.productname,
+                    costprice: prodata.costprice,
+                    sellingprice: prodata.sellingprice,
+                    date: prodata.date,
+                    tilltype: prodata.tilltype,
+                    stocklevel: prodata.stocklevel,
+                    reorderlevel: prodata.reorderlevel,
+                    markup: prodata.markup,
+                    tillTypeId: prodata.tillTypeId,
+                    tillTypeName: prodata.tilltypename,
+                    productcatid: new mongoose.Types.ObjectId(prodata.catname),
+                    // tillMovement:tillMovementdata
+                    $push: {
+                        tillMovement: tillMovementdata
+                    }
+                }, function (err, updateproducts) {
 
-                deferred.reject(err.name + ': ' + err.message);
+                    if (!err) {
+
+                        var data = {};
+                        data.string = 'Product updated successfully';
+                        deferred.resolve(data);
+        
+                    } else {
+
+                        deferred.reject(err.name + ': ' + err.message);
+                    }
+                })
             }
         })
-
 
     }
     return deferred.promise;

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef,ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
@@ -8,7 +8,12 @@ import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition,
 import { ColorPickerService, Cmyk } from 'ngx-color-picker';
 import * as $ from 'jquery';
 import { AuthenticationService } from '../../_services/index';
-
+import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+const PrimaryWhite = '#ffffff';
+const SecondaryGrey = '#ccc';
+const PrimaryRed = '#dd0031';
+const SecondaryBlue = '#006ddd';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { id } from '@swimlane/ngx-charts/release/utils';
 import { ElementRef, ViewChild } from '@angular/core';
@@ -41,7 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     newfileuplodes: Array<File> = [];
     newfileuplodes1: Array<File> = [];
     public rgbaText: string = 'rgba(165, 26, 214, 0.2)';
-
+    newtesting: any;
     public cmykValue: string = '';
 
     public cmykColor: Cmyk = new Cmyk(0, 0, 0, 0);
@@ -52,6 +57,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
      *
      * @param {FormBuilder} _formBuilder
      */
+    public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+    public loading = false;
+    public primaryColour = PrimaryWhite;
+    public secondaryColour = SecondaryGrey;
+    public coloursEnabled = false;
+    public loadingTemplate: TemplateRef<any>;
+    public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
+   
+
     constructor(
 
         private _formBuilder: FormBuilder,
@@ -97,8 +111,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
 
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/profile';
-
-
         this.route.params.subscribe(params => {
             this.ProfileService.getprofileInfo(user._id)
                 .subscribe(
@@ -152,7 +164,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     },
 
                     error => {
-                        console.log(error);
+                        // console.log(error);
 
                     });
         });
@@ -162,7 +174,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.merchantcategories = data;
             },
                 error => {
-                    console.log(error);
+                    // console.log(error);
                 });
 
 
@@ -171,24 +183,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.allcountries = data.data;
             },
                 error => {
-                    console.log(error);
+                    // console.log(error);
                 });
     }
 
+
+
     selectcountries(stateid) {
         if (stateid == undefined || stateid == 'undefined') {
+        
         } else {
+           
+            
             this.form.controls['states'].setValue('')
+            
+            //  this.form.addControl('states',this.form.controls('', validators));
+            this.form.controls['states'].setValidators([Validators.required]);
+
+
             var id = stateid.toString();
+            
             this.ProfileService.getallstates(id)
                 .subscribe(
                     data => {
                         if (data.message == "No records found") {
+                           
                         } else {
+                           
                             this.allstates = data.data;
-
                         }
-
                     },
                     error => {
 
@@ -219,6 +242,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     });
 
         }
+        
     }
 
     fileChangeEvent(fileInput: any, index) {
@@ -281,8 +305,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     updatemyprofile() {
+
+        this.loading = true
         var user = JSON.parse(localStorage.getItem('currentUser'));
         this.route.params.subscribe(params => {
+           
+           
             if (this.filesToUpload.length > 0 || this.backgroundfilesToUpload.length > 0) {
                 var background = [];
                 var data = this.filesToUpload.slice(-1);
@@ -329,23 +357,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                 data => {
 
                                     if (data.string == "Email already exist.") {
-                                        this.snackBar.open("Email already exist.", '', {
+                                        this.snackBar.open("Email already exists.", '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
                                         });
+                                        this.loading = false
+
                                     } else if (data.string == "Business name already exists.") {
                                         this.snackBar.open('Business name already exists.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
                                         });
+                                        this.loading = false
+
                                     } else {
                                         this.snackBar.open('Profile updated successfully.', '', {
                                             duration: 3000,
                                             horizontalPosition: this.horizontalPosition,
                                             verticalPosition: this.verticalPosition,
                                         });
+                                        this.loading = false
+
                                         this.router.navigate([this.returnUrl]);
                                     }
 
@@ -356,12 +390,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                         horizontalPosition: this.horizontalPosition,
                                         verticalPosition: this.verticalPosition,
                                     });
+                                    this.loading = false
+
                                     this.router.navigate([this.returnUrl]);
 
                                 });
                     });
 
             } else {
+                this.loading = true
+
                 this.form.value._id = user._id;
                 this.form.value.userType = user.userType;
                 this.form.value.fontcolor = $("#fontcolor").val()
@@ -371,23 +409,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     .subscribe(
                         data => {
                             if (data.string == "Email already exist.") {
-                                this.snackBar.open('Email already exist.', '', {
+                                this.snackBar.open('Email already exists.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
                                 });
+                                this.loading = false
+
                             } else if (data.string == "Business name already exists.") {
                                 this.snackBar.open('Business name already exists.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
                                 });
+                                this.loading = false
+
                             } else {
                                 this.snackBar.open('Profile updated successfully.', '', {
                                     duration: 3000,
                                     horizontalPosition: this.horizontalPosition,
                                     verticalPosition: this.verticalPosition,
                                 });
+                                this.loading = false
+
                                 this.router.navigate([this.returnUrl]);
                             }
 
@@ -398,6 +442,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
                                 horizontalPosition: this.horizontalPosition,
                                 verticalPosition: this.verticalPosition,
                             });
+                            this.loading = false
+
                             this.router.navigate([this.returnUrl]);
                         });
             }

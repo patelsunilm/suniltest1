@@ -2,13 +2,13 @@ import { Component, OnInit, NgZone, Pipe, PipeTransform } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { MatDialog, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
 import { OrdersService } from '../../../_services/index';
 import { UsersService } from '../../../_services/index';
 import * as FusionCharts from 'fusioncharts';
 import { formatDate } from "@angular/common";
 import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 
 @Pipe({
   name: 'dateFormatPipe',
@@ -147,27 +147,26 @@ export class ValueofcustomerpurchasesComponent implements OnInit {
                    dataFetch.push([changedate,"quantity" ,element.totalQty] ,[changedate,"sellingPrice", element.value]);
                 });
                
-               console.log('bettweens');
-               console.log(between);
-               console.log(dataFetch)
+            //    console.log('bettweens');
+            //    console.log(between);
+            //    console.log(dataFetch)
 
-               var dataFetchNew = [];
+            //    var dataFetchNew = [];
 
-               dataFetch.forEach(element => { 
-                 console.log('array');
-                 console.log(element[0]);
-                dataFetchNew[element[0]][0] =element[0];
-             });
+            //    dataFetch.forEach(element => { 
+            //      console.log('array');
+            //      console.log(element[0]);
+            //     dataFetchNew[element[0]][0] =element[0];
+            //  });
 
                 // for(let k=0; k<dataFetch.length;k++)
                 // {
                 //   dataFetchNew[dataFetch[k]][0] = dataFetch[k];
                 // }
 
-                console.log('dataFetchNew');
-                console.log(dataFetchNew)
+                // console.log('dataFetchNew');
+                // console.log(dataFetchNew)
 
-          return false      
           var jsonify = res => res.json();
           
           var schemaFetch = fetch(

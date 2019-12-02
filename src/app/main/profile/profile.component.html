@@ -105,6 +105,11 @@
 
         <div *ngIf="readLocalStorageValue('userType') == 'Merchant'">
             <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+                    <ngx-loading [show]="loading"
+                    [config]="{animationType: ngxLoadingAnimationTypes.circleSwish, primaryColour: primaryColour, backdropBorderRadius: '3px'}"
+                    [template]="loadingTemplate">
+                  </ngx-loading>
+              
                 <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start"
                     fxFlex="1 0 auto" name="form" [formGroup]="form" (ngSubmit)="updatemyprofile()">
 
@@ -163,7 +168,7 @@
                         <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                             <mat-label>Business name </mat-label>
                             <input matInput formControlName="businessname" autocomplete="off"
-                                pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$" required>
+                            pattern="^[^ ].+[^ ]$" required>
                             <mat-error *ngIf="form.get('businessname').hasError('required')">
                                 Please enter business name!
                             </mat-error>
@@ -266,7 +271,7 @@
                         <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
                             <mat-label>State list</mat-label>
                             <mat-select formControlName="states" required (selectionChange)="selectstate($event.value)">
-                                <mat-option value="Selectstatelist">Select state list</mat-option>
+                                <mat-option >Select state list</mat-option>
                                 <mat-option *ngFor="let state of allstates" [value]="state.stateId">
                                     {{state.stateName}}
                                 </mat-option>
@@ -274,19 +279,25 @@
                             <mat-error *ngIf="form.get('states').hasError('required')">
                                 Please select state list!
                             </mat-error>
+                            
                         </mat-form-field>
+                        
+                        <!-- <mat-error *ngIf="newtesting == 'test'">
+                            Please select state list!
+                        </mat-error> -->
                         <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
                             <mat-label>City list</mat-label>
 
                             <mat-select formControlName="city" required>
                                 <mat-option>Select city list</mat-option>
-                                <mat-option *ngFor="let city of citys" [value]="city.cityId">
-                                    {{city.cityName}}
+                                <mat-option *ngFor="let newcity of citys" [value]="newcity.cityId">
+                                    {{newcity.cityName}}
                                 </mat-option>
                             </mat-select>
                             <mat-error *ngIf="form.get('city').hasError('required')">
                                 Please select city list!
                             </mat-error>
+                            
                              
                         </mat-form-field>
                     </div>

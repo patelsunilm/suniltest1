@@ -49,7 +49,8 @@ export class AddproductComponent implements OnInit {
   price: any;
   Primary: any;
   f = true;
-  
+  setproductcatid : any[] = [];
+   
   qrdata: any;
   url: any;
   
@@ -122,7 +123,7 @@ export class AddproductComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
+          // console.log(error);
 
         });
 
@@ -258,6 +259,11 @@ export class AddproductComponent implements OnInit {
         });
       } else {
 
+        
+
+           
+
+
 
         this.ProductService.addproductgallery(this.filesToUpload).subscribe(data => {
 
@@ -265,7 +271,7 @@ export class AddproductComponent implements OnInit {
             return obj1.index - obj2.index;
 
           });
-
+          var isDuplicateproduct = []
           for (let i = 0; i < this.productForm.value.itemRows.length; i++) {
             var datetime = new Date(new Date).valueOf();
             var randomnumber = Math.floor((Math.random() * 100) + 1);
@@ -290,48 +296,84 @@ export class AddproductComponent implements OnInit {
             //   });
             
             // }
-          }
-           
+            
           
-          this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
-            this.snackBar.open('Product added successfully.', '', {
+            var values = { name: this.productForm.value.itemRows[i].productname }
+             
+            isDuplicateproduct.push(values)
+              
+          }
+
+        
+          var valueArr = isDuplicateproduct.map(function(item){ return item.name });
+          var isDuplicate = valueArr.some(function(item, idx){ 
+              return valueArr.indexOf(item) != idx 
+          });
+         
+           if(isDuplicate == true) {
+           
+            this.snackBar.open('Product name is already exists.', '', {
               duration: 3000,
               horizontalPosition: this.horizontalPosition,
               verticalPosition: this.verticalPosition,
             });
             this.loading = false;
-
-            this.router.navigate([this.returnUrl]);
+           } else {
+           
+          this.ProductService.addproduct(this.productForm.value.itemRows).subscribe(data => {
+           
+            if(data.string == "Product name is already exists."){
+              this.snackBar.open('Product name is already exists.', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+              this.loading = false;
+            } else if(data.string == "Product added successfully.") {
+              this.snackBar.open('Product added successfully.', '', {
+                duration: 3000,
+                horizontalPosition: this.horizontalPosition,
+                verticalPosition: this.verticalPosition,
+              });
+              this.loading = false;
+  
+              this.router.navigate([this.returnUrl]);
+            }
+            
 
           }, error => {
-            console.log(error);
+            // console.log(error);
 
           })
-
+        }
         })
-
+      
       }
     }
   }
 
   addnewcategory(i) {
 
-    $(".cdk-overlay-pane").show()
-    $("#div_" + i).hide();
-    $("#divshow_" + i).show();
+      $("#div_" + i).hide();
+     $("#divshow_" + i).show();
+     $("#candivshow_" + i).show();
+     
     var Categoryhtml = '<mat-form-field appearance="outline"><mat-label  id="matcat' + i + '">Category name</mat-label><input matInput formControlName="productcatname" class="category-input" id="cat' + i + '"></mat-form-field>';
-
     document.getElementById(i).innerHTML = Categoryhtml;
   
-    this.mySelect.close();
-     // this.mySelect.select(i).close();
-    //$("#mySelect_" + i).close();
-   // $(".cdk-overlay-pane").hide()
-
   }
 
+  Cancelproductcategories(i) {
+   
+    $("#divshow_" + i).hide();
+    $("#cat" + i).hide();
+    $("#matcat" + i).hide();
+    $("#div_" + i).show();
+    $("#candivshow_" + i).hide();
+  }
 
-
+  
+  
   addproductcategories(i) {
 
     var merchantId = localStorage.getItem('userId');
@@ -365,30 +407,32 @@ export class AddproductComponent implements OnInit {
               $("#cat" + i).hide();
               $("#matcat" + i).hide();
               $("#div_" + i).show();
-              $(".cdk-overlay-pane").show()
+              $("#candivshow_" + i).hide();
               this.ProductService.getAllProductcategories(merchantId)
                 .subscribe(
                   data => {
-             
+                    if (data.message == "No records found") {
 
-                    this.catName = data.data;
-
-
+                    } else {
+                      this.catName = data.data;
+                      
+                      this.setproductcatid[i] = data.data[0].productCatId
+                      
+                    }
                   },
                   error => {
-                    console.log(error);
+                    // console.log(error);
 
                   });
-
-
-              //  this.test = 'false';
+                  
+                 
 
 
             }
 
           },
           error => {
-            console.log(error);
+            // console.log(error);
 
           });
     }

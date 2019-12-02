@@ -14,7 +14,7 @@ import { ProfileComponent } from './profile.component';
 import { AuthGuardCommon } from './../../_guards/index';
 import { AutofocusModule } from 'angular-autofocus-fix';
 
-
+import { NgxLoadingModule } from 'ngx-loading';
 const routes = [
     {
         path: 'profile',
@@ -46,6 +46,7 @@ const routes = [
         FuseSidebarModule,
         FuseWidgetModule,
         ColorPickerModule,
+        NgxLoadingModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyD81ecsCj4yYpcXSLFcYU97PvRsE_X8Bx8'
         })

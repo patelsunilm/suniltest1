@@ -8,6 +8,7 @@ router.get('/dashboard/getAllmerchantcounts', dashboards.getAllmerchantcounts);
 router.get('/dashboard/getAllcountproducts/:userId', dashboards.getAllcountproducts);
 router.get('/dashboard/getAllcountfaqs/:userId', dashboards.getAllcountfaqs);
 
+
 var profiledata = require('./controllers/profile/profile.controller');
 router.get('/profile/getprofileInfo/:userId', profiledata.getprofileInfo);
 router.post('/profile/updateprofile', profiledata.updateprofile);
@@ -61,6 +62,8 @@ router.post('/merchant/getmerchantreview', merchentdata.getmerchantreview);
 router.post('/merchant/updatemerchantreview', merchentdata.updatemerchantreview);
 router.post('/merchant/getallproductratings', merchentdata.getallproductratings);
 
+router.get('/merchant/getchatallMerchentsData', merchentdata.getchatallMerchentsData);
+
 
 
 var faqdata = require('./controllers/faq/faq.controller');
@@ -90,7 +93,9 @@ router.get('/appusers/getuserbyId/:userid', appusersdetails.getuserbyId);
 router.post('/appusers/updateuserdetails', appusersdetails.updateuserdetails);
 router.post('/appusers/getCartDetails', appusersdetails.getCartDetails);
 router.post('/appusers/UserLogout', appusersdetails.UserLogout);
+router.post('/appusers/getAllUser' , appusersdetails.getAllUser);
 
+router.post('/appusers/chatuser' , appusersdetails.chatuser);
 
 var tillmanagement = require('./controllers/tillmanagement/tillmanagement.controller');
 router.get('/tillmanagement/getalltillType', tillmanagement.getalltillType);
@@ -108,7 +113,6 @@ router.post('/notifications/addnotification', notifications.addnotification);
 
 
 var diarys = require('./controllers/diary/diary.controller');
-
 router.post('/diary/addEventdetails', diarys.addEventdetails);
 router.get('/diary/getaEventDetails/:merchantId', diarys.getaEventDetails);
 router.delete('/diary/deleteEvents/:eventId', diarys.deleteEvents);

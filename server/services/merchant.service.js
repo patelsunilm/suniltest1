@@ -27,6 +27,8 @@ service.addmerchantreview = addmerchantreview;
 service.getmerchantreview = getmerchantreview;
 service.updatemerchantreview = updatemerchantreview;
 service.getallproductratings = getallproductratings;
+service.getchatallMerchentsData = getchatallMerchentsData;
+
 
 function getallMerchentsData() {
 
@@ -118,13 +120,13 @@ function getallMerchentsData() {
                 },
             }
         },
-        { $sort: { createddate: -1 } },
+        { $sort: { dateadded: -1 } },
 
 
     ]).exec(function (err, getMerchentData) {
         if (!err) {
 
-
+            
             var allmerchant = [];
             getMerchentData.forEach(element => {
 
@@ -713,5 +715,22 @@ function getallproductratings(proDetails) {
     })
     return deferred.promise;
 
+}
+
+
+
+function getchatallMerchentsData() {
+
+
+    var deferred = Q.defer();
+    users.find({userType : 'Merchant'},function (err, getdata) {
+        if (!err) {
+           
+            deferred.resolve(getdata);
+        } else {
+            deferred.reject(err.name + ': ' + err.message);
+        }
+    });
+    return deferred.promise;
 }
 module.exports = service;

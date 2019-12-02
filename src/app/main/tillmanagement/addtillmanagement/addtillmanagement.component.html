@@ -64,7 +64,7 @@
     <div class="till" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
       <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
           <mat-label>Till Name</mat-label>
-          <input matInput autocomplete="off" formControlName="tillName" pattern="^([^\s])([\sa-zA-Z0-9_\-]*)([^\s])$"  required>
+          <input matInput autocomplete="off" formControlName="tillName" pattern="^[^ ].+[^ ]$"   required>
           <mat-error *ngIf="form.get('tillName').hasError('required')">
             Please enter till name !
         </mat-error>

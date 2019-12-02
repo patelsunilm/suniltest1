@@ -17,7 +17,8 @@
               <input matInput
                      name="title"
                      formControlName="title"
-                     required>
+                     required pattern="^[^ ].+[^ ]$">
+                  
           </mat-form-field>
 
           <!-- <div fxFlex="1 0 auto" fxLayout="column" fxLayout.gt-xs="row" formGroupName="color">
@@ -100,7 +101,7 @@
               <textarea matInput
                         formControlName="notes"
                         mat-maxlength="250"
-                        max-rows="4">
+                        max-rows="4" pattern="^[^ ].+[^ ]$">
               </textarea>
           </mat-form-field>
       </form>

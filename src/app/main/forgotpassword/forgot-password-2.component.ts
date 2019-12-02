@@ -1,11 +1,16 @@
-import { Component, OnInit, ViewChild, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef,ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { ForgotPasswordService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatTooltip } from '@angular/material';
-
+import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+const PrimaryWhite = '#ffffff';
+const SecondaryGrey = '#ccc';
+const PrimaryRed = '#dd0031';
+const SecondaryBlue = '#006ddd';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 
@@ -22,6 +27,8 @@ export class ForgotPassword2Component implements OnInit {
     verticalPosition: MatSnackBarVerticalPosition = 'top';
     returnUrl: string;
     disabled: any;
+
+
     private _unsubscribeAll: Subject<any>;
     /**
      * Constructor
@@ -30,6 +37,19 @@ export class ForgotPassword2Component implements OnInit {
      * @param {FormBuilder} _formBuilder,
      * 
      */
+
+    public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+    public loading = false;
+    public primaryColour = PrimaryWhite;
+    public secondaryColour = SecondaryGrey;
+    public coloursEnabled = false;
+    public loadingTemplate: TemplateRef<any>;
+    public config = { animationType: ngxLoadingAnimationTypes.none, primaryColour: this.primaryColour, secondaryColour: this.secondaryColour, tertiaryColour: this.primaryColour, backdropBorderRadius: '3px' };
+   
+
+
+
+
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
@@ -76,6 +96,7 @@ export class ForgotPassword2Component implements OnInit {
 
 
     sendforgotpasswordlink() {
+        this.loading = true;
 
         this.ForgotPasswordService.sendlink(this.forgotPasswordForm.value)
             .subscribe(
@@ -87,6 +108,8 @@ export class ForgotPassword2Component implements OnInit {
                             horizontalPosition: this.horizontalPosition,
                             verticalPosition: this.verticalPosition,
                         });
+                        this.loading = false;
+
                     } else {
 
                         this.snackBar.open('Email sent successfully.', '', {
@@ -94,6 +117,8 @@ export class ForgotPassword2Component implements OnInit {
                             horizontalPosition: this.horizontalPosition,
                             verticalPosition: this.verticalPosition,
                         });
+                        this.loading = false;
+
                         this.router.navigate([this.returnUrl]);
 
                     }

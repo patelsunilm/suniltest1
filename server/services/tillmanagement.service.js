@@ -391,9 +391,9 @@ function getTillnametbyId(till) {
 
     if (till.tilltypeid.flag == 1) {
         var deferred = Q.defer();
-        tilldetails.findOne({ $and:[{ _id: till.tilltypeid.id },{merchantid :  till.merchantId} ]}, function (err, tillResults) {
+        tilldetails.findOne({ $and:[{ _id: till.tilltypeid.id },{merchantId :  till.merchantId} ]}, function (err, tillResults) {
             if (!err) {
-                
+               
                 if(tillResults == null || tillResults == "null" ) {
                     var getpro = {}    
                     getpro.error = "error"
@@ -486,6 +486,7 @@ function updatetilltypename(tills) {
 
     if (tills.flag.flag == 1) {
         var deferred = Q.defer();
+       
         tilldetails.findOne({ merchantId: new mongoose.Types.ObjectId(tills.merchantId) }, function (err, results) {
             if (!err) {
 

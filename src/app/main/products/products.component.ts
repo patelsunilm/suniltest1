@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { ProductService } from '../../_services/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ngxLoadingAnimationTypes, NgxLoadingComponent } from 'ngx-loading';
+
 const PrimaryWhite = '#ffffff';
 const SecondaryGrey = '#ccc';
 const PrimaryRed = '#dd0031';
@@ -13,6 +14,8 @@ const SecondaryBlue = '#006ddd';
 import { OnDestroy, TemplateRef } from '@angular/core';
 import { Subject, from } from 'rxjs';
 import * as $ from 'jquery';
+
+
 
 export interface PeriodicElement {
 
@@ -34,10 +37,11 @@ export interface PeriodicElement {
   styleUrls: ['./products.component.scss'],
   animations: fuseAnimations
 })
-// ,'qrcodeImage'
 
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype','tilltypeName', 'stocklevel','qrcodeImage', 'action'];
+
+  // 'qrcodeImage',
+  displayedColumns: string[] = ['image', 'proName', 'costprice', 'markup', 'sellingprice', 'date', 'tilltype','tilltypeName', 'stocklevel','action'];
   dataSource;
   form: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -46,8 +50,10 @@ export class ProductsComponent implements OnInit {
   isTableHasDataAgain = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   url : any;
+  oneimages = new Array<string>();
 
   applyFilter(filterValue: string) {
+        
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
@@ -92,20 +98,21 @@ export class ProductsComponent implements OnInit {
   public showAlert(): void {
     alert('ngx-loading rocks!');
   }
-  constructor( private renderer: Renderer2,public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) { }
-  openDialog() {
+  constructor( private renderer: Renderer2,public dialog: MatDialog, private ProductService: ProductService, public snackBar: MatSnackBar) {
 
+    
+   }
+  
+  openDialog() {
     const dialogRef = this.dialog.open(DialogContentExampleDialog);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+        console.log(`Dialog result: ${result}`);
     });
-  }
-  oneimages : any;
+}
+
   ngOnInit() {
     var userId = localStorage.getItem('userId');
-   
-
     this.ProductService.getproducts(userId)
       .subscribe(
         data => {
@@ -117,18 +124,22 @@ export class ProductsComponent implements OnInit {
             // this.dataSource.paginator = this.paginator;
             // this.isTableHasDataAgain = true;
           
-            const allproducts = [];
-             data.forEach(element => {
+             const allproducts = [];
+           
+            //  data.forEach((element, index) => {
+            //     //  this.oneimages[index] = "assets/uploads/" +element.qrcodeImage;
+               
+                
+            //       element.qrcodeImage  = "assets/uploads/" +element.qrcodeImage;
+            //       allproducts.push(element);
               
-              this.oneimages = "assets/uploads/" +element.qrcodeImage
-              element.qrcodeImage  = "assets/uploads/" +element.qrcodeImage;
-               allproducts.push(element);
+               
   
-            });
+            // });
   
-  
-            if (allproducts.length > 0) {
-              this.dataSource = new MatTableDataSource(allproducts);
+           
+            if (data.length > 0) {
+              this.dataSource = new MatTableDataSource(data);
               this.dataSource.paginator = this.paginator;
               this.isTableHasDataAgain = true;
   
@@ -147,38 +158,47 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  deleteproduct(id ) {
+  
+  deleteproducts(id) {
 
-    let dialogRef = this.dialog.open(deleteproductPopupComponent, {
-      data: {
-        productid: id,
-        
-      },
-      width: '450px'
+    let dialogRef = this.dialog.open(deleteproductpopupComponent, {
+        data: {
+            proid: id,
+           
+        },
+        width: '450px'
     });
-
     dialogRef.afterClosed().subscribe(result => {
       var userId = localStorage.getItem('userId');
-
       this.ProductService.getproducts(userId)
         .subscribe(
           data => {
-
+           
             if (data.length > 0) {
-              this.dataSource = new MatTableDataSource(data);
-              this.dataSource.paginator = this.paginator;
-              this.isTableHasDataAgain = true;
+               var allproducts = [];
+               data.forEach((element, index) => {
+                 allproducts.push(element);
+    
+              });
+              if (allproducts.length > 0) {
+                this.dataSource = new MatTableDataSource(allproducts);
+                this.dataSource.paginator = this.paginator;
+                this.isTableHasDataAgain = true;
+    
+              } else {
+                this.isTableHasDataAgain = false;
+    
+              }
+  
             } else {
               this.isTableHasDataAgain = false;
             }
-
-
+  
           }, error => {
             console.log(error);
           });
-
-    })
-  }
+    });
+}
 
   
 
@@ -187,10 +207,10 @@ export class ProductsComponent implements OnInit {
     var regex = new RegExp("(.*?)\.(xlsx|xls|csv)$");
   
     if (!(regex.test($event.target.value.toLowerCase()))) {
-
+           
     
       $event.target.value = '';
-      this.snackBar.open('Please select correct file format', '', {
+      this.snackBar.open('Please select correct file format.', '', {
         duration: 3000,
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
@@ -204,10 +224,12 @@ export class ProductsComponent implements OnInit {
       $event.target.files[0].userId = merchantid
       $event.target.files[0].url = this.url
   
-      this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
 
-        if (data.string == "Csv imported successfully")  {
-          this.snackBar.open('Csv imported successfully', '', {
+      
+      this.ProductService.addcsvfile($event.target.files[0]).subscribe(data => {
+       
+        if (data.string == "Csv import success fully")  {
+          this.snackBar.open('Csv imported successfully.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -234,11 +256,12 @@ export class ProductsComponent implements OnInit {
                 console.log(error);
               });
         } else if(data.string == "Please add Primary till type"){
-          this.snackBar.open('Please add primary till type', '', {
+          this.snackBar.open('Please added primary till type.', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
           });
+          $event.target.value = '';
           var userId = localStorage.getItem('userId');
           this.loading = false;
 
@@ -259,7 +282,7 @@ export class ProductsComponent implements OnInit {
 
         } else {
 
-          this.snackBar.open('please select correct csv file ', '', {
+          this.snackBar.open('please select correct csv file. ', '', {
             duration: 3000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
@@ -268,6 +291,8 @@ export class ProductsComponent implements OnInit {
           $event.target.value = '';
         }
       }, error => {
+        this.loading = false;
+        $event.target.value = '';
         console.log(error);
       })
     }
@@ -276,47 +301,51 @@ export class ProductsComponent implements OnInit {
 
 
 }
+
+
 @Component({
   selector: 'deleteproduct-popup',
   templateUrl: './deleteproductpopup.html'
 })
-export class deleteproductPopupComponent {
+export class deleteproductpopupComponent {
   returnUrl: string;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
+  
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-    private ProductService: ProductService,
-    private route: ActivatedRoute,
-    private router: Router,
-    public snackBar: MatSnackBar
+       private ProductService: ProductService,
+      private route: ActivatedRoute,
+      private router: Router,
+      public snackBar: MatSnackBar
 
   ) {
 
 
   }
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/companies';
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/products';
   }
 
+  deletemerchantproduct(proid) {
+      this.ProductService.deleteoneproduct(proid)
+          .subscribe(
+              data => {
 
-  
-  delete(id ) {
+                  this.snackBar.open('Product deleted successfully.', '', {
+                      duration: 5000,
+                      horizontalPosition: this.horizontalPosition,
+                      verticalPosition: this.verticalPosition,
+                  });
+                  this.router.navigate([this.returnUrl]);
 
-    
-    this.ProductService.deleteoneproduct(id)
-      .subscribe(
-        data => {
-
-          this.snackBar.open('Product deleted successfully', '', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-
-        })
-
+              },
+              error => {
+                  console.log(error);
+              });
   }
+
 }
+
 export class DialogContentExampleDialog { }
+

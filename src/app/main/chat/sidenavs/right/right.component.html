@@ -1,0 +1,9 @@
+<div [ngSwitch]="view" class="views">
+
+  <app-contact class="view"
+                        *ngSwitchCase="'contact'"
+                        [@slideInRight]
+                        fusePerfectScrollbar>
+  </app-contact>
+
+</div>

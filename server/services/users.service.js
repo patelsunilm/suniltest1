@@ -107,7 +107,6 @@ function addsignupuser(signupdata) {
 
         } else if (signupdata.BusinessName) {
 
-           
             Users.find({ businessname: signupdata.BusinessName }, function (err, newresult) {
                 if (newresult.length > 0) {
 
@@ -117,45 +116,46 @@ function addsignupuser(signupdata) {
 
                 } else {
 
-            var saveallsignup = new Users({
+                    var saveallsignup = new Users({
 
-                name: signupdata.name,
-                email: signupdata.email,
-                password: hashUserPassword,
-                address: signupdata.address,
-                businessname: signupdata.BusinessName,
-                secretquestion: signupdata.Secretquestion,
-                secretanswer: signupdata.Secretanswer,
-                ipaddress: signupdata.ipAddress,
-                status: signupdata.status,
-                uniqueid: signupdata.uniqueid,
-                userType: signupdata.usertype,
-                phone: signupdata.phone,
-                cityid: signupdata.cityid,
-                stateid: signupdata.stateid,
-                countryid: signupdata.countriid,
-                categoryid: signupdata.categoryid,
-                fontcolor: signupdata.fontcolor,
-                backgroundtheme: signupdata.backgroundtheme,
-                image: signupdata.image,
+                        name: signupdata.name,
+                        email: signupdata.email,
+                        password: hashUserPassword,
+                        address: signupdata.address,
+                        businessname: signupdata.BusinessName,
+                        secretquestion: signupdata.Secretquestion,
+                        secretanswer: signupdata.Secretanswer,
+                        ipaddress: signupdata.ipAddress,
+                        status: signupdata.status,
+                        uniqueid: signupdata.uniqueid,
+                        userType: signupdata.usertype,
+                        phone: signupdata.phone,
+                        cityid: signupdata.cityid,
+                        stateid: signupdata.stateid,
+                        countryid: signupdata.countriid,
+                        categoryid: signupdata.categoryid,
+                        fontcolor: signupdata.fontcolor,
+                        backgroundtheme: signupdata.backgroundtheme,
+                        image: signupdata.image,
 
-            });
-            saveallsignup.save(function (err, saveallsignup) {
-                if (!err) {
+                    });
+                    saveallsignup.save(function (err, saveallsignup) {
+                        if (!err) {
 
 
-                    var data = {};
-                    data.string = 'You have signed up successfully.';
-                    deferred.resolve(data);
-                } else {
-
-                    deferred.reject(err.name + ': ' + err.message);
+                            var data = {};
+                            data.string = 'You have signed up successfully.';
+                            deferred.resolve(data);
+                        } else {
+                            console.log('err');
+                            console.log(err);
+                            deferred.reject(err.name + ': ' + err.message);
+                        }
+                    })
                 }
+
             })
         }
-    
-    })
-}
     })
 
     return deferred.promise;
@@ -225,11 +225,12 @@ function submitgoogledetails(googledata) {
 
     var deferred = Q.defer();
 
+    console.log('test123');
     Users.findOne({ email: googledata.email }, function (err, getresult) {
         if (getresult) {
 
             if (getresult.userType == 'Merchant') {
-
+                console.log('a');
                 Users.findOneAndUpdate({ _id: getresult._id }, {
                     googleid: googledata.googleid,
                     authToken: googledata.authToken,
@@ -265,6 +266,7 @@ function submitgoogledetails(googledata) {
 
             }
         } else {
+            console.log('b');
 
             var saveData = new Users({
                 name: googledata.name,
@@ -278,7 +280,7 @@ function submitgoogledetails(googledata) {
                 dateadded: Date.now(),
                 datemodified: Date.now(),
             });
-
+            
             saveData.save(function (err, user) {
                 if (!err) {
                     deferred.resolve({
@@ -291,7 +293,8 @@ function submitgoogledetails(googledata) {
                         token: jwt.sign({ sub: user._id }, config.secret)
                     });
                 } else {
-
+                    console.log('errr');
+                    console.log(err);
                     deferred.reject(err.name + ': ' + err.message);
                 }
             });
@@ -346,11 +349,12 @@ function loginwithemail(data) {
 
                 deferred.reject(err.name + ': ' + err.message);
             } else {
+
                 var transporter = nodemailer.createTransport({
                     service: 'gmail',
                     host: 'smtp.gmail.com',
-                    port: 25,
-                    secure: false,
+                    port: 587,
+                    secure: true,
                     tls: {
                         rejectUnauthorized: false
                     },
@@ -360,15 +364,20 @@ function loginwithemail(data) {
                         pass: config.mail_pass
                     }
                 });
-
+                
+                // console.log('user id');
+                // console.log(user);
                 var mailOptions = {
                     from: config.mail_user,
                     to: data.email, // list of receivers
                     subject: 'Account verification code', // Subject line
                     text: 'otp',
-                    html: otp + ' is your verification code',
+                    // html: otp + ' is your verification code',
+                    html: '<p>Welcome to the SMAF Family.</p></br> <p>Your User ID is:'+ data.email +'<br>Your Password is: '+ otp+'</p></br><p>Please keep your login details safe at all times and your feedback on how we can make SMAF even better can be shared via the feedback button on your profile',
                 };
                 if (user == '') {
+
+                     console.log('pls check your mail');
                     var saveuser = new appusers({
                         email: data.email,
                         otp: otp,
@@ -380,11 +389,18 @@ function loginwithemail(data) {
                     saveuser.save(function (err, saveanewuser) {
                         if (!err) {
 
+                            
                             transporter.sendMail(mailOptions, function (error, info) {
                                 if (error) {
+
+                                    console.log('saveanewuser');
+                                    console.log(error);
                                     deferred.reject(err.name + ': ' + err.message);
                                 } else {
+
+                                    console.log('sucess');
                                     deferred.resolve(userdata);
+                             
                                 }
                             });
                         }
@@ -399,10 +415,29 @@ function loginwithemail(data) {
                         if (err) {
                             deferred.reject(err);
                         } else {
-                            transporter.sendMail(mailOptions, function (error, info) {
+                            
+                            // console.log('data 123');
+                            // console.log(data);
+
+
+                            var mailOptions1 = {
+                                from: config.mail_user,
+                                to: data.email, // list of receivers
+                                subject: 'Account verification code', // Subject line
+                                text: 'otp',
+                               // html: otp + ' is your verification code',
+                                html: '<p>You have just logged into your SMAF.</p></br> <p>Your User ID is:'+ 123456 +'</p><br><p>Your Password is: '+ otp+'</p><br><p>Please keep your login details safe at all times and your feedback on how we can make SMAF even better can be shared via the feedback button on your profile',
+                            };
+
+                            transporter.sendMail(mailOptions1, function (error, info) {
                                 if (error) {
+                                     
+                                    console.log('error 123');
+                                    console.log(error);
                                     deferred.reject(err.name + ': ' + err.message);
                                 } else {
+
+                                    console.log('sucess');
                                     deferred.resolve(userdata);
                                 }
                             });

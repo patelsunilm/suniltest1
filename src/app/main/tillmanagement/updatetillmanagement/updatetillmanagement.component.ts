@@ -41,13 +41,12 @@ export class UpdatetillmanagementComponent implements OnInit {
 
 
       this.tillManagementService.getTillnametbyId(params, merchantId).subscribe(data => {
-
+      
         if (data.flag == 1) {
-          console.log('data');
-          console.log(data);
+          
           if (data.error == "error") {
-            console.log('data 1');
-
+           
+            this.router.navigate(['login']);
           } else {
 
             this.form = this._formBuilder.group({
@@ -57,8 +56,7 @@ export class UpdatetillmanagementComponent implements OnInit {
         } else if (data.flag == 2) {
 
           if (data.error == "error") {
-            console.log('data 2');
-
+            this.router.navigate(['login']);
           } else {
             this.form = this._formBuilder.group({
 
@@ -69,8 +67,8 @@ export class UpdatetillmanagementComponent implements OnInit {
         } else if (data.flag == 3) {
 
           if (data.error == "error") {
-            console.log('data 3');
-
+            
+            this.router.navigate(['login']);
           } else {
             this.form = this._formBuilder.group({
 

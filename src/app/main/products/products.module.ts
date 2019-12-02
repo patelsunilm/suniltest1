@@ -16,7 +16,6 @@ import { MatPaginatorModule } from '@angular/material';
 import { AddproductComponent } from '../products/addproduct/addproduct.component'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AuthGuardCo } from './../../_guards/index';
-import { deleteproductPopupComponent } from './products.component';
 import { UpdateproductComponent } from './updateproduct/updateproduct.component';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxLoadingModule } from 'ngx-loading';
@@ -25,6 +24,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { AutofocusModule } from 'angular-autofocus-fix';
 import { QRCodeModule } from 'angularx-qrcode';
 import { HttpClientModule } from '@angular/common/http';
+import { deleteproductpopupComponent} from './products.component';
 
 
 //  import { AutoFocusDirective } from '../../auto-focus.directive';
@@ -43,14 +43,13 @@ const routes = [
         canActivate: [AuthGuardCo]
     },
     {
-        path: 'products',
-        component: deleteproductPopupComponent,
-        canActivate: [AuthGuardCo]
-    },
-
-    {
         path: 'updateproduct/:id',
         component: UpdateproductComponent,
+        canActivate: [AuthGuardCo]
+    },
+    {
+        path: 'products',
+        component: deleteproductpopupComponent,
         canActivate: [AuthGuardCo]
     }
 ];
@@ -59,9 +58,9 @@ const routes = [
     declarations: [
         ProductsComponent,
         AddproductComponent,
-        deleteproductPopupComponent,
+        deleteproductpopupComponent,
         UpdateproductComponent,
-       //  AutoFocusDirective
+       
 
     ],
     imports: [
@@ -93,6 +92,13 @@ const routes = [
         MatSelectModule,
         QRCodeModule,HttpClientModule,
         MatPaginatorModule, MatDatepickerModule, NgxBarcodeModule,NgxQRCodeModule,AutofocusModule
+    ],
+    exports: [
+       
+        deleteproductpopupComponent,
+        AddproductComponent,
+        ProductsComponent,
+        UpdateproductComponent
     ]
 })
 export class ProductsModule {

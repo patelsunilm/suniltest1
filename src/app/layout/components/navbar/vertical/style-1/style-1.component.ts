@@ -186,7 +186,15 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                         
                     },
                 ]
-            },  
+            }, 
+            {
+                id: 'chat',
+                title: 'Chats',
+                url: '/chat',
+                type: 'item',
+                icon: 'chat'
+            },
+            
         ]
         _router.events.subscribe(
             (event) => {
@@ -340,7 +348,15 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
                                     type: 'item',
                                     
                                 },
+                               
                             ]
+                        },
+                        {
+                            id: 'chat',
+                            title: 'Chats',
+                            url: '/chat',
+                            type: 'item',
+                            icon: 'chat'
                         },
                     ];
 

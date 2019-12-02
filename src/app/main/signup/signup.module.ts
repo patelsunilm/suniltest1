@@ -7,6 +7,7 @@ import { SignupComponent } from 'app/main/signup/signup.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AutofocusModule } from 'angular-autofocus-fix';
+import { NgxLoadingModule } from 'ngx-loading';
 
 const routes = [
     {
@@ -29,7 +30,8 @@ const routes = [
         MatInputModule,
         MatSnackBarModule,
         FuseSharedModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxLoadingModule
     ]
 })
 export class SignupModule {

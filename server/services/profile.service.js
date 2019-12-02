@@ -97,7 +97,7 @@ function updateprofile(getprofiledata) {
 
             } else if (getprofiledata.businessname) {
                 var businessname = new RegExp("^" + getprofiledata.businessname + "$", "i")
-                Users.find({ $and: [{ businessname: getprofiledata.businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
+                Users.find({ $and: [{ businessname: businessname }, { _id: { $ne: getprofiledata._id } }] }, function (err, duplicateData) {
                     if (duplicateData.length > 0) {
                         var data = {};
                         data.string = 'Business name already exists.';
@@ -380,7 +380,8 @@ function getuserprofile(profile) {
                         "phone": userdetail.phone,
                         "firstName": userdetail.firstname,
                         "lastName": userdetail.lastname,
-                        "image": userdetail.image
+                        "image": userdetail.image,
+                        "countryCode" : userdetail.countryCode
                     }
                 }
                 deferred.resolve(appuserdetails);

@@ -39,8 +39,9 @@ function sendlink(sendlinkdata, baseurl) {
                 from: config.mail_user,
                 to: sendlinkdata.email,
                 subject: 'Reset Password Link',
-                html: '<p>Hello,' + password.name + '</p> </br> <p>You have requested to reset your password to your SMAF account. Click on the link below to reset it</p></br> <a href="' + baseurl + '/#' + '/resetpassword/' + userid + '" target="_blank">Click Here</a> </br><p>If you did not request to reset your password, please ignore this mail, or let us know. </p></br><p>Regards,</p></br> <p>SMAF Team! </p>',
+                html: '<p>Hello, ' + password.name + '</p> </br> <p>You have requested to reset your password to your SMAF account. Click on the link below to reset it</p></br> <a href="' + baseurl + '/#' + '/resetpassword/' + userid + '" target="_blank">Click Here</a> </br><p>If you did not request to reset your password, please ignore this mail, or let us know. </p></br><p>Regards,</p></br> <p>SMAF Team! </p>',
             };
+           
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     var data = {};
@@ -92,6 +93,7 @@ function resetpassword(resetpassworddata) {
         } else {
             var diff = Date.now() - (Password.flagTime);
             var diffInHours = diff / 1000 / 60 / 60; // Convert milliseconds to hours
+           
             if (Password.flag == 1 && diffInHours>1) {
               
                 var arr={}

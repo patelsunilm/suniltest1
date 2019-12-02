@@ -42,6 +42,20 @@ export class ProductService {
 
   }
 
+  findproducts(Files) :Observable<any> {
+
+    var userId = localStorage.getItem('userId');
+
+    const formData: any = new FormData();
+    const files: Array<File> = Files;
+   
+    formData.append("uploads", files);
+    formData.append("uploads", userId);
+    
+    return this.http.post<any>(appConfig.apiUrl + '/findproducts', formData )
+
+  }
+
   addproductgallery(Files): Observable<any> {
 
     const formData: any = new FormData();

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component,Pipe, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Subject } from 'rxjs';
@@ -10,11 +10,14 @@ import { fuseAnimations } from '@fuse/animations';
 import { EventFormComponent } from 'app/main/calendar/event-form/event-form.component';
 import { DiaryService } from '../../_services/index';
 import { MatPaginator, MatTableDataSource, MAT_DIALOG_DATA, MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
-
 // import { CalendarService } from 'app/main/apps/calendar/calendar.service';
 // import { CalendarEventModel } from 'app/main/apps/calendar/event.model';
 // import { CalendarEventFormDialogComponent } from 'app/main/apps/calendar/event-form/event-form.component';
+import { DatePipe } from '@angular/common';
 
+@Pipe({
+  name: 'dateFormatPipe',
+})
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -34,7 +37,7 @@ export class CalendarComponent implements OnInit {
   viewDate: Date;
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  constructor(  public snackBar: MatSnackBar,public dialog: MatDialog, private DiaryService : DiaryService,private _matDialog: MatDialog,
+  constructor(public snackBar: MatSnackBar,public dialog: MatDialog, private DiaryService : DiaryService,private _matDialog: MatDialog,
   ) {
    // Set the defaults
    this.view = 'month';
@@ -130,6 +133,9 @@ export class CalendarComponent implements OnInit {
 
   setEvents(): void
   {
+
+    
+    
     var merchantId = localStorage.getItem('userId');
  
     this.DiaryService.getaEventDetails(merchantId)
@@ -152,7 +158,8 @@ export class CalendarComponent implements OnInit {
       error => {
 
         console.log(error);
-      });  }
+      });  
+    }
 
   beforeMonthViewRender({header, body}): void
   {
@@ -176,6 +183,7 @@ export class CalendarComponent implements OnInit {
  
   dayClicked(day: CalendarMonthViewDay): void
   {
+   
       const date: Date = day.date;
       const events: CalendarEvent[] = day.events;
 
@@ -183,10 +191,14 @@ export class CalendarComponent implements OnInit {
       {
           if ( (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0 )
           {
+            
+
               this.activeDayIsOpen = false;
           }
           else
           {
+            
+
               this.activeDayIsOpen = true;
               this.viewDate = date;
           }
@@ -266,7 +278,16 @@ export class CalendarComponent implements OnInit {
                 const formData: FormGroup = response[1];
                 if(actionType == "save") {
                     
-                   
+                  
+                  //  if(formData.value.start <= formData.value.end) { 
+                    var datePipe = new DatePipe("en-US");
+              
+                    var myDate = new Date();
+                    var newEvents = datePipe.transform(formData.value.start,"yyyy-MM-dd")
+                    var currentdate = datePipe.transform(myDate,"yyyy-MM-dd")
+    
+                    
+                    if(currentdate <= newEvents){
                     
                     this.DiaryService.updateEvents(formData.value)
                     .subscribe(
@@ -281,6 +302,43 @@ export class CalendarComponent implements OnInit {
                       }, error => {
                         console.log(error);
                       });
+                   
+                    } else {
+                      this.snackBar.open('Please select correct date.', '', {
+                        duration: 5000,
+                        horizontalPosition: this.horizontalPosition,
+                        verticalPosition: this.verticalPosition,
+                    });
+                    var merchantId = localStorage.getItem('userId');
+  
+                    this.DiaryService.getaEventDetails(merchantId)
+                    .subscribe(
+                      data => {
+                      var newevents = []
+                        data.forEach(element => {
+                             
+                            element.start = new Date(element.start);
+                            element.title = element.title;
+                            element.end = new Date(element.end);
+                            newevents.push(element)
+                          });
+                         this.events = newevents;
+                    
+                       },
+                      error => {
+                
+                        console.log(error);
+                      });
+                    }
+                   
+                    // }else {
+                    //   this.snackBar.open('Please select correct date.', '', {
+                    //     duration: 5000,
+                    //     horizontalPosition: this.horizontalPosition,
+                    //     verticalPosition: this.verticalPosition,
+                    // });
+                    //  }
+
                 }
                
                 switch ( actionType )
@@ -322,14 +380,20 @@ export class CalendarComponent implements OnInit {
               {
                   return;
               }
-              const newEvent = response.getRawValue();
-              newEvent.actions = this.actions;
-            //   this.events.push(newEvent);
+               const newEvent = response.getRawValue();
+               newEvent.actions = this.actions;
                var merchantId = localStorage.getItem('userId');
                newEvent.merchantId = merchantId;
            
                if(newEvent.start <= newEvent.end) {
+                var datePipe = new DatePipe("en-US");
+              
+                var myDate = new Date();
+                var newEvents = datePipe.transform(newEvent.start,"yyyy-MM-dd")
+                var currentdate = datePipe.transform(myDate,"yyyy-MM-dd")
+
                 
+                if(currentdate <= newEvents){
                 this.DiaryService.addEvent(newEvent)
                 .subscribe(
                   data => {
@@ -347,7 +411,8 @@ export class CalendarComponent implements OnInit {
                              newevents.push(element)
                            });
                           this.events = newevents;
-                       },
+                     
+                        },
                        error => {
                  
                          console.log(error);
@@ -362,6 +427,13 @@ export class CalendarComponent implements OnInit {
           
                     console.log(error);
                   });
+                } else {
+                  this.snackBar.open('Please select correct date.', '', {
+                    duration: 5000,
+                    horizontalPosition: this.horizontalPosition,
+                    verticalPosition: this.verticalPosition,
+                });
+                }
                } else {
                 this.snackBar.open('Please select correct date.', '', {
                   duration: 5000,

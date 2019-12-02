@@ -6,6 +6,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 
 import { ForgotPassword2Component } from 'app/main/forgotpassword/forgot-password-2.component';
 import { AutofocusModule } from 'angular-autofocus-fix';
+import { NgxLoadingModule } from 'ngx-loading';
 
 const routes = [
     {
@@ -25,7 +26,7 @@ const routes = [
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-
+        NgxLoadingModule,
         FuseSharedModule,
     ]
 })

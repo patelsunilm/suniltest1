@@ -11,9 +11,7 @@ var fs = require('fs');
 const multer = require('multer');
 var AWS = require('aws-sdk');
 var sharp = require('sharp');
-var Q = require('q');
 var qr = require('qr-image');
-
 var Q = require('q');
 const bwipjs = require('bwip-js');
 var Barc = require('barcode-generator')
@@ -21,6 +19,8 @@ var Barc = require('barcode-generator')
   , fs = require('fs');
 var dateFormat = require('dateformat');
 
+var socket = require('socket.io');
+var http = require('http');
 
 
 uploads = require("express-fileupload")
@@ -32,6 +32,7 @@ var products = require('../server/controllers/products/products.model');// get o
 var appuser = require('../server/controllers/Users/appusers.model');
 var productcategory = require('../server/controllers/products/productcategories.model');
 var tilldetails = require('../server/controllers/tillmanagement/tilldetails.model');
+var merchantChat = require('../server/controllers/appusers/chat.model');
 
 gm = require('gm');
 
@@ -77,7 +78,7 @@ var connectWithRetry = function () {
 
 
 connectWithRetry();
-var http = require('https');
+// var http = require('https');
 // var https = require('https');
 // var options = {
 //   key: fs.readFileSync('./ssl/privkey.pem'),
@@ -86,9 +87,9 @@ var http = require('https');
 var app = express();
 //app.use(forceSsl);
 //var server = https.createServer(options,app).listen(3000);
-var server = http.createServer(app);
 //var io = ios.listen(server);
 var routes = require('./routes');
+
 //app.set('socketio', io);
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -121,6 +122,7 @@ app.use(expressJwt({
 
       return req.headers.authorization.split(' ')[1];
     } else if (req.query && req.query.token) {
+      
       return req.query.token;
     }
     return null;
@@ -187,8 +189,11 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
+
+
+
 app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
-  
+
   var merchantId = req.body.uploads
   tilldetails.findOne({ merchantId: merchantId }, function (err, results) {
     if (!err) {
@@ -199,7 +204,7 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         res.send(data);
 
       } else {
-        
+
 
         var tilltype = "Primary"
         var tilltypeId = results._id;
@@ -209,7 +214,6 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
         var originalFileName = file.originalname;
         var results = [];
 
-       
         var strem = fs.createReadStream('uploads/' + originalFileName, { headers: true })
           .pipe(csv())
           .on('data', (data) =>
@@ -229,35 +233,36 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
             })) {
               var allproducts = [];
               var j = 0;
-              for (let i = 0; i < results.length; i++) {
-                var cost = results[i].costprice == '' ? 0 : results[i].costprice;
-                var markup = results[i].markup == '' ? 0 : results[i].markup;
-                var sellingprice = (parseInt(cost) + parseInt(markup))
-                results[i].sellingprice = sellingprice;
+              var s = 1;
+              var test = []
+              var protest = 0;
+              let myarray = [];
+              var cv
 
-                var datetime = new Date(new Date).valueOf();
-                var randomnumber = Math.floor((Math.random() * 100) + 1);
-                results[i].barcode = datetime + randomnumber;
-                results[i].merchantid = userid;
-
-                var deferred = Q.defer();
-                productcategory.findOne({ $and: [{ catName: results[i].productcategory }, { merchantId: results[i].merchantid }] }, function (err, getcategory) {
-                  if (getcategory) {
-
-                    results[i].productcatid = getcategory._id;
-
-                  } else {
-
-                   
-                    myarray.push(results[i])
+              var newcsvarray = []
+              results.forEach((element,index) => {
+                
+                var productname = new RegExp("^" + element.productname + "$", "i")
+                
+                products.find({ $and: [{ productname: productname }, { merchantid: userid }] }, function (err, duplicateData) {
+                
+                  if (duplicateData.length > 0) {
+                    cv = s++;
+                    if (cv == results.length) {
+                      var data = {};
+                      data.string = 'error';
+                      res.send(data);
+                    }
+                    newcsvarray.push(element)
+                   } else {
                     
-                  }
-                  if ((i + 1) == results.length) {
+                    newcsvarray.push(element)
+                    myarray.push(element)
                     
+                   }
+                   if(newcsvarray.length == results.length) {
+                 
                     for (let index = 0; index < myarray.length; index++) {
-                     
-                     
-                     
                       var cost = myarray[index].costprice == '' ? 0 : myarray[index].costprice;
                       var markup = myarray[index].markup == '' ? 0 : myarray[index].markup;
                       var sellingprice = (parseInt(cost) + parseInt(markup))
@@ -267,25 +272,25 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                       myarray[index].barcode = datetime + randomnumber;
                       myarray[index].merchantid = userid;
                       var deferred = Q.defer();
-                     
+
                       productcategory.findOne({ $and: [{ catName: myarray[index].productcategory }, { merchantId: myarray[index].merchantid }] }, function (err, getcategory) {
                         if (getcategory) {
-      
+
                           myarray[index].productcatid = getcategory._id;
-                        
-                          
+
+
                         } else {
-      
+
                           var procat = new productcategory({
                             catName: myarray[index].productcategory,
                             merchantId: myarray[index].merchantid
-      
+
                           });
                           procat.save(function (err, productcategory) {
                             if (!err) {
-                             
+
                               if (productcategory._id) {
-      
+
                                 myarray[index].productcatid = productcategory._id;
                                 var allproducts = new products({
                                   productname: myarray[index].productname,
@@ -302,84 +307,79 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                                   tilltype: tilltype,
                                   tillTypeName: tilltypename
                                 });
-      
-                                allproducts.save(function (err, newproduct) {
+
+                                allproducts.save(function (err, product) {
                                   if (!err) {
-                                    // console.log('sucess nbv');
-                                    // console.log((index + 1));
-                                    // console.log(myarray.length); 
-                                   
-                                    // if ((index + 1) == myarray.length) {
-      
-                                    //   fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                                    //     if (err) {
-      
-                                    //       deferred.reject(err.name + ': ' + err.message);
-                                    //     } else {
-      
-                                    //       // console.log('complated1')
-      
-                                    //       var data = {};
-                                    //       data.string = 'Csv import success fully';
-                                    //       res.send(data);
-                                    //     }
-                                    //   })
-                                    // }
-        
-                                
-                                    // http://localhost:4200/#/products
-                                    // http://ec2-34-245-11-228.eu-west-1.compute.amazonaws.com:4200/#/products
-                                    var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
-                                    var datetime = new Date(new Date).valueOf();
-                                    var randomnumber = Math.floor((Math.random() * 100) + 1);
-                                    var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
-                                    var sep = filename.split("/");
-                                    var id = new mongoose.Types.ObjectId(product._id);
-      
-                                    products.findOneAndUpdate({ _id: id }, {
-                                      qrcodeImage: sep[1],
-      
-                                    }, function (err, updateproducts) {
-                                      if (!err) {
-      
-                                        if ((index + 1) == myarray.length) {
-      
-                                          fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                                            if (err) {
-      
-                                              deferred.reject(err.name + ': ' + err.message);
-                                            } else {
-      
-                                             
-                                              var data = {};
-                                              data.string = 'Csv import success fully';
-                                              res.send(data);
-                                            }
-                                          })
+
+
+                                    if ((index + 1) == myarray.length) {
+
+                                      fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                        if (err) {
+
+                                          deferred.reject(err.name + ': ' + err.message);
+                                        } else {
+
+                                          // console.log('complated1')
+
+                                          var data = {};
+                                          data.string = 'Csv import success fully';
+                                          res.send(data);
                                         }
-      
-                                      } else {
-      
-                                        deferred.reject(err.name + ': ' + err.message);
-                                      }
-                                    })
-      
+                                      })
+                                    }
+
+                                    // var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                                    // var datetime = new Date(new Date).valueOf();
+                                    // var randomnumber = Math.floor((Math.random() * 100) + 1);
+                                    // var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
+                                    // var sep = filename.split("/");
+                                    // var id = new mongoose.Types.ObjectId(product._id);
+
+                                    // products.findOneAndUpdate({ _id: id }, {
+                                    //   qrcodeImage: sep[1],
+
+                                    // }, function (err, updateproducts) {
+                                    //   if (!err) {
+
+                                    //     if ((index + 1) == myarray.length) {
+
+                                    //       fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                    //         if (err) {
+
+                                    //           deferred.reject(err.name + ': ' + err.message);
+                                    //         } else {
+
+
+                                    //           var data = {};
+                                    //           data.string = 'Csv import success fully';
+                                    //           res.send(data);
+                                    //         }
+                                    //       })
+                                    //     }
+
+                                    //   } else {
+
+                                    //     deferred.reject(err.name + ': ' + err.message);
+                                    //   }
+                                    // })
+
                                   } else {
                                     deferred.reject(err.name + ': ' + err.message);
                                   }
-      
+
                                 });
                               }
-      
+
                             } else {
-      
+
                             }
                           });
                         }
-      
+
                         if (myarray[index].productcatid) {
-      
-                          // console.log('swati');
+
+
                           var allproducts = new products({
                             productname: myarray[index].productname,
                             productcatid: myarray[index].productcatid,
@@ -395,66 +395,60 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                             tilltype: tilltype,
                             tillTypeName: tilltypename
                           });
-      
+
                           allproducts.save(function (err, product) {
                             if (!err) {
-      
-                          // console.log('sucess');
-                          // console.log((i + 1));
-                          // console.log(myarray.length);
-                         // if ((index + 1) == myarray.length) {
-      
-                          // fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                          //   if (err) {
-      
-                          //     deferred.reject(err.name + ': ' + err.message);
-                          //   } else {
-      
-                          //     console.log('complated')
-                          //     var data = {};
-                          //     data.string = 'Csv import success fully';
-                          //     res.send(data);
-                          //   }
-                          //  })
-                          // }
+                              if ((index + 1) == myarray.length) {
 
-                                // http://localhost:4200/#/products
-                                // http://ec2-34-245-11-228.eu-west-1.compute.amazonaws.com:4200/#/products
-                              var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
-                              var datetime = new Date(new Date).valueOf();
-                              var randomnumber = Math.floor((Math.random() * 100) + 1);
-                              var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
-                              var sep = filename.split("/");
-                              var id = new mongoose.Types.ObjectId(product._id);
-                              products.findOneAndUpdate({ _id: id }, {
-                                qrcodeImage: sep[1],
-      
-                              }, function (err, updateproducts) {
-                                if (!err) {
-                                 
-                                  
-                                  
-                                  if ((index + 1) == myarray.length) {
-      
-                                    fs.unlink('uploads/' + originalFileName, function (err, responce) {
-                                      if (err) {
-      
-                                        deferred.reject(err.name + ': ' + err.message);
-                                      } else {
-                                        var data = {};
-                                        data.string = 'Csv import success fully';
-                                        res.send(data);
-                                      }
-                                    })
+                                fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                                  if (err) {
+
+                                    deferred.reject(err.name + ': ' + err.message);
                                   } else {
-                                   
+
+                                    
+                                    var data = {};
+                                    data.string = 'Csv import success fully';
+                                    res.send(data);
                                   }
-                                } else {
-      
-                                  deferred.reject(err.name + ': ' + err.message);
-                                }
-                              })
-      
+                                })
+                              }
+
+                              // var qr_svg = qr.image("http://localhost:4200" + '/#/product/' + product._id, { type: 'png', parse_url: true });
+                              // var datetime = new Date(new Date).valueOf();
+                              // var randomnumber = Math.floor((Math.random() * 100) + 1);
+                              // var filename = qr_svg.pipe(require('fs').createWriteStream('qrcodeimage/' + datetime + randomnumber + 'qr.png')).path
+                              // var sep = filename.split("/");
+                              // var id = new mongoose.Types.ObjectId(product._id);
+                              // products.findOneAndUpdate({ _id: id }, {
+                              //   qrcodeImage: sep[1],
+
+                              // }, function (err, updateproducts) {
+                              //   if (!err) {
+
+
+
+                              //     if ((index + 1) == myarray.length) {
+
+                              //       fs.unlink('uploads/' + originalFileName, function (err, responce) {
+                              //         if (err) {
+
+                              //           deferred.reject(err.name + ': ' + err.message);
+                              //         } else {
+                              //           var data = {};
+                              //           data.string = 'Csv import success fully';
+                              //           res.send(data);
+                              //         }
+                              //       })
+                              //     } else {
+
+                              //     }
+                              //   } else {
+
+                              //     deferred.reject(err.name + ': ' + err.message);
+                              //   }
+                              // })
+
                             } else {
                               deferred.reject(err.name + ': ' + err.message);
                             }
@@ -462,17 +456,17 @@ app.post('/addcsvfile', upload.any('uploads[]'), function (req, res) {
                         }
                       })
                     }
-                  } 
+                   }
                   })
-                  }
-                  
+              });
+            
 
-      } else {
+            } else {
 
               fs.unlink('uploads/' + originalFileName, function (err, responce) {
                 if (err) {
 
-
+                  deferred.reject(err.name + ': ' + err.message);
                 } else {
 
                   var data = {};
@@ -559,46 +553,62 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
 
   if (req.files == '') {
 
-
-
     appuser.findById(req.body.userId, function (err, getdata) {
       if (!err) {
-        getdata.email = req.body.email
-        getdata.firstname = req.body.firstName;
-        getdata.lastname = req.body.lastName;
-        getdata.phone = req.body.phone;
 
-        getdata.save(function (err, usersResults) {
-          if (!err) {
-
-            var user = [];
-            var userprofile = {
-              "status": "1",
-              "message": "Your Profile has been updated successfully.",
-              "data":
-              {
-                email: usersResults.email == undefined ? '' : usersResults.email,
-                firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
-                lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
-                image: usersResults.image == undefined ? '' : usersResults.image,
-                phone: usersResults.phone == undefined ? '' : usersResults.phone,
-                userId: usersResults._id == undefined ? '' : usersResults._id,
-                lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
-
-              }
-            }
-            res.send(userprofile);
-          } else {
-            var userprofile = {
-              "status": "0",
-              "message": "Unable to update profile.",
-              "data":
-                {}
-            }
-            res.send(userprofile);
+        if (getdata == null || getdata == "null" || getdata == undefined || getdata == "undefined") {
+          var userprofile = {
+            "status": "0",
+            "message": "Unable to update profile.",
+            "data":
+              {}
           }
-        });
+          res.send(userprofile);
+        } else {
+
+
+          getdata.email = req.body.email
+          getdata.firstname = req.body.firstName;
+          getdata.lastname = req.body.lastName;
+          getdata.phone = req.body.phone;
+          getdata.countryCode = req.body.countryCode;
+
+          getdata.save(function (err, usersResults) {
+            if (!err) {
+
+              var user = [];
+              var userprofile = {
+                "status": "1",
+                "message": "Your Profile has been updated successfully.",
+                "data":
+                {
+                  email: usersResults.email == undefined ? '' : usersResults.email,
+                  firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
+                  lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
+                  image: usersResults.image == undefined ? '' : usersResults.image,
+                  phone: usersResults.phone == undefined ? '' : usersResults.phone,
+                  userId: usersResults._id == undefined ? '' : usersResults._id,
+                  lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
+                  countryCode: usersResults.countryCode == undefined ? '' : usersResults.countryCode,
+
+                }
+              }
+              res.send(userprofile);
+            } else {
+
+              var userprofile = {
+                "status": "0",
+                "message": "Unable to update profile.",
+                "data":
+                  {}
+              }
+              res.send(userprofile);
+            }
+          });
+        }
       } else {
+
+
         var userprofile = {
           "status": "0",
           "message": "Unable to update profile.",
@@ -644,49 +654,59 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
           else {
 
             appuser.findById(req.body.userId, function (err, getdata) {
-
               if (!err) {
-                getdata.email = req.body.email
-                getdata.firstname = req.body.firstName;
-                getdata.lastname = req.body.lastName;
-                getdata.phone = req.body.phone;
-                getdata.image = resultdata.Location;
-                getdata.save(function (err, usersResults) {
-                  if (!err) {
-
-                    var user = [];
-
-                    var userprofile = {
-                      "status": "1",
-                      "message": "Your Profile has been updated successfully.",
-                      "data":
-                      {
-
-                        email: usersResults.email == undefined ? '' : usersResults.email,
-                        firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
-                        lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
-                        image: usersResults.image == undefined ? '' : usersResults.image,
-                        phone: usersResults.phone == undefined ? '' : usersResults.phone,
-                        userId: usersResults._id == undefined ? '' : usersResults._id,
-                        lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
-
-                      }
-                    }
-
-                    res.send(userprofile);
-
-                  } else {
-
-                    var userprofile = {
-                      "status": "0",
-                      "message": "Unable to update profile.",
-                      "data":
-                        {}
-                    }
-                    res.send(userprofile);
+                if (getdata == null || getdata == "null" || getdata == undefined || getdata == "undefined") {
+                  var userprofile = {
+                    "status": "0",
+                    "message": "Unable to update profile.",
+                    "data":
+                      {}
                   }
-                });
+                  res.send(userprofile);
+                } else {
+                  getdata.email = req.body.email
+                  getdata.firstname = req.body.firstName;
+                  getdata.lastname = req.body.lastName;
+                  getdata.phone = req.body.phone;
+                  getdata.countryCode = req.body.countryCode;
+                  getdata.image = resultdata.Location;
+                  getdata.save(function (err, usersResults) {
+                    if (!err) {
 
+                      var user = [];
+                      var userprofile = {
+                        "status": "1",
+                        "message": "Your Profile has been updated successfully.",
+                        "data":
+                        {
+
+                          email: usersResults.email == undefined ? '' : usersResults.email,
+                          firstName: (usersResults.firstname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.firstname,
+                          lastName: (usersResults.lastname == undefined || usersResults.firstname == null || usersResults.firstname == "null") ? '' : usersResults.lastname,
+                          image: usersResults.image == undefined ? '' : usersResults.image,
+                          phone: usersResults.phone == undefined ? '' : usersResults.phone,
+                          userId: usersResults._id == undefined ? '' : usersResults._id,
+                          lastMerchantId: usersResults.lastMerchantId == undefined ? '' : usersResults.lastMerchantId,
+                          countryCode: usersResults.countryCode == undefined ? '' : usersResults.countryCode,
+
+
+                        }
+                      }
+
+                      res.send(userprofile);
+
+                    } else {
+
+                      var userprofile = {
+                        "status": "0",
+                        "message": "Unable to update profile.",
+                        "data":
+                          {}
+                      }
+                      res.send(userprofile);
+                    }
+                  });
+                }
               } else {
 
                 var userprofile = {
@@ -705,19 +725,342 @@ app.post('/updateuserprofile', upload.any('uploads[]'), function (req, res) {
 })
 
 
+
+
+
 // start server
 var port = process.env.NODE_ENV === 'production' ? 80 : 3000;
 // Once database open, start server
 mongoose.connection.once('open', function callback() {
   console.log('Connection with database succeeded.');
 
-  var server = app.listen(port, function () {
-    console.log('Server listening on port ' + port);
-  });
+ 
 });
 
 
+var server = app.listen(port, function () {
+  console.log('Server listening on port ' + port);
+});
+
+var io = require('socket.io')(server);
+var onlineClient = {};
+var usersActivity = [];
+var users = [];
+var messages = [];
+ console.log('io');
+// console.log(io);
+function currentDateTime(city, offset) {
+  // create Date object for current location
+  d = new Date();
+
+  // convert to msec
+  // add local time zone offset
+  // get UTC time in msec
+  utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+
+  // create new Date object for different city
+  // using supplied offset
+  currentdate = new Date(utc + (3600000 * offset));
+
+  // return time as a string
+
+  var datetime = currentdate.getDate() + "/"
+    + (currentdate.getMonth() + 1) + "/"
+    + currentdate.getFullYear() + " @ "
+    + currentdate.getHours() + ":"
+    + currentdate.getMinutes() + ":"
+    + currentdate.getSeconds();
+  return datetime;
+
+}
 
 
 
 
+io.on('connection', function (socket) {
+
+  // app.post(chatuser)
+io.sockets.emit('authenticateuser', socket.handshake.query, socket.id);
+
+socket.on('chkUser', function (data) {
+
+  //var chk = users.indexOf(data.name);
+  console.log("Server :: " + data.name);
+  var curdatetime = currentDateTime('India', '5.5');
+  users.push(data.name);
+  var data = { name: data.name, msg: ' joined chat on ' + curdatetime + ' !', color: 'text-success', socketId: data.socketId };
+  usersActivity.push(data);
+  onlineClient[data.name] = socket;
+  // if (chk == (-1)) {
+
+  
+  //   con.query("Update users set socketId='" + data.socketId + "' where id='" + data.name + "'", function (err, result) {
+  //     if (err) throw err;
+  //     console.log("User Updated");
+  //   });
+  // }
+  console.log(users);
+  var chk = users.indexOf(data.name);
+  socket.emit("chkUser", chk);
+});
+
+
+socket.on('joined', function (data) {
+  var curdatetime = currentDateTime('India', '5.5');
+  socket.username = data.name;
+  io.sockets.emit('totalOnlineUser', users, socket.username);
+  socket.emit("myInfo", socket.username, curdatetime);
+  io.sockets.emit('newOne', data, messages);
+  io.sockets.emit('usersActivity', usersActivity, curdatetime);
+});
+
+socket.on('disconnect', function (data) {
+
+  var curdatetime = currentDateTime('India', '5.5');
+  if (socket.username != undefined) {
+    var ax = users.indexOf(socket.username);
+    users.splice(ax, 1);
+    io.sockets.emit('totalOnlineUser', users, socket.username);
+    data = { name: socket.username, msg: " left chat on " + curdatetime + " !", color: "text-danger" }
+    usersActivity.push(data);
+
+    io.sockets.emit('usersActivity', usersActivity, curdatetime);
+    socket.emit('usersDisconnect');
+    //socket.emit("disconnect",{});
+  }
+});
+
+socket.on("chatMsg", function (data) {
+  var curdatetime = currentDateTime('India', '5.5');
+  var data = { name: socket.username + " [" + curdatetime + "] ", msg: data.msg }
+  messages.push(data);
+  io.sockets.emit("msgEveryOne", data, curdatetime);
+
+});
+
+
+socket.on("typing", function (data) {
+  io.sockets.emit("isTyping", { isTyping: data, user: socket.username });
+});
+
+socket.on('sendMsg', function (key, msg, type) {
+
+
+  var msgid = "";
+  var saveChat = new merchantChat({
+    toId: socket.handshake.query.userid,
+    formId :  key,
+    message:  msg,
+    type: type,
+    
+});
+saveChat.save(function (err, chatDetails) {
+  if (!err) {
+  
+  
+   msgid = chatDetails._id;
+   var fromId = socket.handshake.query.userid;
+   var data = {
+     to_id: key,
+     from_id: fromId,
+     type: type,
+     msgid: msgid,
+     msg: msg
+   };
+   //console.log(data);
+   io.sockets.emit('getMsg', data);
+    } else {
+      deferred.reject(err.name + ': ' + err.message);
+  }
+})
+
+
+
+
+})
+
+socket.on('dateTimeUpdate', function (data) {
+    socket.datetime = data.datatime;
+  });
+
+  socket.on('sendPrivateChat', function (data) {
+
+    var socketTo = onlineClient[data.toName];
+    var socketFrom = onlineClient[data.fromName];
+    var group = 'private';
+    socketTo.join(group);  //create room
+    socketFrom.join(group);
+    //io.sockets.in(data.name).emit('privateChat', data);    
+    socketTo.emit('privateChat', data);
+    socketFrom.emit('privateChat', data);
+  });
+
+  socket.on('sendpush', function () {
+
+    key = 2;
+    // con.query("Select deviceToken from users where id=" + key + "", function (err, result, fields) {
+    //   if (err) throw err;
+
+    //   console.log(result[0].deviceToken);
+
+    // });
+  });
+
+
+socket.on('addMessage', doc => {
+
+  var saveChat = new merchantChat({
+    toId: doc.message.toid,
+    formId :  doc.message.formid,
+    message:  doc.message.message,
+    time: doc.message.time,
+    
+});
+saveChat.save(function (err, chatDetails) {
+  if (!err) {
+
+    merchantChat.aggregate([
+      {'$match' : {
+        '$or' : [
+        {
+            '$and' : [
+                {
+                  'toId': new mongoose.Types.ObjectId(doc.message.formid) 
+                 },{
+                   'formId':new mongoose.Types.ObjectId( doc.message.toid)  
+                 }
+            ]
+            },{
+                    '$and' : [
+                   {
+                    'toId':new mongoose.Types.ObjectId(doc.message.toid) 
+                    },{
+                        'formId':new mongoose.Types.ObjectId(doc.message.formid) 
+                      }
+            ]
+                }
+    ]
+    }},{
+        '$group' : {
+                '_id' : null,
+                'chatDetails' : {
+                        '$push' : {
+                                 "_id" : '$_id',
+                                "toId" : '$toId',
+                                "formId" : '$formId',
+                                "message" : "$message",
+                                "time" : '$time',
+                              
+                            }
+                    }
+            }
+        },
+        {
+            '$project' : {
+                    'chatDetails' : '$chatDetails'
+                }
+            }
+    
+      ]).exec(function (err, getdata) {
+  
+        if (!err) {
+   
+       
+        if(getdata == '' || getdata == null || getdata == "null" || getdata == undefined || getdata == "undefined") {
+          
+          io.emit('getchatMessage', { "message"  :"" });
+  
+        } else {
+
+
+          console.log('get messge');
+          console.log(getdata[0].chatDetails);
+          io.emit('getchatMessage', { "message"  :getdata[0].chatDetails });
+  
+        }
+          // deferred.resolve(getdata);
+        } else {
+          deferred.reject(err.name + ': ' + err.message);
+        }
+      });
+  
+  
+   
+    } else {
+      deferred.reject(err.name + ': ' + err.message);
+  }
+})
+
+});
+
+socket.on('getMessageByid', message => {
+  
+ 
+
+  merchantChat.aggregate([
+    {'$match' : {
+      '$or' : [
+      {
+          '$and' : [
+              {
+                'toId': new mongoose.Types.ObjectId(message.message.formid) 
+               },{
+                 'formId':new mongoose.Types.ObjectId( message.message.toid)  
+               }
+          ]
+          },{
+                  '$and' : [
+                 {
+                  'toId':new mongoose.Types.ObjectId(message.message.toid) 
+                  },{
+                      'formId':new mongoose.Types.ObjectId(message.message.formid) 
+                    }
+          ]
+              }
+  ]
+  }},{
+      '$group' : {
+              '_id' : null,
+              'chatDetails' : {
+                      '$push' : {
+                               "_id" : '$_id',
+                              "toId" : '$toId',
+                              "formId" : '$formId',
+                              "message" : "$message",
+                              "time" : '$time',
+                            
+                          }
+                  }
+          }
+      },
+      {
+          '$project' : {
+                  'chatDetails' : '$chatDetails'
+              }
+          }
+  
+    ]).exec(function (err, getdata) {
+
+      if (!err) {
+ 
+     
+      if(getdata == '' || getdata == null || getdata == "null" || getdata == undefined || getdata == "undefined") {
+        
+        io.emit('getchatMessage', { "message"  :"" });
+
+      } else {
+
+
+        io.emit('getchatMessage', { "message"  :getdata[0].chatDetails });
+
+      }
+        // deferred.resolve(getdata);
+      } else {
+        deferred.reject(err.name + ': ' + err.message);
+      }
+    });
+
+ })
+
+
+})

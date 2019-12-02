@@ -84,7 +84,7 @@ export class AddtillmanagementComponent implements OnInit {
     this.form.value.tilltype = this.tilltypevalue
     
     this.tillManagementService.addtilldetails(this.form.value).subscribe(data => {
-
+     
       if (data.string == "Primary type added successfully.") {
         this.snackBar.open('Primary type is added successfully.', '', {
           duration: 3000,

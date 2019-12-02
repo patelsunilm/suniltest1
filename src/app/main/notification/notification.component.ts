@@ -100,14 +100,21 @@ export class NotificationComponent implements OnInit {
     this.NotificationService.addnotification(this.form.value)
       .subscribe(
         data => {
-          this.snackBar.open('Notification send successfully.', '', {
+          
+          this.snackBar.open('Notification sent successfully.', '', {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
         });
-        },
-        error => {
+        this.form = this._formBuilder.group({
 
+          Message: [''],
+          users: [''],
+    
+        }); 
+      },
+        error => {
+          console.log('error');
           console.log(error);
         });
   }
