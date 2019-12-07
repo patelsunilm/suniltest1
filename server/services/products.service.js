@@ -101,7 +101,7 @@ function addproduct(addproducts) {
                                 var randomnumber = Math.floor((Math.random() * 100) + 1);
                                 var filename = qr_svg.pipe(require('fs').createWriteStream('../src/assets/uploads/' + datetime + randomnumber + 'qr.png')).path
                                 //    assets/images/qrcode/
-                                var sep = filename.split("../src/assets/uploads/");
+                                var sep = filename.split("../src/assets/uploads/"); 
                                 var id = new mongoose.Types.ObjectId(productsresults._id);
 
 
