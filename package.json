@@ -92,7 +92,7 @@
     "nodemailer": "6.2.1",
     "path": "0.12.7",
     "perfect-scrollbar": "1.4.0",
-    "prismjs": "1.15.0",
+    "prismjs": "1.25.0",
     "qr-image": "3.2.0",
     "rgb-hex": "3.0.0",
     "rootpath": "0.1.2",
